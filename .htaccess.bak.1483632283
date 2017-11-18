@@ -1,0 +1,3 @@
+# Use PHP56 Single php.ini as default
+AddHandler application/x-httpd-php56s .php
+AddHandler application/x-httpd-php5s .php

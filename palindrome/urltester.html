@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script>
+function process_url(e) {
+	var mit_url_str = "http://web.mit.edu/~puzzle/www/2014/puzzle/";
+	var mit_url_str_lng = mit_url_str.length;
+	var puzzle_string;
+	url_string = e.value;
+	if (url_string.indexOf(mit_url_str) == 0) {
+		url_string = url_string.replace(mit_url_str,"");
+		url_string = url_string.substr(0,url_string.indexOf("/"));
+		puzzle_string = process_string(url_string);
+	} else {
+		puzzle_string = "Puzzle not found";
+	}
+	document.getElementById('result').innerHTML = puzzle_string;
+}
+
+function process_string(fodder) {
+	var result = "";
+	var start_of_word = 1;
+	for (i = 0;  i < fodder.length; i++) {
+		var individ = fodder.toUpperCase().charCodeAt(i);
+		if (individ > 64 && individ < 90) {
+			if (start_of_word == 1) {
+				start_of_word = 0;
+				result = result + fodder.toUpperCase().charAt(i);
+			} else {
+				result = result + fodder.toLowerCase().charAt(i);
+			}
+		} else {
+			if (individ == 47) {
+				return result;
+			}
+			start_of_word = 1;
+			result = result+" ";
+		}
+	}
+	return result;
+}
+</script>
+<title>Untitled Document</title>
+</head>
+
+<body>
+
+<p>Testing URL manipulation</p>  
+<p><input name='puzzle' value='' onchange='process_url(this)'/></p>  
+<p><div id='result'></div></p>  
+</body>
+</html>

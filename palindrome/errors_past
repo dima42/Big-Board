@@ -1,0 +1,594 @@
+[23-Dec-2012 16:07:13] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:07:16] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:08:20] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:08:30] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:09:03] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:09:32] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:10:17] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:11:04] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:28:13] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:29:01] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:34:06] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:36:32] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:37:02] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:38:00] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:38:28] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:38:31] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:38:44] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:39:58] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 16:40:28] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 21:32:51] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 22:01:45] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 22:01:45] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 22:02:08] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 22:02:08] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[23-Dec-2012 22:06:35] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 08:25:17] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 08:25:17] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 14:38:35] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 14:48:23] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 14:49:34] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 14:53:32] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 14:54:53] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 14:54:59] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 14:55:04] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 14:56:15] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 15:06:01] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 15:06:54] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 15:07:30] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 15:10:27] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 15:17:42] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 15:19:01] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 15:36:21] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 15:36:21] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 15:38:08] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 15:38:08] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 16:13:58] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 16:13:58] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 17:12:18] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 17:12:18] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 17:12:24] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 17:12:24] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 17:12:32] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 17:12:32] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 17:14:18] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 17:14:18] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 17:48:15] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[24-Dec-2012 17:48:15] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[25-Dec-2012 00:12:12] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[25-Dec-2012 01:43:07] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[25-Dec-2012 01:43:07] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[25-Dec-2012 06:20:41] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cookie - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[25-Dec-2012 06:20:41] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[26-Dec-2012 07:13:46] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[26-Dec-2012 07:14:25] PHP Warning:  require_once(../../src/Google_Client.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home5/spandext/public_html/palindrome/login.php on line 17
+[26-Dec-2012 07:14:25] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required '../../src/Google_Client.php' (include_path='.:/usr/lib64/php:/usr/lib/php:/usr/share/pear') in /home5/spandext/public_html/palindrome/login.php on line 17
+[26-Dec-2012 07:26:29] PHP Warning:  require_once(/google-api-php-client/src/Google_Client.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home5/spandext/public_html/palindrome/login.php on line 17
+[26-Dec-2012 07:26:29] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required '/google-api-php-client/src/Google_Client.php' (include_path='.:/usr/lib64/php:/usr/lib/php:/usr/share/pear') in /home5/spandext/public_html/palindrome/login.php on line 17
+[26-Dec-2012 08:18:41] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:35) in /home5/spandext/public_html/palindrome/index.php on line 16
+[26-Dec-2012 08:18:50] PHP Fatal error:  Uncaught exception 'Google_ServiceException' with message 'Error calling GET https://www.googleapis.com/plus/v1/people/me: (403) Access Not Configured' in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php:66
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php(36): Google_REST::decodeHttpResponse(Object(Google_HttpRequest))
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/service/Google_ServiceResource.php(177): Google_REST::execute(Object(Google_HttpRequest))
+#2 /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_PlusService.php(205): Google_ServiceResource->__call('get', Array)
+#3 /home5/spandext/public_html/palindrome/login.php(47): Google_PeopleServiceResource->get('me')
+#4 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php on line 66
+[26-Dec-2012 08:18:53] PHP Fatal error:  Uncaught exception 'Google_ServiceException' with message 'Error calling GET https://www.googleapis.com/plus/v1/people/me: (403) Access Not Configured' in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php:66
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php(36): Google_REST::decodeHttpResponse(Object(Google_HttpRequest))
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/service/Google_ServiceResource.php(177): Google_REST::execute(Object(Google_HttpRequest))
+#2 /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_PlusService.php(205): Google_ServiceResource->__call('get', Array)
+#3 /home5/spandext/public_html/palindrome/login.php(47): Google_PeopleServiceResource->get('me')
+#4 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php on line 66
+[26-Dec-2012 08:21:51] PHP Fatal error:  Uncaught exception 'Google_ServiceException' with message 'Error calling GET https://www.googleapis.com/plus/v1/people/me: (403) Access Not Configured' in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php:66
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php(36): Google_REST::decodeHttpResponse(Object(Google_HttpRequest))
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/service/Google_ServiceResource.php(177): Google_REST::execute(Object(Google_HttpRequest))
+#2 /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_PlusService.php(205): Google_ServiceResource->__call('get', Array)
+#3 /home5/spandext/public_html/palindrome/login.php(47): Google_PeopleServiceResource->get('me')
+#4 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php on line 66
+[26-Dec-2012 08:41:54] PHP Warning:  require_once(plus.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home5/spandext/public_html/palindrome/index.php on line 6
+[26-Dec-2012 08:41:54] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'plus.php' (include_path='.:/usr/lib64/php:/usr/lib/php:/usr/share/pear') in /home5/spandext/public_html/palindrome/index.php on line 6
+[26-Dec-2012 08:42:35] PHP Fatal error:  Class 'getGoogleClient' not found in /home5/spandext/public_html/palindrome/index.php on line 10
+[26-Dec-2012 08:43:06] PHP Fatal error:  Call to a member function setApplicationName() on a non-object in /home5/spandext/public_html/palindrome/plus.php on line 11
+[26-Dec-2012 08:44:04] PHP Fatal error:  Call to a member function setAccessToken() on a non-object in /home5/spandext/public_html/palindrome/plus.php on line 32
+[26-Dec-2012 08:48:00] PHP Fatal error:  Call to a member function setAccessToken() on a non-object in /home5/spandext/public_html/palindrome/plus.php on line 32
+[26-Dec-2012 08:49:21] PHP Catchable fatal error:  Argument 1 passed to applyAccessToken() must be an instance of Google_Client, null given, called in /home5/spandext/public_html/palindrome/index.php on line 17 and defined in /home5/spandext/public_html/palindrome/plus.php on line 31
+[26-Dec-2012 08:50:33] PHP Catchable fatal error:  Argument 1 passed to Google_PlusService::__construct() must be an instance of Google_Client, none given, called in /home5/spandext/public_html/palindrome/plus.php on line 7 and defined in /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_PlusService.php on line 237
+[26-Dec-2012 08:51:48] PHP Catchable fatal error:  Argument 1 passed to Google_PlusService::__construct() must be an instance of Google_Client, none given, called in /home5/spandext/public_html/palindrome/plus.php on line 7 and defined in /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_PlusService.php on line 237
+[26-Dec-2012 08:51:52] PHP Catchable fatal error:  Argument 1 passed to Google_PlusService::__construct() must be an instance of Google_Client, none given, called in /home5/spandext/public_html/palindrome/plus.php on line 7 and defined in /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_PlusService.php on line 237
+[26-Dec-2012 08:52:09] PHP Fatal error:  Call to a member function setAccessToken() on a non-object in /home5/spandext/public_html/palindrome/plus.php on line 23
+[26-Dec-2012 08:57:04] PHP Fatal error:  Call to a member function authenticate() on a non-object in /home5/spandext/public_html/palindrome/plus.php on line 17
+[26-Dec-2012 08:58:10] PHP Fatal error:  Call to a member function authenticate() on a non-object in /home5/spandext/public_html/palindrome/plus.php on line 17
+[26-Dec-2012 09:00:16] PHP Fatal error:  Call to a member function authenticate() on a non-object in /home5/spandext/public_html/palindrome/plus.php on line 17
+[26-Dec-2012 11:09:23] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 45
+[26-Dec-2012 11:10:52] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 45
+[26-Dec-2012 11:12:16] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 45
+[26-Dec-2012 11:12:53] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 45
+[26-Dec-2012 11:14:26] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 45
+[26-Dec-2012 11:15:26] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:15:26] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 47
+[26-Dec-2012 11:16:22] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:17:44] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:18:35] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:18:44] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:21:06] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:21:24] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:21:25] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 28
+[26-Dec-2012 11:21:25] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 47
+[26-Dec-2012 11:22:37] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:22:37] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '4/TqzgrM9rJJO1L...')
+#1 /home5/spandext/public_html/palindrome/index.php(26): Google_Client->authenticate('4/TqzgrM9rJJO1L...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 11:23:39] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:23:40] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '4/TqzgrM9rJJO1L...')
+#1 /home5/spandext/public_html/palindrome/index.php(26): Google_Client->authenticate('4/TqzgrM9rJJO1L...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 11:24:05] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:24:27] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:24:27] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 28
+[26-Dec-2012 11:24:27] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 47
+[26-Dec-2012 11:26:24] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:26:24] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '4/ULDpfd8a9lhaT...')
+#1 /home5/spandext/public_html/palindrome/index.php(26): Google_Client->authenticate('4/ULDpfd8a9lhaT...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 11:26:54] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:28:01] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:28:21] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:30:29] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:30:29] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 37
+[26-Dec-2012 11:32:45] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:32:45] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 37
+[26-Dec-2012 11:33:08] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:33:08] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 37
+[26-Dec-2012 11:33:46] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:34:25] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:34:25] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 28
+[26-Dec-2012 11:34:25] PHP Fatal error:  Call to a member function get() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 37
+[26-Dec-2012 11:35:05] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:35:06] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '4/cqc-J0LHA-7g7...')
+#1 /home5/spandext/public_html/palindrome/index.php(26): Google_Client->authenticate('4/cqc-J0LHA-7g7...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 11:43:23] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:43:39] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:44:58] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:53:43] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:53:43] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 11:54:08] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:54:37] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:54:38] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 28
+[26-Dec-2012 11:54:38] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 11:55:17] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:55:17] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 11:56:55] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 11:56:55] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 12:07:17] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 12:07:18] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 12:07:22] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 12:07:22] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 12:07:28] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 12:07:28] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 28
+[26-Dec-2012 12:07:30] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 12:07:36] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 12:07:36] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 12:07:39] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 12:07:40] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 12:08:14] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 11
+[26-Dec-2012 12:08:14] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 12:10:36] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 37
+[26-Dec-2012 12:10:49] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 27
+[26-Dec-2012 12:10:50] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 37
+[26-Dec-2012 12:10:56] PHP Fatal error:  Cannot access empty property in /home5/spandext/public_html/palindrome/index.php on line 37
+[26-Dec-2012 12:26:51] PHP Fatal error:  Cannot use object of type stdClass as array in /home5/spandext/public_html/palindrome/index.php on line 40
+[26-Dec-2012 12:27:02] PHP Fatal error:  Cannot use object of type stdClass as array in /home5/spandext/public_html/palindrome/index.php on line 40
+[26-Dec-2012 12:32:22] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 36
+[26-Dec-2012 12:32:30] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 36
+[26-Dec-2012 12:32:53] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '4/0qkXeKi1hq0sH...')
+#1 /home5/spandext/public_html/palindrome/index.php(26): Google_Client->authenticate('4/0qkXeKi1hq0sH...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 12:33:10] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '4/0qkXeKi1hq0sH...')
+#1 /home5/spandext/public_html/palindrome/index.php(26): Google_Client->authenticate('4/0qkXeKi1hq0sH...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 12:33:44] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 36
+[26-Dec-2012 12:35:19] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '4/oNbEqigt2b6fl...')
+#1 /home5/spandext/public_html/palindrome/index.php(26): Google_Client->authenticate('4/oNbEqigt2b6fl...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 12:35:29] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 37
+[26-Dec-2012 12:36:03] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 37
+[26-Dec-2012 12:37:43] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '4/vtoObBowHUVxM...')
+#1 /home5/spandext/public_html/palindrome/index.php(26): Google_Client->authenticate('4/vtoObBowHUVxM...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 12:38:22] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home5/spandext/public_html/palindrome/index.php on line 29
+[26-Dec-2012 12:38:26] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home5/spandext/public_html/palindrome/index.php on line 29
+[26-Dec-2012 12:38:35] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home5/spandext/public_html/palindrome/index.php on line 29
+[26-Dec-2012 12:38:59] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 12:39:49] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '4/6y6qsgJ3pKy-P...')
+#1 /home5/spandext/public_html/palindrome/index.php(26): Google_Client->authenticate('4/6y6qsgJ3pKy-P...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 12:45:44] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 29
+[26-Dec-2012 12:46:39] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 29
+[26-Dec-2012 13:13:11] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 29
+[26-Dec-2012 13:13:11] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 18
+[26-Dec-2012 13:13:11] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 18
+[26-Dec-2012 13:13:11] PHP Warning:  mysql_num_rows(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/sql.php on line 29
+[26-Dec-2012 13:13:11] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 45
+[26-Dec-2012 13:13:11] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 45
+[26-Dec-2012 13:13:11] PHP Warning:  mysql_insert_id(): supplied argument is not a valid MySQL-Link resource in /home5/spandext/public_html/palindrome/sql.php on line 47
+[26-Dec-2012 13:13:44] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 18
+[26-Dec-2012 13:13:44] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 18
+[26-Dec-2012 13:13:44] PHP Warning:  mysql_num_rows(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/sql.php on line 29
+[26-Dec-2012 13:13:44] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 45
+[26-Dec-2012 13:13:44] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 45
+[26-Dec-2012 13:13:44] PHP Warning:  mysql_insert_id(): supplied argument is not a valid MySQL-Link resource in /home5/spandext/public_html/palindrome/sql.php on line 47
+[26-Dec-2012 13:14:40] PHP Warning:  mysql_insert_id(): supplied argument is not a valid MySQL-Link resource in /home5/spandext/public_html/palindrome/sql.php on line 47
+[26-Dec-2012 13:15:20] PHP Warning:  mysql_insert_id(): supplied argument is not a valid MySQL-Link resource in /home5/spandext/public_html/palindrome/sql.php on line 47
+[26-Dec-2012 13:17:29] PHP Warning:  mysql_insert_id(): supplied argument is not a valid MySQL-Link resource in /home5/spandext/public_html/palindrome/sql.php on line 47
+[26-Dec-2012 13:17:41] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/sql.php on line 32
+[26-Dec-2012 13:18:38] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/sql.php on line 32
+[26-Dec-2012 13:18:48] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/sql.php on line 32
+[26-Dec-2012 13:19:39] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/sql.php on line 33
+[26-Dec-2012 13:20:06] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/sql.php on line 33
+[26-Dec-2012 13:20:37] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/sql.php on line 32
+[26-Dec-2012 13:21:04] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/sql.php on line 32
+[26-Dec-2012 13:22:28] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/sql.php on line 32
+[26-Dec-2012 13:23:31] PHP Warning:  mysql_insert_id(): supplied argument is not a valid MySQL-Link resource in /home5/spandext/public_html/palindrome/sql.php on line 46
+[26-Dec-2012 13:32:11] PHP Parse error:  syntax error, unexpected '}' in /home5/spandext/public_html/palindrome/index.php on line 38
+[26-Dec-2012 13:32:29] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 30
+[26-Dec-2012 13:40:19] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home5/spandext/public_html/palindrome/html.php:34) in /home5/spandext/public_html/palindrome/index.php on line 30
+[26-Dec-2012 13:42:33] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\\/xuptK9mbTtZ...')
+#2 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->refreshToken('1\\/xuptK9mbTtZ...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 13:42:49] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\\/xuptK9mbTtZ...')
+#2 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->refreshToken('1\\/xuptK9mbTtZ...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 13:44:54] PHP Fatal error:  Call to undefined function  refreshtoken() in /home5/spandext/public_html/palindrome/index.php on line 44
+[26-Dec-2012 13:44:58] PHP Fatal error:  Call to undefined function  refreshtoken() in /home5/spandext/public_html/palindrome/index.php on line 44
+[26-Dec-2012 13:45:24] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\\/xuptK9mbTtZ...')
+#2 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->refreshToken('1\\/xuptK9mbTtZ...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 13:45:25] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\\/xuptK9mbTtZ...')
+#2 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->refreshToken('1\\/xuptK9mbTtZ...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 13:46:14] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\/xuptK9mbTtZ3...')
+#2 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->refreshToken('1\/xuptK9mbTtZ3...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 13:49:05] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\/xuptK9mbTtZ3...')
+#2 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->refreshToken('1\/xuptK9mbTtZ3...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 13:49:28] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\/xuptK9mbTtZ3...')
+#2 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->refreshToken('1\/xuptK9mbTtZ3...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 13:49:29] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\/xuptK9mbTtZ3...')
+#2 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->refreshToken('1\/xuptK9mbTtZ3...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 13:51:49] PHP Parse error:  syntax error, unexpected $end in /home5/spandext/public_html/palindrome/index.php on line 68
+[26-Dec-2012 13:53:49] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\/4eDdepE9RlH8...')
+#2 /home5/spandext/public_html/palindrome/index.php(45): Google_Client->refreshToken('1\/4eDdepE9RlH8...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 14:01:25] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\\/4eDdepE9RlH...')
+#2 /home5/spandext/public_html/palindrome/index.php(45): Google_Client->refreshToken('1\\/4eDdepE9RlH...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 14:01:54] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_request"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken(NULL)
+#2 /home5/spandext/public_html/palindrome/index.php(45): Google_Client->refreshToken(NULL)
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 14:02:24] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('{\"access_token...')
+#2 /home5/spandext/public_html/palindrome/index.php(45): Google_Client->refreshToken('{\"access_token...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 14:02:31] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('{\"access_token...')
+#2 /home5/spandext/public_html/palindrome/index.php(45): Google_Client->refreshToken('{\"access_token...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 14:08:37] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('{\"access_token...')
+#2 /home5/spandext/public_html/palindrome/index.php(45): Google_Client->refreshToken('{\"access_token...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 14:09:09] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\\/6MpXrbFdqdL...')
+#2 /home5/spandext/public_html/palindrome/index.php(45): Google_Client->refreshToken('1\\/6MpXrbFdqdL...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 14:10:32] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:279
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php(239): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(315): Google_OAuth2->refreshToken('1\/6MpXrbFdqdLZ...')
+#2 /home5/spandext/public_html/palindrome/index.php(45): Google_Client->refreshToken('1\/6MpXrbFdqdLZ...')
+#3 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 279
+[26-Dec-2012 14:21:41] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '1\/6MpXrbFdqdLZ...')
+#1 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->authenticate('1\/6MpXrbFdqdLZ...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 14:21:44] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '1\/6MpXrbFdqdLZ...')
+#1 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->authenticate('1\/6MpXrbFdqdLZ...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 14:21:51] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '1\/6MpXrbFdqdLZ...')
+#1 /home5/spandext/public_html/palindrome/index.php(44): Google_Client->authenticate('1\/6MpXrbFdqdLZ...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[26-Dec-2012 15:15:32] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/index.php on line 73
+[26-Dec-2012 15:16:13] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/index.php on line 73
+[26-Dec-2012 16:21:17] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 62
+[26-Dec-2012 16:21:18] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 62
+[26-Dec-2012 16:24:59] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:24:59] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:32:27] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:32:27] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:32:30] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:32:30] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:32:33] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:32:33] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:38:37] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:38:37] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:38:52] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:38:52] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:40:06] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:40:06] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:40:38] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:40:38] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:40:41] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:40:41] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:43:48] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:43:48] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:44:20] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:44:20] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:44:32] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:44:32] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:45:55] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:45:55] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:45:57] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:45:57] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:45:58] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:45:58] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:46:00] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:46:00] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:46:01] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:46:01] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:46:02] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:46:02] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:46:16] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:46:16] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:46:17] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:46:17] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:46:37] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:46:37] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:46:38] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:46:38] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:47:19] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:47:19] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:48:07] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:48:07] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:48:25] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:48:25] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:48:51] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:48:51] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:48:53] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:48:53] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 65
+[26-Dec-2012 16:49:49] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:49:49] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:51:16] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home5/spandext/public_html/palindrome/sql.php on line 59
+[26-Dec-2012 16:51:16] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home5/spandext/public_html/palindrome/sql.php on line 59
+[27-Dec-2012 06:57:32] PHP Warning:  mysql_fetch_assoc(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 151
+[27-Dec-2012 06:57:47] PHP Warning:  mysql_fetch_assoc(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 151
+[27-Dec-2012 06:58:58] PHP Warning:  mysql_fetch_assoc(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 151
+[27-Dec-2012 06:59:24] PHP Warning:  mysql_fetch_assoc(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 152
+[27-Dec-2012 06:59:55] PHP Warning:  mysql_fetch_assoc(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 152
+[27-Dec-2012 10:09:21] PHP Fatal error:  Call to undefined function  getpuzzlesql() in /home5/spandext/public_html/palindrome/html.php on line 206
+[27-Dec-2012 10:10:01] PHP Warning:  mysql_num_rows(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 207
+[27-Dec-2012 10:10:35] PHP Warning:  mysql_num_rows(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 207
+[27-Dec-2012 10:35:54] PHP Fatal error:  Call to undefined function  getpuzzlesql() in /home5/spandext/public_html/palindrome/html.php on line 206
+[27-Dec-2012 10:36:10] PHP Fatal error:  Call to undefined function  getpuzzlesql() in /home5/spandext/public_html/palindrome/html.php on line 206
+[27-Dec-2012 10:36:26] PHP Fatal error:  Call to undefined function  getpuzzlesql() in /home5/spandext/public_html/palindrome/html.php on line 206
+[27-Dec-2012 11:48:44] PHP Fatal error:  Call to undefined function  getlatestteamupdate() in /home5/spandext/public_html/palindrome/html.php on line 44
+[27-Dec-2012 11:50:16] PHP Fatal error:  Call to undefined function  getlatestteamupdate() in /home5/spandext/public_html/palindrome/html.php on line 44
+[27-Dec-2012 11:50:54] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 45
+[27-Dec-2012 11:51:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 45
+[27-Dec-2012 11:51:55] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 45
+[27-Dec-2012 12:43:41] PHP Warning:  mysql_num_rows(): supplied argument is not a valid MySQL result resource in /home5/spandext/public_html/palindrome/html.php on line 213
+[27-Dec-2012 13:37:04] PHP Parse error:  syntax error, unexpected $end in /home5/spandext/public_html/palindrome/html.php on line 256
+[27-Dec-2012 14:28:23] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, '4/bAN-Xq1yX1aoI...')
+#1 /home5/spandext/public_html/palindrome/index.php(26): Google_Client->authenticate('4/bAN-Xq1yX1aoI...')
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/auth/Google_OAuth2.php on line 113
+[27-Dec-2012 15:04:10] PHP Catchable fatal error:  Object of class Google_FilesServiceResource could not be converted to string in /home5/spandext/public_html/palindrome/index.php on line 72
+[27-Dec-2012 15:04:10] PHP Catchable fatal error:  Object of class Google_FilesServiceResource could not be converted to string in /home5/spandext/public_html/palindrome/index.php on line 72
+[27-Dec-2012 15:07:09] PHP Fatal error:  Uncaught exception 'Google_ServiceException' with message 'Error calling GET https://www.googleapis.com/drive/v2/files: (401) Invalid Credentials' in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php:66
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php(36): Google_REST::decodeHttpResponse(Object(Google_HttpRequest))
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/service/Google_ServiceResource.php(177): Google_REST::execute(Object(Google_HttpRequest))
+#2 /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php(122): Google_ServiceResource->__call('list', Array)
+#3 /home5/spandext/public_html/palindrome/index.php(74): Google_FilesServiceResource->listFiles()
+#4 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php on line 66
+[27-Dec-2012 15:08:42] PHP Fatal error:  Uncaught exception 'Google_ServiceException' with message 'Error calling GET https://www.googleapis.com/drive/v2/files: (401) Invalid Credentials' in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php:66
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php(36): Google_REST::decodeHttpResponse(Object(Google_HttpRequest))
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/service/Google_ServiceResource.php(177): Google_REST::execute(Object(Google_HttpRequest))
+#2 /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php(122): Google_ServiceResource->__call('list', Array)
+#3 /home5/spandext/public_html/palindrome/index.php(75): Google_FilesServiceResource->listFiles()
+#4 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php on line 66
+[27-Dec-2012 15:48:11] PHP Fatal error:  Using $this when not in object context in /home5/spandext/public_html/palindrome/index.php on line 107
+[27-Dec-2012 15:48:36] PHP Fatal error:  Using $this when not in object context in /home5/spandext/public_html/palindrome/index.php on line 108
+[27-Dec-2012 15:49:32] PHP Fatal error:  Using $this when not in object context in /home5/spandext/public_html/palindrome/index.php on line 108
+[27-Dec-2012 15:50:25] PHP Fatal error:  Using $this when not in object context in /home5/spandext/public_html/palindrome/index.php on line 109
+[27-Dec-2012 15:50:44] PHP Fatal error:  Using $this when not in object context in /home5/spandext/public_html/palindrome/index.php on line 109
+[27-Dec-2012 15:52:18] PHP Fatal error:  Using $this when not in object context in /home5/spandext/public_html/palindrome/index.php on line 109
+[27-Dec-2012 15:52:20] PHP Fatal error:  Using $this when not in object context in /home5/spandext/public_html/palindrome/index.php on line 109
+[27-Dec-2012 15:53:14] PHP Fatal error:  Using $this when not in object context in /home5/spandext/public_html/palindrome/index.php on line 109
+[27-Dec-2012 15:53:45] PHP Fatal error:  Using $this when not in object context in /home5/spandext/public_html/palindrome/index.php on line 109
+[27-Dec-2012 16:03:48] PHP Fatal error:  Call to a member function insert() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 109
+[27-Dec-2012 16:05:37] PHP Fatal error:  Call to a member function insert() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 109
+[27-Dec-2012 16:08:41] PHP Fatal error:  Class 'DriveFileParentsCollection' not found in /home5/spandext/public_html/palindrome/index.php on line 102
+[27-Dec-2012 16:10:28] PHP Fatal error:  Class 'ParentReference' not found in /home5/spandext/public_html/palindrome/index.php on line 102
+[27-Dec-2012 16:13:25] PHP Fatal error:  Call to a member function insert() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 102
+[27-Dec-2012 16:13:48] PHP Fatal error:  Call to a member function insert() on a non-object in /home5/spandext/public_html/palindrome/index.php on line 102
+[27-Dec-2012 16:14:44] PHP Catchable fatal error:  Argument 1 passed to Google_DriveService::__construct() must be an instance of Google_Client, none given, called in /home5/spandext/public_html/palindrome/index.php on line 92 and defined in /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php on line 786
+[27-Dec-2012 16:15:35] PHP Catchable fatal error:  Argument 1 passed to Google_DriveService::__construct() must be an instance of Google_Client, null given, called in /home5/spandext/public_html/palindrome/index.php on line 91 and defined in /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php on line 786
+[27-Dec-2012 16:15:58] PHP Catchable fatal error:  Argument 1 passed to Google_DriveService::__construct() must be an instance of Google_Client, instance of stdClass given, called in /home5/spandext/public_html/palindrome/index.php on line 91 and defined in /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php on line 786
+[27-Dec-2012 16:16:16] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home5/spandext/public_html/palindrome/index.php on line 91
+[27-Dec-2012 16:24:24] PHP Catchable fatal error:  Argument 1 passed to Google_DriveService::__construct() must be an instance of Google_Client, null given, called in /home5/spandext/public_html/palindrome/index.php on line 73 and defined in /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php on line 786
+[27-Dec-2012 16:24:53] PHP Fatal error:  Uncaught exception 'Google_ServiceException' with message 'Error calling POST https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart: (401) Invalid Credentials' in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php:66
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php(36): Google_REST::decodeHttpResponse(Object(Google_HttpRequest))
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/service/Google_ServiceResource.php(177): Google_REST::execute(Object(Google_HttpRequest))
+#2 /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php(47): Google_ServiceResource->__call('insert', Array)
+#3 /home5/spandext/public_html/palindrome/index.php(85): Google_FilesServiceResource->insert(Object(Google_DriveFile), Array)
+#4 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php on line 66
+[27-Dec-2012 16:25:56] PHP Fatal error:  Uncaught exception 'Google_ServiceException' with message 'Error calling POST https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart: (401) Login Required' in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php:66
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php(36): Google_REST::decodeHttpResponse(Object(Google_HttpRequest))
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/service/Google_ServiceResource.php(177): Google_REST::execute(Object(Google_HttpRequest))
+#2 /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php(47): Google_ServiceResource->__call('insert', Array)
+#3 /home5/spandext/public_html/palindrome/index.php(85): Google_FilesServiceResource->insert(Object(Google_DriveFile), Array)
+#4 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php on line 66
+[27-Dec-2012 16:26:01] PHP Fatal error:  Uncaught exception 'Google_Exception' with message 'Cant add services after having authenticated' in /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php:119
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php(791): Google_Client->addService('drive', 'v2')
+#1 /home5/spandext/public_html/palindrome/index.php(73): Google_DriveService->__construct(Object(Google_Client))
+#2 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/Google_Client.php on line 119
+[27-Dec-2012 16:26:02] PHP Fatal error:  Uncaught exception 'Google_ServiceException' with message 'Error calling POST https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart: (401) Invalid Credentials' in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php:66
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php(36): Google_REST::decodeHttpResponse(Object(Google_HttpRequest))
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/service/Google_ServiceResource.php(177): Google_REST::execute(Object(Google_HttpRequest))
+#2 /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php(47): Google_ServiceResource->__call('insert', Array)
+#3 /home5/spandext/public_html/palindrome/index.php(85): Google_FilesServiceResource->insert(Object(Google_DriveFile), Array)
+#4 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php on line 66
+[27-Dec-2012 16:30:53] PHP Fatal error:  Uncaught exception 'Google_ServiceException' with message 'Error calling POST https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart: (401) Invalid Credentials' in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php:66
+Stack trace:
+#0 /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php(36): Google_REST::decodeHttpResponse(Object(Google_HttpRequest))
+#1 /home5/spandext/public_html/palindrome/google-api-php-client/src/service/Google_ServiceResource.php(177): Google_REST::execute(Object(Google_HttpRequest))
+#2 /home5/spandext/public_html/palindrome/google-api-php-client/src/contrib/Google_DriveService.php(47): Google_ServiceResource->__call('insert', Array)
+#3 /home5/spandext/public_html/palindrome/index.php(85): Google_FilesServiceResource->insert(Object(Google_DriveFile), Array)
+#4 {main}
+  thrown in /home5/spandext/public_html/palindrome/google-api-php-client/src/io/Google_REST.php on line 66

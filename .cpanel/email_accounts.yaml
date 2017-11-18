@@ -1,0 +1,20 @@
+--- 
+__version: '2.1'
+dev.spandexters.com: 
+  account_count: 0
+  accounts: {}
+
+palindrome.spandexters.com: 
+  account_count: 0
+  accounts: {}
+
+spandexters.com: 
+  account_count: 1
+  accounts: 
+    editor: 
+      disk_mtime: '1452877889'
+      diskquota: 262144000
+      diskused: 2031
+  disk_mtime: '1452877889'
+  passwd_mtime: '1452877889'
+  quota_mtime: '1452877889'

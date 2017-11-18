@@ -1,0 +1,3 @@
+# Use PHP7 Single php.ini as default
+AddHandler application/x-httpd-php70s .php
+AddHandler application/x-httpd-php5s .php

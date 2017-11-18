@@ -1,0 +1,19 @@
+[16-Aug-2012 17:45:06] PHP Parse error:  syntax error, unexpected $end in /home5/spandext/public_html/words/add_words.php on line 20
+[16-Aug-2012 17:45:46] PHP Parse error:  syntax error, unexpected $end in /home5/spandext/public_html/words/add_words.php on line 24
+[16-Aug-2012 17:45:52] PHP Parse error:  syntax error, unexpected $end in /home5/spandext/public_html/words/add_words.php on line 24
+[18-Aug-2012 13:15:13] PHP Parse error:  syntax error, unexpected T_STRING in /home5/spandext/public_html/words/add_words.php on line 38
+[18-Aug-2012 13:38:12] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 50
+[18-Aug-2012 13:39:06] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 50
+[18-Aug-2012 13:40:06] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 50
+[18-Aug-2012 13:41:07] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 50
+[18-Aug-2012 13:41:48] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 52
+[18-Aug-2012 13:42:05] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 52
+[18-Aug-2012 13:42:21] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 52
+[18-Aug-2012 13:42:23] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 52
+[18-Aug-2012 13:42:32] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 52
+[18-Aug-2012 13:42:43] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 52
+[18-Aug-2012 13:42:56] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 52
+[19-Aug-2012 09:30:03] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 83
+[19-Aug-2012 09:31:05] PHP Fatal error:  Function name must be a string in /home5/spandext/public_html/words/add_words.php on line 83
+[19-Aug-2012 10:15:00] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 24 bytes) in /home5/spandext/public_html/words/add_words.php on line 37
+[19-Aug-2012 13:16:39] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home5/spandext/public_html/words/add_words.php on line 72

@@ -1,0 +1,2 @@
+# Use PHP56CGI as default
+AddHandler fcgid56-script .php
