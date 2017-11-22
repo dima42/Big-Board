@@ -115,7 +115,7 @@ if ($noAccessYet && !$DEBUG) {
       if (isset($_GET['meta'])) {
           displayMeta($my_puzzle_list,$_GET['meta']);
       } else if (isset($_GET['updates'])) {
-          displayUpdates($_GET['filter']);
+          displayUpdates($_GET['updates']);
       } else if (isset($_GET['bylastmod'])) {
           displayAbandonedPuzzles();
       } else if (isset($_GET['puzzle'])) {
