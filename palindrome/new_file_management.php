@@ -27,7 +27,9 @@ function create_new_file($title) {
     $service = get_new_drive_service();
     $file = new Google_DriveFile();
     $file->setTitle($title);
-    $file->setDescription($_SESSION['error_string']);
+    if (in_array("error_string", $_SESSION)) {
+        $file->setDescription($_SESSION['error_string']);
+    }
     $file->setMimeType("application/vnd.google-apps.spreadsheet");
 
     // Set the parent folder.

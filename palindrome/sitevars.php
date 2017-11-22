@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $DEBUG = false;
 
 if ($_SERVER['HTTP_HOST'] == "localhost:8888") {

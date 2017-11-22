@@ -7,7 +7,6 @@ require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
-session_start();
 Global $link;
 $link = connectToDB();
 
@@ -68,7 +67,7 @@ if ($noAccessYet) {
 }
 
 // next, if there is no access token, user has not authorized app. So let's begin by checking that.
-if ($noAccessYet && !$DEBUG) {
+if ($noAccessYet) {
     writeHeader(FALSE);
     $authUrl = $pal_client->createAuthUrl();
     print "<p><a class='login' href='$authUrl'>Connect Me!</a>. Only Palindrome members may access this big board.</p>";
@@ -76,14 +75,11 @@ if ($noAccessYet && !$DEBUG) {
     // first, let's try to get the user from the database based on root folder ID
 
     // this will get the user ID of someone already established as a palindrome member
-    if ($DEBUG) {
-        $_SESSION["user_id"] = getUserDriveID("0AIyrhiUGyiJrUk9PVA", "Sandor Weisz");
-    } else {
-        $aboutg = $pal_drive->about->get();
-        $my_name = $aboutg["user"]["displayName"];
-        $my_root = $aboutg["rootFolderId"];
-        $_SESSION["user_id"] = getUserDriveID($my_root, $my_name);
-    }
+    // $_SESSION["user_id"] = getUserDriveID("0AIyrhiUGyiJrUk9PVA", "Sandor Weisz");
+    $aboutg = $pal_drive->about->get();
+    $my_name = $aboutg["user"]["displayName"];
+    $my_root = $aboutg["rootFolderId"];
+    $_SESSION["user_id"] = getUserDriveID($my_root, $my_name);
 
     writeHeader(TRUE);
 
