@@ -1,10 +1,21 @@
 <?php
 session_start();
+require_once 'vendor/autoload.php';
 
 $DEBUG = false;
 
 if ($_SERVER['HTTP_HOST'] == "localhost:8888") {
     $DEBUG = true;
+}
+
+$loader = new Twig_Loader_Filesystem('templates');
+Global $twig;
+$twig = new Twig_Environment($loader, array(
+));
+
+function render($template, $vars = array()) {
+    Global $twig;
+    echo $twig->render($template, $vars);
 }
 
 function connectToDB() {
