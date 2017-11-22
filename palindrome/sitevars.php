@@ -43,16 +43,4 @@ function connectToDB() {
 function getCurrentParentFolder() {
 	return  "0BwQVTWNxkZQaNmI0QkNlWGVSQmM"; // current Mystery Hunt 2016/All Puzzles folder
 }
-
-function getPalindromesName() {
-	return "Too Long No Loot";
-}
-
-function getPalindromeRoomNumbers() {
-    return "4-159, 4-146, 4-145";
-}
-
-function getPalindromePhoneNumber() {
-    return "617 715-4577";
-}
 ?>
