@@ -28,8 +28,8 @@ function writeHeader($showTeamInformation) {
 
 function writeIntro() {
 	$results = getLatestTeamUpdateSQL();
-    if (mysql_num_rows($results) > 0) {
-	    while ($row = mysql_fetch_array($results)) {
+    if ($results->num_rows > 0) {
+	    while ($row = $results->fetch_array(MYSQLI_ASSOC)) {
 	    	$latest_news = str_replace("'","&#39;",$row["NEWS"]);
 	        $latest_news_from = " (".$row["WHO"].")";
 	    }
@@ -78,7 +78,7 @@ function writeHiddenNotesBox() {
 function writeKey() {
 	$statuses = array(); $total_puzzles = 0;
 	$results = getStatusProportionsSQL();
-	while ($row = mysql_fetch_assoc($results)) {
+	while ($row = $results->fetch_assoc()) {
 		// link to spreadsheet first
 		$statuses[$row["PUZSTT"]] = $row["PUZSTTSUM"];
         $total_puzzles += $row["PUZSTTSUM"];
@@ -120,15 +120,16 @@ function showDatabaseError($error_code) {
 }
 
 function displayPuzzles($my_puzzle_list) {
-	$whos_on_what = getPuzzleAssignments(); $whos_on_what_array = array();
-    while ($row = mysql_fetch_assoc($whos_on_what)) {
+	$whos_on_what = getPuzzleAssignments();
+    $whos_on_what_array = array();
+    while ($row = $whos_on_what->fetch_assoc()) {
     	$whos_on_what_array[$row["SNACK"]] = $row["ANTS"];
 	}
 	$result = getPuzzles();
 	$bgcolor = "#ffffff";
 	$just_starting = TRUE; $puzzle_count = 0;
 
-	while ($row = mysql_fetch_assoc($result)) {
+	while ($row = $result->fetch_assoc()) {
     	// some specifics for table layout
         $cell_width = 150; $col_width = 6; $title_limit = 20;
 		// link to spreadsheet first

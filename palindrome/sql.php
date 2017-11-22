@@ -1,17 +1,26 @@
 <?
+function error_debug($link) {
+    $error = $link->error;
+    if ($error != "" || $error != NULL) {
+        pull_back_the_curtain("getPuzzles error ".$error);
+    }
+}
+
 function getPuzzles() {
+    Global $link;
 	$query =  	"select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, ".
 				"b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
 				"from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
 				"on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
 				"order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
 	pull_back_the_curtain($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("getPuzzles error ".mysql_error()); }
+	$query_resource =  $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
 
 function getUnsolvedPuzzles() {
+    Global $link;
 	$query =  	"select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, ".
 				"b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
 				"from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
@@ -25,25 +34,28 @@ function getUnsolvedPuzzles() {
 }
 
 function getFeaturedPuzzleIDSQL() {
-	$query =  	"select puz_id as PUZID from puz_tbl b where puz_stt = 'featured'";
+    Global $link;
+	$query = "select puz_id as PUZID from puz_tbl b where puz_stt = 'featured'";
 	pull_back_the_curtain($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("getPuzzles error ".mysql_error()); }
+	$query_resource =  $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
 
 function getPuzzleAssignments() {
+    Global $link;
 	$query =  	"select puz_id as SNACK, count(*) as ANTS ".
 				"from puz_chk_out a ".
 				"where chk_in is NULL and puz_id in (select puz_id from puz_tbl where puz_stt != 'solved') ".
 				"group by puz_id";
 	pull_back_the_curtain($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("getPuzzles error ".mysql_error()); }
+	$query_resource =  $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
 
 function getUpdatesSQL() {
+    Global $link;
 	$query =  	"select a.pal_upd_txt as NEWS, a.upd_tme as WHN, b.pal_usr_nme as WHO, a.pal_upd_code as TYP ".
 				"from pal_upd_tbl a, pal_usr_tbl b ".
 				"where a.usr_id = b.pal_id ".
@@ -54,6 +66,7 @@ function getUpdatesSQL() {
 	return $query_resource;
 }
 function findUser($google_id) {
+    Global $link;
 	$query = "select pal_id as UID from pal_usr_tbl where pal_ggl_id = ".$google_id;
 
 	pull_back_the_curtain($query);
@@ -63,6 +76,7 @@ function findUser($google_id) {
 }
 
 function getUserID($google_id, $display_name) {
+    Global $link;
 	// see if user is in database
 	$results = findUser($google_id);
 
@@ -93,6 +107,7 @@ function getUserDriveID($root_id, $display_name) {
 }
 
 function getUserRefreshToken($pal_id) {
+    Global $link;
 	$query = "select pal_ggl_rfr as REFRESH_TOKEN from pal_usr_tbl where pal_id = '".$pal_id."'";
 	pull_back_the_curtain($query);
 	$results =  mysql_query($query);
@@ -108,6 +123,7 @@ function getUserRefreshToken($pal_id) {
 }
 
 function setUserRefreshToken($pal_id, $refresh_token) {
+    Global $link;
 	$query = "update pal_usr_tbl set pal_ggl_rfr = ".$refresh_token." where pal_id = '".$pal_id."'";
 	pull_back_the_curtain($query);
 	$results =  mysql_query($query);
@@ -117,6 +133,7 @@ function setUserRefreshToken($pal_id, $refresh_token) {
 }
 
 function createUserDriveID($google_id, $display_name) {
+    Global $link;
 	$query = "insert into pal_usr_tbl (pal_usr_nme, pal_ggl_rfr, pal_ggl_id) ".
 			 "values (".
 			 "'".$display_name."', ".
@@ -130,6 +147,7 @@ function createUserDriveID($google_id, $display_name) {
 }
 
 function createUser($google_id, $display_name, $refresh) {
+    Global $link;
 	$query = "insert into pal_usr_tbl (pal_usr_nme, pal_ggl_rfr, pal_ggl_id) ".
 			 "values (".
 			 "'".$display_name."', ".
@@ -143,6 +161,7 @@ function createUser($google_id, $display_name, $refresh) {
 }
 
 function getCurrentPuzzleSQL($user_id) {
+    Global $link;
 	$query = "select puz_id as PUZID, chk_out as CHECKOUT from puz_chk_out where usr_id = ".$user_id." and chk_in is null";
 	pull_back_the_curtain($query);
 	$query_resource =  mysql_query($query);
@@ -151,6 +170,7 @@ function getCurrentPuzzleSQL($user_id) {
 }
 
 function signMeUpSQL($pid, $uid) {
+    Global $link;
 	$query = "insert into puz_chk_out (puz_id, usr_id) values (".$pid.", ".$uid.")";
 	mysql_query($query);
 	if (mysql_error() == "") {
@@ -161,6 +181,7 @@ function signMeUpSQL($pid, $uid) {
 }
 
 function iQuitSQL($pid, $uid) {
+    Global $link;
 	$query = "update puz_chk_out set chk_in = current_timestamp where puz_id = ".$pid." and usr_id = ".$uid;
 	mysql_query($query);
 	if (mysql_error() == "") {
@@ -171,6 +192,7 @@ function iQuitSQL($pid, $uid) {
 }
 
 function gameChangerSQL($pid, $stt) {
+    Global $link;
 	// if $stt is featured, then it is the only puzzle that can have that status
 	$query = "";
 	if ($stt == "featured") {
@@ -187,6 +209,7 @@ function gameChangerSQL($pid, $stt) {
 }
 
 function eurekaSQL($pid, $ans) {
+    Global $link;
 	$query = "update puz_tbl set puz_ans = '".$ans."', puz_stt='solved' where puz_id = ".$pid;
 	mysql_query($query);
 	$query = "update puz_chk_out set chk_in = current_timestamp where puz_id = ".$pid;
@@ -199,6 +222,7 @@ function eurekaSQL($pid, $ans) {
 }
 
 function thepuzzleiswhereSQL($pid, $link) {
+    Global $link;
 	$query = "update puz_tbl set puz_url = '".$link."' where puz_id = ".$pid;
 	mysql_query($query);
 	if (mysql_error() == "") {
@@ -209,6 +233,7 @@ function thepuzzleiswhereSQL($pid, $link) {
 }
 
 function workrelocationSQL($pid, $link) {
+    Global $link;
 	$query = "update puz_tbl set puz_spr = '".$link."' where puz_id = ".$pid;
 	mysql_query($query);
 	if (mysql_error() == "") {
@@ -219,6 +244,7 @@ function workrelocationSQL($pid, $link) {
 }
 
 function knightswhonolongersayniSQL($pid, $title) {
+    Global $link;
 	$query = "update puz_tbl set puz_ttl = '".$title."' where puz_id = ".$pid;
 	mysql_query($query);
 	if (mysql_error() == "") {
@@ -229,6 +255,7 @@ function knightswhonolongersayniSQL($pid, $title) {
 }
 
 function newDaddySQL($pid, $mid) {
+    Global $link;
 	$query = "insert into puz_rel_tbl (puz_id, puz_par_id) values (".$pid.", ".$mid.")";
 	mysql_query($query);
 	if (mysql_error() == "") {
@@ -239,6 +266,7 @@ function newDaddySQL($pid, $mid) {
 }
 
 function abandonedSQL($pid, $mid) {
+    Global $link;
 	$query = "delete from puz_rel_tbl where puz_id = ".$pid." and puz_par_id = ".$mid."";
 	mysql_query($query);
 	if (mysql_error() == "") {
@@ -249,6 +277,7 @@ function abandonedSQL($pid, $mid) {
 }
 
 function addUpdateSQL($uid, $cde, $nws) {
+    Global $link;
 	$query = "insert into pal_upd_tbl (pal_upd_code, pal_upd_txt, usr_id) values ('".$cde."', '".$nws."', ".$uid.")";
 	mysql_query($query);
 	if (mysql_error() == "") {
@@ -260,6 +289,7 @@ function addUpdateSQL($uid, $cde, $nws) {
 }
 
 function getMetaSQL($pid) {
+    Global $link;
 	$query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
 				"c.pal_id as UID, c.pal_usr_nme as UNAME, (a.puz_id = ".$pid.") as META ".
 				"from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
@@ -272,6 +302,7 @@ function getMetaSQL($pid) {
 }
 
 function getLoosePuzzlesSQL() {
+    Global $link;
 	$query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
 				"c.pal_id as UID, c.pal_usr_nme as UNAME, FALSE as META ".
 				"from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
@@ -284,6 +315,7 @@ function getLoosePuzzlesSQL() {
 }
 
 function getPuzzleSQL($pid) {
+    Global $link;
 	$query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
 				"c.pal_id as UID, c.pal_usr_nme as UNAME ".
 				"from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
@@ -296,6 +328,7 @@ function getPuzzleSQL($pid) {
 
 
 function getAllMetasSQL($pid) {
+    Global $link;
 	$query = "select a.puz_id as MID, a.puz_ttl as MTTL, sum(b.puz_id = ".$pid.") as INMETA from puz_tbl a, puz_rel_tbl b where a.puz_id = b.puz_par_id group by a.puz_id, a.puz_ttl";
 	mysql_query($query); pull_back_the_curtain($query);
 	$query_resource =  mysql_query($query);
@@ -304,31 +337,39 @@ function getAllMetasSQL($pid) {
 }
 
 function getLatestTeamUpdateSQL() {
+    Global $link;
 	$query = "select a.pal_upd_txt as NEWS, b.pal_usr_nme as WHO from pal_upd_tbl a, pal_usr_tbl b where a.pal_upd_code = 'URG' and a.usr_id = b.pal_id ".
 				"order by a.row_id";
-	mysql_query($query); pull_back_the_curtain($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("myPuzzle error ".mysql_error()); }
+    // $link->query($query);
+    // pull_back_the_curtain($query);
+	$query_resource =  $link->query($query);
+	if ($link->error != "" || $link->error != NULL) {
+        pull_back_the_curtain("myPuzzle error ".$link->error);
+    }
 	return $query_resource;
 }
 
 // each of the next three functions do the same basic thing, but with specific results.
 function addNewMetaSQL($ttl, $url, $fid) {
+    Global $link;
 	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid);
 	addPuzzleRelationSQL($new_puzzle_id, $new_puzzle_id);
 	return "M".$new_puzzle_id;
 }
 function addLoosePuzzleSQL($ttl, $url, $fid) {
+    Global $link;
 	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid);
 	return "P".$new_puzzle_id;
 }
 function addPuzzleInMetaSQL($ttl, $url, $par, $fid) {
+    Global $link;
 	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid);
 	addPuzzleRelationSQL($new_puzzle_id, $par);
 	return "P".$new_puzzle_id."M".$par;
 }
 
 function addPuzzleSQL($ttl, $url, $fid) {
+    Global $link;
 	$query = "insert into puz_tbl (puz_ttl, puz_url, puz_spr) values ('".$ttl."', '".$url."', 'https://docs.google.com/spreadsheet/ccc?key=".$fid."')";
 	mysql_query($query);
 	$new_puz_id = mysql_insert_id();
@@ -336,11 +377,13 @@ function addPuzzleSQL($ttl, $url, $fid) {
 }
 
 function addPuzzleRelationSQL($pid, $par) {
+    Global $link;
 	$query = "insert into puz_rel_tbl (puz_id, puz_par_id) values (".$pid.", ".$par.")";
 	mysql_query($query);
 }
 
 function deletePuzzleSQL($pid) {
+    Global $link;
 	// there are three places to remove puzzles...the puzzle table, puzzle check out, and puzzle relation table
 	$query = "delete from puz_tbl where puz_id = ".$pid;
 	mysql_query($query);
@@ -356,6 +399,7 @@ function deletePuzzleSQL($pid) {
 }
 
 function promotePuzzleSQL($pid) {
+    Global $link;
 	// there are three places to remove puzzles...the puzzle table, puzzle check out, and puzzle relation table
 	$query = "insert into puz_rel_tbl (puz_id, puz_par_id) values (".$pid.", ".$pid.")";
 	mysql_query($query);
@@ -367,15 +411,18 @@ function promotePuzzleSQL($pid) {
 }
 
 function getStatusProportionsSQL() {
+    Global $link;
 	// let's get the specific proportion of statuses
 	$query = "SELECT puz_stt as PUZSTT, COUNT(*) PUZSTTSUM FROM puz_tbl GROUP BY puz_stt";
-	mysql_query($query); pull_back_the_curtain($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("myPuzzle error ".mysql_error()); }
+    // $link->query($query);
+    // pull_back_the_curtain($query);
+	$query_resource =  $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
 
 function checkForExistingPuzzleSQL($title) {
+    Global $link;
 	$query = "select count(*) as TITLE_COUNT from puz_tbl ".
 			 "where puz_ttl = '".$title."'";
 	$row = mysql_fetch_array(mysql_query($query));
@@ -383,6 +430,7 @@ function checkForExistingPuzzleSQL($title) {
 }
 
 function updateNotesSQL($pid, $notes) {
+    Global $link;
 	$query = "update puz_tbl set puz_notes = '".$notes."' where puz_id = ".$pid;
 	mysql_query($query);
 	if (mysql_error() == "") {
