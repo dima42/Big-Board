@@ -75,9 +75,10 @@ function getUserID($google_id, $display_name) {
 	return $row['UID'];
 }
 
-function getUserDriveID($link, $root_id, $display_name) {
-	$query = "select pal_id as UID from pal_usr_tbl where pal_ggl_id = '".$root_id."'";
-	pull_back_the_curtain($query);
+function getUserDriveID($root_id, $display_name) {
+    Global $link;
+    $query = "select pal_id as UID from pal_usr_tbl where pal_ggl_id = '".$root_id."'";
+    pull_back_the_curtain($query);
 	$results =  $link->query($query);
 	if ($link->error != "" || $link->error != NULL) { pull_back_the_curtain("findUser error ".mysqli_error()); }
 

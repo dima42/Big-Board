@@ -8,6 +8,7 @@ require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
 session_start();
+Global $link;
 $link = connectToDB();
 
 // Visit https://code.google.com/apis/console to generate your
@@ -76,12 +77,12 @@ if ($noAccessYet && !$DEBUG) {
 
     // this will get the user ID of someone already established as a palindrome member
     if ($DEBUG) {
-        $_SESSION["user_id"] = getUserDriveID($link, "0AIyrhiUGyiJrUk9PVA", "Sandor Weisz");
+        $_SESSION["user_id"] = getUserDriveID("0AIyrhiUGyiJrUk9PVA", "Sandor Weisz");
     } else {
         $aboutg = $pal_drive->about->get();
         $my_name = $aboutg["user"]["displayName"];
         $my_root = $aboutg["rootFolderId"];
-        $_SESSION["user_id"] = getUserDriveID($link, $my_root, $my_name);
+        $_SESSION["user_id"] = getUserDriveID($my_root, $my_name);
     }
 
     writeHeader(TRUE);
