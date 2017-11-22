@@ -68,9 +68,10 @@ if ($noAccessYet) {
 
 // next, if there is no access token, user has not authorized app. So let's begin by checking that.
 if ($noAccessYet) {
-    writeHeader(FALSE);
     $authUrl = $pal_client->createAuthUrl();
-    print "<p><a class='login' href='$authUrl'>Connect Me!</a>. Only Palindrome members may access this big board.</p>";
+    render('loggedout.html', array(
+        'auth_url' => $authUrl
+    ));
 } else {
     // first, let's try to get the user from the database based on root folder ID
 
@@ -80,7 +81,7 @@ if ($noAccessYet) {
     $my_root = $aboutg["rootFolderId"];
     $_SESSION["user_id"] = getUserDriveID($my_root, $my_name);
 
-    writeHeader(TRUE);
+    // writeHeader(TRUE);
 
     //if ($_SESSION["user_id"] == 0) {
         // we should always check to see if they have access
@@ -108,30 +109,34 @@ if ($noAccessYet) {
       $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
       writeIntro();
       if (isset($_GET['meta'])) {
-          displayMeta($my_puzzle_list,$_GET['meta']);
+        // showing a meta?
+          displayMeta($my_puzzle_list, $_GET['meta']);
       } else if (isset($_GET['updates'])) {
+        // showing updates?
           displayUpdates($_GET['updates']);
       } else if (isset($_GET['bylastmod'])) {
+        // showing abandoned?
           displayAbandonedPuzzles();
       } else if (isset($_GET['puzzle'])) {
+        // showing a single puzzle?
           if ($_GET['puzzle'] == 'F') {
               displayFeature($my_puzzle_list);
           } else {
               displayPuzzle($my_puzzle_list,$_GET['puzzle']);
           }
       } else {
+        // showing main page?
           writeKey();
           displayPuzzles($my_puzzle_list);
-          //writeKey();
           writeInstructions();
       }
+        render('loggedin.html');
     } else {
         // if someone is not a member of palindrome, let's tell them to bugger off
-        displayWarning();
+        render('buggeroff.html');
     }
-}
 
-writeFooter();
+}
 
 function getCurrentPuzzle($user_id) {
     // since we have removed the check out feature, we are commenting out most of this function
