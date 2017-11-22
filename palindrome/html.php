@@ -316,7 +316,7 @@ function displayMeta($my_puzzle_list, $meta_id) {
 function displayPuzzle($my_puzzle_list, $puzzle_id) {
 	// this is a little different. For this, we are getting info about the puzzle, but also, we need to edit a lot of its information.
     $results = getPuzzleSQL($puzzle_id);
-    $puzzle_count = mysql_num_rows($results);
+    $puzzle_count = $results->num_rows;
     if ($puzzle_count == 0) {
     	print "<P>This puzzle does not exist. It is a ghost puzzle.";
         return;
@@ -324,7 +324,7 @@ function displayPuzzle($my_puzzle_list, $puzzle_id) {
 
     $which_puzzle = 0;
     $current_workers = array();
-    while ($row = mysql_fetch_assoc($results)) {
+    while ($row = $results->fetch_assoc()) {
     	if ($which_puzzle == 0) {
         $puzzle_header = "<H2><input class='metaTitle' size=100 name='puzttl_".$row["PUZID"]."' value='".$row["PUZNME"]."' style='background: transparent; border: none;'/ onchange='new_name(this, ".$row["PUZID"].")'></H2>";
         if($row["PUZSTT"] == "featured") {
@@ -353,7 +353,7 @@ function displayPuzzle($my_puzzle_list, $puzzle_id) {
    print "<p>&nbsp;</p><p>&nbsp;</p><h2>Metapuzzles</h2>";
 
    $results = getAllMetasSQL($puzzle_id);
-    while ($row = mysql_fetch_assoc($results)) {
+    while ($row = $results->fetch_assoc()) {
     	if ($row["INMETA"] > 0) {
         	print "<p><input type='checkbox' checked name='puzinmeta_".$row['MID']."' onclick='change_parent(this, ".$puzzle_id.", ".$row['MID'].")'>".$row["MTTL"]."</p>";
         } else {
@@ -377,7 +377,7 @@ function displayUpdates($filter) {
     }
     $news_table .= "</p><table border=0 cellspacing=0 cellpadding=4>";
     $results = getUpdatesSQL();
-    while ($row = mysql_fetch_assoc($results)) {
+    while ($row = $results->fetch_assoc()) {
     	if ($filter != "Y" || $row["TYP"] != "PUZ") {
         	$news_table .= "<tr><td>".$row["WHN"].": ".$row["NEWS"]." (".$row['WHO'].")</td></tr>";
         }

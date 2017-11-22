@@ -2,7 +2,7 @@
 function error_debug($link) {
     $error = $link->error;
     if ($error != "" || $error != NULL) {
-        pull_back_the_curtain("getPuzzles error ".$error);
+        pull_back_the_curtain("Error: ".$error);
     }
 }
 
@@ -28,8 +28,8 @@ function getUnsolvedPuzzles() {
 				"where b.puz_stt != 'solved' ".
 				"order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
 	pull_back_the_curtain($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("getPuzzles error ".mysql_error()); }
+	$query_resource = $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
 
@@ -61,17 +61,18 @@ function getUpdatesSQL() {
 				"where a.usr_id = b.pal_id ".
 				"order by a.upd_tme desc";
 	pull_back_the_curtain($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("getPuzzles error ".mysql_error()); }
+	$query_resource = $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
+
 function findUser($google_id) {
     Global $link;
 	$query = "select pal_id as UID from pal_usr_tbl where pal_ggl_id = ".$google_id;
 
 	pull_back_the_curtain($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("findUser error ".mysql_error()); }
+	$query_resource = $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
 
@@ -295,9 +296,9 @@ function getMetaSQL($pid) {
 				"from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
 				"where a.puz_id in (select puz_id from puz_rel_tbl where puz_par_id = ".$pid.") ".
 				"order by META desc, a.puz_id";
-	mysql_query($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("mymeta error ".mysql_error()); }
+	$link->query($query);
+	$query_resource = $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
 
@@ -308,9 +309,9 @@ function getLoosePuzzlesSQL() {
 				"from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
 				"where a.puz_id not in (select puz_id from puz_rel_tbl) ".
 				"order by a.puz_id";
-	mysql_query($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("mymeta error ".mysql_error()); }
+	$link->query($query);
+	$query_resource = $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
 
@@ -320,9 +321,10 @@ function getPuzzleSQL($pid) {
 				"c.pal_id as UID, c.pal_usr_nme as UNAME ".
 				"from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
 				"where a.puz_id = ".$pid."";
-	mysql_query($query); pull_back_the_curtain($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("myPuzzle error ".mysql_error()); }
+    // $link->query($query);
+    // pull_back_the_curtain($query);
+	$query_resource = $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
 
@@ -330,9 +332,10 @@ function getPuzzleSQL($pid) {
 function getAllMetasSQL($pid) {
     Global $link;
 	$query = "select a.puz_id as MID, a.puz_ttl as MTTL, sum(b.puz_id = ".$pid.") as INMETA from puz_tbl a, puz_rel_tbl b where a.puz_id = b.puz_par_id group by a.puz_id, a.puz_ttl";
-	mysql_query($query); pull_back_the_curtain($query);
-	$query_resource =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("myPuzzle error ".mysql_error()); }
+    // $link->query($query);
+    // pull_back_the_curtain($query);
+	$query_resource = $link->query($query);
+    error_debug($link);
 	return $query_resource;
 }
 
@@ -343,9 +346,7 @@ function getLatestTeamUpdateSQL() {
     // $link->query($query);
     // pull_back_the_curtain($query);
 	$query_resource =  $link->query($query);
-	if ($link->error != "" || $link->error != NULL) {
-        pull_back_the_curtain("myPuzzle error ".$link->error);
-    }
+    error_debug($link);
 	return $query_resource;
 }
 
