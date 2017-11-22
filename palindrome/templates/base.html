@@ -1,0 +1,44 @@
+{% set team_name = "Too Long No Loot" %}
+<html>
+<head>
+<title>{{ team_name }}</title>
+<script type='text/javascript' src='pallap.js'></script>
+<link rel="stylesheet" type="text/css" href="/screen.css" media="all">
+</head>
+<body onload='idle_hands();' onmousemove='idle_hands();' onclick='idle_hands();' onkeydown='idle_hands();'>
+<table>
+    <tr>
+        <td>
+            <a href='index.php'><span style='font-size:18px;font-weight:bold;'>{{ team_name }} Big Board</span></a>
+        </td>
+
+        <td align='right'>
+            {% block teaminfo %}{% endblock %}
+        </td>
+    </tr>
+</table>
+
+<P><em><span id='newscrawl'></span></em></p>
+
+{# <input type='hidden' id='userid' value='{{ $_SESSION['user_id'] }}' > #}
+
+{% block body %}
+{% endblock %}
+
+<div id='new_puzzle_input'>New <span id='new_puzzle_type'></span><br/>
+<input id='new_puzzle_title' name='new_puzzle_title' value='Name' size=25 /><br/>
+<input id='new_puzzle_url' name='new_puzzle_url' value='URL' size=25/><br/>
+<div id='new_puzzle_save' style='text-align: center; padding: 4px 2px 0px 2px;'>
+<span class='fake_button' onclick='save_new_puzzle();'>Save</span> |
+<span class='fake_button' onclick='abort_addition();'>Cancel</span>
+</div>
+<input id='new_puzzle_hidden_type' name='new_puzzle_hidden_type'type='hidden' value=''><input id='new_puzzle_hidden_uid' name='new_puzzle_hidden_uid'type='hidden' value=''><input id='new_puzzle_hidden_parent' id='new_puzzle_hidden_parent' type='hidden' value=''></div>
+
+<div id='show_notes' onclick='hide_notes()'></div>
+
+{# <p>strftime('%c');</p> #}
+<p>Page will reload every 180 seconds automatically.</p>
+{# if (in_array("error_string", $_SESSION)) {
+    <P>".$_SESSION['error_string']."</p>
+} #}
+</body></html>
