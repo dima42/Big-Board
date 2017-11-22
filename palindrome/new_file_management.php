@@ -4,21 +4,21 @@ require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
 function get_new_drive_service() {
-  $pal_client = new Google_Client();
-  $pal_client ->setAccessType("offline");
-  $pal_client ->setApplicationName("Palindrome Big Board");
-  $pal_client ->setClientId('938479797888.apps.googleusercontent.com');
-  $pal_client ->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
-  $pal_client ->setRedirectUri('http://palindrome.spandexters.com');
-  $access_token = $_COOKIE['PAL_ACCESS_TOKEN'];
-  if ($access_token == "") {
-	  $_SESSION['error_string'] .= "You must have cookies active.";
-	  return;
-  } else {
-	  $pal_client->setAccessToken(stripslashes($access_token));
-	  if ($pal_client->isAccessTokenExpired()) {
-		$_SESSION['error_string'] .= "This token is no good";
-	  }
+    $pal_client = new Google_Client();
+    $pal_client ->setAccessType("offline");
+    $pal_client ->setApplicationName("Palindrome Big Board");
+    $pal_client ->setClientId('938479797888.apps.googleusercontent.com');
+    $pal_client ->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
+    $pal_client ->setRedirectUri('http://palindrome.spandexters.com');
+    $access_token = $_COOKIE['PAL_ACCESS_TOKEN'];
+    if ($access_token == "") {
+        $_SESSION['error_string'] .= "You must have cookies active.";
+        return;
+    } else {
+        $pal_client->setAccessToken(stripslashes($access_token));
+        if ($pal_client->isAccessTokenExpired()) {
+            $_SESSION['error_string'] .= "This token is no good";
+        }
 	  return new Google_DriveService($pal_client);
   }
 }
