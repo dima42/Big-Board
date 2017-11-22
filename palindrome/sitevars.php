@@ -8,9 +8,9 @@ function connectToDB() {
 }
 
 // Call this to find the folder we are using to store puzzle spreadsheets.
-// When setting up an upcoming Mystery Hunt folder, create an All Puzzle folders. 
+// When setting up an upcoming Mystery Hunt folder, create an All Puzzle folders.
 function getCurrentParentFolder() {
-	return  "0BwQVTWNxkZQaNmI0QkNlWGVSQmM"; // current Mystery Hunt 2016/All Puzzles folder	
+	return  "0BwQVTWNxkZQaNmI0QkNlWGVSQmM"; // current Mystery Hunt 2016/All Puzzles folder
 }
 
 function getPalindromesName() {
