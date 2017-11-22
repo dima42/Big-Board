@@ -75,7 +75,6 @@ if ($noAccessYet) {
     // first, let's try to get the user from the database based on root folder ID
 
     // this will get the user ID of someone already established as a palindrome member
-    // $_SESSION["user_id"] = getUserDriveID("0AIyrhiUGyiJrUk9PVA", "Sandor Weisz");
     $aboutg = $pal_drive->about->get();
     $my_name = $aboutg["user"]["displayName"];
     $my_root = $aboutg["rootFolderId"];
