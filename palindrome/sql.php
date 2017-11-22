@@ -85,7 +85,7 @@ function getUserID($google_id, $display_name) {
 	if ($results->num_rows == 0) {
 		return createUser($google_id, $display_name, $_SESSION['refresh_token']);
 	}
-	$row = $results->fetch_array();
+	$row = $results->fetch_array(MYSQLI_ASSOC);
 	return $row['UID'];
 }
 
@@ -118,7 +118,7 @@ function getUserRefreshToken($pal_id) {
 		return 0;
 	}
 	// otherwise, return the refresh token.
-	$row = $results->fetch_array();
+	$row = $results->fetch_array(MYSQLI_ASSOC);
 	return $row['REFRESH_TOKEN'];
 }
 

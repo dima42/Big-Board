@@ -1,17 +1,21 @@
 <?php
-
 require_once "sitevars.php";
-connectToDB();
+Global $link;
+$link = connectToDB();
+
 print "<html><body>";
 print "<H4>All Palindrome members on the Big Board</h4><ol>";
 
-$query =  	"select pal_usr_nme as WHO from pal_usr_tbl order by 1";
-$query_resource =  mysql_query($query);
-if (mysql_error() != "" || mysql_error() != NULL) { print("getPuzzles error ".mysql_error()); }
+$query = "select pal_usr_nme as WHO from pal_usr_tbl order by 1";
+$query_resource =  $link->query($query);
+if ($link->error != "" || $link->error != NULL) {
+    print("getPuzzles error ".$link->error);
+}
 
-while ($row = mysql_fetch_array($query_resource)) {
-    	print "<LI>".$row["WHO"];
-}	
+while ($row = $query_resource->fetch_array(MYSQLI_ASSOC)) {
+    print "<li>" . $row["WHO"];
+    print "</li>";
+}
 
 print "</ol></body></html>";
 ?>
