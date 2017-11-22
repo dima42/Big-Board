@@ -17,40 +17,38 @@ function get_new_drive_service() {
   } else {
 	  $pal_client->setAccessToken(stripslashes($access_token));
 	  if ($pal_client->isAccessTokenExpired()) {
-		$_SESSION['error_string'] .= "This token is no good";  
+		$_SESSION['error_string'] .= "This token is no good";
 	  }
 	  return new Google_DriveService($pal_client);
   }
 }
 
 function create_new_file($title) {
-	$service = get_new_drive_service();
-	$file = new Google_DriveFile();
-	$file->setTitle($title);
-	$file->setDescription($_SESSION['error_string']);
-	$file->setMimeType("application/vnd.google-apps.spreadsheet");
+    $service = get_new_drive_service();
+    $file = new Google_DriveFile();
+    $file->setTitle($title);
+    $file->setDescription($_SESSION['error_string']);
+    $file->setMimeType("application/vnd.google-apps.spreadsheet");
 
-	// Set the parent folder.
-	$parents = new Google_ParentReference();
-	$parents->setId(getCurrentParentFolder());
+    // Set the parent folder.
+    $parents = new Google_ParentReference();
+    $parents->setId(getCurrentParentFolder());
     $file->setParents(array($parents));
-  try {
-	  $brandNewFiel = new Google_DriveFile();
-      $brandNewFiel = $service->files->insert($file, array(
-		  'data' => "",
-		  'mimeType' => "application/vnd.google-apps.spreadsheet",
-	  ));
-  
-	return $brandNewFiel["id"];
-  
-  } catch (Exception $e) {
-	  return "";
-  }
+    try {
+        $brandNewFiel = new Google_DriveFile();
+        $brandNewFiel = $service->files->insert($file, array(
+            'data' => "",
+            'mimeType' => "application/vnd.google-apps.spreadsheet",
+        ));
+    	return $brandNewFiel["id"];
+    } catch (Exception $e) {
+        return "";
+    }
 }
 
 function getDrivesFiles() {
 	$myDriveService = get_new_drive_service();
-	
+
 	// this gives us all available files to the user and shows when they were last updated.
 	$current_puzzles = array();
 	$all_files = $myDriveService->files->listFiles();
@@ -62,7 +60,7 @@ function getDrivesFiles() {
 }
 
 function sessionTest() {
-	return "Session test is ". $_SESSION['access_token'];	
+	return "Session test is ". $_SESSION['access_token'];
 }
 
 ?>
