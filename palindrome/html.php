@@ -109,7 +109,9 @@ function writeFooter() {
 	writeHiddenNotesBox();
     print "<p>".strftime('%c');
 	print "<p>Page will reload every 180 seconds automatically.</p>";
-	print "<P>".$_SESSION['error_string'];
+    if (in_array("error_string", $_SESSION)) {
+    	print "<P>".$_SESSION['error_string']."</p>";
+    }
 	print "</body></html>";
 }
 
