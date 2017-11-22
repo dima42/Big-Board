@@ -187,8 +187,23 @@ function displayPuzzles($my_puzzle_list) {
         				"&nbsp;<span name='puzwrk_".$row["PUZID"]."'>".$ants."</span>" */
                       "";
 
-        $answer_field = "<input name='puzans_".$row["PUZID"]."' value='".$row["PUZANS"]."' size=".($cell_width/7.5)." class='".$row["PUZSTT"]."' style='border-width:0px; text-align: center;'".
-        					" onchange='editAnswer(this, ".$row["PUZID"].", \"".$row["PUZANS"]."\", ".$_SESSION['user_id'].", \"".$row['INDPUZ']."\")'><br/>\r\n";
+        $answer_field =
+            "<input name='puzans_" .
+            $row["PUZID"] .
+            "' value='".$row["PUZANS"] .
+            "' size=" . ($cell_width/7.5) .
+            " class='" .
+            $row["STATUS"] .
+            "' style='border-width:0px; text-align: center;'" .
+			" onchange='editAnswer(this, " .
+            $row["PUZID"] .
+            ", \"" .
+            $row["PUZANS"] .
+            "\", " .
+            $_SESSION['user_id'] .
+            ", \"" .
+            $row['INDPUZ'] .
+            "\")'><br/>\r\n";
 
         if ($row["META"] == NULL && $just_starting) {
         	print "<table border=0 cellspacing=0 cellpadding=4>\r\n";
