@@ -143,18 +143,17 @@ function displayPuzzles($my_puzzle_list) {
         $slacklink .= ">slack</span></a>";
 
 		// display notes?
+        $noteslink = "";
+        $notestext = "<br/>";
         if ($row['PUZNTS'] != "") {
-			$noteslink = "";//"<span class='fake_button' onclick='show_notes(\"".addslashes($row['PUZNTS'])."\")'>note</span>";
-			if ($row["STATUS"] != "solved") {
-				$notestext = "<p><span class='fake_button'  onclick='show_notes(\"".addslashes($row['PUZNTS'])."\")'>".substr($row['PUZNTS'],0,$title_limit);
-				if (strlen($row['PUZNTS']) > $title_limit) {
-					$notestext .= "...";
-				}
-				$notestext .= "</span>";
-			}
-        } else {
-        	$noteslink = "";
-			$notestext = "<br/>";
+            $noteslink = "";//"<span class='fake_button' onclick='show_notes(\"".addslashes($row['PUZNTS'])."\")'>note</span>";
+            if ($row["STATUS"] != "solved") {
+                $notestext = "<p><span class='fake_button'  onclick='show_notes(\"".addslashes($row['PUZNTS'])."\")'>".substr($row['PUZNTS'],0,$title_limit);
+                if (strlen($row['PUZNTS']) > $title_limit) {
+                    $notestext .= "...";
+                }
+                $notestext .= "</span>";
+            }
         }
 
 		//if the title of the puzzle is too long, shorten it
