@@ -144,7 +144,7 @@ function createUserDriveID($google_id, $display_name) {
 	$query_resource = $link->query($query);
     error_debug($link);
 
-	return mysql_insert_id();
+	return $link->insert_id();
 }
 
 function createUser($google_id, $display_name, $refresh) {
@@ -158,7 +158,7 @@ function createUser($google_id, $display_name, $refresh) {
 	pull_back_the_curtain($query);
 	$query_resource = $link->query($query);
     error_debug($link);
-	return mysql_insert_id();
+	return $link->insert_id();
 }
 
 function getCurrentPuzzleSQL($user_id) {
@@ -373,7 +373,7 @@ function addPuzzleSQL($ttl, $url, $fid) {
     Global $link;
 	$query = "insert into puz_tbl (puz_ttl, puz_url, puz_spr) values ('".$ttl."', '".$url."', 'https://docs.google.com/spreadsheet/ccc?key=".$fid."')";
 	$link->query($query);
-	$new_puz_id = mysql_insert_id();
+	$new_puz_id = $link->insert_id();
 	return $new_puz_id;
 }
 
