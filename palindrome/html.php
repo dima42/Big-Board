@@ -39,10 +39,10 @@ function writeIntro() {
     }
 	print "<p>News/Chat (<span class='pastNews'><a href='?updates&filter=Y'>previous</a></span>): <input id='UrgentMessage' name='UrgentMessage' value='".$latest_news.$latest_news_from."' style='border: none; "
     		."background-color: #EEEEEE;' size=175 onchange='add_update(this, \"URG\", ".$_SESSION["user_id"].")'/><br /></p>";
-			
-	print "<p><a href='http://palindrome2017.slack.com/messages/general' target='_new'>Slack (general)</a>";	
-	print "&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://plus.google.com/hangouts/_/7lw6rz5zwbkiaozrwld6q77ahaa?authuser=0&hl=en' target='_new'>Hangout 1</a>";	
-	print "&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://plus.google.com/hangouts/_/ha2iwh7ioc4ctfnehufqfvomzya?authuser=0&hl=en' target='_new'>Hangout 2</a>";	
+
+	print "<p><a href='http://palindrome2017.slack.com/messages/general' target='_new'>Slack (general)</a>";
+	print "&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://plus.google.com/hangouts/_/7lw6rz5zwbkiaozrwld6q77ahaa?authuser=0&hl=en' target='_new'>Hangout 1</a>";
+	print "&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://plus.google.com/hangouts/_/ha2iwh7ioc4ctfnehufqfvomzya?authuser=0&hl=en' target='_new'>Hangout 2</a>";
 }
 
 function writeInstructions() {
@@ -94,11 +94,11 @@ function writeKey() {
 
 	if (array_key_exists("featured",$statuses)) {
     	print "<th align=center valign=middle class='puzzle featured' width=".(480*$statuses["featured"]/$total_puzzles)."px>Featured<br/>(<a href='index.php?puzzle=F'>View</a>)</th>"; }
-	if (array_key_exists("priority",$statuses)) { 
+	if (array_key_exists("priority",$statuses)) {
     	print "<th align=center valign=middle class='puzzle priority' width=".(480*$statuses["priority"]/$total_puzzles)."px>Priority<br/>(".$statuses["priority"].")</th>"; }
-	if (array_key_exists("open",$statuses)) { 
+	if (array_key_exists("open",$statuses)) {
     	print "<th align=center valign=middle class='puzzle open' width=".(480*$statuses["open"]/$total_puzzles)."px>Open<br/>(".$statuses["open"].")</th>"; }
-	if (array_key_exists("stuck",$statuses)) { 
+	if (array_key_exists("stuck",$statuses)) {
     	print "<th align=center valign=middle class='puzzle stuck' width=".(480*$statuses["stuck"]/$total_puzzles)."px>Stuck<br/>(".$statuses["stuck"].")</th>"; }
 	if (array_key_exists("solved",$statuses)) { print "<th align=center valign=middle class='puzzle solved' width=".(480*$statuses["solved"]/$total_puzzles)."px>Solved<br/>(".$statuses["solved"].")</th>"; }
     print "<th><a href='index.php?bylastmod'>All Unsolved<br/>Puzzles</a></th></tr></table></p>";
@@ -127,7 +127,7 @@ function displayPuzzles($my_puzzle_list) {
 	$result = getPuzzles();
 	$bgcolor = "#ffffff";
 	$just_starting = TRUE; $puzzle_count = 0;
-	
+
 	while ($row = mysql_fetch_assoc($result)) {
     	// some specifics for table layout
         $cell_width = 150; $col_width = 6; $title_limit = 20;
@@ -155,13 +155,13 @@ function displayPuzzles($my_puzzle_list) {
         	$noteslink = "";
 			$notestext = "<br/>";
         }
-		
+
 		//if the title of the puzzle is too long, shorten it
 		$puzzle = $row['INDPUZ'];
         if (strlen($row['INDPUZ']) >$title_limit) {
         	if (substr($puzzle,0,2) == "A " || substr($puzzle,0,4) == "The ") {
             	$puzzle = substr($puzzle,strpos($puzzle," "),strlen($puzzle));
-            } 
+            }
         	$puzzle = substr($puzzle,0,$title_limit-1)."...";
         } else {}
 		// if there is a puzzle URL, use it
@@ -170,7 +170,7 @@ function displayPuzzles($my_puzzle_list) {
 		} else {
 				$puzzle_link = $puzzle;
 		}
-		
+
         if (array_key_exists($row["PUZID"],$whos_on_what_array)) {
             	$ants = $whos_on_what_array[$row["PUZID"]];
             } else {
@@ -185,16 +185,16 @@ function displayPuzzles($my_puzzle_list) {
         $is_puz_out = /* "<img name='puzchk_".$row["PUZID"]."' src='".$on_puzzle.".png' width=14px height=14px onclick='toggle_Puzzle_Checkout(".$row["PUZID"].");'>".
         				"&nbsp;<span name='puzwrk_".$row["PUZID"]."'>".$ants."</span>" */
                       "";
-		
+
         $answer_field = "<input name='puzans_".$row["PUZID"]."' value='".$row["PUZANS"]."' size=".($cell_width/7.5)." class='".$row["PUZSTT"]."' style='border-width:0px; text-align: center;'".
         					" onchange='editAnswer(this, ".$row["PUZID"].", \"".$row["PUZANS"]."\", ".$_SESSION['user_id'].", \"".$row['INDPUZ']."\")'><br/>\r\n";
-        			
+
         if ($row["META"] == NULL && $just_starting) {
         	print "<table border=0 cellspacing=0 cellpadding=4>\r\n";
 			print "<tr><th align=center valign=top class='MetaRound' width=".$cell_width."px>Puzzles<br/>Not in a Meta<br/><a href='?meta=0'>View all</a></th>\r\n";
 			$just_starting = FALSE;
         }
-                    
+
 		if ($row["META"] == 1) {
 			// this is the start of a new table
 			if (!$just_starting) {
@@ -216,10 +216,10 @@ function displayPuzzles($my_puzzle_list) {
             print "</th>\r\n";
 		} else {
 			if ($puzzle_count == $col_width) {
-				print "</tr><tr><td>&nbsp;</td>";	
+				print "</tr><tr><td>&nbsp;</td>";
 				$puzzle_count = 0;
 			}
-            
+
 			print "<td align=left valign=top name='puzzle_".$row['PUZID']."'  width=".$cell_width."px class='puzzle ".$row['STATUS']."'>";
             print $puzzle_link."<br/>\r\n";
 			print $answer_field."<br/>\r\n";
@@ -229,10 +229,10 @@ function displayPuzzles($my_puzzle_list) {
             print $noteslink;
             print $notestext;
             print "</td>\r\n";
-			$puzzle_count += 1;	
+			$puzzle_count += 1;
 		}
 	}
-	
+
 	print "<td colspan='".($col_width-$puzzle_count)."' width='".($cell_width*($col_width-$puzzle_count))."px'>&nbsp;</td></tr></table><br/>\r\n";
 }
 
@@ -247,7 +247,7 @@ function displayMeta($my_puzzle_list, $meta_id) {
     	print "<P>This does not appear to be a metapuzzle. There are no puzzles that are part of it.";
         return;
     }
-    
+
     $meta_table = "";
     $meta_table = "<table border=0 cellspacing=0 cellpadding=4><tr><th>Puzzle</th><th>Answer</th><!--<th>Who's On It?</th>--><th>Let's Go!</th></tr>";
     $meta_header = "";
@@ -261,14 +261,14 @@ function displayMeta($my_puzzle_list, $meta_id) {
             if($row["PUZSTT"] == "solved") {
             	$meta_header .= "<H2 style='color:#FF6600'>This puzzle has been solved: ".$row["PUZANS"]."</H2>";
             }
-            
+
             $meta_header .= "<table><tr><td><a name='puzurllink_".$row["PUZID"]."' href='".$row["PURL"]."'>Meta URL</a></td><td><input size=40 name='puzurl_".$row["PUZID"]."' value='".$row["PURL"]."' onchange='new_link(this, ".$row["PUZID"].")' /></td></tr>";
             $meta_header .= "<tr><td><a name='puzsprlink_".$row["PUZID"]."' href='".$row["PUZSPR"]."'>Google Doc</a></td><td><input size=40 name='puzspr_".$row["PUZID"]."' value='".$row["PUZSPR"]."' onchange='new_sprd(this, ".$row["PUZID"].")' /></td></tr>";
             $meta_header .= "<tr><td>Notes</td><td><input size=40 name='puznts_".$row["PUZID"]."' onchange='upd_notes(this, ".$row["PUZID"].")' value='".$row["PUZNOT"]."'</></td></tr></table>";
             $current_puz_id = $row["PUZID"];
         } else {
-          // what we want to do is check to see if this line is the same as the last line. If it isn't, and if it isn't the last row, 
-          	
+          // what we want to do is check to see if this line is the same as the last line. If it isn't, and if it isn't the last row,
+
           if ($current_puz_id != $meta_id && ($current_puz_id != $row["PUZID"])) {
           	$meta_table .= $current_puzzle_table_front.implode(", ",$current_workers).$current_puzzle_table_back;
             $current_workers = array();
@@ -304,19 +304,19 @@ function displayPuzzle($my_puzzle_list, $puzzle_id) {
     	print "<P>This puzzle does not exist. It is a ghost puzzle.";
         return;
     }
-    
+
     $which_puzzle = 0;
     $current_workers = array();
     while ($row = mysql_fetch_assoc($results)) {
     	if ($which_puzzle == 0) {
         $puzzle_header = "<H2><input class='metaTitle' size=100 name='puzttl_".$row["PUZID"]."' value='".$row["PUZNME"]."' style='background: transparent; border: none;'/ onchange='new_name(this, ".$row["PUZID"].")'></H2>";
         if($row["PUZSTT"] == "featured") {
-            $puzzle_header .= "<H2 style='color:#009900'>This puzzle is the Featured Puzzle</H2>";        	
+            $puzzle_header .= "<H2 style='color:#009900'>This puzzle is the Featured Puzzle</H2>";
          }
         if($row["PUZSTT"] == "solved") {
             $puzzle_header .= "<H2 style='color:#FF6600'>This puzzle has been solved: ".$row["PUZANS"]."</H2>";
         }
-            
+
         $puzzle_header .= "<table><tr><td><a name='puzurllink_".$row["PUZID"]."' href='".$row["PURL"]."'>Puzzle URL</a></td><td>".
         					"<input size=40 name='puzurl_".$row["PUZID"]."' value='".$row["PURL"]."' onchange='new_link(this, ".$row["PUZID"].")' /></td></tr>";
         $puzzle_header .= "<tr><td><a name='puzsprlink_".$row["PUZID"]."' href='".$row["PUZSPR"]."'>Google Doc</a></td><td>".
@@ -334,7 +334,7 @@ function displayPuzzle($my_puzzle_list, $puzzle_id) {
     //}
 
    print "<p>&nbsp;</p><p>&nbsp;</p><h2>Metapuzzles</h2>";
-   
+
    $results = getAllMetasSQL($puzzle_id);
     while ($row = mysql_fetch_assoc($results)) {
     	if ($row["INMETA"] > 0) {
@@ -347,7 +347,7 @@ function displayPuzzle($my_puzzle_list, $puzzle_id) {
    print "<p>&nbsp;</p><p>&nbsp;</p>";
    print "<table><tr valign=middle><th width=240px align=left>Advanced options.<br/>Do not use unless you are sure.</th>";
    print "<td width=240px><div><a href='#' class='fake_button' onclick='promote_puzzle(".$puzzle_id.");'>Mark this puzzle as a metapuzzle.</a></div></td>";
-   print "<td width=240px><div><a href='#' class='fake_button' onclick='delete_puzzle(".$puzzle_id.");'>Delete this puzzle.</a><input type=checkbox id='areyousure' value='yes'/>Are you sure?</div></td></tr></table>"; 
+   print "<td width=240px><div><a href='#' class='fake_button' onclick='delete_puzzle(".$puzzle_id.");'>Delete this puzzle.</a><input type=checkbox id='areyousure' value='yes'/>Are you sure?</div></td></tr></table>";
 }
 
 function displayUpdates($filter) {
@@ -401,7 +401,7 @@ function displayAbandonedPuzzles() {
     while ($row = mysql_fetch_assoc($results)) {
         // what we want to do is get the last part of the spreadsheet key
         $currentFile = substr($row['PUZSPR'],strpos($row['PUZSPR'],"ccc?key=")+8,44);
-        
+
         // check to see if the file is in the folder
         if (array_key_exists($currentFile, $from_the_folder)) {
         	$all_puzzles[$currentFile] = $from_the_folder[$currentFile][1]."|"
@@ -417,7 +417,7 @@ function displayAbandonedPuzzles() {
                                             .$row['PUZURL']."|"
                                             .$row['PUZSPR']."|"
                                             .$row['PUZNTS']."|"."Unknown";
-		}        
+		}
 	}
 
 	asort($all_puzzles);
@@ -444,7 +444,7 @@ function displayAbandonedPuzzles() {
                         "<td><a href='".$this_puzzle[4]."' target='_new'>Drive</a></td>".
                         "</tr>";
         }
-     
+
     $aband_table .= "</table>";
     print $aband_table;
     print "<p><a href='index.php'>&laquo; Back to the Big Board</a></p>";

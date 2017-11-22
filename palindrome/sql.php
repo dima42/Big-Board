@@ -55,11 +55,11 @@ function getUpdatesSQL() {
 }
 function findUser($google_id) {
 	$query = "select pal_id as UID from pal_usr_tbl where pal_ggl_id = ".$google_id;
-	
+
 	pull_back_the_curtain($query);
 	$query_resource =  mysql_query($query);
 	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("findUser error ".mysql_error()); }
-	return $query_resource;	
+	return $query_resource;
 }
 
 function getUserID($google_id, $display_name) {
@@ -67,12 +67,12 @@ function getUserID($google_id, $display_name) {
 	$results = findUser($google_id);
 
 	// if results are empty, user does not exist, and we should create a user record for it, returning ID
-	
+
 	if (mysql_num_rows($results) == 0) {
 		return createUser($google_id, $display_name, $_SESSION['refresh_token']);
 	}
 	$row=mysql_fetch_array($results);
-	return $row['UID'];	
+	return $row['UID'];
 }
 
 function getUserDriveID($root_id, $display_name) {
@@ -87,7 +87,7 @@ function getUserDriveID($root_id, $display_name) {
 	}
 	// otherwise, return the ID that we found.
 	$row=mysql_fetch_array($results);
-	return $row['UID'];	
+	return $row['UID'];
 }
 
 function getUserRefreshToken($pal_id) {
@@ -102,7 +102,7 @@ function getUserRefreshToken($pal_id) {
 	}
 	// otherwise, return the refresh token.
 	$row=mysql_fetch_array($results);
-	return $row['REFRESH_TOKEN'];	
+	return $row['REFRESH_TOKEN'];
 }
 
 function setUserRefreshToken($pal_id, $refresh_token) {
@@ -111,7 +111,7 @@ function setUserRefreshToken($pal_id, $refresh_token) {
 	$results =  mysql_query($query);
 	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("findUser error ".mysql_error()); }
 
-	return 1;	
+	return 1;
 }
 
 function createUserDriveID($google_id, $display_name) {
@@ -266,7 +266,7 @@ function getMetaSQL($pid) {
 	mysql_query($query);
 	$query_resource =  mysql_query($query);
 	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("mymeta error ".mysql_error()); }
-	return $query_resource;	
+	return $query_resource;
 }
 
 function getLoosePuzzlesSQL() {
@@ -278,7 +278,7 @@ function getLoosePuzzlesSQL() {
 	mysql_query($query);
 	$query_resource =  mysql_query($query);
 	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("mymeta error ".mysql_error()); }
-	return $query_resource;	
+	return $query_resource;
 }
 
 function getPuzzleSQL($pid) {
@@ -289,7 +289,7 @@ function getPuzzleSQL($pid) {
 	mysql_query($query); pull_back_the_curtain($query);
 	$query_resource =  mysql_query($query);
 	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("myPuzzle error ".mysql_error()); }
-	return $query_resource;	
+	return $query_resource;
 }
 
 
@@ -298,7 +298,7 @@ function getAllMetasSQL($pid) {
 	mysql_query($query); pull_back_the_curtain($query);
 	$query_resource =  mysql_query($query);
 	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("myPuzzle error ".mysql_error()); }
-	return $query_resource;	
+	return $query_resource;
 }
 
 function getLatestTeamUpdateSQL() {
@@ -307,7 +307,7 @@ function getLatestTeamUpdateSQL() {
 	mysql_query($query); pull_back_the_curtain($query);
 	$query_resource =  mysql_query($query);
 	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("myPuzzle error ".mysql_error()); }
-	return $query_resource;	
+	return $query_resource;
 }
 
 // each of the next three functions do the same basic thing, but with specific results.
@@ -330,7 +330,7 @@ function addPuzzleSQL($ttl, $url, $fid) {
 	$query = "insert into puz_tbl (puz_ttl, puz_url, puz_spr) values ('".$ttl."', '".$url."', 'https://docs.google.com/spreadsheet/ccc?key=".$fid."')";
 	mysql_query($query);
 	$new_puz_id = mysql_insert_id();
-	return $new_puz_id;	
+	return $new_puz_id;
 }
 
 function addPuzzleRelationSQL($pid, $par) {
@@ -370,14 +370,14 @@ function getStatusProportionsSQL() {
 	mysql_query($query); pull_back_the_curtain($query);
 	$query_resource =  mysql_query($query);
 	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("myPuzzle error ".mysql_error()); }
-	return $query_resource;	
+	return $query_resource;
 }
 
 function checkForExistingPuzzleSQL($title) {
 	$query = "select count(*) as TITLE_COUNT from puz_tbl ".
 			 "where puz_ttl = '".$title."'";
 	$row = mysql_fetch_array(mysql_query($query));
-	return ($row["TITLE_COUNT"]);	
+	return ($row["TITLE_COUNT"]);
 }
 
 function updateNotesSQL($pid, $notes) {
