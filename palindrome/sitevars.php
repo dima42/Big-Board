@@ -1,10 +1,24 @@
 <?php
 function connectToDB() {
-	$gConnection = mysql_connect('localhost', 'spandext_foggy', 'sm4rg4nA');
-	if (!$gConnection) {}
-	mysql_select_db('spandext_palin') or writeHeader('Could not select database');
+    $user = 'spandext_foggy';
+    $password = 'sm4rg4nA';
+    $db = 'spandext_palin';
+    $host = 'localhost';
+    $port = 8889;
 
-	return "Success";
+    $link = mysqli_init();
+    $success = mysqli_real_connect(
+       $link,
+       $host,
+       $user,
+       $password,
+       $db,
+       $port
+    );
+	if (!$success) {
+        writeHeader('Could not select database');
+    }
+	return $success;
 }
 
 // Call this to find the folder we are using to store puzzle spreadsheets.
