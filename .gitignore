@@ -1,3 +1,5 @@
+*.codekit3
+
 # CakePHP 3
 
 /vendor/*
