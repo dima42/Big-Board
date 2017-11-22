@@ -3,28 +3,28 @@ require_once 'sitevars.php';
 require_once 'htmlcss.php';
 require_once 'slack_functions.php';
 
-function writeHeader($showTeamInformation) {
-	$palindromeName = getPalindromesName();
-	print "<html><head><title>".$palindromeName."</title>";
-	print "<script type='text/javascript' src='pallap.js'></script>";
-	writeStylesheet();
-	print "</head>";
-	print "<body onload='idle_hands();' onmousemove='idle_hands();' onclick='idle_hands();' onkeydown='idle_hands();'>";
-	print "<table width='1200'>";
-	print "<tr><td><a href='index.php'><span style='font-size:18px;font-weight:bold;'>$palindromeName Big Board</span></a></td>";
+// function writeHeader($showTeamInformation) {
+// 	$palindromeName = getPalindromesName();
+// 	print "<html><head><title>".$palindromeName."</title>";
+// 	print "<script type='text/javascript' src='pallap.js'></script>";
+// 	writeStylesheet();
+// 	print "</head>";
+// 	print "<body onload='idle_hands();' onmousemove='idle_hands();' onclick='idle_hands();' onkeydown='idle_hands();'>";
+// 	print "<table width='1200'>";
+// 	print "<tr><td><a href='index.php'><span style='font-size:18px;font-weight:bold;'>$palindromeName Big Board</span></a></td>";
 
-	if ($showTeamInformation) {
-		print "<td align='right'><strong>HQ</strong>: ";
-	    print getPalindromeRoomNumbers();
-	    print "&nbsp;&nbsp;&nbsp;<strong>Phone</strong>  ";
-	    print getPalindromePhoneNumber();
-	    print "&nbsp;&nbsp;&nbsp;<strong>E-mail</strong>: team-palindrome@mit.edu<br/>";
-		print "Username: palindrome &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password: aplanacanal</td>";
-	}
+// 	if ($showTeamInformation) {
+// 		print "<td align='right'><strong>HQ</strong>: ";
+// 	    print getPalindromeRoomNumbers();
+// 	    print "&nbsp;&nbsp;&nbsp;<strong>Phone</strong>  ";
+// 	    print getPalindromePhoneNumber();
+// 	    print "&nbsp;&nbsp;&nbsp;<strong>E-mail</strong>: team-palindrome@mit.edu<br/>";
+// 		print "Username: palindrome &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password: aplanacanal</td>";
+// 	}
 
-	print "</tr></table><P><em><span id='newscrawl'></span></em></p>";
-	print "<input type='hidden' id='userid' value='".$_SESSION['user_id']."'/>";
-}
+// 	print "</tr></table><P><em><span id='newscrawl'></span></em></p>";
+// 	print "<input type='hidden' id='userid' value='".$_SESSION['user_id']."'/>";
+// }
 
 function writeIntro() {
 	$results = getLatestTeamUpdateSQL();
@@ -60,23 +60,9 @@ function writeInstructions() {
 	print "</div>";
 }
 
-function writeHiddenNewMetabox() {
-	print "<div id='new_puzzle_input'>New <span id='new_puzzle_type'></span><br/>";
-	print "<input id='new_puzzle_title' name='new_puzzle_title' value='Name' size=25 /><br/>";
-	print "<input id='new_puzzle_url' name='new_puzzle_url' value='URL' size=25/><br/>";
-	print "<div id='new_puzzle_save' style='text-align: center; padding: 4px 2px 0px 2px;'>";
-	print "<span class='fake_button' onclick='save_new_puzzle();'>Save</span> | ";
-	print "<span class='fake_button' onclick='abort_addition();'>Cancel</span>";
-	print "</div>";
-	print "<input id='new_puzzle_hidden_type' name='new_puzzle_hidden_type'type='hidden' value=''><input id='new_puzzle_hidden_uid' name='new_puzzle_hidden_uid'type='hidden' value=''><input id='new_puzzle_hidden_parent' id='new_puzzle_hidden_parent' type='hidden' value=''></div>";
-}
-
-function writeHiddenNotesBox() {
-	print "<div id='show_notes' onclick='hide_notes()'></div>";
-}
-
 function writeKey() {
-	$statuses = array(); $total_puzzles = 0;
+    $statuses = array();
+    $total_puzzles = 0;
 	$results = getStatusProportionsSQL();
 	while ($row = $results->fetch_assoc()) {
 		// link to spreadsheet first
@@ -102,17 +88,6 @@ function writeKey() {
     	print "<th align=center valign=middle class='puzzle stuck' width=".(480*$statuses["stuck"]/$total_puzzles)."px>Stuck<br/>(".$statuses["stuck"].")</th>"; }
 	if (array_key_exists("solved",$statuses)) { print "<th align=center valign=middle class='puzzle solved' width=".(480*$statuses["solved"]/$total_puzzles)."px>Solved<br/>(".$statuses["solved"].")</th>"; }
     print "<th><a href='index.php?bylastmod'>All Unsolved<br/>Puzzles</a></th></tr></table></p>";
-}
-
-function writeFooter() {
-	writeHiddenNewMetabox();
-	writeHiddenNotesBox();
-    print "<p>".strftime('%c');
-	print "<p>Page will reload every 180 seconds automatically.</p>";
-    if (in_array("error_string", $_SESSION)) {
-    	print "<P>".$_SESSION['error_string']."</p>";
-    }
-	print "</body></html>";
 }
 
 function showDatabaseError($error_code) {
@@ -389,10 +364,6 @@ function displayUpdates($filter) {
 
 function pull_back_the_curtain($debugging_text) {
 	//print "<P><font color=red>".$debugging_text."</font></p>";
-}
-
-function displayWarning() {
-	print "<P><span style='color:#FF6600'>Hi there. Sorry, but you are not allowed to view this information.</span></p>";
 }
 
 function displayFeature($my_puzzle_list, $puzzle_id) {
