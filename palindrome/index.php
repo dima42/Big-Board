@@ -144,7 +144,7 @@ function getCurrentPuzzle($user_id) {
     //$results = getCurrentPuzzleSQL($user_id);
     // for now, we want an array of puzzles
     $my_puzzles = array();
-    //while ($row=mysql_fetch_array($results)) {
+    //while ($row=$results->fetch_array(MYSQLI_ASSOC)) {
         //$my_puzzles[$row['PUZID']]=$row['CHECKOUT'];
     //}
 
