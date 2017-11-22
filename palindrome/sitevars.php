@@ -1,4 +1,10 @@
 <?php
+$DEBUG = false;
+
+if ($_SERVER['HTTP_HOST'] == "localhost:8888") {
+    $DEBUG = true;
+}
+
 function connectToDB() {
     $user = 'spandext_foggy';
     $password = 'sm4rg4nA';
