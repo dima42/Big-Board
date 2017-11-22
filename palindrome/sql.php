@@ -75,18 +75,19 @@ function getUserID($google_id, $display_name) {
 	return $row['UID'];
 }
 
-function getUserDriveID($root_id, $display_name) {
+function getUserDriveID($link, $root_id, $display_name) {
 	$query = "select pal_id as UID from pal_usr_tbl where pal_ggl_id = '".$root_id."'";
 	pull_back_the_curtain($query);
-	$results =  mysql_query($query);
-	if (mysql_error() != "" || mysql_error() != NULL) { pull_back_the_curtain("findUser error ".mysql_error()); }
+	$results =  $link->query($query);
+	if ($link->error != "" || $link->error != NULL) { pull_back_the_curtain("findUser error ".mysqli_error()); }
 
 	// if results are empty, return 0. there is separate logic to determine if we should create a user
-	if (mysql_num_rows($results) == 0) {
+	if ($results->num_rows == 0) {
 		return 0;
 	}
+
 	// otherwise, return the ID that we found.
-	$row=mysql_fetch_array($results);
+	$row = $results->fetch_array(MYSQLI_ASSOC);
 	return $row['UID'];
 }
 

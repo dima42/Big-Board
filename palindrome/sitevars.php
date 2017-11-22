@@ -6,19 +6,17 @@ function connectToDB() {
     $host = 'localhost';
     $port = 8889;
 
-    $link = mysqli_init();
-    $success = mysqli_real_connect(
-       $link,
+    $link = mysqli_connect(
        $host,
        $user,
        $password,
        $db,
        $port
     );
-	if (!$success) {
+	if (!$link) {
         writeHeader('Could not select database');
     }
-	return $success;
+	return $link;
 }
 
 // Call this to find the folder we are using to store puzzle spreadsheets.

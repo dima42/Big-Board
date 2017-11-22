@@ -1,5 +1,4 @@
 <?php
-
 require_once "sitevars.php";
 require_once "new_file_management.php";
 require_once "html.php";
@@ -9,7 +8,7 @@ require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
 session_start();
-connectToDB();
+$link = connectToDB();
 
 // Visit https://code.google.com/apis/console to generate your
 // oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
@@ -68,16 +67,24 @@ if ($noAccessYet) {
 }
 
 // next, if there is no access token, user has not authorized app. So let's begin by checking that.
-if ($noAccessYet) {
+if ($noAccessYet && !$DEBUG) {
     writeHeader(FALSE);
     $authUrl = $pal_client->createAuthUrl();
     print "<p><a class='login' href='$authUrl'>Connect Me!</a>. Only Palindrome members may access this big board.</p>";
 } else {
-    writeHeader(TRUE);
     // first, let's try to get the user from the database based on root folder ID
-    $aboutg = $pal_drive->about->get(); $my_name = $aboutg["user"]["displayName"]; $my_root = $aboutg["rootFolderId"];
+
     // this will get the user ID of someone already established as a palindrome member
-    $_SESSION["user_id"] = getUserDriveID($my_root, $my_name);
+    if ($DEBUG) {
+        $_SESSION["user_id"] = getUserDriveID($link, "0AIyrhiUGyiJrUk9PVA", "Sandor Weisz");
+    } else {
+        $aboutg = $pal_drive->about->get();
+        $my_name = $aboutg["user"]["displayName"];
+        $my_root = $aboutg["rootFolderId"];
+        $_SESSION["user_id"] = getUserDriveID($link, $my_root, $my_name);
+    }
+
+    writeHeader(TRUE);
 
     //if ($_SESSION["user_id"] == 0) {
         // we should always check to see if they have access
