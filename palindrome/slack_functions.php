@@ -15,7 +15,7 @@ function createNewSlackChannel($title) {
     curl_setopt ($curl, CURLOPT_URL, "https://slack.com/api/channels.create?token=".drawkwards_token()."&name=".$slack_channel_title);
     $result = curl_exec ($curl);
 	curl_close ($curl);
-	
+
 	print drawkwards_token();
 	print $result;
 }
