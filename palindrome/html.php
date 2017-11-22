@@ -259,7 +259,7 @@ function displayMeta($my_puzzle_list, $meta_id) {
     } else {
 		$results = getMetaSQL($meta_id);
     }
-    $puzzle_count = mysql_num_rows($results); $which_puzzle = 0;
+    $puzzle_count = $results->num_rows; $which_puzzle = 0;
     if ($puzzle_count == 0) {
     	print "<P>This does not appear to be a metapuzzle. There are no puzzles that are part of it.";
         return;
@@ -271,7 +271,7 @@ function displayMeta($my_puzzle_list, $meta_id) {
     $current_puz_id = "";
     $current_workers = array();
 
-    while ($row = mysql_fetch_assoc($results)) {
+    while ($row = $results->fetch_assoc()) {
     	$which_puzzle += 1;
     	if ($row["META"] == 1) {
         	$meta_header = "<H2><input class='metaTitle' size=100 name='puzttl_".$row["PUZID"]."' value='".$row["PUZNME"]."' style='background: transparent; border: none;'/ onchange='new_name(this, ".$row["PUZID"].")'></H2>";
@@ -398,7 +398,7 @@ function displayWarning() {
 function displayFeature($my_puzzle_list, $puzzle_id) {
     $results = getFeaturedPuzzleIDSQL();
     $featureID = "";
-    while ($row = mysql_fetch_assoc($results)) {
+    while ($row = $results->fetch_assoc()) {
     	$featureID = $row["PUZID"];
 	}
 
@@ -415,7 +415,7 @@ function displayAbandonedPuzzles() {
 	$all_puzzles = array();
 
     $results = getUnsolvedPuzzles();
-    while ($row = mysql_fetch_assoc($results)) {
+    while ($row = $results->fetch_assoc()) {
         // what we want to do is get the last part of the spreadsheet key
         $currentFile = substr($row['PUZSPR'],strpos($row['PUZSPR'],"ccc?key=")+8,44);
 
