@@ -1,0 +1,17 @@
+{% extends 'loggedin.twig' %}
+
+{% block body %}
+<p><strong>Instructions:</strong> <span class='fake_button' id='instruction_status' onclick='toggle_instructions();'>show</span>
+<div id='instructions'>
+    Enter answers below the name of the puzzle.<br/>
+    Use the following codes to change the status of a puzzle: <br/>
+    <b>.</b> = the puzzle is open<br/>
+    <b>?</b> = the puzzle is stuck<br/>
+    <b>!</b> = the puzzle is a priority<br/>
+    <b>!!!</b> = the puzzle is the feature puzzle. Only one puzzle can be the featured puzzle.<br/>
+    <br/>
+    Click <span class='fake_button'>info</span> to view and edit puzzle information (include notes).<br/><br/>
+    Click <span class='fake_button'>drive</span> to view the spreadsheet for a puzzle.<br/><br/>
+    To nest one metapuzzle inside a metapuzzle: Click info for the metapuzzle. Click view as puzzle. Check off the meta to nest it under.
+</div>
+{% endblock %}
