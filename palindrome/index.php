@@ -121,15 +121,12 @@ if ($noAccessYet) {
         print "<p>News/Chat (<span class='pastNews'><a href='?updates&filter=Y'>previous</a></span>): <input id='UrgentMessage' name='UrgentMessage' value='".$latest_news.$latest_news_from."' style='border: none; "
                 ."background-color: #EEEEEE;' size=175 onchange='add_update(this, \"URG\", ".$_SESSION["user_id"].")'/><br /></p>";
 
-
         if (isset($_GET['meta'])) {
             // showing a meta
             displayMeta($_GET['meta']);
         } else if (isset($_GET['updates'])) {
             // showing updates
-            displayUpdates($_GET['updates']);
-            render('updates.twig', array(
-            ));
+            displayUpdates($_GET['filter']);
         } else if (isset($_GET['bylastmod'])) {
             // showing abandoned
             displayAbandonedPuzzles();

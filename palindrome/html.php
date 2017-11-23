@@ -240,23 +240,12 @@ function displayPuzzle($my_puzzle_list, $puzzle_id) {
 }
 
 function displayUpdates($filter) {
-	$news_table = "";
-    $news_table = "<p>"; //Most recent updates are listed first. ";
-    if ($filter == "Y") {
-    	$news_table .= "<a href='index.php?updates'>All updates</a>";
-    } else {
-    	$news_table .= "<a href='index.php?updates&filter=Y'>Hide automatic updates</a>";
-    }
-    $news_table .= "</p><table border=0 cellspacing=0 cellpadding=4>";
     $results = getUpdatesSQL();
-    while ($row = $results->fetch_assoc()) {
-    	if ($filter != "Y" || $row["TYP"] != "PUZ") {
-        	$news_table .= "<tr><td>".$row["WHN"].": ".$row["NEWS"]." (".$row['WHO'].")</td></tr>";
-        }
-	}
-    $news_table .= "</table>";
-    print $news_table;
-    print "<p><a href='index.php'>&laquo; Back to the Big Board</a></p>";
+
+    render('updates.twig', array(
+        'filter' => $filter,
+        'updates' => $results
+    ));
 }
 
 function displayFeature($my_puzzle_list, $puzzle_id) {

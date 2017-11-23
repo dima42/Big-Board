@@ -1,5 +1,19 @@
 {% extends 'loggedin.twig' %}
 
 {% block body %}
-updates
+<p>
+    {% if filter == "Y" %}
+        <a href='index.php?updates'>All updates</a>
+    {% else %}
+        <a href='index.php?updates&filter=Y'>Hide automatic updates</a>
+    {% endif %}
+</p>
+
+<table border=0 cellspacing=0 cellpadding=4>
+    {% for update in updates if filter != "Y" or update.TYP != "PUZ" %}
+            <tr><td>{{ update.WHN }}: {{ update.NEWS }} ({{ update.WHO }})</td></tr>
+    {% endfor %}
+</table>
+
+<p><a href='index.php'>&laquo; Back to the Big Board</a></p>
 {% endblock %}
