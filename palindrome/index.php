@@ -137,7 +137,7 @@ if ($noAccessYet) {
                 displayFeature($my_puzzle_list);
                 render('loggedin.twig');
             } else {
-                displayPuzzle($my_puzzle_list, $_GET['puzzle']);
+                displayPuzzle($_GET['puzzle']);
             }
         } else {
             // showing main page

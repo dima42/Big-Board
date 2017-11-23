@@ -199,7 +199,7 @@ function displayFeature($my_puzzle_list, $puzzle_id) {
     }
 }
 
-function displayPuzzle($my_puzzle_list, $puzzle_id) {
+function displayPuzzle($puzzle_id) {
     $results = getPuzzleSQL($puzzle_id);
 
     $puzzle_count = $results->num_rows;
