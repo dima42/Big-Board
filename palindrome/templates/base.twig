@@ -18,12 +18,14 @@
     </tr>
 </table>
 
-<P><em><span id='newscrawl'></span></em></p>
+<P>
+    <em><span id='newscrawl'></span></em>
+</p>
 
-{# <input type='hidden' id='userid' value='{{ $_SESSION['user_id'] }}' > #}
+<input type='hidden' id='userid' value='{{ user_id }}'>
 
-{% block body %}
-{% endblock %}
+{% block header %}{% endblock %}
+{% block body %}{% endblock %}
 
 <div id='new_puzzle_input'>New <span id='new_puzzle_type'></span><br/>
 <input id='new_puzzle_title' name='new_puzzle_title' value='Name' size=25 /><br/>
@@ -36,9 +38,7 @@
 
 <div id='show_notes' onclick='hide_notes()'></div>
 
-{# <p>strftime('%c');</p> #}
+<p>{{ time }}</p>
 <p>Page will reload every 180 seconds automatically.</p>
-{# if (in_array("error_string", $_SESSION)) {
-    <P>".$_SESSION['error_string']."</p>
-} #}
+<P>{{ error }}</p>
 </body></html>

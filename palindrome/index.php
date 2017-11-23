@@ -69,7 +69,7 @@ if ($noAccessYet) {
 // next, if there is no access token, user has not authorized app. So let's begin by checking that.
 if ($noAccessYet) {
     $authUrl = $pal_client->createAuthUrl();
-    render('loggedout.html', array(
+    render('loggedout.twig', array(
         'auth_url' => $authUrl
     ));
 } else {
@@ -107,38 +107,53 @@ if ($noAccessYet) {
 
     if ($_SESSION["user_id"] != 0) {
         $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
-        writeIntro();
+
+        $results = getLatestTeamUpdateSQL();
+        if ($results->num_rows > 0) {
+            while ($row = $results->fetch_array(MYSQLI_ASSOC)) {
+                $latest_news = str_replace("'","&#39;",$row["NEWS"]);
+                $latest_news_from = " (".$row["WHO"].")";
+            }
+        } else {
+            $latest_news = "Type over this text to send out a message.";
+            $latest_news_from = "";
+        }
+        print "<p>News/Chat (<span class='pastNews'><a href='?updates&filter=Y'>previous</a></span>): <input id='UrgentMessage' name='UrgentMessage' value='".$latest_news.$latest_news_from."' style='border: none; "
+                ."background-color: #EEEEEE;' size=175 onchange='add_update(this, \"URG\", ".$_SESSION["user_id"].")'/><br /></p>";
+
+
         if (isset($_GET['meta'])) {
             // showing a meta
-            displayMeta($my_puzzle_list, $_GET['meta']);
-            render('loggedin.html');
+            displayMeta($_GET['meta']);
         } else if (isset($_GET['updates'])) {
             // showing updates
             displayUpdates($_GET['updates']);
-            render('loggedin.html');
+            render('updates.twig', array(
+            ));
         } else if (isset($_GET['bylastmod'])) {
             // showing abandoned
             displayAbandonedPuzzles();
-            render('loggedin.html');
+            render('abandoned.twig', array(
+            ));
         } else if (isset($_GET['puzzle'])) {
             // showing a single puzzle
             if ($_GET['puzzle'] == 'F') {
                 displayFeature($my_puzzle_list);
-                render('loggedin.html');
+                render('loggedin.twig');
             } else {
                 displayPuzzle($my_puzzle_list,$_GET['puzzle']);
-                render('loggedin.html');
+                render('loggedin.twig');
             }
         } else {
             // showing main page
             writeKey();
             displayPuzzles($my_puzzle_list);
-            writeInstructions();
-            render('loggedin.html');
+            render('all_puzzles.twig', array(
+            ));
     }
     } else {
         // if someone is not a member of palindrome, let's tell them to bugger off
-        render('buggeroff.html');
+        render('buggeroff.twig');
     }
 
 }
