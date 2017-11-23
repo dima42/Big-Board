@@ -3,63 +3,6 @@ require_once 'sitevars.php';
 require_once 'htmlcss.php';
 require_once 'slack_functions.php';
 
-// function writeHeader($showTeamInformation) {
-// 	$palindromeName = getPalindromesName();
-// 	print "<html><head><title>".$palindromeName."</title>";
-// 	print "<script type='text/javascript' src='pallap.js'></script>";
-// 	writeStylesheet();
-// 	print "</head>";
-// 	print "<body onload='idle_hands();' onmousemove='idle_hands();' onclick='idle_hands();' onkeydown='idle_hands();'>";
-// 	print "<table width='1200'>";
-// 	print "<tr><td><a href='index.php'><span style='font-size:18px;font-weight:bold;'>$palindromeName Big Board</span></a></td>";
-
-// 	if ($showTeamInformation) {
-// 		print "<td align='right'><strong>HQ</strong>: ";
-// 	    print getPalindromeRoomNumbers();
-// 	    print "&nbsp;&nbsp;&nbsp;<strong>Phone</strong>  ";
-// 	    print getPalindromePhoneNumber();
-// 	    print "&nbsp;&nbsp;&nbsp;<strong>E-mail</strong>: team-palindrome@mit.edu<br/>";
-// 		print "Username: palindrome &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password: aplanacanal</td>";
-// 	}
-
-// 	print "</tr></table><P><em><span id='newscrawl'></span></em></p>";
-// 	print "<input type='hidden' id='userid' value='".$_SESSION['user_id']."'/>";
-// }
-
-function writeIntro() {
-	$results = getLatestTeamUpdateSQL();
-    if ($results->num_rows > 0) {
-	    while ($row = $results->fetch_array(MYSQLI_ASSOC)) {
-	    	$latest_news = str_replace("'","&#39;",$row["NEWS"]);
-	        $latest_news_from = " (".$row["WHO"].")";
-	    }
-    } else {
-    	$latest_news = "Type over this text to send out a message.";
-        $latest_news_from = "";
-    }
-	print "<p>News/Chat (<span class='pastNews'><a href='?updates&filter=Y'>previous</a></span>): <input id='UrgentMessage' name='UrgentMessage' value='".$latest_news.$latest_news_from."' style='border: none; "
-    		."background-color: #EEEEEE;' size=175 onchange='add_update(this, \"URG\", ".$_SESSION["user_id"].")'/><br /></p>";
-
-	print "<p><a href='http://palindrome2017.slack.com/messages/general' target='_new'>Slack (general)</a>";
-	print "&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://plus.google.com/hangouts/_/7lw6rz5zwbkiaozrwld6q77ahaa?authuser=0&hl=en' target='_new'>Hangout 1</a>";
-	print "&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://plus.google.com/hangouts/_/ha2iwh7ioc4ctfnehufqfvomzya?authuser=0&hl=en' target='_new'>Hangout 2</a>";
-}
-
-function writeInstructions() {
-	print "<p><strong>Instructions:</strong> <span class='fake_button' id='instruction_status' onclick='toggle_instructions();'>show</span>";
-	print "<div id='instructions'>Enter answers below the name of the puzzle.<br/>";
-	print "Use the following codes to change the status of a puzzle: <br/>";
-	print "<b>.</b> = the puzzle is open<br/>";
-	print "<b>?</b> = the puzzle is stuck<br/>";
-	print "<b>!</b> = the puzzle is a priority<br/>";
-	print "<b>!!!</b> = the puzzle is the feature puzzle. Only one puzzle can be the featured puzzle.<br/>";
-	print "<br/>";
-	print "Click <span class='fake_button'>info</span> to view and edit puzzle information (include notes).<br/><br/>";
-	print "Click <span class='fake_button'>drive</span> to view the spreadsheet for a puzzle.<br/><br/>";
-	print "To nest one metapuzzle inside a metapuzzle: Click info for the metapuzzle. Click view as puzzle. Check off the meta to nest it under.";
-	print "</div>";
-}
-
 function writeKey() {
     $statuses = array();
     $total_puzzles = 0;
@@ -228,64 +171,18 @@ function displayPuzzles($my_puzzle_list) {
 	print "<td colspan='".($col_width-$puzzle_count)."' width='".($cell_width*($col_width-$puzzle_count))."px'>&nbsp;</td></tr></table><br/>\r\n";
 }
 
-function displayMeta($my_puzzle_list, $meta_id) {
-	if ($meta_id == 0 ) {
-		$results = getLoosePuzzlesSQL();
-    } else {
-		$results = getMetaSQL($meta_id);
-    }
-    $puzzle_count = $results->num_rows; $which_puzzle = 0;
-    if ($puzzle_count == 0) {
-    	print "<P>This does not appear to be a metapuzzle. There are no puzzles that are part of it.";
-        return;
+function displayMeta($meta_id) {
+	if ($meta_id == 0) {
+        // TODO: redirect to function for showing unattached puzzles.
+		// old code: $results = getLoosePuzzlesSQL();
     }
 
-    $meta_table = "";
-    $meta_table = "<table border=0 cellspacing=0 cellpadding=4><tr><th>Puzzle</th><th>Answer</th><!--<th>Who's On It?</th>--><th>Let's Go!</th></tr>";
-    $meta_header = "";
-    $current_puz_id = "";
-    $current_workers = array();
+	$results = getMetaSQL($meta_id);
 
-    while ($row = $results->fetch_assoc()) {
-    	$which_puzzle += 1;
-    	if ($row["META"] == 1) {
-        	$meta_header = "<H2><input class='metaTitle' size=100 name='puzttl_".$row["PUZID"]."' value='".$row["PUZNME"]."' style='background: transparent; border: none;'/ onchange='new_name(this, ".$row["PUZID"].")'></H2>";
-            if($row["PUZSTT"] == "solved") {
-            	$meta_header .= "<H2 style='color:#FF6600'>This puzzle has been solved: ".$row["PUZANS"]."</H2>";
-            }
-
-            $meta_header .= "<table><tr><td><a name='puzurllink_".$row["PUZID"]."' href='".$row["PURL"]."'>Meta URL</a></td><td><input size=40 name='puzurl_".$row["PUZID"]."' value='".$row["PURL"]."' onchange='new_link(this, ".$row["PUZID"].")' /></td></tr>";
-            $meta_header .= "<tr><td><a name='puzsprlink_".$row["PUZID"]."' href='".$row["PUZSPR"]."'>Google Doc</a></td><td><input size=40 name='puzspr_".$row["PUZID"]."' value='".$row["PUZSPR"]."' onchange='new_sprd(this, ".$row["PUZID"].")' /></td></tr>";
-            $meta_header .= "<tr><td>Notes</td><td><input size=40 name='puznts_".$row["PUZID"]."' onchange='upd_notes(this, ".$row["PUZID"].")' value='".$row["PUZNOT"]."'</></td></tr></table>";
-            $current_puz_id = $row["PUZID"];
-        } else {
-          // what we want to do is check to see if this line is the same as the last line. If it isn't, and if it isn't the last row,
-
-          if ($current_puz_id != $meta_id && ($current_puz_id != $row["PUZID"])) {
-          	$meta_table .= $current_puzzle_table_front.implode(", ",$current_workers).$current_puzzle_table_back;
-            $current_workers = array();
-          }
-          $current_puz_id = $row["PUZID"];
-          $current_puzzle_table_front = "<tr class='".$row["PUZSTT"]."'><td><a href='".$row["PURL"]."' target='_new'>".$row["PUZNME"]."</a></td><td>".$row["PUZANS"]."</td><!--<td>-->";
-          $current_puzzle_table_back = "<!--</td>-->";
-          $current_workers[] = "";//$row["UNAME"];
-          if ($row["PUZSPR"] != "") {
-          		$current_puzzle_table_back .= "<th><a href='".$row["PUZSPR"]."' target='_new'><img src='sprd.png' width=20px height=20px /></a></th></tr>";
-          	} else {
-          		$current_puzzle_table_back .= "<th></th></tr>";
-          	}
-           if ($which_puzzle == $puzzle_count) {
-          		$meta_table .= $current_puzzle_table_front.implode(", ",$current_workers).$current_puzzle_table_back;
-           }
-         }
-	}
-    $meta_table .= "</table>";
-    print $meta_header;
-    print $meta_table;
-    print "<p><a href='index.php'>&laquo; Back to the Big Board</a></p>";
-	if ($meta_id != 0 ) {
-    	print "<p><a href='index.php?puzzle=".$meta_id."'>View this metapuzzle as a regular puzzle</a></p>";
-    }
+    render('meta.twig', array(
+        'meta_id' => $meta_id,
+        'puzzles' => $results
+    ));
 }
 
 function displayPuzzle($my_puzzle_list, $puzzle_id) {
