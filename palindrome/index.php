@@ -81,29 +81,29 @@ if ($noAccessYet) {
     $my_root = $aboutg["rootFolderId"];
     $_SESSION["user_id"] = getUserDriveID($my_root, $my_name);
 
-    // writeHeader(TRUE);
+    // we should always check to see if they have access
+    // check to see if they have write access to the palindrome folder
+    //let's check to see if the user has access
+    $isUserInPalindrome = FALSE;
 
-    //if ($_SESSION["user_id"] == 0) {
-        // we should always check to see if they have access
-        // check to see if they have write access to the palindrome folder
-          //let's check to see if the user has access
-          $isUserInPalindrome = FALSE;
-          // we need to find the current Mystery Hunt folder.
-          $hunt_folder = new Google_DriveFile();
-          try {
-              $hunt_folder = $pal_drive->files->get("0B5NGrtZ8ORMrYzY0MzFjYWEtZDRkZC00ZDNhLTg2N2YtZDljM2FiNmJhMjg5");
-              if ($hunt_folder["userPermission"]["id"] == "me") {
-                  $isUserInPalindrome = TRUE;
-              } else {
-                  $isUserInPalindrome = FALSE;
-              }
-          } catch (Exception $e) {
-              print "<P>An error has occured. <!--".$e->getMessage()."-->";
-              $isUserInPalindrome = FALSE;
-          }
-      // if they do have access, let's take root and name from before and create a user
-      if ($isUserInPalindrome && $_SESSION["user_id"] == 0) { $_SESSION["user_id"] = createUserDriveID($my_root, $my_name); }
-    //}
+    // Find the current Mystery Hunt folder.
+    $hunt_folder = new Google_DriveFile();
+    try {
+        $hunt_folder = $pal_drive->files->get("0B5NGrtZ8ORMrYzY0MzFjYWEtZDRkZC00ZDNhLTg2N2YtZDljM2FiNmJhMjg5");
+        if ($hunt_folder["userPermission"]["id"] == "me") {
+            $isUserInPalindrome = TRUE;
+        } else {
+            $isUserInPalindrome = FALSE;
+        }
+    } catch (Exception $e) {
+        print "<P>An error has occured. <!--".$e->getMessage()."-->";
+        $isUserInPalindrome = FALSE;
+    }
+
+    // if they do have access, let's take root and name from before and create a user
+    if ($isUserInPalindrome && $_SESSION["user_id"] == 0) {
+        $_SESSION["user_id"] = createUserDriveID($my_root, $my_name);
+    }
 
     if ($_SESSION["user_id"] != 0) {
         $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
