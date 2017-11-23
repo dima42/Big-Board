@@ -106,31 +106,36 @@ if ($noAccessYet) {
     //}
 
     if ($_SESSION["user_id"] != 0) {
-      $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
-      writeIntro();
-      if (isset($_GET['meta'])) {
-        // showing a meta?
-          displayMeta($my_puzzle_list, $_GET['meta']);
-      } else if (isset($_GET['updates'])) {
-        // showing updates?
-          displayUpdates($_GET['updates']);
-      } else if (isset($_GET['bylastmod'])) {
-        // showing abandoned?
-          displayAbandonedPuzzles();
-      } else if (isset($_GET['puzzle'])) {
-        // showing a single puzzle?
-          if ($_GET['puzzle'] == 'F') {
-              displayFeature($my_puzzle_list);
-          } else {
-              displayPuzzle($my_puzzle_list,$_GET['puzzle']);
-          }
-      } else {
-        // showing main page?
-          writeKey();
-          displayPuzzles($my_puzzle_list);
-          writeInstructions();
-      }
-        render('loggedin.html');
+        $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
+        writeIntro();
+        if (isset($_GET['meta'])) {
+            // showing a meta
+            displayMeta($my_puzzle_list, $_GET['meta']);
+            render('loggedin.html');
+        } else if (isset($_GET['updates'])) {
+            // showing updates
+            displayUpdates($_GET['updates']);
+            render('loggedin.html');
+        } else if (isset($_GET['bylastmod'])) {
+            // showing abandoned
+            displayAbandonedPuzzles();
+            render('loggedin.html');
+        } else if (isset($_GET['puzzle'])) {
+            // showing a single puzzle
+            if ($_GET['puzzle'] == 'F') {
+                displayFeature($my_puzzle_list);
+                render('loggedin.html');
+            } else {
+                displayPuzzle($my_puzzle_list,$_GET['puzzle']);
+                render('loggedin.html');
+            }
+        } else {
+            // showing main page
+            writeKey();
+            displayPuzzles($my_puzzle_list);
+            writeInstructions();
+            render('loggedin.html');
+    }
     } else {
         // if someone is not a member of palindrome, let's tell them to bugger off
         render('buggeroff.html');
