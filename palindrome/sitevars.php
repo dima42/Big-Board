@@ -15,6 +15,11 @@ $twig = new Twig_Environment($loader, array(
 
 function render($template, $vars = array()) {
     Global $twig;
+    $vars['user_id'] = $_SESSION['user_id'];
+    $vars['time'] = strftime('%c');
+    if (in_array("error_string", $_SESSION)) {
+        $vars['error'] = $_SESSION['error_string'];
+    }
     echo $twig->render($template, $vars);
 }
 
