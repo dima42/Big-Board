@@ -1,5 +1,65 @@
 {% extends 'loggedin.twig' %}
 
 {% block body %}
-meta
+
+<H2><input class='metaTitle' size=100 name='puzttl_{{ puzzle.PUZID }}' value='{{ puzzle.PUZNME }}' style='background: transparent; border: none;' onchange='new_name(this, {{ puzzle.PUZID }})'></H2>
+{% if puzzle.PUZSTT == "featured" %}
+    <H2 style='color:#009900'>This puzzle is the Featured Puzzle</H2>
+{% endif %}
+{% if puzzle.PUZSTT == "solved" %}
+    <H2 style='color:#FF6600'>This puzzle has been solved: {{ puzzle.PUZANS }}</H2>
+{% endif %}
+
+<table>
+    <tr>
+        <td><a name='puzurllink_{{ puzzle.PUZID }}' href='{{ puzzle.PURL }}'>Puzzle URL</a></td>
+        <td>
+            <input size=40 name='puzurl_{{ puzzle.PUZID }}' value='{{ puzzle.PURL }}' onchange='new_link(this, {{ puzzle.PUZID }})' >
+        </td>
+    </tr>
+    <tr>
+        <td><a name='puzsprlink_{{ puzzle.PUZID }}' href='{{ puzzle.PUZSPR }}'>Google Doc</a></td>
+        <td>
+            <input size=40 name='puzspr_{{ puzzle.PUZID }}' value='{{ puzzle.PUZSPR }}' onchange='new_sprd(this, {{ puzzle.PUZID }})' >
+        </td>
+    </tr>
+    <tr>
+        <td>Notes</td>
+        <td>
+            <input size=40 name='puznts_{{ puzzle.PUZID }}' onchange='upd_notes(this, {{ puzzle.PUZID }})' value='{{ puzzle.PUZNOT }}' <>
+        </td>
+    </tr>
+    </table
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>Metapuzzles</h2>
+
+{% for meta in metas %}
+    <p>
+        <input type='checkbox' {% if meta.INMETA > 0 %}checked{% endif %} name='puzinmeta_{{ meta.MID }}' onclick='change_parent(this, {{ puzzle_id }}, {{ meta.MID }})'>
+        {{ meta.MTTL }}
+    </p>
+{% endfor %}
+
+<p><a href='index.php'>&laquo; Back to the Big Board</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<table>
+    <tr valign=middle>
+        <th width=240px align=left>Advanced options.
+            <br>
+            Do not use unless you are sure.
+        </th>
+        <td width=240px>
+            <div><a href='#' class='fake_button' onclick='promote_puzzle( {{ puzzle_id }});'>Mark this puzzle as a metapuzzle.</a></div>
+        </td>
+        <td width=240px>
+            <div>
+                <a href='#' class='fake_button' onclick='delete_puzzle( {{ puzzle_id }});'>Delete this puzzle.</a>
+                <input type=checkbox id='areyousure' value='yes' >Are you sure?
+            </div>
+        </td>
+    </tr>
+</table>
+
 {% endblock %}

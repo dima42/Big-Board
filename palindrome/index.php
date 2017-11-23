@@ -133,11 +133,11 @@ if ($noAccessYet) {
         } else if (isset($_GET['puzzle'])) {
             // showing a single puzzle
             if ($_GET['puzzle'] == 'F') {
+                // TODO: WHAT ARE FEATURED PUZZLES?
                 displayFeature($my_puzzle_list);
                 render('loggedin.twig');
             } else {
-                displayPuzzle($my_puzzle_list,$_GET['puzzle']);
-                render('loggedin.twig');
+                displayPuzzle($my_puzzle_list, $_GET['puzzle']);
             }
         } else {
             // showing main page

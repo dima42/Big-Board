@@ -185,58 +185,38 @@ function displayMeta($meta_id) {
     ));
 }
 
+function displayFeature($my_puzzle_list, $puzzle_id) {
+    $results = getFeaturedPuzzleIDSQL();
+    $featureID = "";
+    while ($row = $results->fetch_assoc()) {
+        $featureID = $row["PUZID"];
+    }
+
+    if ($featureID != "") {
+        displayPuzzle($my_puzzle_list, $featureID);
+    } else {
+        displayPuzzles($my_puzzle_list);
+    }
+}
+
 function displayPuzzle($my_puzzle_list, $puzzle_id) {
-	// this is a little different. For this, we are getting info about the puzzle, but also, we need to edit a lot of its information.
     $results = getPuzzleSQL($puzzle_id);
+
     $puzzle_count = $results->num_rows;
     if ($puzzle_count == 0) {
-    	print "<P>This puzzle does not exist. It is a ghost puzzle.";
+        // TODO: redirect to error template
+        print "<P>This puzzle does not exist. It is a ghost puzzle.</p>";
         return;
     }
 
-    $which_puzzle = 0;
-    $current_workers = array();
-    while ($row = $results->fetch_assoc()) {
-    	if ($which_puzzle == 0) {
-        $puzzle_header = "<H2><input class='metaTitle' size=100 name='puzttl_".$row["PUZID"]."' value='".$row["PUZNME"]."' style='background: transparent; border: none;'/ onchange='new_name(this, ".$row["PUZID"].")'></H2>";
-        if($row["PUZSTT"] == "featured") {
-            $puzzle_header .= "<H2 style='color:#009900'>This puzzle is the Featured Puzzle</H2>";
-         }
-        if($row["PUZSTT"] == "solved") {
-            $puzzle_header .= "<H2 style='color:#FF6600'>This puzzle has been solved: ".$row["PUZANS"]."</H2>";
-        }
+    $puzzle = $results->fetch_assoc();
+    $metas = getAllMetasSQL($puzzle_id);
 
-        $puzzle_header .= "<table><tr><td><a name='puzurllink_".$row["PUZID"]."' href='".$row["PURL"]."'>Puzzle URL</a></td><td>".
-        					"<input size=40 name='puzurl_".$row["PUZID"]."' value='".$row["PURL"]."' onchange='new_link(this, ".$row["PUZID"].")' /></td></tr>";
-        $puzzle_header .= "<tr><td><a name='puzsprlink_".$row["PUZID"]."' href='".$row["PUZSPR"]."'>Google Doc</a></td><td>".
-        					"<input size=40 name='puzspr_".$row["PUZID"]."' value='".$row["PUZSPR"]."' onchange='new_sprd(this, ".$row["PUZID"].")' /></td></tr>";
-        $puzzle_header .= "<tr><td>Notes</td><td><input size=40 name='puznts_".$row["PUZID"]."' onchange='upd_notes(this, ".$row["PUZID"].")' value='".$row["PUZNOT"]."'</></td></tr></table>";
-        $which_puzzle += 1;
-      }
-      $current_workers[] = $row['UNAME'];
-	}
-    print $puzzle_header;
-    //if (count($current_workers) > 0) {
-    //	print "<P>Who's working on this: ".implode(", ",$current_workers)."</P>";
-    //} else {
-    //	print "<P>No one is working on this.</P>";
-    //}
-
-   print "<p>&nbsp;</p><p>&nbsp;</p><h2>Metapuzzles</h2>";
-
-   $results = getAllMetasSQL($puzzle_id);
-    while ($row = $results->fetch_assoc()) {
-    	if ($row["INMETA"] > 0) {
-        	print "<p><input type='checkbox' checked name='puzinmeta_".$row['MID']."' onclick='change_parent(this, ".$puzzle_id.", ".$row['MID'].")'>".$row["MTTL"]."</p>";
-        } else {
-        	print "<p><input type='checkbox' name='puzinmeta_".$row['MID']."' onclick='change_parent(this, ".$puzzle_id.", ".$row['MID'].")'>".$row["MTTL"]."</p>";
-        }
-    }
-   print "<p><a href='index.php'>&laquo; Back to the Big Board</a></p>";
-   print "<p>&nbsp;</p><p>&nbsp;</p>";
-   print "<table><tr valign=middle><th width=240px align=left>Advanced options.<br/>Do not use unless you are sure.</th>";
-   print "<td width=240px><div><a href='#' class='fake_button' onclick='promote_puzzle(".$puzzle_id.");'>Mark this puzzle as a metapuzzle.</a></div></td>";
-   print "<td width=240px><div><a href='#' class='fake_button' onclick='delete_puzzle(".$puzzle_id.");'>Delete this puzzle.</a><input type=checkbox id='areyousure' value='yes'/>Are you sure?</div></td></tr></table>";
+    render('puzzle.twig', array(
+        'puzzle_id' => $puzzle_id,
+        'puzzle' => $puzzle,
+        'metas' => $metas
+    ));
 }
 
 function displayUpdates($filter) {
@@ -246,20 +226,6 @@ function displayUpdates($filter) {
         'filter' => $filter,
         'updates' => $results
     ));
-}
-
-function displayFeature($my_puzzle_list, $puzzle_id) {
-    $results = getFeaturedPuzzleIDSQL();
-    $featureID = "";
-    while ($row = $results->fetch_assoc()) {
-    	$featureID = $row["PUZID"];
-	}
-
-    if ($featureID != "") {
-    	displayPuzzle($my_puzzle_list, $featureID);
-    } else {
-    	displayPuzzles($my_puzzle_list);
-    }
 }
 
 function displayAbandonedPuzzles() {
