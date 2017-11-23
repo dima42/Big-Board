@@ -141,10 +141,7 @@ if ($noAccessYet) {
             }
         } else {
             // showing main page
-            writeKey();
             displayPuzzles($my_puzzle_list);
-            render('all_puzzles.twig', array(
-            ));
     }
     } else {
         // if someone is not a member of palindrome, let's tell them to bugger off

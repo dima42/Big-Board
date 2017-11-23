@@ -1,6 +1,68 @@
 {% extends 'loggedin.twig' %}
 
+{% set cell_width = 150 %}
+
 {% block body %}
+<table border=0 cellspacing=0 cellpadding=4>
+    <tr>
+        <th align=center valign=middle width=120px onclick='show_puzzle_input("M",0, {{ user_id }});'>
+            <span class='fake_button'>+New Meta</span></th>
+        <th align=center valign=middle width=120px onclick='show_puzzle_input("P",0, {{ user_id }});' />
+        <span class='fake_button'>+New Puzzle</span></th>
+        <th align=center valign=middle class="" width=120px>&nbsp;</th>
+
+    {% if statuses.featured > 0 %}
+        <th align=center valign=middle class='puzzle featured' width="{{ 480 * statuses.featured / total_puzzles }}px">Featured<br/>(<a href='index.php?puzzle=F'>View</a>)</th>
+    {% endif %}
+    {% if statuses.priority > 0 %}
+        <th align=center valign=middle class='puzzle priority' width="{{ 480 * statuses.priority / total_puzzles }}px">Priority<br/>{{ statuses.priority }}</th>
+    {% endif %}
+    {% if statuses.open > 0 %}
+        <th align=center valign=middle class='puzzle open' width="{{ 480 * statuses.open / total_puzzles }}px">Open<br/>{{ statuses.open }}</th>
+    {% endif %}
+    {% if statuses.stuck > 0 %}
+        <th align=center valign=middle class='puzzle stuck' width="{{ 480 * statuses.stuck / total_puzzles }}px">Stuck<br/>{{ statuses.stuck }}</th>
+    {% endif %}
+    {% if statuses.solved > 0 %}
+        <th align=center valign=middle class='puzzle solved' width="{{ 480 * statuses.solved / total_puzzles }}px">Solved<br/>{{ statuses.solved }}</th>
+    {% endif %}
+        <th><a href='index.php?bylastmod'>All Unsolved<br/>Puzzles</a></th></tr></table></p>
+    </tr>
+</table>
+
+{% for puzzle in puzzles %}
+    <div name='puzzle_{{ puzzle.PUZID }}' width="{{ cell_width }}px" class='puzzle {{ puzzle.STATUS }}'>
+    {% if puzzle.META == 1 %}
+        <b>META</b>
+    {% endif %}
+    {% if puzzle.PUZURL != "" %}
+        <A HREF='{{ puzzle.PUZURL }}' target='_blank' alt='{{ puzzle.INDPUZ }}'>{{ puzzle.INDPUZ }}</A>
+    {% else %}
+        {{ puzzle.INDPUZ }}
+    {% endif %}
+    <br>
+
+    <input
+        name='puzans_"{{ puzzle.PUZID }}' value='{{ puzzle.PUZANS }}'
+        size="({{ cell_width / 7.5 }})"
+        class='{{ puzzle. STATUS }}'
+        style='border-width:0px; text-align: center;'
+        onchange='editAnswer(this, "{{ puzzle. PUZID }}", "{{ puzzle. PUZANS }}", {{ user_id }}, "{{ puzzle.INDPUZ }}")'
+    >
+    <br>
+    <a href='?puzzle={{ puzzle.PUZID }}' class='fake_button'>info</a>
+    {# spreadshet #}
+    <a href='{{ puzzle.PUZSPR }}' target='_blank' style='text-decoration: none;'><span class='fake_button'>drive</span></a>
+    {# slack #}
+    <a href='http://palindrome2017.slack.com/messages/{{ puzzle.puz_reduced }}' target='_blank' style='text-decoration: none;'><span class='fake_button'>slack</span></a>
+    {% if puzzle.META == 1 %}
+        {# show +puzzle button here #}
+    {% endif %}
+    {# notes text #}
+    {# insert $notestext here #}
+    </div>
+{% endfor %}
+
 <p><strong>Instructions:</strong> <span class='fake_button' id='instruction_status' onclick='toggle_instructions();'>show</span>
 <div id='instructions'>
     Enter answers below the name of the puzzle.<br/>
