@@ -263,60 +263,40 @@ function displayFeature($my_puzzle_list, $puzzle_id) {
 }
 
 function displayAbandonedPuzzles() {
-	// first of all let's get the current spreadsheets in the folder
-	$from_the_folder = getDrivesFiles();
-	$all_puzzles = array();
+    // first of all let's get the current spreadsheets in the folder
+    $from_the_folder = getDrivesFiles();
+    $all_puzzles = array();
 
     $results = getUnsolvedPuzzles();
-    while ($row = $results->fetch_assoc()) {
-        // what we want to do is get the last part of the spreadsheet key
-        $currentFile = substr($row['PUZSPR'],strpos($row['PUZSPR'],"ccc?key=")+8,44);
+    foreach ($results as $row) {
+        $currentFile = substr($row['PUZSPR'], strpos($row['PUZSPR'], "ccc?key=") + 8, 44);
 
-        // check to see if the file is in the folder
+        $lastmod = "2017-12-31";
         if (array_key_exists($currentFile, $from_the_folder)) {
-        	$all_puzzles[$currentFile] = $from_the_folder[$currentFile][1]."|"
-            								.$row['INDPUZ']."|"
-                                            .$row['STATUS']."|"
-                                            .$row['PUZURL']."|"
-                                            .$row['PUZSPR']."|"
-                                            .$row['PUZNTS']."|".$from_the_folder[$currentFile][0];
-		} else {
-        	$all_puzzles[$currentFile] = "2015-12-31|"
-            								.$row['INDPUZ']."|"
-                                            .$row['STATUS']."|"
-                                            .$row['PUZURL']."|"
-                                            .$row['PUZSPR']."|"
-                                            .$row['PUZNTS']."|"."Unknown";
-		}
-	}
+            $lastmod = $from_the_folder[$currentFile][1];
 
-	asort($all_puzzles);
-	$aband_table = "";
-    $aband_table = "<p>The following lists all unsolved puzzles, in order of how long ago their spreadsheet was opened (which may or may not reflect when someone last worked on the puzzle.</p>";
-    $aband_table .= "<table border=0 cellspacing=0 cellpadding=4>";
-    $aband_table .= "<tr><th>Puzzle</th><th>Last Modified</th><th>Notes</th><th>Status</th><th>Link to Spreadsheet</th></tr>";
-
-    foreach($all_puzzles as $k=>$v) {
-    	$this_puzzle = explode("|",$v);
-		$how_old = (time()-strtotime($this_puzzle[0]))/60;
-        if ($how_old > 60*24) {
-        	$how_old_txt = intval($how_old/(24*60))." days";
-        } else if ($how_old > 60) {
-        	$how_old_txt = intval($how_old/60)." hrs";
-        } else {
-        	$how_old_txt = intval($how_old)." min";
-        }
-        $aband_table .= "<tr class='".$this_puzzle[2]."'>".
-        				"<td><a href='".$this_puzzle[3]."' target='_new'>".$this_puzzle[1]."</a></td>".
-        				"<td>".$how_old_txt."</td>".
-        				"<td>".$this_puzzle[5]."</td>".
-        				"<td>".$this_puzzle[2]."</td>".
-                        "<td><a href='".$this_puzzle[4]."' target='_new'>Drive</a></td>".
-                        "</tr>";
+            $how_old = (time() - strtotime($lastmod))/60;
+            if ($how_old > 60*24) {
+                $file_age = intval($how_old/(24*60)) . " days";
+            } else if ($how_old > 60) {
+                $file_age = intval($how_old/60) . " hrs";
+            } else {
+                $file_age = intval($how_old) . " min";
+            }
         }
 
-    $aband_table .= "</table>";
-    print $aband_table;
-    print "<p><a href='index.php'>&laquo; Back to the Big Board</a></p>";
+        $all_puzzles[$currentFile] = array(
+            'FILEAGE' => $file_age,
+            'INDPUZ' => $row['INDPUZ'],
+            'STATUS' => $row['STATUS'],
+            'PUZURL' => $row['PUZURL'],
+            'PUZSPR' => $row['PUZSPR'],
+            'PUZNTS' => $row['PUZNTS'],
+        );
+    }
+
+    render('abandoned.twig', array(
+        'puzzles' => $all_puzzles
+    ));
 }
 ?>

@@ -130,8 +130,6 @@ if ($noAccessYet) {
         } else if (isset($_GET['bylastmod'])) {
             // showing abandoned
             displayAbandonedPuzzles();
-            render('abandoned.twig', array(
-            ));
         } else if (isset($_GET['puzzle'])) {
             // showing a single puzzle
             if ($_GET['puzzle'] == 'F') {
