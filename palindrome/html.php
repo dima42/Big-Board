@@ -362,10 +362,6 @@ function displayUpdates($filter) {
     print "<p><a href='index.php'>&laquo; Back to the Big Board</a></p>";
 }
 
-function pull_back_the_curtain($debugging_text) {
-	//print "<P><font color=red>".$debugging_text."</font></p>";
-}
-
 function displayFeature($my_puzzle_list, $puzzle_id) {
     $results = getFeaturedPuzzleIDSQL();
     $featureID = "";

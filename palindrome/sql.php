@@ -1,4 +1,8 @@
 <?
+function pull_back_the_curtain($debugging_text) {
+    //print "<P><font color=red>".$debugging_text."</font></p>";
+}
+
 function error_debug($link) {
     $error = $link->error;
     if ($error != "" || $error != NULL) {
