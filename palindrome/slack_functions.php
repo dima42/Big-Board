@@ -13,7 +13,7 @@ function createNewSlackChannel($title) {
     curl_close($curl);
 
     // print $drawkwards_token;
-    print $result;
+    // print $result;
 
     return $slack_channel;
 }
