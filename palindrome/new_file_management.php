@@ -23,30 +23,46 @@ function get_new_drive_service() {
   }
 }
 
-function create_new_file($title) {
+function create_file_from_template($title) {
     $service = get_new_drive_service();
     $file = new Google_DriveFile();
     $file->setTitle($title);
-    if (in_array("error_string", $_SESSION)) {
-        $file->setDescription($_SESSION['error_string']);
-    }
-    $file->setMimeType("application/vnd.google-apps.spreadsheet");
+    // 1nXyGRx_EJTXeK7_dpewFnRjzL6eiM7prC6-T02cdMu4 is ID of our Template file, which is inside Mystery Hunt 2018/All Puzzles.
+    $copy = $service->files->copy('1nXyGRx_EJTXeK7_dpewFnRjzL6eiM7prC6-T02cdMu4', $file);
 
-    // Set the parent folder.
-    $parents = new Google_ParentReference();
-    $parents->setId(getCurrentParentFolder());
-    $file->setParents(array($parents));
-    try {
-        $brandNewFiel = new Google_DriveFile();
-        $brandNewFiel = $service->files->insert($file, array(
-            'data' => "",
-            'mimeType' => "application/vnd.google-apps.spreadsheet",
-        ));
-    	return $brandNewFiel["id"];
-    } catch (Exception $e) {
-        return "";
-    }
+    return $copy['id'];
 }
+
+// Call this to find the folder we are using to store puzzle spreadsheets.
+// When setting up an upcoming Mystery Hunt folder, create an All Puzzle folders.
+// function getCurrentParentFolder() {
+//     return  "1FI0ClFnc1bU0H8hCDVZOWGz3H02Kv773"; // current "Mystery Hunt 2018/All Puzzles" folder
+// }
+
+// function create_new_file($title) {
+//     $service = get_new_drive_service();
+//     $file = new Google_DriveFile();
+//     $file->setTitle($title);
+//     if (in_array("error_string", $_SESSION)) {
+//         $file->setDescription($_SESSION['error_string']);
+//     }
+//     $file->setMimeType("application/vnd.google-apps.spreadsheet");
+
+//     // Set the parent folder.
+//     $parents = new Google_ParentReference();
+//     $parents->setId(getCurrentParentFolder());
+//     $file->setParents(array($parents));
+//     try {
+//         $brandNewFiel = new Google_DriveFile();
+//         $brandNewFiel = $service->files->insert($file, array(
+//             'data' => "",
+//             'mimeType' => "application/vnd.google-apps.spreadsheet",
+//         ));
+//     	return $brandNewFiel["id"];
+//     } catch (Exception $e) {
+//         return "";
+//     }
+// }
 
 function getDrivesFiles() {
 	$myDriveService = get_new_drive_service();

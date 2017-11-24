@@ -54,7 +54,7 @@ if ($f == "NWS") {
 }
 
 if ($f == "ANM" || $f == "ANP" || $f == "APIM") {
-	if (checkForExistingPuzzleSQL($_GET{"ttl"}) == 0) {
+    if (checkForExistingPuzzleSQL($_GET{"ttl"}) == 0) {
         $url = $_GET{"url"};
         if (substr($url, -3, 3) == "URL") {
             $url = substr($url, 0, strlen($url) - 3);
@@ -62,7 +62,7 @@ if ($f == "ANM" || $f == "ANP" || $f == "APIM") {
 
         $slack_channel = createNewSlackChannel($_GET{"ttl"});
         $message = "";
-        $file_id = create_new_file($_GET["ttl"]);
+        $file_id = create_file_from_template($_GET["ttl"]);
         if ($f == "ANM") {
             addNewMetaSQL($_GET{"ttl"}, $url, $file_id, $slack_channel);
             $message = "A new metapuzzle, ".$_GET{"ttl"}.", has been added.";
