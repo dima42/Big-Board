@@ -5,10 +5,12 @@
 {% block body %}
 <table border=0 cellspacing=0 cellpadding=4>
     <tr>
-        <th align=center valign=middle width=120px onclick='show_puzzle_input("M",0, {{ user_id }});'>
-            <span class='fake_button'>+New Meta</span></th>
-        <th align=center valign=middle width=120px onclick='show_puzzle_input("P",0, {{ user_id }});' />
-        <span class='fake_button'>+New Puzzle</span></th>
+        <th width="120px" onclick='show_puzzle_input("M" ,0, {{ user_id }});'>
+            <span class='fake_button'>+New Meta</span>
+        </th>
+        <th width="120px" onclick='show_puzzle_input("P", 0, {{ user_id }});'>
+            <span class='fake_button'>+New Puzzle</span>
+        </th>
         <th align=center valign=middle class="" width=120px>&nbsp;</th>
 
     {% if statuses.featured > 0 %}
