@@ -12,39 +12,51 @@ $link = connectToDB();
 $f = $_GET{"f"};
 
 if ($f == "CHK") {
-    print signMeUpSQL($_GET{"pid"},$_GET{"uid"});
+    print signMeUpSQL($_GET{"pid"}, $_GET{"uid"});
 }
 
 if ($f == "QWT") {
-    print iQuitSQL($_GET{"pid"},$_GET{"uid"});
+    print iQuitSQL($_GET{"pid"}, $_GET{"uid"});
 }
 
 if ($f == "STT") {
-	print gameChangerSQL($_GET{"pid"},$_GET{"stt"});
-	addUpdateSQL($_GET{"uid"},"PUZ","I have set the status of puzzle, ".$_GET{"ttl"}." to ".$_GET{"stt"}.".");
+	print gameChangerSQL($_GET{"pid"}, $_GET{"stt"});
+	addUpdateSQL($_GET{"uid"}, "PUZ", "I have set the status of puzzle,  ".$_GET{"ttl"}." to ".$_GET{"stt"}.".");
 }
 
 if ($f == "ANS") {
-	print eurekaSQL($_GET{"pid"},$_GET{"ans"});
-	addUpdateSQL($_GET{"uid"},"PUZ","".$_GET{"ttl"}." is solved! (The answer was ".$_GET{"ans"}.".");
+	print eurekaSQL($_GET{"pid"}, $_GET{"ans"});
+	addUpdateSQL($_GET{"uid"}, "PUZ", "".$_GET{"ttl"}." is solved! (The answer was ".$_GET{"ans"}.".");
 }
 
-if ($f == "NPL") { print thepuzzleiswhereSQL($_GET{"pid"},$_GET{"link"});}
+if ($f == "NPL") {
+    print thepuzzleiswhereSQL($_GET{"pid"}, $_GET{"link"});
+}
 
-if ($f == "NPS") { print workrelocationSQL($_GET{"pid"},$_GET{"link"});}
+if ($f == "NPS") {
+    print workrelocationSQL($_GET{"pid"}, $_GET{"link"});
+}
 
-if ($f == "NPN") { print knightswhonolongersayniSQL($_GET{"pid"},$_GET{"ttl"});}
+if ($f == "NPN") {
+    print knightswhonolongersayniSQL($_GET{"pid"}, $_GET{"ttl"});
+}
 
-if ($f == "APM") { print newDaddySQL($_GET{"pid"},$_GET{"mid"});}
+if ($f == "APM") {
+    print newDaddySQL($_GET{"pid"}, $_GET{"mid"});
+}
 
-if ($f == "RPM") { print abandonedSQL($_GET{"pid"},$_GET{"mid"});}
+if ($f == "RPM") {
+    print abandonedSQL($_GET{"pid"}, $_GET{"mid"});
+}
 
-if ($f == "NWS") { print addUpdateSQL($_GET{"uid"},$_GET{"code"},$_GET{"news"});}
+if ($f == "NWS") {
+    print addUpdateSQL($_GET{"uid"}, $_GET{"code"},$_GET{"news"});
+}
 
 if ($f == "ANM" || $f == "ANP" || $f == "APIM") {
 	if (checkForExistingPuzzleSQL($_GET{"ttl"}) == 0) {
         $url = $_GET{"url"};
-        if (substr($url,-3,3) == "URL") {
+        if (substr($url, -3, 3) == "URL") {
             $url = substr($url, 0, strlen($url) - 3);
         }
 
