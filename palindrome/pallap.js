@@ -32,10 +32,10 @@ function handlePuzzleAddition(e) {
 			document.getElementById("UrgentMessage").value = "A puzzle with this title already exists. This page will refresh momentarily.";
 			var start = new Date().getTime();
         	while (new Date().getTime() < start + 5000);
-			location.replace("index.php");
+			// location.replace("index.php");
 		} else {
 			document.getElementById("UrgentMessage").value = msgr.responseText;
-	 		location.reload(true);
+	 		// location.reload(true);
 		}
 	} else {
 		document.getElementById("new_puzzle_save").innerHTML = "Saving...please be patient.";
@@ -300,7 +300,6 @@ function add_update(elem, code, userID) {
 }
 
 function show_puzzle_input(type, metaID, userID) {
-	//alert(event.pageX+"; "+event.pageY);
 	if (type=="M") {
 		n_p_type = "meta";
 	} else {
@@ -314,8 +313,8 @@ function show_puzzle_input(type, metaID, userID) {
 	// type should be either P or M. If M, then there is no metaID needed
 	document.getElementById("new_puzzle_input").style.display = "block";
 	document.getElementById("new_puzzle_input").style.position = "absolute";
-	document.getElementById("new_puzzle_input").style.left = event.pageX;
-	document.getElementById("new_puzzle_input").style.top = event.pageY;
+	document.getElementById("new_puzzle_input").style.left = event.pageX + "px";
+	document.getElementById("new_puzzle_input").style.top = event.pageY + "px";
 	document.getElementById("new_puzzle_hidden_uid").value = userID;
 	document.getElementById("new_puzzle_hidden_type").value = type;
 	document.getElementById("new_puzzle_hidden_parent").value = metaID;
@@ -377,10 +376,10 @@ function promote_puzzle(puzzleID) {
 }
 
 function idle_hands() {
-  if (timeout) {
-    clearTimeout(timeout);
-  }
-  timeout = setTimeout("location.reload();", session_timeout);
+  // if (timeout) {
+  //   clearTimeout(timeout);
+  // }
+  // timeout = setTimeout("location.reload();", session_timeout);
 }
 
 function process_url(url_string) {
