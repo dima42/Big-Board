@@ -2,6 +2,7 @@
 require_once 'sitevars.php';
 require_once 'htmlcss.php';
 require_once 'sql.php';
+require_once "new_file_management.php";
 
 function getCurrentPuzzle($user_id) {
     $results = getCurrentPuzzleSQL($user_id);
@@ -15,6 +16,13 @@ function getCurrentPuzzle($user_id) {
 function displayError($error) {
     render('error.twig', array(
         'error' => $error,
+    ));
+}
+
+function displayTest() {
+    $result = create_file_from_template("test-". rand(1000, 9999));
+    render('test.twig', array(
+        'content' => $result,
     ));
 }
 

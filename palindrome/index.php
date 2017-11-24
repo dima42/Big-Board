@@ -117,6 +117,11 @@ function show_page($pal_drive, $querystring) {
 }
 
 function show_content($querystring) {
+    // Show test
+    if (isset($_GET['test'])) {
+        return displayTest();
+    }
+
     // Show a meta
     if (isset($_GET['meta'])) {
         return displayMeta($_GET['meta']);
