@@ -188,9 +188,9 @@ function createUser($google_id, $display_name, $refresh) {
     Global $link;
 	$query = "insert into pal_usr_tbl (pal_usr_nme, pal_ggl_rfr, pal_ggl_id) ".
 			 "values (".
-			 "'".$display_name."', ".
-			 "'".$refresh."', ".
-			 "'".$google_id."' ".
+			 "'" . $display_name . "', " .
+			 "'" . $refresh . "', " .
+			 "'" . $google_id . "' " .
 			 ")";
 	pull_back_the_curtain($query);
 	$query_resource = $link->query($query);
@@ -200,18 +200,18 @@ function createUser($google_id, $display_name, $refresh) {
 
 function signMeUpSQL($pid, $uid) {
     Global $link;
-	$query = "insert into puz_chk_out (puz_id, usr_id) values (".$pid.", ".$uid.")";
+	$query = "insert into puz_chk_out (puz_id, usr_id) values (" . $pid . ", " . $uid . ")";
 	$link->query($query);
 	if ($link->error == "") {
 		return "You are now signed up for this puzzle.";
 	} else {
-		return $link->error ." (".$query.")";
+		return $link->error ." (" . $query . ")";
 	}
 }
 
 function iQuitSQL($pid, $uid) {
     Global $link;
-	$query = "update puz_chk_out set chk_in = current_timestamp where puz_id = ".$pid." and usr_id = ".$uid;
+	$query = "update puz_chk_out set chk_in = current_timestamp where puz_id = " . $pid . " and usr_id = " . $uid;
 	$link->query($query);
 	if ($link->error == "") {
 		return "You are no longer working on this puzzle.";
@@ -228,91 +228,91 @@ function gameChangerSQL($pid, $stt) {
 		$query = "update puz_tbl set puz_stt = 'priority' where puz_stt = 'featured'; ";
 		$link->query($query);
 	}
-	$query = "update puz_tbl set puz_ans = '', puz_stt='".$stt."' where puz_id = ".$pid;
+	$query = "update puz_tbl set puz_ans = '', puz_stt='" . $stt . "' where puz_id = " . $pid;
 	$link->query($query);
 	if ($link->error == "") {
-		return "I have changed the status of this puzzle to ".$stt;
+		return "I have changed the status of this puzzle to " . $stt;
 	} else {
-		return $link->error ." (".$query.")";
+		return $link->error  . " (" . $query . ")";
 	}
 }
 
 function eurekaSQL($pid, $ans) {
     Global $link;
-	$query = "update puz_tbl set puz_ans = '".$ans."', puz_stt='solved' where puz_id = ".$pid;
+	$query = "update puz_tbl set puz_ans = '" . $ans . "', puz_stt='solved' where puz_id = " . $pid;
 	$link->query($query);
-	$query = "update puz_chk_out set chk_in = current_timestamp where puz_id = ".$pid;
+	$query = "update puz_chk_out set chk_in = current_timestamp where puz_id = " . $pid;
 	$link->query($query);
 	if ($link->error == "") {
 		return "Another answer! We are well on our way to winning!";
 	} else {
-		return $link->error ." (".$query.")";
+		return $link->error . " (" . $query . ")";
 	}
 }
 
 function thepuzzleiswhereSQL($pid, $link) {
     Global $link;
-	$query = "update puz_tbl set puz_url = '".$link."' where puz_id = ".$pid;
+	$query = "update puz_tbl set puz_url = '" . $link . "' where puz_id = " . $pid;
 	$link->query($query);
 	if ($link->error == "") {
-		return "Okay! We'll go there instead. (".$link.")";
+		return "Okay! We'll go there instead .  (" . $link . ")";
 	} else {
-		return $link->error ." (".$query.")";
+		return $link->error . " (" . $query . ")";
 	}
 }
 
 function workrelocationSQL($pid, $link) {
     Global $link;
-	$query = "update puz_tbl set puz_spr = '".$link."' where puz_id = ".$pid;
+	$query = "update puz_tbl set puz_spr = '" . $link . "' where puz_id = " . $pid;
 	$link->query($query);
 	if ($link->error == "") {
-		return "Okay! We'll work there instead. (".$link.")";
+		return "Okay! We'll work there instead .  (" . $link . ")";
 	} else {
-		return $link->error ." (".$query.")";
+		return $link->error  . " (" . $query . ")";
 	}
 }
 
 function knightswhonolongersayniSQL($pid, $title) {
     Global $link;
-	$query = "update puz_tbl set puz_ttl = '".$title."' where puz_id = ".$pid;
+	$query = "update puz_tbl set puz_ttl = '" . $title . "' where puz_id = " . $pid;
 	$link->query($query);
 	if ($link->error == "") {
-		return "Okay! This puzzle's title has changed. (".$title.")";
+		return "Okay! This puzzle's title has changed .  (" . $title . ")";
 	} else {
-		return $link->error ." (".$query.")";
+		return $link->error  . " (" . $query . ")";
 	}
 }
 
 function newDaddySQL($pid, $mid) {
     Global $link;
-	$query = "insert into puz_rel_tbl (puz_id, puz_par_id) values (".$pid.", ".$mid.")";
+	$query = "insert into puz_rel_tbl (puz_id, puz_par_id) values (" . $pid . ", " . $mid . ")";
 	$link->query($query);
 	if ($link->error == "") {
 		return "This puzzle is now in a new metapuzzle.";
 	} else {
-		return $link->error ." (".$query.")";
+		return $link->error  . " (" . $query . ")";
 	}
 }
 
 function abandonedSQL($pid, $mid) {
     Global $link;
-	$query = "delete from puz_rel_tbl where puz_id = ".$pid." and puz_par_id = ".$mid."";
+	$query = "delete from puz_rel_tbl where puz_id = " . $pid . " and puz_par_id = " . $mid . "";
 	$link->query($query);
 	if ($link->error == "") {
 		return "This puzzle is now in no longer part of that metapuzzle.";
 	} else {
-		return $link->error ." (".$query.")";
+		return $link->error  . " (" . $query . ")";
 	}
 }
 
 function addUpdateSQL($uid, $cde, $nws) {
     Global $link;
-	$query = "insert into pal_upd_tbl (pal_upd_code, pal_upd_txt, usr_id) values ('".$cde."', '".$nws."', ".$uid.")";
+	$query = "insert into pal_upd_tbl (pal_upd_code, pal_upd_txt, usr_id) values ('" . $cde . "', '" . $nws . "', " . $uid . ")";
 	$link->query($query);
 	if ($link->error == "") {
 		return $nws;
 	} else {
-		return $link->error ." (".$query.")";
+		return $link->error  . " (" . $query . ")";
 	}
 }
 
