@@ -22,7 +22,7 @@ $pal_client ->setRedirectUri('http://' . $_SERVER['HTTP_HOST']);
 
 $pal_drive = new Google_DriveService($pal_client);
 
-$noAccessYet=TRUE;
+$noAccessYet = TRUE;
 
 // user is logging out
 if (isset($_REQUEST['logout'])) {unset($_SESSION['access_token']);session_destroy();}
@@ -38,7 +38,7 @@ if (isset($_GET['code'])) {
     $_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
     setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
 
-    $noAccessYet=FALSE;
+    $noAccessYet = FALSE;
 }
 
 // let's check to see if we have an access token. If we do, then we can get all sorts of fun information
@@ -48,7 +48,7 @@ if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) { 
 if (isset($_SESSION['access_token'])) {
     $pal_client->setAccessToken($_SESSION['access_token']);
     if (!$pal_client->isAccessTokenExpired()) {
-        $noAccessYet=FALSE;
+        $noAccessYet = FALSE;
     }
 }
 
@@ -62,21 +62,21 @@ if ($noAccessYet) {
         $_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
         setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
 
-        $noAccessYet=FALSE;
+        $noAccessYet = FALSE;
     }
 }
 
-show_page($pal_drive, $_GET);
+// if there is no access token, user has not authorized app. So let's begin by checking that.
+if ($noAccessYet) {
+    $authUrl = $pal_client->createAuthUrl();
+    return render('loggedout.twig', array(
+        'auth_url' => $authUrl
+    ));
+} else {
+    show_page($pal_drive);
+}
 
-function show_page($pal_drive, $querystring) {
-    // if there is no access token, user has not authorized app. So let's begin by checking that.
-    if ($noAccessYet) {
-        $authUrl = $pal_client->createAuthUrl();
-        return render('loggedout.twig', array(
-            'auth_url' => $authUrl
-        ));
-    }
-
+function show_page($pal_drive) {
     // first, let's try to get the user from the database based on root folder ID
 
     // this will get the user ID of someone already established as a palindrome member
@@ -113,10 +113,10 @@ function show_page($pal_drive, $querystring) {
         render('buggeroff.twig');
     }
 
-    show_content($_GET);
+    show_content();
 }
 
-function show_content($querystring) {
+function show_content() {
     // Show test
     if (isset($_GET['test'])) {
         return displayTest();
