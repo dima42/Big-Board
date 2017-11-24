@@ -3,11 +3,8 @@ require_once 'sitevars.php';
 require_once 'htmlcss.php';
 require_once 'slack_functions.php';
 
-function showDatabaseError($error_code) {
-	if ($error_code != "" || $error_code != NULL) {
-		print "<p>I'm sorry, but a database error is puzzling us. $error_code </p>";
-	}
-}
+function displayPuzzles() {
+    $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
 
 function displayPuzzles($my_puzzle_list) {
     $statuses = array(
