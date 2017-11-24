@@ -72,11 +72,11 @@ function toggle_Puzzle_Checkout(puzzleID) {
 		msgr.send();
 		new_image = "onit.png"; adjustment = 1;
 	}
-	
+
 	for (i=0; i < updated_puzzles.length; i++) {
 		updated_puzzles[i].src = new_image;
 	}
-	
+
 	updated_puzzles = document.getElementsByName("puzwrk_"+puzzleID);
 	if (updated_puzzles[0].innerHTML == "" && adjustment == -1) {
 		newTotal = ""
@@ -127,42 +127,42 @@ function editAnswer(elem, puzzleID, origAnswer, userID, puzzleName) {
 				exit;
 			}
 		}
-		
+
 		original_class = document.getElementsByName("puzzle_"+puzzleID)[0].className.split(" ")[0];
-		
+
 		msgr = new XMLHttpRequest();
 		msgr.onreadystatechange = handleResponse;
 		if (elem.value == "?") {
 			// we are stuck on this puzzle. We are not changing the value, but the status.
 			msgr.open("GET","ajax_handler.php?f=STT&uid="+userID+"&ttl="+encodeURIComponent(puzzleName)+"&pid="+puzzleID+"&stt=stuck",true);
-			msgr.send();	
+			msgr.send();
 			status = original_class + " stuck";
 			urlForSlack = "https://palindrome-tools.herokuapp.com/update?type=stuck&text="+encodeURIComponent("Everybody is stuck on "+puzzleName)+"&id="+puzzleID;
 			actual_answer = "";
 		} else if (elem.value == "!") {
 			// we are stuck on this puzzle, but we are making it a priority.
 			msgr.open("GET","ajax_handler.php?f=STT&uid="+userID+"&ttl="+encodeURIComponent(puzzleName)+"&pid="+puzzleID+"&stt=priority",true);
-			msgr.send();	
+			msgr.send();
 			urlForSlack = "https://palindrome-tools.herokuapp.com/update?type=priority&text="+encodeURIComponent(puzzleName+" is now a priority")+"&id="+puzzleID;
 			status = original_class + " priority";
 			actual_answer = "";
 		} else if (elem.value == "!!!") {
 			// we are stuck on this puzzle, but we are making it a priority.
 			msgr.open("GET","ajax_handler.php?f=STT&uid="+userID+"&ttl="+encodeURIComponent(puzzleName)+"&pid="+puzzleID+"&stt=featured",true);
-			msgr.send();	
+			msgr.send();
 			urlForSlack = "https://palindrome-tools.herokuapp.com/update?type=feature&text="+encodeURIComponent(puzzleName+" is now the featured puzzle")+"&id="+puzzleID;
 			status = original_class + " featured";
 			actual_answer = "";
 		} else if (elem.value == "" || elem.value == ".") {
 			// we are deleting the answer to this puzzle
 			msgr.open("GET","ajax_handler.php?f=STT&uid="+userID+"&ttl="+encodeURIComponent(puzzleName)+"&pid="+puzzleID+"&stt=open",true);
-			msgr.send();	
+			msgr.send();
 			status = original_class + " open";
 			actual_answer = "";
 		} else if (elem.value.indexOf(mit_url_str)==0) {
 			quicksave_new_puzzle(elem.value, puzzleID);
 		} else {
-			// we are entering an answer	
+			// we are entering an answer
 			msgr.open("GET","ajax_handler.php?f=ANS&uid="+userID+"&ttl="+encodeURIComponent(puzzleName)+"&pid="+puzzleID+"&ans="+elem.value.toUpperCase(),true);
 			msgr.send();
 			urlForSlack = "https://palindrome-tools.herokuapp.com/update?type=solution&text="+encodeURIComponent(puzzleName+" has been solved. The answer was "+elem.value.toUpperCase())+".&id="+puzzleID;
@@ -176,13 +176,13 @@ function editAnswer(elem, puzzleID, origAnswer, userID, puzzleName) {
 		for (i=0; i < updated_puzzles.length; i++) {
 			updated_puzzles[i].className = status;
 		}
-		
+
 		// we'll do this twice, once for the cells, and once for the answer fields
 		updated_puzzles = document.getElementsByName("puzans_"+puzzleID);
 		for (i=0; i < updated_puzzles.length; i++) {
 			updated_puzzles[i].value = actual_answer;
 		}
-		
+
 		if (urlForSlack > "") {
 			updateSlack(urlForSlack);
 		}
@@ -193,19 +193,19 @@ function updateSlack(uri) {
 	var msgr2 = new XMLHttpRequest();
 	msgr2.onreadystatechange = handleResponse;
 	msgr2.open("GET",uri,true);
-	msgr2.send();	
+	msgr2.send();
 	//alert(uri);
 }
 
 function new_link(elem, puzzleID) {
 	// we need to do a number of things here. First is, check to see if there is an actual change.
 	new_link = elem.value;
-	
+
 	msgr = new XMLHttpRequest();
 	msgr.onreadystatechange = handleResponse;
 	msgr.open("GET","ajax_handler.php?f=NPL&pid="+puzzleID+"&link="+encodeURIComponent(new_link),true);
-	msgr.send();	
-	
+	msgr.send();
+
 	// we'll do this twice, once for the cells, and once for the answer fields
 	updated_puzzles = document.getElementsByName("puzurllink_"+puzzleID);
 	for (i=0; i < updated_puzzles.length; i++) {
@@ -216,12 +216,12 @@ function new_link(elem, puzzleID) {
 function new_sprd(elem, puzzleID) {
 	// we need to do a number of things here. First is, check to see if there is an actual change.
 	new_link = elem.value;
-	
+
 	msgr = new XMLHttpRequest();
 	msgr.onreadystatechange = handleResponse;
 	msgr.open("GET","ajax_handler.php?f=NPS&pid="+puzzleID+"&link="+encodeURIComponent(new_link),true);
-	msgr.send();	
-	
+	msgr.send();
+
 	// we'll do this twice, once for the cells, and once for the answer fields
 	updated_puzzles = document.getElementsByName("puzsprlink_"+puzzleID);
 	for (i=0; i < updated_puzzles.length; i++) {
@@ -232,12 +232,12 @@ function new_sprd(elem, puzzleID) {
 function new_name(elem, puzzleID) {
 	// we need to do a number of things here. First is, check to see if there is an actual change.
 	new_link = elem.value;
-	
+
 	msgr = new XMLHttpRequest();
 	msgr.onreadystatechange = handleResponse;
 	msgr.open("GET","ajax_handler.php?f=NPN&pid="+puzzleID+"&ttl="+encodeURIComponent(new_link),true);
-	msgr.send();	
-	
+	msgr.send();
+
 	// we'll do this twice, once for the cells, and once for the answer fields
 	updated_puzzles = document.getElementsByName("puzttl_"+puzzleID);
 	for (i=0; i < updated_puzzles.length; i++) {
@@ -248,12 +248,12 @@ function new_name(elem, puzzleID) {
 function upd_notes(elem, puzzleID) {
 	// we need to do a number of things here. First is, check to see if there is an actual change.
 	new_notes = elem.value;
-	
+
 	msgr = new XMLHttpRequest();
 	msgr.onreadystatechange = handleResponse;
 	msgr.open("GET","ajax_handler.php?f=UNS&pid="+puzzleID+"&nts="+encodeURIComponent(new_notes),true);
-	msgr.send();	
-	
+	msgr.send();
+
 	// we'll do this twice, once for the cells, and once for the answer fields
 	//updated_puzzles = document.getElementsByName("puzsprlink_"+puzzleID);
 	//for (i=0; i < updated_puzzles.length; i++) {
@@ -267,7 +267,7 @@ function delete_puzzle(puzzleID) {
 		alert ("You must check off the are you sure box.");
 		return;
 	}
-	
+
 	msgr = new XMLHttpRequest();
 	msgr.onreadystatechange = handlePuzzle;
 	msgr.open("GET","ajax_handler.php?f=DPZ&pid="+puzzleID,true);
@@ -281,12 +281,12 @@ function change_parent(elem, puzzleID, metaID) {
 	} else {
 		fnct = "RPM";
 	}
-	
+
 	msgr = new XMLHttpRequest();
 	msgr.onreadystatechange = handleResponse;
 	msgr.open("GET","ajax_handler.php?f="+fnct+"&pid="+puzzleID+"&mid="+metaID,true);
-	msgr.send();	
-	
+	msgr.send();
+
 	// there is no update to this
 }
 
@@ -295,13 +295,13 @@ function add_update(elem, code, userID) {
 	msgr = new XMLHttpRequest();
 	msgr.onreadystatechange = handleResponse;
 	msgr.open("GET","ajax_handler.php?f=NWS&uid="+userID+"&code="+code+"&news="+encodeURIComponent(elem.value),true);
-	msgr.send();	
+	msgr.send();
 	// there is no update to this
 }
 
 function show_puzzle_input(type, metaID, userID) {
 	//alert(event.pageX+"; "+event.pageY);
-	if (type=="M") { 
+	if (type=="M") {
 		n_p_type = "meta";
 	} else {
 		if (metaID == 0) {
@@ -310,7 +310,7 @@ function show_puzzle_input(type, metaID, userID) {
 			n_p_type="puzzle in meta";
 		}
 	}
-	
+
 	// type should be either P or M. If M, then there is no metaID needed
 	document.getElementById("new_puzzle_input").style.display = "block";
 	document.getElementById("new_puzzle_input").style.position = "absolute";
@@ -325,7 +325,7 @@ function show_puzzle_input(type, metaID, userID) {
 }
 
 function abort_addition() {
-	document.getElementById("new_puzzle_input").style.display = "none";	
+	document.getElementById("new_puzzle_input").style.display = "none";
 }
 
 function save_new_puzzle() {
@@ -338,7 +338,7 @@ function save_new_puzzle() {
 	if (new_url == "URL") { new_url = ""};
     new_typ = document.getElementById("new_puzzle_hidden_type").value;
     new_par = document.getElementById("new_puzzle_hidden_parent").value;
-   
+
 	// This is straightforward...send update into database and that's it.
 	msgr = new XMLHttpRequest();
 	msgr.onreadystatechange = handlePuzzleAddition;
@@ -351,7 +351,7 @@ function save_new_puzzle() {
 			msgr.open("GET","ajax_handler.php?f=APIM&uid="+uid+"&par="+new_par+"&ttl="+encodeURIComponent(new_ttl)+"&url="+encodeURIComponent(new_url),true);
 		}
 	}
-	msgr.send();	
+	msgr.send();
 }
 
 function quicksave_new_puzzle(puzzle_url, metapuzzle_id) {
@@ -360,7 +360,7 @@ function quicksave_new_puzzle(puzzle_url, metapuzzle_id) {
     new_url = puzzle_url;
     new_typ = "puzzle in meta";
     new_par = metapuzzle_id;
-   
+
 	// This is straightforward...send update into database and that's it.
 	msgr = new XMLHttpRequest();
 	msgr.onreadystatechange = handlePuzzleAddition;

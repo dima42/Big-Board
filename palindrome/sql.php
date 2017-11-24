@@ -19,21 +19,21 @@ function getData($query) {
 }
 
 function getPuzzles() {
-	$query =  	"select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, ".
-				"b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
-				"from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
-				"on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
-				"order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
+	$query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, ".
+			 "b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
+			 "from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
+			 "on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
+			 "order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
     return getData($query);
 }
 
 function getUnsolvedPuzzles() {
-	$query =  	"select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, ".
-				"b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
-				"from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
-				"on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
-				"where b.puz_stt != 'solved' ".
-				"order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
+	$query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, ".
+			 "b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
+			 "from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
+			 "on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
+			 "where b.puz_stt != 'solved' ".
+			 "order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
     return getData($query);
 }
 
@@ -43,18 +43,18 @@ function getFeaturedPuzzleIDSQL() {
 }
 
 function getPuzzleAssignments() {
-	$query =  	"select puz_id as SNACK, count(*) as ANTS ".
-				"from puz_chk_out a ".
-				"where chk_in is NULL and puz_id in (select puz_id from puz_tbl where puz_stt != 'solved') ".
-				"group by puz_id";
+	$query = "select puz_id as SNACK, count(*) as ANTS ".
+		     "from puz_chk_out a ".
+		     "where chk_in is NULL and puz_id in (select puz_id from puz_tbl where puz_stt != 'solved') ".
+		     "group by puz_id";
     return getData($query);
 }
 
 function getUpdatesSQL() {
-	$query =  	"select a.pal_upd_txt as NEWS, a.upd_tme as WHN, b.pal_usr_nme as WHO, a.pal_upd_code as TYP ".
-				"from pal_upd_tbl a, pal_usr_tbl b ".
-				"where a.usr_id = b.pal_id ".
-				"order by a.upd_tme desc";
+	$query = "select a.pal_upd_txt as NEWS, a.upd_tme as WHN, b.pal_usr_nme as WHO, a.pal_upd_code as TYP ".
+		     "from pal_upd_tbl a, pal_usr_tbl b ".
+		     "where a.usr_id = b.pal_id ".
+		     "order by a.upd_tme desc";
     return getData($query);
 }
 
