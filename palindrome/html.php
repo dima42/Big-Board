@@ -1,9 +1,4 @@
 <?
-require_once 'sitevars.php';
-require_once 'htmlcss.php';
-require_once 'sql.php';
-require_once "new_file_management.php";
-
 function getCurrentPuzzle($user_id) {
     $results = getCurrentPuzzleSQL($user_id);
     $my_puzzles = array();
