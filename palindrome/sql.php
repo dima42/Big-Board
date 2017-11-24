@@ -19,7 +19,7 @@ function getData($query) {
 }
 
 function getPuzzles() {
-	$query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, ".
+	$query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, b.slack SLACK, ".
 			 "b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
 			 "from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
 			 "on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
@@ -312,35 +312,35 @@ function addUpdateSQL($uid, $cde, $nws) {
 	if ($link->error == "") {
 		return $nws;
 	} else {
-		//print "<!--".$link->error ." (".$query.")-->";
 		return $link->error ." (".$query.")";
 	}
 }
 
-// each of the next three functions do the same basic thing, but with specific results.
-function addNewMetaSQL($ttl, $url, $fid) {
+// Add a puzzle. Each of the next three functions do the same basic thing, but with specific results.
+function addNewMetaSQL($ttl, $url, $fid, $slack) {
     Global $link;
-	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid);
+	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid, $slack);
 	addPuzzleRelationSQL($new_puzzle_id, $new_puzzle_id);
 	return "M".$new_puzzle_id;
 }
 
-function addLoosePuzzleSQL($ttl, $url, $fid) {
+function addLoosePuzzleSQL($ttl, $url, $fid, $slack) {
     Global $link;
-	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid);
+	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid, $slack);
 	return "P".$new_puzzle_id;
 }
 
-function addPuzzleInMetaSQL($ttl, $url, $par, $fid) {
+function addPuzzleInMetaSQL($ttl, $url, $par, $fid, $slack) {
     Global $link;
-	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid);
+	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid, $slack);
 	addPuzzleRelationSQL($new_puzzle_id, $par);
 	return "P".$new_puzzle_id."M".$par;
 }
 
-function addPuzzleSQL($ttl, $url, $fid) {
+function addPuzzleSQL($ttl, $url, $fid, $slack) {
     Global $link;
-	$query = "insert into puz_tbl (puz_ttl, puz_url, puz_spr) values ('".$ttl."', '".$url."', 'https://docs.google.com/spreadsheet/ccc?key=".$fid."')";
+	$query = "insert into puz_tbl (puz_ttl, puz_url, puz_spr, slack) " .
+        "values ('" . $ttl . "', '" . $url . "', 'https://docs.google.com/spreadsheet/ccc?key=" . $fid."', '" . $slack . "')";
 	$link->query($query);
 	$new_puz_id = $link->insert_id;
 	return $new_puz_id;
