@@ -1,7 +1,6 @@
 <?
 require_once 'sitevars.php';
 require_once 'htmlcss.php';
-require_once 'slack_functions.php';
 require_once 'sql.php';
 
 function getCurrentPuzzle($user_id) {

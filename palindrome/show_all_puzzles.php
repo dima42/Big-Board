@@ -1,6 +1,5 @@
 <?php
 require_once "sitevars.php";
-require_once "slack_functions.php";
 
 Global $link;
 $link = connectToDB();
@@ -21,7 +20,7 @@ while ($row = $query_resource->fetch_array(MYSQLI_ASSOC)) {
 	print "</td><td>";
     	print  $row["puz_ttl"];
 	print "</td><td>";
-    	print  convertToSlackChannel($row["puz_ttl"]);
+    	print  $row["slack"];
 	print "</td><td>";
     	print  $row["puz_stt"];
 	print "</td><td>";
