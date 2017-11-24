@@ -12,6 +12,12 @@ function getCurrentPuzzle($user_id) {
     return $my_puzzles;
 }
 
+function displayError($error) {
+    render('error.twig', array(
+        'error' => $error,
+    ));
+}
+
 function displayPuzzles() {
     // We have removed the check out feature.
     // $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);

@@ -66,13 +66,17 @@ if ($noAccessYet) {
     }
 }
 
-// next, if there is no access token, user has not authorized app. So let's begin by checking that.
-if ($noAccessYet) {
-    $authUrl = $pal_client->createAuthUrl();
-    render('loggedout.twig', array(
-        'auth_url' => $authUrl
-    ));
-} else {
+show_page($pal_drive, $_GET);
+
+function show_page($pal_drive, $querystring) {
+    // if there is no access token, user has not authorized app. So let's begin by checking that.
+    if ($noAccessYet) {
+        $authUrl = $pal_client->createAuthUrl();
+        return render('loggedout.twig', array(
+            'auth_url' => $authUrl
+        ));
+    }
+
     // first, let's try to get the user from the database based on root folder ID
 
     // this will get the user ID of someone already established as a palindrome member
@@ -96,8 +100,7 @@ if ($noAccessYet) {
             $isUserInPalindrome = FALSE;
         }
     } catch (Exception $e) {
-        print "<P>An error has occured. <!--".$e->getMessage()."-->";
-        $isUserInPalindrome = FALSE;
+        return displayError($e->getMessage());
     }
 
     // if they do have access, let's take root and name from before and create a user
@@ -105,15 +108,15 @@ if ($noAccessYet) {
         $_SESSION["user_id"] = createUserDriveID($my_root, $my_name);
     }
 
-    if ($_SESSION["user_id"] != 0) {
-        show_page($_GET);
-    } else {
+    if ($_SESSION["user_id"] == 0) {
         // if someone is not a member of palindrome, let's tell them to bugger off
         render('buggeroff.twig');
     }
+
+    show_content($_GET);
 }
 
-function show_page($querystring) {
+function show_content($querystring) {
     // Show a meta
     if (isset($_GET['meta'])) {
         return displayMeta($_GET['meta']);
@@ -132,7 +135,6 @@ function show_page($querystring) {
     // Show a single puzzle
     if (isset($_GET['puzzle'])) {
         if ($_GET['puzzle'] == 'F') {
-            // TODO: WHAT ARE FEATURED PUZZLES?
             return displayFeature();
         } else {
             return displayPuzzle($_GET['puzzle']);
