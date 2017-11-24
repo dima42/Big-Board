@@ -6,7 +6,6 @@ require_once 'slack_functions.php';
 function displayPuzzles() {
     $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
 
-function displayPuzzles($my_puzzle_list) {
     $statuses = array(
         "featured" => 0,
         "priority" => 0,
@@ -83,7 +82,7 @@ function displayMeta($meta_id) {
     ));
 }
 
-function displayFeature($my_puzzle_list, $puzzle_id) {
+function displayFeature($puzzle_id) {
     $results = getFeaturedPuzzleIDSQL();
     $featureID = "";
     while ($row = $results->fetch_assoc()) {
@@ -91,9 +90,9 @@ function displayFeature($my_puzzle_list, $puzzle_id) {
     }
 
     if ($featureID != "") {
-        displayPuzzle($my_puzzle_list, $featureID);
+        displayPuzzle($featureID);
     } else {
-        displayPuzzles($my_puzzle_list);
+        displayPuzzles();
     }
 }
 

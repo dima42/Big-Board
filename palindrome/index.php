@@ -106,7 +106,6 @@ if ($noAccessYet) {
     }
 
     if ($_SESSION["user_id"] != 0) {
-        $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
 
         $results = getLatestTeamUpdateSQL();
         if ($results->num_rows > 0) {
@@ -134,14 +133,14 @@ if ($noAccessYet) {
             // showing a single puzzle
             if ($_GET['puzzle'] == 'F') {
                 // TODO: WHAT ARE FEATURED PUZZLES?
-                displayFeature($my_puzzle_list);
+                displayFeature();
                 render('loggedin.twig');
             } else {
                 displayPuzzle($_GET['puzzle']);
             }
         } else {
             // showing main page
-            displayPuzzles($my_puzzle_list);
+            displayPuzzles();
     }
     } else {
         // if someone is not a member of palindrome, let's tell them to bugger off
