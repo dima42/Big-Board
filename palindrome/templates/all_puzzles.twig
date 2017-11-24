@@ -31,12 +31,22 @@
 </table>
 
 {% for puzzle in puzzles %}
+
+    {% if loop.first and puzzle.META != 1 %}
+        {# if the first puzzle isn't a meta, then we have puzzles that aren't attached to a meta. #}
+        <h3>
+        Puzzles Not in a Meta<br>
+        <a href='?meta=0'>View all</a>
+        </h3>
+    {% endif %}
+
     <div name='puzzle_{{ puzzle.PUZID }}' width="{{ cell_width }}px" class='puzzle {{ puzzle.STATUS }}'>
     {% if puzzle.META == 1 %}
         <b>META</b>
     {% endif %}
+
     {% if puzzle.PUZURL != "" %}
-        <A HREF='{{ puzzle.PUZURL }}' target='_blank' alt='{{ puzzle.INDPUZ }}'>{{ puzzle.INDPUZ }}</A>
+        <a href='{{ puzzle.PUZURL }}' target='_blank' alt='{{ puzzle.INDPUZ }}'>{{ puzzle.INDPUZ }}</a>
     {% else %}
         {{ puzzle.INDPUZ }}
     {% endif %}
@@ -59,7 +69,13 @@
         {# show +puzzle button here #}
     {% endif %}
     {# notes text #}
-    {# insert $notestext here #}
+    {% if puzzle.PUZNTS %}
+        <p>
+            <span class='fake_button'  onclick='show_notes()'>Notes</span>
+            <span class="the-notes">{{ puzzle.PUZNTS }}</span>
+        </p>
+    {% endif %}
+
     </div>
 {% endfor %}
 

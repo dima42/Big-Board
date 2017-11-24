@@ -17,11 +17,12 @@ function displayPuzzles($my_puzzle_list) {
         "stuck" => 0,
         "solved" => 0,
     );
+
     $total_puzzles = 0;
-    $results = getStatusProportionsSQL();
 
     // Count up all the puzzles in each status
-    while ($row = $results->fetch_assoc()) {
+    $all_statuses = getStatusProportionsSQL();
+    while ($row = $all_statuses->fetch_assoc()) {
         $statuses[$row["PUZSTT"]] = $row["PUZSTTSUM"];
         $total_puzzles += $row["PUZSTTSUM"];
     }
@@ -31,83 +32,43 @@ function displayPuzzles($my_puzzle_list) {
     while ($row = $whos_on_what->fetch_assoc()) {
     	$whos_on_what_array[$row["SNACK"]] = $row["ANTS"];
 	}
-	$results = getPuzzles();
-    // $bgcolor = "#ffffff";
-    $just_starting = TRUE;
-    $puzzle_count = 0;
 
-    $result_backup = $results;
-    // TODO: Modify the results with the followign logic
-	while ($row = $result_backup->fetch_assoc()) {
-    	// some specifics for table layout
-        // $cell_width = 150;
-        $col_width = 6;
-        $title_limit = 20;
-		// link to spreadsheet first
+	$results = getPuzzles();
+    $all_puzzles = [];
+
+    while ($row = $results->fetch_assoc()) {
+        $current_puzzle = $row;
 
         // TODO: make up slack channel name and create it. Then add this slug to the array
-        // TODO: first post in that slack channel should be all the links.
-		$puz_reduced = convertToSlackChannel($row['INDPUZ']);
+        $slack_channel = convertToSlackChannel($row['INDPUZ']);
+        $current_puzzle['slack_channel'] = $slack_channel;
 
-		// TODO: if there are notes, show them
-        $notestext = "<br/>";
-        if ($row['PUZNTS'] != "") {
-            //"<span class='fake_button' onclick='show_notes(\"".addslashes($row['PUZNTS'])."\")'>note</span>";
-            if ($row["STATUS"] != "solved") {
-                $notestext = "<p><span class='fake_button'  onclick='show_notes(\"".addslashes($row['PUZNTS'])."\")'>".substr($row['PUZNTS'],0,$title_limit);
-                if (strlen($row['PUZNTS']) > $title_limit) {
-                    $notestext .= "...";
-                }
-                $notestext .= "</span>";
-            }
-        }
-
-		// TODO: if the title of the puzzle is too long, shorten it. Maybe do this in Twig
-		$puzzle = $row['INDPUZ'];
-        if (strlen($row['INDPUZ']) >$title_limit) {
-        	if (substr($puzzle,0,2) == "A " || substr($puzzle,0,4) == "The ") {
-            	$puzzle = substr($puzzle,strpos($puzzle," "),strlen($puzzle));
-            }
-        	$puzzle = substr($puzzle,0,$title_limit-1)."...";
-        }
-
-		// TODO: Show just uzzle title if there's no link
-		if ($row["PUZURL"] != "") {
-			$puzzle_link = "<A HREF='".$row["PUZURL"]."' target='_blank' alt='".$row['INDPUZ']."'>".$puzzle."</A>";
-		} else {
-			$puzzle_link = $puzzle;
-		}
-
-		// TODO: Show who's working on puzzle. Are we still using this?
-        if (array_key_exists($row["PUZID"], $whos_on_what_array)) {
-            $ants = $whos_on_what_array[$row["PUZID"]];
-        } else {
-            $ants = "";
-        }
+        // TODO: Show who's working on puzzle. Are we still using this?
+        // if (array_key_exists($row["PUZID"], $whos_on_what_array)) {
+        //     $ants = $whos_on_what_array[$row["PUZID"]];
+        // } else {
+        //     $ants = "";
+        // }
 
         // TODO: If I'm working on puzzle, indicate that. Are we still using this?
-        if (array_key_exists($row["PUZID"], $my_puzzle_list)) {
-			$on_puzzle = "onit";
-		} else {
-			$on_puzzle = "noton";
-		}
+        // if (array_key_exists($row["PUZID"], $my_puzzle_list)) {
+        //     $on_puzzle = "onit";
+        // } else {
+        //     $on_puzzle = "noton";
+        // }
 
+        // TODO: Are we still using this?
         // $is_puz_out = /* "<img name='puzchk_".$row["PUZID"]."' src='".$on_puzzle.".png' width=14px height=14px onclick='toggle_Puzzle_Checkout(".$row["PUZID"].");'>".
-        				// "&nbsp;<span name='puzwrk_".$row["PUZID"]."'>".$ants."</span>" */
-                      // "";
+        // "&nbsp;<span name='puzwrk_".$row["PUZID"]."'>".$ants."</span>" */
+        // "";
 
-        // TODO Show un-meta'd puzzles
-        if ($row["META"] == NULL && $just_starting) {
-        	print "<table border=0 cellspacing=0 cellpadding=4>\r\n";
-			print "<tr><th align=center valign=top class='MetaRound' width=".$cell_width."px>Puzzles<br/>Not in a Meta<br/><a href='?meta=0'>View all</a></th>\r\n";
-			$just_starting = FALSE;
-        }
+        $all_puzzles[] = $current_puzzle;
 	}
 
     render('all_puzzles.twig', array(
         'statuses' => $statuses,
         'total_puzzles' => $total_puzzles,
-        'puzzles' => $results
+        'puzzles' => $all_puzzles,
     ));
 }
 
