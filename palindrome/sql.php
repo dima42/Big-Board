@@ -100,8 +100,10 @@ function getAllMetasSQL($pid) {
 }
 
 function getLatestTeamUpdateSQL() {
-    $query = "select a.pal_upd_txt as NEWS, b.pal_usr_nme as WHO from pal_upd_tbl a, pal_usr_tbl b where a.pal_upd_code = 'URG' and a.usr_id = b.pal_id ".
-                "order by a.row_id";
+    $query = "select a.pal_upd_txt as NEWS, b.pal_usr_nme as WHO from pal_upd_tbl a, pal_usr_tbl b " .
+                "where a.pal_upd_code = 'URG' and a.usr_id = b.pal_id " .
+                "order by a.row_id DESC " .
+                "limit 1";
     return getData($query);
 }
 

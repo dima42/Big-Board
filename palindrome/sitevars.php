@@ -14,9 +14,20 @@ $twig = new Twig_Environment($loader, array(
 ));
 
 function render($template, $vars = array()) {
+    $news = "Type over this text to send out a message.";
+    $news_from = "";
+
+    $latest_updates = getLatestTeamUpdateSQL();
+    $row = $latest_updates->fetch_assoc();
+    $news = $row["NEWS"];
+    $news_from = $row["WHO"];
+
     Global $twig;
     $vars['user_id'] = $_SESSION['user_id'];
     $vars['time'] = strftime('%c');
+    $vars['news'] = $news;
+    $vars['news_from'] = $news_from;
+
     if (in_array("error_string", $_SESSION)) {
         $vars['error'] = $_SESSION['error_string'];
     }

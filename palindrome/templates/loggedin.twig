@@ -1,6 +1,11 @@
 {% extends 'base.twig' %}
 
 {% block header %}
+
+    <p>News/Chat (<span class='pastNews'><a href='?updates&filter=Y'>previous</a></span>):
+    <input id='UrgentMessage' name='UrgentMessage' value='{{ news }} ({{ news_from }})' style='border: none; background-color: #EEEEEE;' size=175 onchange='add_update(this, "URG", "{{ user_id }}");'><br /></p>
+
+
     <p><a href='http://palindrome2017.slack.com/messages/general' target='_new'>Slack (general)</a>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <a href='https://plus.google.com/hangouts/_/7lw6rz5zwbkiaozrwld6q77ahaa?authuser=0&hl=en' target='_new'>Hangout 1</a>
