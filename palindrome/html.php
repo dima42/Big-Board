@@ -2,6 +2,7 @@
 require_once 'sitevars.php';
 require_once 'htmlcss.php';
 require_once 'slack_functions.php';
+require_once 'sql.php';
 
 function getCurrentPuzzle($user_id) {
     $results = getCurrentPuzzleSQL($user_id);
@@ -39,16 +40,9 @@ function displayPuzzles() {
     	$whos_on_what_array[$row["SNACK"]] = $row["ANTS"];
 	}
 
-	$results = getPuzzles();
-    $all_puzzles = [];
+	$all_puzzles = getPuzzles();
 
-    while ($row = $results->fetch_assoc()) {
-        $current_puzzle = $row;
-
-        // TODO: make up slack channel name and create it. Then add this slug to the array
-        $slack_channel = convertToSlackChannel($row['INDPUZ']);
-        $current_puzzle['slack_channel'] = $slack_channel;
-
+    // while ($row = $results->fetch_assoc()) {
         // TODO: Show who's working on puzzle. Are we still using this?
         // if (array_key_exists($row["PUZID"], $whos_on_what_array)) {
         //     $ants = $whos_on_what_array[$row["PUZID"]];
@@ -67,9 +61,7 @@ function displayPuzzles() {
         // $is_puz_out = /* "<img name='puzchk_".$row["PUZID"]."' src='".$on_puzzle.".png' width=14px height=14px onclick='toggle_Puzzle_Checkout(".$row["PUZID"].");'>".
         // "&nbsp;<span name='puzwrk_".$row["PUZID"]."'>".$ants."</span>" */
         // "";
-
-        $all_puzzles[] = $current_puzzle;
-	}
+    // }
 
     render('all_puzzles.twig', array(
         'statuses' => $statuses,
