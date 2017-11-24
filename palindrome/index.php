@@ -106,51 +106,40 @@ if ($noAccessYet) {
     }
 
     if ($_SESSION["user_id"] != 0) {
-
-        $results = getLatestTeamUpdateSQL();
-        if ($results->num_rows > 0) {
-            while ($row = $results->fetch_array(MYSQLI_ASSOC)) {
-                $latest_news = str_replace("'","&#39;",$row["NEWS"]);
-                $latest_news_from = " (".$row["WHO"].")";
-            }
-        } else {
-            $latest_news = "Type over this text to send out a message.";
-            $latest_news_from = "";
-        }
-        print "<p>News/Chat (<span class='pastNews'><a href='?updates&filter=Y'>previous</a></span>): <input id='UrgentMessage' name='UrgentMessage' value='".$latest_news.$latest_news_from."' style='border: none; "
-                ."background-color: #EEEEEE;' size=175 onchange='add_update(this, \"URG\", ".$_SESSION["user_id"].")'/><br /></p>";
-
-        if (isset($_GET['meta'])) {
-            // showing a meta
-            displayMeta($_GET['meta']);
-        } else if (isset($_GET['updates'])) {
-            // showing updates
-            displayUpdates($_GET['filter']);
-        } else if (isset($_GET['bylastmod'])) {
-            // showing abandoned
-            displayAbandonedPuzzles();
-        } else if (isset($_GET['puzzle'])) {
-            // showing a single puzzle
-            if ($_GET['puzzle'] == 'F') {
-                // TODO: WHAT ARE FEATURED PUZZLES?
-                displayFeature();
-                render('loggedin.twig');
-            } else {
-                displayPuzzle($_GET['puzzle']);
-            }
-        } else {
-            // showing main page
-            displayPuzzles();
-    }
+        show_page($_GET);
     } else {
         // if someone is not a member of palindrome, let's tell them to bugger off
         render('buggeroff.twig');
     }
-
 }
 
+function show_page($querystring) {
+    // Show a meta
+    if (isset($_GET['meta'])) {
+        return displayMeta($_GET['meta']);
+    }
 
+    // Show updates
+    if (isset($_GET['updates'])) {
+        return displayUpdates($_GET['filter']);
+    }
 
-    return $my_puzzles;
+    // Show abandoned
+    if (isset($_GET['bylastmod'])) {
+        return displayAbandonedPuzzles();
+    }
+
+    // Show a single puzzle
+    if (isset($_GET['puzzle'])) {
+        if ($_GET['puzzle'] == 'F') {
+            // TODO: WHAT ARE FEATURED PUZZLES?
+            return displayFeature();
+        } else {
+            return displayPuzzle($_GET['puzzle']);
+        }
+    }
+
+    // Show main page
+    return displayPuzzles();
 }
 ?>
