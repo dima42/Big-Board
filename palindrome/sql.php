@@ -339,6 +339,7 @@ function addPuzzleInMetaSQL($ttl, $url, $par, $fid, $slack) {
 
 function addPuzzleSQL($ttl, $url, $fid, $slack) {
     Global $link;
+    $ttl = $link->real_escape_string($ttl);
 	$query = "insert into puz_tbl (puz_ttl, puz_url, puz_spr, slack) " .
         "values ('" . $ttl . "', '" . $url . "', 'https://docs.google.com/spreadsheet/ccc?key=" . $fid."', '" . $slack . "')";
 	$link->query($query);
@@ -382,8 +383,9 @@ function promotePuzzleSQL($pid) {
 
 function checkForExistingPuzzleSQL($title) {
     Global $link;
+    $title = $link->real_escape_string($title);
 	$query = "select count(*) as TITLE_COUNT from puz_tbl ".
-			 "where puz_ttl = '".$title."'";
+			 "where puz_ttl = '" . $title . "'";
     $results = $link->query($query);
     $row = $results->fetch_array(MYSQLI_ASSOC);
 	return $row["TITLE_COUNT"];
