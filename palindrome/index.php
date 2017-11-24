@@ -149,15 +149,7 @@ if ($noAccessYet) {
 
 }
 
-function getCurrentPuzzle($user_id) {
-    // since we have removed the check out feature, we are commenting out most of this function
 
-    //$results = getCurrentPuzzleSQL($user_id);
-    // for now, we want an array of puzzles
-    $my_puzzles = array();
-    //while ($row=$results->fetch_array(MYSQLI_ASSOC)) {
-        //$my_puzzles[$row['PUZID']]=$row['CHECKOUT'];
-    //}
 
     return $my_puzzles;
 }

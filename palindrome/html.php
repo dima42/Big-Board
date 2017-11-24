@@ -3,8 +3,18 @@ require_once 'sitevars.php';
 require_once 'htmlcss.php';
 require_once 'slack_functions.php';
 
+function getCurrentPuzzle($user_id) {
+    $results = getCurrentPuzzleSQL($user_id);
+    $my_puzzles = array();
+    while ($row=$results->fetch_array(MYSQLI_ASSOC)) {
+        $my_puzzles[$row['PUZID']] = $row['CHECKOUT'];
+    }
+    return $my_puzzles;
+}
+
 function displayPuzzles() {
-    $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
+    // We have removed the check out feature.
+    // $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
 
     $statuses = array(
         "featured" => 0,
