@@ -74,6 +74,6 @@ h2 {
  * Tables
  */
 
-.table td {
+.table td, .table th {
     padding: .5rem;
 }
