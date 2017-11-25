@@ -1,8 +1,9 @@
 {% extends 'loggedin.twig' %}
 
-{% block body %}
+{% block content %}
 
-<H2><input class='metaTitle' size=100 name='puzttl_{{ puzzle.PUZID }}' value='{{ puzzle.PUZNME }}' style='background: transparent; border: none;' onchange='new_name(this, {{ puzzle.PUZID }})'></H2>
+<h1>{{ puzzle.PUZNME }}</h1>
+
 {% if puzzle.PUZSTT == "featured" %}
     <H2 style='color:#009900'>This puzzle is the Featured Puzzle</H2>
 {% endif %}
@@ -29,9 +30,8 @@
             <input size=40 name='puznts_{{ puzzle.PUZID }}' onchange='upd_notes(this, {{ puzzle.PUZID }})' value='{{ puzzle.PUZNOT }}' <>
         </td>
     </tr>
-    </table
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+</table>
+
 <h2>Metapuzzles</h2>
 
 {% for meta in metas %}
@@ -41,9 +41,6 @@
     </p>
 {% endfor %}
 
-<p><a href='index.php'>&laquo; Back to the Big Board</a></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
 <table>
     <tr valign=middle>
         <th width=240px align=left>Advanced options.

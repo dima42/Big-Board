@@ -1,18 +1,12 @@
 {% extends 'loggedin.twig' %}
 
-{% set cell_width = 150 %}
 
-{% block body %}
-<table border=0 cellspacing=0 cellpadding=4>
+{% block content %}
+<h1>All puzzles</h1>
+
+<table>
     <tr>
-        <th width="120px" onclick='show_puzzle_input("M" ,0, {{ user_id }});'>
-            <span class='fake_button'>+New Meta</span>
-        </th>
-        <th width="120px" onclick='show_puzzle_input("P", 0, {{ user_id }});'>
-            <span class='fake_button'>+New Puzzle</span>
-        </th>
         <th align=center valign=middle class="" width=120px>&nbsp;</th>
-
     {% if statuses.featured > 0 %}
         <th align=center valign=middle class='puzzle featured' width="{{ 480 * statuses.featured / total_puzzles }}px">Featured<br/>(<a href='index.php?puzzle=F'>View</a>)</th>
     {% endif %}
@@ -28,70 +22,59 @@
     {% if statuses.solved > 0 %}
         <th align=center valign=middle class='puzzle solved' width="{{ 480 * statuses.solved / total_puzzles }}px">Solved<br/>{{ statuses.solved }}</th>
     {% endif %}
-        <th><a href='index.php?bylastmod'>All Unsolved<br/>Puzzles</a></th></tr></table></p>
     </tr>
 </table>
 
-{% for puzzle in puzzles %}
 
-    {% if loop.first and puzzle.META != 1 %}
-        {# if the first puzzle isn't a meta, then we have puzzles that aren't attached to a meta. #}
-        <h3>
-        Puzzles Not in a Meta<br>
-        <a href='?meta=0'>View all</a>
-        </h3>
-    {% endif %}
-
-    <div name='puzzle_{{ puzzle.PUZID }}' width="{{ cell_width }}px" class='puzzle {{ puzzle.STATUS }}'>
-    {% if puzzle.META == 1 %}
-        <b>META</b>
-    {% endif %}
-
-    {% if puzzle.PUZURL != "" %}
-        <a href='{{ puzzle.PUZURL }}' target='_blank' alt='{{ puzzle.INDPUZ }}'>{{ puzzle.INDPUZ }}</a>
-    {% else %}
-        {{ puzzle.INDPUZ }}
-    {% endif %}
-    <br>
-
-    <input
-        name='puzans_"{{ puzzle.PUZID }}' value='{{ puzzle.PUZANS }}'
-        size="({{ cell_width / 7.5 }})"
-        class='{{ puzzle. STATUS }}'
-        style='border-width:0px; text-align: center;'
-        onchange='editAnswer(this, "{{ puzzle. PUZID }}", "{{ puzzle. PUZANS }}", {{ user_id }}, "{{ puzzle.INDPUZ }}")'
-    >
-    <br>
-    <a href='?puzzle={{ puzzle.PUZID }}' class='fake_button'>info</a>
-    {# spreadshet #}
-    <a href='{{ puzzle.PUZSPR }}' target='_blank' style='text-decoration: none;'><span class='fake_button'>drive</span></a>
-    {# slack #}
-    <a href='http://palindrome2017.slack.com/messages/{{ puzzle.SLACK }}' target='_blank' style='text-decoration: none;'><span class='fake_button'>slack</span></a>
-    {% if puzzle.META == 1 %}
-        {# show +puzzle button here #}
-    {% endif %}
-    {# notes text #}
-    {% if puzzle.PUZNTS %}
-        <p>
-            <span class='fake_button'  onclick='show_notes()'>Notes</span>
-            <span class="the-notes">{{ puzzle.PUZNTS }}</span>
-        </p>
-    {% endif %}
-
-    </div>
+{% for meta, puzzles in all_puzzles_by_meta %}
+<h2><a href="/?meta={{ puzzles.0.PUZID }}">{{ meta }}</a></h2>
+{# TODO show +puzzle button here #}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Solution</th>
+            <th>Notes</th>
+            <th>Link</th>
+            <th>Google</th>
+            <th>Slack</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for puzzle in puzzles %}
+        <tr class="puzzle{{ puzzle.PUZID }}" class="puzzle {{ puzzle.STATUS }} {% if puzzle.META == 1 %}meta{% endif %}">
+            <td><a href="/?puzzle={{ puzzle.PUZID }}">{{ puzzle.INDPUZ }}</a></td>
+            <td>{{ puzzle.STATUS }}</td>
+            <td>
+                {{ puzzle. PUZANS }}
+                <!--input
+                name='puzans_"{{ puzzle.PUZID }}' value='{{ puzzle.PUZANS }}'
+                class='{{ puzzle. STATUS }}'
+                style='border-width:0px; text-align: center;'
+                onchange='editAnswer(this, "{{ puzzle. PUZID }}", "{{ puzzle. PUZANS }}", {{ user_id }}, "{{ puzzle.INDPUZ }}")'
+                -->
+            </td>
+            <td>{{ puzzle.PUZNTS }}</td>
+            <td>{% if puzzle.PUZURL %}<a href="{{ puzzle.PUZURL }}">Link</a>{% endif %}</td>
+            <td><a href="{{ puzzle.PUZSPR }}">Google</a></td>
+            <td><a href="http://palindrome2017.slack.com/messages/{{ puzzle.SLACK }}">Slack</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endfor %}
+
 
 <p><strong>Instructions:</strong> <span class='fake_button' id='instruction_status' onclick='toggle_instructions();'>show</span>
 <div id='instructions'>
-    Enter answers below the name of the puzzle.<br/>
+    Click an answer to change it.<br/>
     Use the following codes to change the status of a puzzle: <br/>
     <b>.</b> = the puzzle is open<br/>
     <b>?</b> = the puzzle is stuck<br/>
     <b>!</b> = the puzzle is a priority<br/>
     <b>!!!</b> = the puzzle is the feature puzzle. Only one puzzle can be the featured puzzle.<br/>
     <br/>
-    Click <span class='fake_button'>info</span> to view and edit puzzle information (include notes).<br/><br/>
-    Click <span class='fake_button'>drive</span> to view the spreadsheet for a puzzle.<br/><br/>
     To nest one metapuzzle inside a metapuzzle: Click info for the metapuzzle. Click view as puzzle. Check off the meta to nest it under.
 </div>
 {% endblock %}

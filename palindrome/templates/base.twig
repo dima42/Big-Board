@@ -1,47 +1,37 @@
 {% set team_name = "Too Long No Loot" %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <title>{{ team_name }}</title>
-<script type='text/javascript' src='pallap.js'></script>
-<link rel="stylesheet" type="text/css" href="/screen.css" media="all">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<link rel="stylesheet" href="dashboard.css">
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" rel="stylesheet">
 </head>
-<body onload='idle_hands();' onmousemove='idle_hands();' onclick='idle_hands();' onkeydown='idle_hands();'>
-<table>
-    <tr>
-        <td>
-            <a href='index.php'><span style='font-size:18px;font-weight:bold;'>{{ team_name }} Big Board</span></a>
-        </td>
 
-        <td align='right'>
-            {% block teaminfo %}{% endblock %}
-        </td>
-    </tr>
-</table>
+<body>
 
-<P>
-    <em><span id='newscrawl'></span></em>
-</p>
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    {% block navbar %}{% endblock %}
+  </nav>
+</header>
 
-<input type='hidden' id='userid' value='{{ user_id }}'>
-
-{% block header %}{% endblock %}
-{% block body %}{% endblock %}
-
-<div id='new_puzzle_input'>New <span id='new_puzzle_type'></span><br/>
-<input id='new_puzzle_title' name='new_puzzle_title' value='Name' size=25 /><br/>
-<input id='new_puzzle_url' name='new_puzzle_url' value='URL' size=25/><br/>
-<div id='new_puzzle_save' style='text-align: center; padding: 4px 2px 0px 2px;'>
-<span class='fake_button' onclick='save_new_puzzle();'>Save</span> |
-<span class='fake_button' onclick='abort_addition();'>Cancel</span>
+<div class="container-fluid">
+  <div class="row">
+    {% block body %}{% endblock %}
+  </div>
 </div>
-<input id='new_puzzle_hidden_type' name='new_puzzle_hidden_type'type='hidden' value=''><input id='new_puzzle_hidden_uid' name='new_puzzle_hidden_uid'type='hidden' value=''><input id='new_puzzle_hidden_parent' id='new_puzzle_hidden_parent' type='hidden' value=''></div>
 
-<div id='show_notes' onclick='hide_notes()'></div>
-
-<p>{{ time }}</p>
-<p>Page will reload every 180 seconds automatically.</p>
-<P>{{ error }}</p>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
 </body>
 </html>

@@ -1,28 +1,113 @@
 {% extends 'base.twig' %}
 
-{% block header %}
+{% block navbar %}
+<a class="navbar-brand" href="/">{{ team_name }}</a>
+<button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>
 
-    <p>News/Chat (<span class='pastNews'><a href='?updates&filter=Y'>previous</a></span>):
-    <input id='UrgentMessage' name='UrgentMessage' value='{{ news }} ({{ news_from }})' style='border: none; background-color: #EEEEEE;' size=175 onchange='add_update(this, "URG", "{{ user_id }}");'><br /></p>
-
-
-    <p><a href='http://palindrome2017.slack.com/messages/general' target='_new'>Slack (general)</a>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <a href='https://plus.google.com/hangouts/_/7lw6rz5zwbkiaozrwld6q77ahaa?authuser=0&hl=en' target='_new'>Hangout 1</a>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <a href='https://plus.google.com/hangouts/_/ha2iwh7ioc4ctfnehufqfvomzya?authuser=0&hl=en' target='_new'>Hangout 2</a>
+<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="http://palindrome2018.slack.com/messages/general">Slack</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="https://drive.google.com/drive/u/0/folders/0B5NGrtZ8ORMreUJoSlV2NjFPYVk">Google Drive</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href='https://plus.google.com/hangouts/_/7lw6rz5zwbkiaozrwld6q77ahaa?authuser=0&hl=en'>HO 1</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href='https://plus.google.com/hangouts/_/ha2iwh7ioc4ctfnehufqfvomzya?authuser=0&hl=en'>HO 2</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">The Hunt</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+    <li class="nav-item dropdown">
+      <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Add…
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
+        <a class="dropdown-item active" href="/?new">Puzzle(s)</a>
+        <a class="dropdown-item" href="">Meta</a>
+      </div>
+    </li>
+  </ul>
+</div>
 {% endblock %}
 
-{% block teaminfo %}
-    <strong>HQ</strong>:
-    4-159, 4-146, 4-145
-    &nbsp;&nbsp;&nbsp;
-    <strong>Phone</strong>
-    617 715-4577
-    &nbsp;&nbsp;&nbsp;
-    <strong>E-mail</strong>: team-palindrome@mit.edu<br/>
-    Username: palindrome
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    Password: aplanacanal
+{% block body %}
+<nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+    <ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="/">All puzzles</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/?meta=0">Unattached</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/?bylastmod">Unsolved</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Your puzzles</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/?updates&filter=Y">Updates</a>
+    </li>
+    </ul>
+
+    <ul class="nav nav-pills flex-column">
+        <li>
+            <p class="nav-link">
+            <strong>News<br></strong>
+            {{ news }} ({{ news_from }})
+            {# <input id='UrgentMessage' name='UrgentMessage' value='{{ news }} ({{ news_from }})' onchange='add_update(this, "URG", "{{ user_id }}");'> #}
+            </p>
+        </li>
+        <li>
+            <p class="nav-link">
+                <strong>Important info</strong><br>
+                HQ: 4-159, 4-146, 4-145<br>
+                Phone: 617 715-4577
+                <a href="mailto:team-palindrome@mit.edu">team-palindrome@mit.edu</a><br>
+                palindrome/aplanacanal
+            </p>
+
+        </li>
+    </ul>
+
+    <ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+      <a class="nav-link"></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link"></a>
+    </li>
+    <li class="nav-item">
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link"></a>
+    </li>
+    </ul>
+</nav>
+
+<main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+
+{% block content %}{% endblock %}
+
+<input type='hidden' id='userid' value='{{ user_id }}'>
+
+<div id='show_notes' onclick='hide_notes()'></div>
+
+<p>
+    {{ time }}<br>
+    Page will reload every 180 seconds automatically.
+</p>
+
+<P>{{ error }}</p>
+</main>
 
 {% endblock %}

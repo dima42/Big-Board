@@ -137,6 +137,11 @@ function show_content() {
         return displayAbandonedPuzzles();
     }
 
+    // Show abandoned
+    if (isset($_GET['new'])) {
+        return displayNew();
+    }
+
     // Show a single puzzle
     if (isset($_GET['puzzle'])) {
         if ($_GET['puzzle'] == 'F') {

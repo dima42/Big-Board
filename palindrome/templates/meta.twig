@@ -1,11 +1,11 @@
 {% extends 'loggedin.twig' %}
 
-{% block body %}
+{% block content %}
 
 {% for puzzle in puzzles if puzzle.META %}
-    <H2><input class='metaTitle' size=100 name='puzttl_{{ puzzle.PUZID }}' value="{{ puzzle.PUZNME }}" style='background: transparent; border: none;'/ onchange='new_name(this, {{ puzzle.PUZID }})'></H2>
+    <h1>{{ puzzle.PUZNME }} <small class="text-muted">meta</small></h1>
     {% if puzzle.PUZSTT == "solved" %}
-        <H2 style='color:#FF6600'>This puzzle has been solved: {{ puzzle.PUZANS }}</H2>
+        <h2 style='color:#FF6600'>This puzzle has been solved: {{ puzzle.PUZANS }}</h2>
     {% endif %}
 
     <table>
@@ -18,12 +18,15 @@
 {% endfor %}
 
 <table border=0 cellspacing=0 cellpadding=4>
+    <thead>
     <tr>
         <th>Puzzle</th>
         <th>Answer</th>
         <th>Let's Go!</th>
     </tr>
+    </thead>
 
+    <tbody>
     {% for puzzle in puzzles if puzzle.META == 0 %}
         <tr class='{{ puzzle.PUZSTT }}'>
             <td><a href='{{ puzzle.PURL }}' target='_new'>{{ puzzle.PUZNME }}</a></td>
@@ -37,9 +40,8 @@
             {% endif %}
         </tr>
     {% endfor %}
+    </tbody>
 </table>
 
 <p><a href='index.php?puzzle={{ meta_id }}'>View this metapuzzle as a regular puzzle</a></p>
-
-<p><a href='/'>&laquo; Back to the Big Board</a></p>
 {% endblock %}

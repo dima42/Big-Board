@@ -21,6 +21,11 @@ function displayTest() {
     ));
 }
 
+function displayNew() {
+    render('new.twig', array(
+    ));
+}
+
 function displayPuzzles() {
     // We have removed the check out feature.
     // $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
@@ -49,6 +54,11 @@ function displayPuzzles() {
 	}
 
 	$all_puzzles = getPuzzles();
+    $all_puzzles_by_meta = array();
+
+    while ($row = $all_puzzles->fetch_assoc()) {
+        $all_puzzles_by_meta[$row['METPUZ']][] = $row;
+    }
 
     // while ($row = $results->fetch_assoc()) {
         // TODO: Show who's working on puzzle. Are we still using this?
@@ -75,6 +85,7 @@ function displayPuzzles() {
         'statuses' => $statuses,
         'total_puzzles' => $total_puzzles,
         'puzzles' => $all_puzzles,
+        'all_puzzles_by_meta' => $all_puzzles_by_meta,
     ));
 }
 

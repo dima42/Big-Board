@@ -1,8 +1,9 @@
 {% extends 'loggedin.twig' %}
 
-{% block body %}
+{% block content %}
 <p>The following lists all unsolved puzzles, in order of how long ago their spreadsheet was opened (which may or may not reflect when someone last worked on the puzzle.</p>
-<table border=0 cellspacing=0 cellpadding=4>
+<table>
+    <thead>
     <tr>
         <th>Puzzle</th>
         <th>Last Modified</th>
@@ -10,6 +11,9 @@
         <th>Status</th>
         <th>Link to Spreadsheet</th>
     </tr>
+    </thead>
+
+    <tbody>
 
     {% for puzzle in puzzles %}
         <tr class='{{ puzzle.STATUS }}'>
@@ -20,8 +24,6 @@
             <td><a href='{{ puzzle.PUZSPR }}' target='_new'>Drive</a></td>
         </tr>
     {% endfor %}
-
+    </tbody>
 </table>
-
-<p><a href='index.php'>&laquo; Back to the Big Board</a></p>
 {% endblock %}
