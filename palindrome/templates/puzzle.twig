@@ -33,14 +33,14 @@ Notes
 
 <h2>Metapuzzles</h2>
 
-{% for meta in metas %}
+{% for meta in puzzle_metas %}
     <p>
         <input type='checkbox' {% if meta.INMETA > 0 %}checked{% endif %} name='puzinmeta_{{ meta.MID }}' onclick='change_parent(this, {{ puzzle_id }}, {{ meta.MID }})'>
         {{ meta.MTTL }}
     </p>
 {% endfor %}
 
-<h4>Advanced options.</h4>
+<h2>Advanced options</h2>
 Do not use unless you are sure.
 <div>
     <a href='#' class='fake_button' onclick='promote_puzzle( {{ puzzle_id }});'>Mark this puzzle as a metapuzzle.</a>

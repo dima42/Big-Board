@@ -128,12 +128,12 @@ function displayPuzzle($puzzle_id) {
     }
 
     $puzzle = $results->fetch_assoc();
-    $metas = getAllMetasSQL($puzzle_id);
+    $puzzle_metas = getPuzzleMetas($puzzle_id);
 
     render('puzzle.twig', array(
         'puzzle_id' => $puzzle_id,
         'puzzle' => $puzzle,
-        'metas' => $metas
+        'puzzle_metas' => $puzzle_metas,
     ));
 }
 

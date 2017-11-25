@@ -98,7 +98,12 @@ function getPuzzle($pid) {
     return getData($query);
 }
 
-function getAllMetasSQL($pid) {
+function getAllMetas() {
+    $query = "SELECT a.puz_id as MID, a.puz_ttl as MTTL FROM puz_tbl a, puz_rel_tbl b WHERE a.puz_id = b.puz_par_id GROUP BY a.puz_id, a.puz_ttl";
+    return getData($query);
+}
+
+function getPuzzleMetas($pid) {
     $query = "select a.puz_id as MID, a.puz_ttl as MTTL, sum(b.puz_id = ".$pid.") as INMETA from puz_tbl a, puz_rel_tbl b where a.puz_id = b.puz_par_id group by a.puz_id, a.puz_ttl";
     return getData($query);
 }
