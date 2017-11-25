@@ -37,22 +37,21 @@ function render($template, $vars = array()) {
 }
 
 function connectToDB() {
-    $user = 'spandext_foggy';
-    $password = 'sm4rg4nA';
-    $db = 'spandext_palin';
-    $host = 'localhost';
-    $port = 8889;
+    $url = parse_url(getenv("PALINDROME_DATABASE_URL"));
+    $server = $url["host"];
+    $username = $url["user"];
+    $password = $url["pass"];
+    $db = substr($url["path"], 1);
 
     $link = mysqli_connect(
-       $host,
-       $user,
+       $server,
+       $username,
        $password,
-       $db,
-       $port
+       $db
     );
-	if (!$link) {
+    if (!$link) {
         writeHeader('Could not select database');
     }
-	return $link;
+    return $link;
 }
 ?>
