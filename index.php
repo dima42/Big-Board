@@ -120,48 +120,4 @@ function show_page($pal_drive) {
 
     show_content();
 }
-
-function show_content() {
-    // Show test
-    if (isset($_GET['test'])) {
-        return displayTest();
-    }
-
-    // Show a meta
-    if (isset($_GET['meta'])) {
-        return displayMeta($_GET['meta']);
-    }
-
-    // Show unattached
-    if (isset($_GET['loose'])) {
-        return displayLoosePuzzles();
-    }
-
-    // Show updates
-    if (isset($_GET['updates'])) {
-        return displayUpdates($_GET['filter']);
-    }
-
-    // Show unsolved
-    if (isset($_GET['unsolved'])) {
-        return displayUnsolvedPuzzles();
-    }
-
-    // Show form for new puzzle
-    if (isset($_GET['new'])) {
-        return displayNew();
-    }
-
-    // Show a single puzzle
-    if (isset($_GET['puzzle'])) {
-        if ($_GET['puzzle'] == 'F') {
-            return displayFeature();
-        } else {
-            return displayPuzzle($_GET['puzzle']);
-        }
-    }
-
-    // Show main page
-    return displayPuzzles();
-}
 ?>
