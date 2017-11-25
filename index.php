@@ -32,7 +32,7 @@ if (isset($_GET['code'])) {
     $pal_client->authenticate($_GET['code']);
     $_SESSION['access_token'] = $pal_client->getAccessToken();
     setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
-    header('Location: http://palindrome.spandexters.com/');
+    header('Location: /');
 
     $token_dump = json_decode($_SESSION['access_token']);
     $_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
