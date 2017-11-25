@@ -118,7 +118,7 @@ function displayFeature($puzzle_id) {
 }
 
 function displayPuzzle($puzzle_id) {
-    $results = getPuzzleSQL($puzzle_id);
+    $results = getPuzzle($puzzle_id);
 
     $puzzle_count = $results->num_rows;
     if ($puzzle_count == 0) {
