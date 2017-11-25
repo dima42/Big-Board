@@ -69,7 +69,7 @@ if ($noAccessYet) {
 // if there is no access token, user has not authorized app. So let's begin by checking that.
 if ($noAccessYet) {
     $authUrl = $pal_client->createAuthUrl();
-    return render('loggedout.twig', array(
+    render('loggedout.twig', array(
         'auth_url' => $authUrl
     ));
 } else {
