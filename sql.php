@@ -68,7 +68,7 @@ function getCurrentPuzzleSQL($user_id) {
     return getData($query);
 }
 
-function getMetaSQL($pid) {
+function getMeta($pid) {
     $query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
                 "c.pal_id as UID, c.pal_usr_nme as UNAME, (a.puz_id = ".$pid.") as META ".
                 "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
@@ -77,7 +77,7 @@ function getMetaSQL($pid) {
     return getData($query);
 }
 
-function getLoosePuzzlesSQL() {
+function getLoosePuzzles() {
     $query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
                 "c.pal_id as UID, c.pal_usr_nme as UNAME, FALSE as META ".
                 "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".

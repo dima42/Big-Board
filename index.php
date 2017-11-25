@@ -132,17 +132,22 @@ function show_content() {
         return displayMeta($_GET['meta']);
     }
 
+    // Show unattached
+    if (isset($_GET['loose'])) {
+        return displayLoosePuzzles();
+    }
+
     // Show updates
     if (isset($_GET['updates'])) {
         return displayUpdates($_GET['filter']);
     }
 
-    // Show abandoned
-    if (isset($_GET['bylastmod'])) {
-        return displayAbandonedPuzzles();
+    // Show unsolved
+    if (isset($_GET['unsolved'])) {
+        return displayUnsolvedPuzzles();
     }
 
-    // Show abandoned
+    // Show form for new puzzle
     if (isset($_GET['new'])) {
         return displayNew();
     }

@@ -90,15 +90,18 @@ function displayPuzzles() {
 }
 
 function displayMeta($meta_id) {
-	if ($meta_id == 0) {
-        // TODO: redirect to function for showing unattached puzzles.
-		// old code: $results = getLoosePuzzlesSQL();
-    }
-
-	$results = getMetaSQL($meta_id);
+    $results = getMeta($meta_id);
 
     render('meta.twig', array(
         'meta_id' => $meta_id,
+        'puzzles' => $results
+    ));
+}
+
+function displayLoosePuzzles() {
+	$results = getLoosePuzzles();
+
+    render('loose.twig', array(
         'puzzles' => $results
     ));
 }
@@ -146,7 +149,7 @@ function displayUpdates($filter) {
     ));
 }
 
-function displayAbandonedPuzzles() {
+function displayUnsolvedPuzzles() {
     // first of all let's get the current spreadsheets in the folder
     $from_the_folder = getDrivesFiles();
     $all_puzzles = array();
