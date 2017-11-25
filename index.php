@@ -25,7 +25,10 @@ $pal_drive = new Google_DriveService($pal_client);
 $noAccessYet = TRUE;
 
 // user is logging out
-if (isset($_REQUEST['logout'])) {unset($_SESSION['access_token']);session_destroy();}
+if (isset($_REQUEST['logout'])) {
+    unset($_SESSION['access_token']);
+    session_destroy();
+}
 
 // let's get the persons access token for future use. This is automatica only the login takes place.
 if (isset($_GET['code'])) {
@@ -43,7 +46,9 @@ if (isset($_GET['code'])) {
 
 // let's check to see if we have an access token. If we do, then we can get all sorts of fun information
 // if we do not have a session token, check the cookies
-if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) { $_SESSION['access_token'] = stripslashes($_COOKIE['PAL_ACCESS_TOKEN']); }
+if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) {
+    $_SESSION['access_token'] = stripslashes($_COOKIE['PAL_ACCESS_TOKEN']);
+}
 
 if (isset($_SESSION['access_token'])) {
     $pal_client->setAccessToken($_SESSION['access_token']);
