@@ -21,12 +21,14 @@ function render($template, $vars = array()) {
     $row = $latest_updates->fetch_assoc();
     $news = $row["NEWS"];
     $news_from = $row["WHO"];
+    $metas = getAllMetas();
 
     Global $twig;
     $vars['user_id'] = $_SESSION['user_id'];
     $vars['time'] = strftime('%c');
     $vars['news'] = $news;
     $vars['news_from'] = $news_from;
+    $vars['metas'] = $metas;
 
     if (in_array("error_string", $_SESSION)) {
         $vars['error'] = $_SESSION['error_string'];
