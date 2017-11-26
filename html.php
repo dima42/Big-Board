@@ -15,9 +15,9 @@ function show_content() {
         return displayLoosePuzzles();
     }
 
-    // Show updates
-    if (isset($_GET['updates'])) {
-        return displayUpdates($_GET['filter']);
+    // Show news
+    if (isset($_GET['news'])) {
+        return displayNews($_GET['filter']);
     }
 
     // Show unsolved
@@ -183,10 +183,10 @@ function displayPuzzle($puzzle_id) {
     ));
 }
 
-function displayUpdates($filter) {
+function displayNews($filter) {
     $results = getUpdatesSQL();
 
-    render('updates.twig', array(
+    render('news.twig', array(
         'filter' => $filter,
         'updates' => $results
     ));
