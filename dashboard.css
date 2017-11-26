@@ -5,7 +5,7 @@
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
   padding-top: 3.5rem;
-  font-size: .9rem;
+  font-size: 1rem;
   font-family: Roboto, sans-serif;
 }
 
@@ -72,8 +72,16 @@ h2 {
  * Tables
  */
 
+.table {
+    margin-bottom: 2em;
+}
+
 .table td, .table th {
     padding: .5rem;
-    font-family: 'PT Mono', monospace;
-    font-size: .9rem;
+    font-family: Inconsolata, monospace;
+    /*font-size: .9rem;*/
+}
+
+thead tr {
+    background: #f7f7f7;
 }
