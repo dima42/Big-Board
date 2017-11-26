@@ -3,15 +3,6 @@
 {% block content %}
 <h1>Latest news</h1>
 
-<p>
-    Show
-    {% if filter == "Y" %}
-        <a href='/?news'>all updates</a>
-    {% else %}
-        <a href='/?news&filter=Y'>just important updates</a>
-    {% endif %}
-</p>
-
 <table class="table">
     {% for update in updates if filter != "Y" or update.TYP != "PUZ" %}
     <tr>
@@ -21,4 +12,15 @@
     </tr>
     {% endfor %}
 </table>
+{% endblock %}
+
+{% block aside %}
+<h4>Show</h4>
+<p>
+    {% if filter == "Y" %}
+        <a href='/?news'>all updates</a>
+    {% else %}
+        <a href='/?news&filter=Y'>just important updates</a>
+    {% endif %}
+</p>
 {% endblock %}
