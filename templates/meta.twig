@@ -4,7 +4,7 @@
 
 {% for puzzle in puzzles if puzzle.META %}
     <h1>{{ puzzle.PUZZLE_NAME }} <small class="text-muted">meta</small></h1>
-    {% if puzzle.PUZSTT == "solved" %}
+    {% if puzzle.STATUS == "solved" %}
     <div class="alert alert-success">
         {{ puzzle.PUZANS }}
     </div>
