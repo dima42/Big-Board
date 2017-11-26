@@ -9,10 +9,10 @@
     <span class="badge badge-pill badge-secondary">{{ puzzle.STATUS | emojify }} {{ puzzle.STATUS }}</span>
 </h1>
 
-{% if puzzle.PUZSTT == "featured" %}
+{% if puzzle.STATUS == "featured" %}
     <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
 {% endif %}
-{% if puzzle.PUZSTT == "solved" %}
+{% if puzzle.STATUS == "solved" %}
     <div class="alert alert-success">
         {{ puzzle.PUZANS }}
     </div>
