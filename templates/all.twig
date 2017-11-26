@@ -1,6 +1,5 @@
 {% extends 'loggedin.twig' %}
 
-
 {% block content %}
 <h1>All puzzles</h1>
 
@@ -28,7 +27,6 @@
 
 {% for meta, puzzles in all_puzzles_by_meta %}
 <h2><a href="/?meta={{ puzzles.0.PUZID }}">{{ meta }}</a></h2>
-{# TODO show +puzzle button here #}
 <table class="table table-striped">
     <thead>
         <tr>
