@@ -60,26 +60,6 @@
     </ul>
 
     <ul class="nav nav-pills flex-column">
-        <li>
-            <p class="nav-link">
-            <strong>News<br></strong>
-            {{ news }} ({{ news_from }})
-            {# <input id='UrgentMessage' name='UrgentMessage' value='{{ news }} ({{ news_from }})' onchange='add_update(this, "URG", "{{ user_id }}");'> #}
-            </p>
-        </li>
-        <li>
-            <p class="nav-link">
-                <strong>Important info</strong><br>
-                HQ: 4-159, 4-146, 4-145<br>
-                Phone: 617 715-4577
-                <a href="mailto:team-palindrome@mit.edu">team-palindrome@mit.edu</a><br>
-                palindrome/aplanacanal
-            </p>
-
-        </li>
-    </ul>
-
-    <ul class="nav nav-pills flex-column">
     <li class="nav-item">
       <a class="nav-link"></a>
     </li>
@@ -107,8 +87,21 @@
 <aside class="col-md-2 col-lg-3 d-none d-md-block pt-3 pl-3 mt-3">
     {% block aside %}{% endblock %}
 
+    <h4>Latest news</h4>
+    <p>
+    {{ news }} ({{ news_from }})
+    {# <input id='UrgentMessage' name='UrgentMessage' value='{{ news }} ({{ news_from }})' onchange='add_update(this, "URG", "{{ user_id }}");'> #}
+    </p>
+
+    <hr>
     <small>
-        {{ time }}<br>
+    HQ: 4-159, 4-146, 4-145<br>
+    Phone: 617 715-4577<br>
+    <a href="mailto:team-palindrome@mit.edu">team-palindrome@mit.edu</a><br>
+    palindrome/aplanacanal<br>
+    </small>
+    <small>
+        <br>{{ time }}
         {# Page will reload every 180 seconds automatically. #}
     </small>
 
