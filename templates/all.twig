@@ -3,34 +3,12 @@
 {% block content %}
 <h1>All puzzles</h1>
 
-<table>
-    <tr>
-        <th align=center valign=middle class="" width=120px>&nbsp;</th>
-    {% if statuses.featured > 0 %}
-        <th align=center valign=middle class='puzzle featured' width="{{ 480 * statuses.featured / total_puzzles }}px">Featured<br/>(<a href='index.php?puzzle=F'>View</a>)</th>
-    {% endif %}
-    {% if statuses.priority > 0 %}
-        <th align=center valign=middle class='puzzle priority' width="{{ 480 * statuses.priority / total_puzzles }}px">Priority<br/>{{ statuses.priority }}</th>
-    {% endif %}
-    {% if statuses.open > 0 %}
-        <th align=center valign=middle class='puzzle open' width="{{ 480 * statuses.open / total_puzzles }}px">Open<br/>{{ statuses.open }}</th>
-    {% endif %}
-    {% if statuses.stuck > 0 %}
-        <th align=center valign=middle class='puzzle stuck' width="{{ 480 * statuses.stuck / total_puzzles }}px">Stuck<br/>{{ statuses.stuck }}</th>
-    {% endif %}
-    {% if statuses.solved > 0 %}
-        <th align=center valign=middle class='puzzle solved' width="{{ 480 * statuses.solved / total_puzzles }}px">Solved<br/>{{ statuses.solved }}</th>
-    {% endif %}
-    </tr>
-</table>
-
 {% from 'macros.twig' import puzzle_table %}
 
 {% for meta, puzzles in all_puzzles_by_meta %}
 <h2><a href="/?meta={{ puzzles.0.PUZID }}">{{ meta }}</a></h2>
 {{ puzzle_table(puzzles) }}
 {% endfor %}
-
 
 <p><strong>Instructions:</strong> <span class='fake_button' id='instruction_status' onclick='toggle_instructions();'>show</span>
 <div id='instructions'>
@@ -43,4 +21,11 @@
     <br/>
     To nest one metapuzzle inside a metapuzzle: Click info for the metapuzzle. Click view as puzzle. Check off the meta to nest it under.
 </div>
+{% endblock %}
+
+{% block aside %}
+    {% for status in statuses %}
+        <h4>{{ status.STATUS }}</h4>
+        <p>{{ status.STATUS_SUM }}</p>
+    {% endfor %}
 {% endblock %}

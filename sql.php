@@ -118,8 +118,8 @@ function getLatestTeamUpdateSQL() {
     return getData($query);
 }
 
-function getStatusProportionsSQL() {
-    $query = "SELECT puz_stt as STATUS, COUNT(*) PUZSTTSUM FROM puz_tbl GROUP BY puz_stt";
+function getStatusesSQL() {
+    $query = "SELECT puz_stt as STATUS, COUNT(*) STATUS_SUM FROM puz_tbl GROUP BY puz_stt";
     return getData($query);
 }
 

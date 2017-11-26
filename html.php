@@ -85,17 +85,17 @@ function displayPuzzles() {
     $total_puzzles = 0;
 
     // Count up all the puzzles in each status
-    $all_statuses = getStatusProportionsSQL();
-    while ($row = $all_statuses->fetch_assoc()) {
-        $statuses[$row["STATUS"]] = $row["PUZSTTSUM"];
-        $total_puzzles += $row["PUZSTTSUM"];
-    }
+    $all_statuses = getStatusesSQL();
+    // while ($row = $all_statuses->fetch_assoc()) {
+    //     $statuses[$row["STATUS"]] = $row["STATUS_SUM"];
+    //     $total_puzzles += $row["STATUS_SUM"];
+    // }
 
-	$whos_on_what = getPuzzleAssignments();
-    $whos_on_what_array = array();
-    while ($row = $whos_on_what->fetch_assoc()) {
-    	$whos_on_what_array[$row["SNACK"]] = $row["ANTS"];
-	}
+	// $whos_on_what = getPuzzleAssignments();
+ //    $whos_on_what_array = array();
+ //    while ($row = $whos_on_what->fetch_assoc()) {
+ //    	$whos_on_what_array[$row["SNACK"]] = $row["ANTS"];
+	// }
 
 	$all_puzzles = getPuzzles();
     $all_puzzles_by_meta = array();
@@ -126,7 +126,7 @@ function displayPuzzles() {
     // }
 
     render('all.twig', array(
-        'statuses' => $statuses,
+        'statuses' => $all_statuses,
         'total_puzzles' => $total_puzzles,
         'all_puzzles_by_meta' => $all_puzzles_by_meta,
     ));
