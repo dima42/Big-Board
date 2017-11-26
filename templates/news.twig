@@ -1,17 +1,24 @@
 {% extends 'loggedin.twig' %}
 
 {% block content %}
+<h1>Latest news</h1>
+
 <p>
+    Show
     {% if filter == "Y" %}
-        <a href='index.php?updates'>All updates</a>
+        <a href='/?news'>all updates</a>
     {% else %}
-        <a href='index.php?updates&filter=Y'>Hide automatic updates</a>
+        <a href='/?news&filter=Y'>just important updates</a>
     {% endif %}
 </p>
 
-<table border=0 cellspacing=0 cellpadding=4>
+<table class="table">
     {% for update in updates if filter != "Y" or update.TYP != "PUZ" %}
-            <tr><td>{{ update.WHN }}: {{ update.NEWS }} ({{ update.WHO }})</td></tr>
+    <tr>
+        <td>{{ update.WHN }}</td>
+        <td>{{ update.NEWS }}</td>
+        <td>{{ update.WHO }}</td>
+    </tr>
     {% endfor %}
 </table>
 {% endblock %}
