@@ -194,40 +194,30 @@ function displayUpdates($filter) {
 }
 
 function displayUnsolvedPuzzles() {
-    // first of all let's get the current spreadsheets in the folder
-    $from_the_folder = getDrivesFiles();
-    $all_puzzles = array();
+    $unsolved_puzzles = getUnsolvedPuzzles();
+    $puzzles = array();
+    $driveService = get_new_drive_service();
 
-    $results = getUnsolvedPuzzles();
-    foreach ($results as $row) {
-        $currentFile = substr($row['PUZSPR'], strpos($row['PUZSPR'], "ccc?key=") + 8, 44);
+    foreach ($unsolved_puzzles as $row) {
+        $fileID = substr($row['PUZSPR'], strpos($row['PUZSPR'], "ccc?key=") + 8, 44);
+        $puzzles[$fileID] = $row;
 
-        $lastmod = "2017-12-31";
-        if (array_key_exists($currentFile, $from_the_folder)) {
-            $lastmod = $from_the_folder[$currentFile][1];
+        $file = $driveService->files->get($fileID);
+        $puzzles[$fileID]['lastModBy'] = $file['lastModifyingUserName'] ?? "";
 
-            $how_old = (time() - strtotime($lastmod))/60;
-            if ($how_old > 60*24) {
-                $file_age = intval($how_old/(24*60)) . " days";
-            } else if ($how_old > 60) {
-                $file_age = intval($how_old/60) . " hrs";
-            } else {
-                $file_age = intval($how_old) . " min";
-            }
+        $how_old = (time() - strtotime($file['modifiedDate'] ?? "2017-12-31")) / 60;
+        $file_age = intval($how_old) . " min";
+        if ($how_old > 60*24) {
+            $file_age = intval($how_old/(24*60)) . " days";
+        } else if ($how_old > 60) {
+            $file_age = intval($how_old/60) . " hrs";
         }
 
-        $all_puzzles[$currentFile] = array(
-            'FILEAGE' => $file_age,
-            'INDPUZ' => $row['INDPUZ'],
-            'STATUS' => $row['STATUS'],
-            'PUZURL' => $row['PUZURL'],
-            'PUZSPR' => $row['PUZSPR'],
-            'PUZNTS' => $row['PUZNTS'],
-        );
+        $puzzles[$fileID]['lastMod'] = $file_age;
     }
 
-    render('abandoned.twig', array(
-        'puzzles' => $all_puzzles
+    render('unsolved.twig', array(
+        'puzzles' => $puzzles
     ));
 }
 ?>
