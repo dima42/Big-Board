@@ -87,7 +87,7 @@ function displayPuzzles() {
     // Count up all the puzzles in each status
     $all_statuses = getStatusProportionsSQL();
     while ($row = $all_statuses->fetch_assoc()) {
-        $statuses[$row["PUZSTT"]] = $row["PUZSTTSUM"];
+        $statuses[$row["STATUS"]] = $row["PUZSTTSUM"];
         $total_puzzles += $row["PUZSTTSUM"];
     }
 

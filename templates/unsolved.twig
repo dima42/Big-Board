@@ -6,32 +6,7 @@
 
 <p>In order of how long ago their spreadsheet was opened (which may or may not reflect when someone last worked on the puzzle).</p>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Last mod</th>
-            <th>By</th>
-            <th>Status</th>
-            <th>Notes</th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for puzzle in puzzles %}
-        <tr class="puzzle{{ puzzle.PUZID }}" class="puzzle {{ puzzle.STATUS }} {% if puzzle.META == 1 %}meta{% endif %}">
-            <td><a href="/?puzzle={{ puzzle.PUZID }}">{{ puzzle.INDPUZ }}</a></td>
-            <td>{{ puzzle.lastMod }}</td>
-            <td>{{ puzzle.lastModBy }}</td>
-            <td>{{ puzzle.STATUS }}</td>
-            <td>{{ puzzle.PUZNTS }}</td>
-            <td>{% if puzzle.PUZURL %}<a href="{{ puzzle.PUZURL }}"><img src="/img/mit.png" width="20" alt=""></a>{% endif %}</td>
-            <td><a href="{{ puzzle.PUZSPR }}"><img src="/img/drive.png" width="20" alt=""></a></td>
-            <td><a href="http://palindrome2017.slack.com/messages/{{ puzzle.SLACK }}"><img src="/img/slack.png" width="20" alt=""></a></td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+{% from 'macros.twig' import puzzle_table %}
+{{ puzzle_table(puzzles, false, true) }}
+
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block content %}
 
 {% for puzzle in puzzles if puzzle.META %}
-    <h1>{{ puzzle.PUZNME }} <small class="text-muted">meta</small></h1>
+    <h1>{{ puzzle.PUZZLE_NAME }} <small class="text-muted">meta</small></h1>
     {% if puzzle.PUZSTT == "solved" %}
     <div class="alert alert-success">
         {{ puzzle.PUZANS }}
@@ -20,30 +20,8 @@
     <P>This does not appear to be a metapuzzle. There are no puzzles that are part of it.</P>
 {% endfor %}
 
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th>Puzzle</th>
-        <th>Answer</th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
-    </thead>
-
-    <tbody>
-    {% for puzzle in puzzles if puzzle.META == 0 %}
-        <tr class='{{ puzzle.PUZSTT }}'>
-            <td><a href="/?puzzle={{ puzzle.PUZID }}">{{ puzzle.PUZNME }}</a></td>
-            <td>{{ puzzle.PUZANS }}</td>
-
-            <td>{% if puzzle.PURL %}<a href="{{ puzzle.PURL }}"><img src="/img/mit.png" width="20" alt=""></a>{% endif %}</td>
-            <td><a href="{{ puzzle.PUZSPR }}"><img src="/img/drive.png" width="20" alt=""></a></td>
-            <td><a href="http://palindrome2017.slack.com/messages/{{ puzzle.SLACK }}"><img src="/img/slack.png" width="20" alt=""></a></td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+{% from 'macros.twig' import puzzle_table %}
+{{ puzzle_table(puzzles) }}
 
 <p><a href='index.php?puzzle={{ meta_id }}'>View this metapuzzle as a regular puzzle</a></p>
 {% endblock %}

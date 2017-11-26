@@ -19,7 +19,7 @@ function getData($query) {
 }
 
 function getPuzzles() {
-	$query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, b.slack SLACK, ".
+	$query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl PUZZLE_NAME, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, b.slack SLACK, ".
 			 "b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
 			 "from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
 			 "on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
@@ -28,7 +28,7 @@ function getPuzzles() {
 }
 
 function getLoosePuzzles() {
-    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
+    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZZLE_NAME, a.puz_url as PUZURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as STATUS, a.puz_notes as PUZNTS, ".
                 "c.pal_id as UID, c.pal_usr_nme as UNAME, FALSE as META ".
                 "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
                 "where a.puz_id not in (select puz_id from puz_rel_tbl) ".
@@ -37,7 +37,7 @@ function getLoosePuzzles() {
 }
 
 function getUnsolvedPuzzles() {
-	$query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, ".
+	$query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl PUZZLE_NAME, b.puz_ans PUZANS, b.puz_url PUZURL, a.puz_stt as STATUS, b.puz_notes PUZNTS, ".
 			 "b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
 			 "from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
 			 "on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
@@ -47,7 +47,7 @@ function getUnsolvedPuzzles() {
 }
 
 function getMeta($pid) {
-    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
+    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZZLE_NAME, a.puz_url as PUZURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as STATUS, a.puz_notes as PUZNTS, ".
                 "c.pal_id as UID, c.pal_usr_nme as UNAME, (a.puz_id = ".$pid.") as META ".
                 "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
                 "where a.puz_id in (select puz_id from puz_rel_tbl where puz_par_id = ".$pid.") ".
@@ -56,7 +56,7 @@ function getMeta($pid) {
 }
 
 function getPuzzle($pid) {
-    $query = "SELECT a.puz_id as PUZID, e.puz_ttl as META, e.puz_id as META_ID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
+    $query = "SELECT a.puz_id as PUZID, e.puz_ttl as META, e.puz_id as META_ID, a.puz_ttl as PUZZLE_NAME, a.puz_url as PUZURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as STATUS, a.puz_notes as PUZNTS, ".
                 "c.pal_id as UID, c.pal_usr_nme as UNAME ".
                 "FROM puz_tbl a " .
                 "LEFT JOIN (puz_chk_out b, pal_usr_tbl c) " .
@@ -119,7 +119,7 @@ function getLatestTeamUpdateSQL() {
 }
 
 function getStatusProportionsSQL() {
-    $query = "SELECT puz_stt as PUZSTT, COUNT(*) PUZSTTSUM FROM puz_tbl GROUP BY puz_stt";
+    $query = "SELECT puz_stt as STATUS, COUNT(*) PUZSTTSUM FROM puz_tbl GROUP BY puz_stt";
     return getData($query);
 }
 

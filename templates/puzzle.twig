@@ -2,15 +2,11 @@
 
 {% block content %}
 
-{# {% for k, v in puzzle %}
-    {{ k }}: {{ v }}<br>
-{% endfor %} #}
-
-<h5 class="meta"><a href="/?meta={{ puzzle.META_ID }}">{{ puzzle.META }}</a></h5>
+<h5 class="meta">Part of <a href="/?meta={{ puzzle.META_ID }}">{{ puzzle.META }}</a></h5>
 
 <h1>
-    {{ puzzle.PUZNME }}
-    <span class="badge badge-pill badge-info">Status</span>
+    {{ puzzle.PUZZLE_NAME }}
+    <span class="badge badge-pill badge-secondary">{{ puzzle.STATUS | emojify }} {{ puzzle.STATUS }}</span>
 </h1>
 
 {% if puzzle.PUZSTT == "featured" %}
