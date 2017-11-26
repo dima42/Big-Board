@@ -4,9 +4,12 @@
 
 <h1>Unsolved puzzles</h1>
 
-<p>In order of how long ago their spreadsheet was opened (which may or may not reflect when someone last worked on the puzzle).</p>
-
 {% from 'macros.twig' import puzzle_table %}
 {{ puzzle_table(puzzles, false, true) }}
 
+{% endblock %}
+
+{% block aside %}
+    <h4>About this page</h4>
+    <p>A list of all unsolved puzzles, in order of how long ago their spreadsheet was opened (which may or may not reflect when someone last worked on the puzzle).</p>
 {% endblock %}

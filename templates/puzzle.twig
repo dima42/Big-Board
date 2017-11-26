@@ -18,14 +18,6 @@
     </div>
 {% endif %}
 
-<a name='puzurllink_{{ puzzle.PUZID }}' href='{{ puzzle.PURL }}'>Puzzle URL</a>
-<input size=40 name='puzurl_{{ puzzle.PUZID }}' value='{{ puzzle.PURL }}' onchange='new_link(this, {{ puzzle.PUZID }})' >
-<br>
-<a name='puzsprlink_{{ puzzle.PUZID }}' href='{{ puzzle.PUZSPR }}'>Google Doc</a>
-<input size=40 name='puzspr_{{ puzzle.PUZID }}' value='{{ puzzle.PUZSPR }}' onchange='new_sprd(this, {{ puzzle.PUZID }})' >
-<br>
-Notes
-<input size=40 name='puznts_{{ puzzle.PUZID }}' onchange='upd_notes(this, {{ puzzle.PUZID }})' value='{{ puzzle.PUZNOT }}' >
 
 <h2>Metapuzzles</h2>
 
@@ -45,4 +37,17 @@ Do not use unless you are sure.
     <a href='#' class='fake_button' onclick='delete_puzzle( {{ puzzle_id }});'>Delete this puzzle.</a>
 </div>
 <input type=checkbox id='areyousure' value='yes' >Are you sure?
+{% endblock %}
+
+{% block aside %}
+<a name='puzurllink_{{ puzzle.PUZID }}' href='{{ puzzle.PURL }}'>Puzzle URL</a>
+{# <input size=40 name='puzurl_{{ puzzle.PUZID }}' value='{{ puzzle.PURL }}' onchange='new_link(this, {{ puzzle.PUZID }})' > #}
+<br>
+<a name='puzsprlink_{{ puzzle.PUZID }}' href='{{ puzzle.PUZSPR }}'>Google Doc</a>
+{# <input size=40 name='puzspr_{{ puzzle.PUZID }}' value='{{ puzzle.PUZSPR }}' onchange='new_sprd(this, {{ puzzle.PUZID }})' > #}
+<br>
+<h4>Notes</h4>
+{{ puzzle.PUZNTS }}
+{# <input size=40 name='puznts_{{ puzzle.PUZID }}' onchange='upd_notes(this, {{ puzzle.PUZID }})' value='{{ puzzle.PUZNOT }}' > #}
+
 {% endblock %}

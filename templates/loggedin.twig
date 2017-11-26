@@ -50,7 +50,7 @@
 {% endblock %}
 
 {% block body %}
-<nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
     <ul class="nav nav-pills flex-column">
         {% for meta in metas %}
         <li class="nav-item">
@@ -95,20 +95,25 @@
     </ul>
 </nav>
 
-<main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+<main role="main" class="col-12 ml-sm-auto col-md-8 col-lg-7 pt-3">
 
 {% block content %}{% endblock %}
 
 <input type='hidden' id='userid' value='{{ user_id }}'>
 
 <div id='show_notes' onclick='hide_notes()'></div>
-
-<p>
-    {{ time }}<br>
-    Page will reload every 180 seconds automatically.
-</p>
-
-<P>{{ error }}</p>
 </main>
+
+<aside class="col-md-2 col-lg-3 d-none d-md-block pt-3 pl-3 mt-3">
+    {% block aside %}{% endblock %}
+
+    <small>
+        {{ time }}<br>
+        {# Page will reload every 180 seconds automatically. #}
+    </small>
+
+    <P>{{ error }}</p>
+
+</aside>
 
 {% endblock %}

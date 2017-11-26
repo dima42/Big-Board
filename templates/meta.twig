@@ -10,18 +10,25 @@
     </div>
     {% endif %}
 
-    <a name='puzurllink_{{ puzzle.PUZID }}' href='{{ puzzle.PURL }}'>Meta URL</a>
-    <input size=40 name='puzurl_{{ puzzle.PUZID }}' value='{{ puzzle.PURL }}' onchange='new_link(this, {{ puzzle.PUZID }})' ><br>
-    <a name='puzsprlink_{{ puzzle.PUZID }}' href='{{ puzzle.PUZSPR}}'>Google Doc</a>
-    <input size=40 name='puzspr_{{ puzzle.PUZID }}' value='{{ puzzle.PUZSPR}}' onchange='new_sprd(this, {{ puzzle.PUZID }})' ><br>
-    Notes
-    <input size=40 name='puznts_{{ puzzle.PUZID }}' onchange='upd_notes(this, {{ puzzle.PUZID }})' value='{{ puzzle.PUZNOT }}' >
 {% else %}
     <P>This does not appear to be a metapuzzle. There are no puzzles that are part of it.</P>
 {% endfor %}
 
 {% from 'macros.twig' import puzzle_table %}
 {{ puzzle_table(puzzles) }}
+
+{% endblock %}
+
+{% block aside %}
+{% for puzzle in puzzles if puzzle.META %}
+<a name='puzurllink_{{ puzzle.PUZID }}' href='{{ puzzle.PURL }}'>Meta URL</a><br>
+{# <input size=40 name='puzurl_{{ puzzle.PUZID }}' value='{{ puzzle.PURL }}' onchange='new_link(this, {{ puzzle.PUZID }})' ><br> #}
+<a name='puzsprlink_{{ puzzle.PUZID }}' href='{{ puzzle.PUZSPR}}'>Google Doc</a><br>
+{# <input size=40 name='puzspr_{{ puzzle.PUZID }}' value='{{ puzzle.PUZSPR}}' onchange='new_sprd(this, {{ puzzle.PUZID }})' ><br> #}
+<h4>Notes</h4>
+{{ puzzle.PUZNTS }}
+{# <input size=40 name='puznts_{{ puzzle.PUZID }}' onchange='upd_notes(this, {{ puzzle.PUZID }})' value='{{ puzzle.PUZNOT }}' > #}
+{% endfor %}
 
 <p><a href='index.php?puzzle={{ meta_id }}'>View this metapuzzle as a regular puzzle</a></p>
 {% endblock %}

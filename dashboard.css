@@ -54,6 +54,13 @@ h2 {
   border-radius: 0;
 }
 
+
+/* ASIDE*/
+
+aside {
+    border-left: 1px solid #eee;
+}
+
 /*
  * Dashboard
  */
