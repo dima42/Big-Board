@@ -27,6 +27,15 @@ function getPuzzles() {
     return getData($query);
 }
 
+function getLoosePuzzles() {
+    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
+                "c.pal_id as UID, c.pal_usr_nme as UNAME, FALSE as META ".
+                "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
+                "where a.puz_id not in (select puz_id from puz_rel_tbl) ".
+                "order by a.puz_id";
+    return getData($query);
+}
+
 function getUnsolvedPuzzles() {
 	$query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl INDPUZ, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, ".
 			 "b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
@@ -36,6 +45,39 @@ function getUnsolvedPuzzles() {
 			 "order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
     return getData($query);
 }
+
+function getMeta($pid) {
+    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
+                "c.pal_id as UID, c.pal_usr_nme as UNAME, (a.puz_id = ".$pid.") as META ".
+                "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
+                "where a.puz_id in (select puz_id from puz_rel_tbl where puz_par_id = ".$pid.") ".
+                "order by META desc, a.puz_id";
+    return getData($query);
+}
+
+function getPuzzle($pid) {
+    $query = "SELECT a.puz_id as PUZID, e.puz_ttl as META, e.puz_id as META_ID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
+                "c.pal_id as UID, c.pal_usr_nme as UNAME ".
+                "FROM puz_tbl a " .
+                "LEFT JOIN (puz_chk_out b, pal_usr_tbl c) " .
+                "ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL " .
+                "LEFT JOIN (puz_rel_tbl d, puz_tbl e)" .
+                "on (a.puz_id = d.puz_id and d.puz_par_id = e.puz_id)" .
+                "WHERE a.puz_id = ".$pid."";
+    return getData($query);
+}
+
+function getAllMetas() {
+    $query = "SELECT a.puz_id as MID, a.puz_ttl as MTTL FROM puz_tbl a, puz_rel_tbl b WHERE a.puz_id = b.puz_par_id GROUP BY a.puz_id, a.puz_ttl";
+    return getData($query);
+}
+
+function getPuzzleMetas($pid) {
+    $query = "select a.puz_id as MID, a.puz_ttl as MTTL, sum(b.puz_id = ".$pid.") as INMETA from puz_tbl a, puz_rel_tbl b where a.puz_id = b.puz_par_id group by a.puz_id, a.puz_ttl";
+    return getData($query);
+}
+
+
 
 function getFeaturedPuzzleIDSQL() {
 	$query = "select puz_id as PUZID from puz_tbl b where puz_stt = 'featured'";
@@ -65,46 +107,6 @@ function findUser($google_id) {
 
 function getCurrentPuzzleSQL($user_id) {
     $query = "select puz_id as PUZID, chk_out as CHECKOUT from puz_chk_out where usr_id = ".$user_id." and chk_in is null";
-    return getData($query);
-}
-
-function getMeta($pid) {
-    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
-                "c.pal_id as UID, c.pal_usr_nme as UNAME, (a.puz_id = ".$pid.") as META ".
-                "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
-                "where a.puz_id in (select puz_id from puz_rel_tbl where puz_par_id = ".$pid.") ".
-                "order by META desc, a.puz_id";
-    return getData($query);
-}
-
-function getLoosePuzzles() {
-    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
-                "c.pal_id as UID, c.pal_usr_nme as UNAME, FALSE as META ".
-                "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
-                "where a.puz_id not in (select puz_id from puz_rel_tbl) ".
-                "order by a.puz_id";
-    return getData($query);
-}
-
-function getPuzzle($pid) {
-    $query = "SELECT a.puz_id as PUZID, e.puz_ttl as META, e.puz_id as META_ID, a.puz_ttl as PUZNME, a.puz_url as PURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as PUZSTT, a.puz_notes as PUZNOT, ".
-                "c.pal_id as UID, c.pal_usr_nme as UNAME ".
-                "FROM puz_tbl a " .
-                "LEFT JOIN (puz_chk_out b, pal_usr_tbl c) " .
-                "ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL " .
-                "LEFT JOIN (puz_rel_tbl d, puz_tbl e)" .
-                "on (a.puz_id = d.puz_id and d.puz_par_id = e.puz_id)" .
-                "WHERE a.puz_id = ".$pid."";
-    return getData($query);
-}
-
-function getAllMetas() {
-    $query = "SELECT a.puz_id as MID, a.puz_ttl as MTTL FROM puz_tbl a, puz_rel_tbl b WHERE a.puz_id = b.puz_par_id GROUP BY a.puz_id, a.puz_ttl";
-    return getData($query);
-}
-
-function getPuzzleMetas($pid) {
-    $query = "select a.puz_id as MID, a.puz_ttl as MTTL, sum(b.puz_id = ".$pid.") as INMETA from puz_tbl a, puz_rel_tbl b where a.puz_id = b.puz_par_id group by a.puz_id, a.puz_ttl";
     return getData($query);
 }
 
