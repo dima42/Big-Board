@@ -18,6 +18,8 @@ $emojify = new Twig_Filter('emojify', function ($status) {
     switch ($status) {
         case "solved":
             return "✅";
+        case "open":
+            return "🤔";
     }
     return "";
 });
