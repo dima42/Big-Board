@@ -30,8 +30,8 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th></th>
             <th>Name</th>
-            <th>Status</th>
             <th>Solution</th>
             <th>Notes</th>
             <th></th>
@@ -42,8 +42,8 @@
     <tbody>
     {% for puzzle in puzzles %}
         <tr class="puzzle{{ puzzle.PUZID }}" class="puzzle {{ puzzle.STATUS }} {% if puzzle.META == 1 %}meta{% endif %}">
+            <td>{{ puzzle.STATUS | emojify }}</td>
             <td><a href="/?puzzle={{ puzzle.PUZID }}">{{ puzzle.INDPUZ }}</a></td>
-            <td>{{ puzzle.STATUS }}</td>
             <td>
                 {{ puzzle. PUZANS }}
                 <!--input

@@ -9,9 +9,19 @@ if ($_SERVER['HTTP_HOST'] == "localhost:8888") {
 }
 
 $loader = new Twig_Loader_Filesystem('templates');
+
 Global $twig;
 $twig = new Twig_Environment($loader, array(
 ));
+
+$emojify = new Twig_Filter('emojify', function ($status) {
+    switch ($status) {
+        case "solved":
+            return "✅";
+    }
+    return "";
+});
+$twig->addFilter($emojify);
 
 function render($template, $vars = array()) {
     $news = "Type over this text to send out a message.";
