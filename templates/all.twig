@@ -24,8 +24,10 @@
 {% endblock %}
 
 {% block aside %}
+    <h4>{{ total_puzzles }} total</h4>
+    <ul class="list-unstyled">
     {% for status in statuses %}
-        <h4>{{ status.STATUS }}</h4>
-        <p>{{ status.STATUS_SUM }}</p>
+        <li>{{ status.STATUS | emojify }} {{ status.STATUS_SUM }}</li>
     {% endfor %}
+    </ul>
 {% endblock %}
