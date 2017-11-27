@@ -370,38 +370,3 @@ function idle_hands() {
   // }
   // timeout = setTimeout("location.reload();", session_timeout);
 }
-
-function process_url(url_string) {
-	var puzzle_string;
-	if (url_string.indexOf(mit_url_str) == 0) {
-		url_string = url_string.replace(mit_url_str,"");
-		url_string = url_string.substr(0,url_string.indexOf("/"));
-		puzzle_string = process_string(url_string);
-	} else {
-		puzzle_string = "Puzzle not found";
-	}
-	return puzzle_string;
-}
-
-function process_string(fodder) {
-	var result = "";
-	var start_of_word = 1;
-	for (i = 0;  i < fodder.length; i++) {
-		var individ = fodder.toUpperCase().charCodeAt(i);
-		if (individ > 64 && individ < 90) {
-			if (start_of_word == 1) {
-				start_of_word = 0;
-				result = result + fodder.toUpperCase().charAt(i);
-			} else {
-				result = result + fodder.toLowerCase().charAt(i);
-			}
-		} else {
-			if (individ == 47) {
-				return result;
-			}
-			start_of_word = 1;
-			result = result+" ";
-		}
-	}
-	return result;
-}
