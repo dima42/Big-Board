@@ -18,7 +18,7 @@ $twig = new Twig_Environment($loader, array(
 $emojify = new Twig_Filter('emojify', function ($status) {
     switch ($status) {
         case "solved":
-            return "✅";
+            return "🏁";
         case "open":
             return "🤔";
     }
