@@ -18,15 +18,11 @@ function getData($query) {
     return $query_resource;
 }
 
-function findUser($google_id) {
-	$query = "select pal_id as UID from pal_usr_tbl where pal_ggl_id = ".$google_id;
-    return getData($query);
-}
-
 function getUserID($google_id, $display_name) {
     Global $link;
-	// see if user is in database
-	$results = findUser($google_id);
+    // see if user is in database
+	$query = "select pal_id as UID from pal_usr_tbl where pal_ggl_id = ".$google_id;
+	$results = getData($query);
 
 	// if results are empty, user does not exist, and we should create a user record for it, returning ID
 

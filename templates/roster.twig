@@ -1,0 +1,27 @@
+{% extends 'loggedin.twig' %}
+
+{% block content %}
+<h1>Latest news</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Slack username</th>
+            <th>Working on…</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for person in roster %}
+    <tr>
+        <td>{{ person.FULL_NAME }}</td>
+        <td>{{ person.SLACK_HANDLE }}</td>
+        <td></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block aside %}
+{% endblock %}

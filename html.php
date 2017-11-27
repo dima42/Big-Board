@@ -27,6 +27,11 @@ function show_content() {
         return displayUnsolvedPuzzles();
     }
 
+    // Show unsolved
+    if (isset($_GET['roster'])) {
+        return displayRoster();
+    }
+
     // Show form for new puzzle
     if (isset($_GET['new'])) {
         return displayNew();
@@ -58,25 +63,29 @@ function displayTest() {
     ));
 }
 
-function getCurrentPuzzle($user_id) {
-    $query = "select puz_id as PUZID, chk_out as CHECKOUT from puz_chk_out where usr_id = " . $user_id . " and chk_in is null";
-    $results = getData($query);
-
-    $my_puzzles = array();
-    while ($row=$results->fetch_array(MYSQLI_ASSOC)) {
-        $my_puzzles[$row['PUZID']] = $row['CHECKOUT'];
-    }
-    return $my_puzzles;
-}
-
 function displayNew() {
     render('new.twig', array(
     ));
 }
 
+function displayRoster() {
+    $query = "select pal_id as ID, pal_usr_nme as FULL_NAME, slack_id as SLACK_ID, slack_handle as SLACK_HANDLE from pal_usr_tbl ORDER BY pal_usr_nme";
+    $roster = getData($query);
+
+    render('roster.twig', array(
+        'roster' => $roster,
+    ));
+}
+
 function displayPuzzles() {
     // We have removed the check out feature.
-    // $my_puzzle_list = getCurrentPuzzle($_SESSION["user_id"]);
+    // $query = "select puz_id as PUZID, chk_out as CHECKOUT from puz_chk_out where usr_id = " . $_SESSION["user_id"] . " and chk_in is null";
+    // $results = getData($query);
+    // $my_puzzle_list = array();
+    // while ($row=$results->fetch_array(MYSQLI_ASSOC)) {
+    //     $my_puzzle_list[$row['PUZID']] = $row['CHECKOUT'];
+    // }
+    // return $my_puzzle_list;
 
     $statuses = array(
         "featured" => 0,
