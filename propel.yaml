@@ -1,0 +1,18 @@
+propel:
+  database:
+      connections:
+          palindrome:
+              adapter: mysql
+              classname: Propel\Runtime\Connection\ConnectionWrapper
+              dsn: "mysql:host=%env.PALINDROME_DB_HOST%;dbname=%env.PALINDROME_DB_NAME%"
+              user: %env.PALINDROME_DB_USERNAME%
+              password: %env.PALINDROME_DB_PASSWORD%
+              attributes:
+  runtime:
+      defaultConnection: palindrome
+      connections:
+          - palindrome
+  generator:
+      defaultConnection: palindrome
+      connections:
+          - palindrome
