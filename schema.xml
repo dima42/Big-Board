@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="palindrome" defaultIdMethod="native">
+    <table name="puzzle" phpName="Puzzle">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="title" type="varchar" size="128" required="false" />
+        <column name="url" type="varchar" size="128" required="false" />
+        <column name="spreadsheet_id" type="varchar" size="128" required="false" />
+        <column name="solution" type="varchar" size="128" required="false" />
+        <column name="status" type="varchar" size="24" required="false" />
+        <column name="slack_channel" type="varchar" size="48" required="false" />
+        <column name="slack_channel_id" type="varchar" size="24" required="false" />
+        <unique>
+            <unique-column name="title" />
+        </unique>
+    </table>
+    <table name="note" phpName="Note">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="text" type="varchar" size="255" required="true" />
+        <column name="puzzle_id" type="integer" required="true"/>
+        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="Note">
+            <reference local="puzzle_id" foreign="id"/>
+        </foreign-key>
+        <behavior name="timestampable" />
+    </table>
+    <table name="member" phpName="Member">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="full_name" type="varchar" size="64" required="true" />
+        <column name="google_id" type="varchar" size="64" required="false" />
+        <column name="google_referrer" type="varchar" size="64" required="false" />
+        <column name="slack_id" type="varchar" size="24" required="false" />
+        <column name="slack_handle" type="varchar" size="48" required="false" />
+        <unique>
+            <unique-column name="full_name" />
+        </unique>
+    </table>
+    <table name="solver" phpName="Solver">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="puzzle_id" type="integer" required="true"/>
+        <column name="member_id" type="integer" required="true"/>
+        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="Solver">
+            <reference local="puzzle_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="puzzle" phpName="Parent" refPhpName="Solver">
+            <reference local="member_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="relationship" phpName="Relationship">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="puzzle_id" type="integer" required="true"/>
+        <column name="parent_id" type="integer" required="true"/>
+        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="Relationship">
+            <reference local="puzzle_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="puzzle" phpName="Parent" refPhpName="Relationship">
+            <reference local="parent_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="news" phpName="News">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="code" type="varchar" size="16" required="false" />
+        <column name="text" type="varchar" size="255" required="true" />
+        <column name="member_id" type="integer" required="false"/>
+        <foreign-key foreignTable="member" phpName="Member" refPhpName="News">
+            <reference local="member_id" foreign="id"/>
+        </foreign-key>
+        <behavior name="timestampable" />
+    </table>
+</database>
