@@ -4,6 +4,7 @@ require_once 'vendor/autoload.php';
 require_once "sql.php";
 
 $DEBUG = false;
+$_SESSION['alert'] = "";
 
 if ($_SERVER['HTTP_HOST'] == "localhost:8888") {
     $DEBUG = true;
@@ -30,10 +31,11 @@ function render($template, $vars = array()) {
     $news = "Type over this text to send out a message.";
     $news_from = "";
 
-    $query = "select a.pal_upd_txt as NEWS, b.pal_usr_nme as WHO from pal_upd_tbl a, pal_usr_tbl b " .
-                "where a.pal_upd_code = 'URG' and a.usr_id = b.pal_id " .
-                "order by a.row_id DESC " .
-                "limit 1";
+    $query = "SELECT a.pal_upd_txt as NEWS, b.pal_usr_nme as WHO " .
+                "FROM pal_upd_tbl a, pal_usr_tbl b " .
+                "WHERE a.pal_upd_code = 'URG' AND a.usr_id = b.pal_id " .
+                "ORDER BY a.row_id DESC " .
+                "LIMIT 1";
     $latest_updates = getData($query);
     $row = $latest_updates->fetch_assoc();
     $news = $row["NEWS"];
@@ -41,6 +43,7 @@ function render($template, $vars = array()) {
 
     Global $twig;
     $vars['user_id'] = $_SESSION['user_id'];
+    $vars['alert'] = $_SESSION['alert_message'];
     $vars['time'] = strftime('%c');
     $vars['news'] = $news;
     $vars['news_from'] = $news_from;
@@ -52,6 +55,8 @@ function render($template, $vars = array()) {
         $vars['error'] = $_SESSION['error_string'];
     }
     echo $twig->render($template, $vars);
+
+    unset($_SESSION['alert_message']);
 }
 
 function connectToDB() {

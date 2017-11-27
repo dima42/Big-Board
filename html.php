@@ -34,6 +34,9 @@ function show_content() {
 
     // Show form for new puzzle
     if (isset($_GET['add'])) {
+        if (isset($_POST['url-list'])) {
+            redirect('/?add', 'hi');
+        }
         return displayAdd();
     }
 
@@ -48,6 +51,13 @@ function show_content() {
 
     // Show main page
     return displayPuzzles();
+}
+
+function redirect($location, $message) {
+    $_SESSION['alert_message'] = $message;
+    header("Location: " . $location);
+    exit();
+    ob_flush();
 }
 
 function displayError($error) {
