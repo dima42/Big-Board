@@ -22,9 +22,9 @@
 {% block aside %}
 {% for puzzle in puzzles if puzzle.META %}
 <p>
-    <a name='puzurllink_{{ puzzle.PUZID }}' href='{{ puzzle.PURL }}'>Meta URL</a><br>
+    <a id='puzurllink_{{ puzzle.PUZID }}' href='{{ puzzle.PURL }}'>Meta URL</a><br>
     {# <input size=40 name='puzurl_{{ puzzle.PUZID }}' value='{{ puzzle.PURL }}' onchange='new_link(this, {{ puzzle.PUZID }})' ><br> #}
-    <a name='puzsprlink_{{ puzzle.PUZID }}' href='{{ puzzle.PUZSPR}}'>Google Doc</a><br>
+    <a id='puzsprlink_{{ puzzle.PUZID }}' href='{{ puzzle.PUZSPR}}'>Google Doc</a><br>
     {# <input size=40 name='puzspr_{{ puzzle.PUZID }}' value='{{ puzzle.PUZSPR}}' onchange='new_sprd(this, {{ puzzle.PUZID }})' ><br> #}
 </p>
 <h4>Notes</h4>

@@ -7,19 +7,19 @@ var mit_url_str_lng = mit_url_str.length;
 
 function handleResponse(e) {
 	if (msgr.readyState == 4 && msgr.status == 200) {
-		document.getElementById("UrgentMessage").value = msgr.responseText;
-		document.getElementById("UrgentMessage").style.color = "#000000";
+		$("#UrgentMessage").value = msgr.responseText;
+		$("#UrgentMessage").style.color = "#000000";
 	}
 }
 
 function handlePuzzle(e) {
 	if (msgr.readyState == 4 && msgr.status == 200) {
 		//so easiest thing to do is just refresh the page
-		if(msgr.responseText == "E-42") {
-			document.getElementById("UrgentMessage").value = "A puzzle with this title already exists. This page will refresh momentarily.";
+		if (msgr.responseText == "E-42") {
+			$("#UrgentMessage").value = "A puzzle with this title already exists. This page will refresh momentarily.";
 			//location.replace("index.php");
 		} else {
-			document.getElementById("UrgentMessage").value = msgr.responseText;
+			$("#UrgentMessage").value = msgr.responseText;
 		    //location.replace("index.php");
 		}
 	}
@@ -29,46 +29,45 @@ function handlePuzzleAddition(e) {
 	if (msgr.readyState == 4 && msgr.status == 200) {
 		//so easiest thing to do is just refresh the page
 		if(msgr.responseText == "E-42") {
-			document.getElementById("UrgentMessage").value = "A puzzle with this title already exists. This page will refresh momentarily.";
+			$("#UrgentMessage").value = "A puzzle with this title already exists. This page will refresh momentarily.";
 			var start = new Date().getTime();
         	while (new Date().getTime() < start + 5000);
 			// location.replace("index.php");
 		} else {
-			document.getElementById("UrgentMessage").value = msgr.responseText;
+			$("#UrgentMessage").value = msgr.responseText;
 	 		// location.reload(true);
 		}
 	} else {
-		document.getElementById("new_puzzle_save").innerHTML = "Saving...please be patient.";
+		$("#new_puzzle_save").innerHTML = "Saving...please be patient.";
 		d = new Date();
 		n = d.getTime()%6;
 		if (n == 1) {
-			document.getElementById("new_puzzle_save").innerHTML = "Saving....please be patient.";
+			$("#new_puzzle_save").innerHTML = "Saving....please be patient.";
 		} else if (n == 2) {
-			document.getElementById("new_puzzle_save").innerHTML = "Saving....please be understanding.";
+			$("#new_puzzle_save").innerHTML = "Saving....please be understanding.";
 		} else if (n == 3) {
-			document.getElementById("new_puzzle_save").innerHTML = "Saving....please be zen-like.";
+			$("#new_puzzle_save").innerHTML = "Saving....please be zen-like.";
 		} else if (n == 4) {
-			document.getElementById("new_puzzle_save").innerHTML = "Saving....please be zennish";
+			$("#new_puzzle_save").innerHTML = "Saving....please be zennish";
 		} else if (n == 5) {
-			document.getElementById("new_puzzle_save").innerHTML = "Saving.....please be lenient.";
+			$("#new_puzzle_save").innerHTML = "Saving.....please be lenient.";
 		} else {
-			document.getElementById("new_puzzle_save").innerHTML = "Saving.....please be excellent.";
+			$("#new_puzzle_save").innerHTML = "Saving.....please be excellent.";
 		}
 	}
 }
 
-
 function toggle_Puzzle_Checkout(puzzleID) {
-	updated_puzzles = document.getElementsByName("puzchk_"+puzzleID);
+	updated_puzzles = $("#puzchk_"+puzzleID);
 	elem = updated_puzzles[0];
 	msgr = new XMLHttpRequest();
 	msgr.onreadystatechange = handleResponse;
 	if (elem.src.indexOf("noton") == -1) {
-		msgr.open("GET","ajax_handler.php?f=QWT&pid="+puzzleID+"&uid="+document.getElementById("userid").value,true);
+		msgr.open("GET","ajax_handler.php?f=QWT&pid="+puzzleID+"&uid="+$("#userid").value,true);
 		msgr.send();
 		new_image = "noton.png"; adjustment = -1;
 	} else {
-		msgr.open("GET","ajax_handler.php?f=CHK&pid="+puzzleID+"&uid="+document.getElementById("userid").value,true);
+		msgr.open("GET","ajax_handler.php?f=CHK&pid="+puzzleID+"&uid="+$("#userid").value,true);
 		msgr.send();
 		new_image = "onit.png"; adjustment = 1;
 	}
@@ -77,7 +76,7 @@ function toggle_Puzzle_Checkout(puzzleID) {
 		updated_puzzles[i].src = new_image;
 	}
 
-	updated_puzzles = document.getElementsByName("puzwrk_"+puzzleID);
+	updated_puzzles = $("#puzwrk_"+puzzleID);
 	if (updated_puzzles[0].innerHTML == "" && adjustment == -1) {
 		newTotal = ""
 	} else {
@@ -90,28 +89,18 @@ function toggle_Puzzle_Checkout(puzzleID) {
 }
 
 function toggle_instructions() {
-	if (document.getElementById("instructions").style.display == "block") {
-		document.getElementById("instructions").style.display = "none";
-		document.getElementById("instruction_status").innerHTML = "show";
+	if ($("#instructions").style.display == "block") {
+		$("#instructions").style.display = "none";
+		$("#instruction_status").innerHTML = "show";
 	} else {
-		document.getElementById("instructions").style.display = "block";
-		document.getElementById("instruction_status").innerHTML = "hide";
+		$("#instructions").style.display = "block";
+		$("#instruction_status").innerHTML = "hide";
 	}
-}
-
-function show_notes(notes) {
-	// all this is showing the notes for a given puzzle
-	document.getElementById("show_notes").style.display = "block";
-	document.getElementById("show_notes").style.position = "absolute";
-	document.getElementById("show_notes").style.left = event.pageX;
-	document.getElementById("show_notes").style.top = event.pageY;
-	document.getElementById("show_notes").innerHTML = notes+"<br>[Click to hide]";
-	// there is no update to this
 }
 
 function hide_notes() {
 	// all this is showing the notes for a given puzzle
-	document.getElementById("show_notes").style.display = "none";
+	$("#show_notes").style.display = "none";
 }
 
 function editAnswer(elem, puzzleID, origAnswer, userID, puzzleName) {
@@ -128,7 +117,7 @@ function editAnswer(elem, puzzleID, origAnswer, userID, puzzleName) {
 			}
 		}
 
-		original_class = document.getElementsByName("puzzle_"+puzzleID)[0].className.split(" ")[0];
+		original_class = $("#puzzle"+puzzleID)[0].className.split(" ")[0];
 
 		msgr = new XMLHttpRequest();
 		msgr.onreadystatechange = handleResponse;
@@ -172,13 +161,13 @@ function editAnswer(elem, puzzleID, origAnswer, userID, puzzleName) {
 		}
 
 		// we'll do this twice, once for the cells, and once for the answer fields
-		updated_puzzles = document.getElementsByName("puzzle_"+puzzleID);
+		updated_puzzles = $("#puzzle" + puzzleID);
 		for (i=0; i < updated_puzzles.length; i++) {
 			updated_puzzles[i].className = status;
 		}
 
 		// we'll do this twice, once for the cells, and once for the answer fields
-		updated_puzzles = document.getElementsByName("puzans_"+puzzleID);
+		updated_puzzles = $("[name=puzans_" + puzzleID + "]");
 		for (i=0; i < updated_puzzles.length; i++) {
 			updated_puzzles[i].value = actual_answer;
 		}
@@ -207,7 +196,7 @@ function new_link(elem, puzzleID) {
 	msgr.send();
 
 	// we'll do this twice, once for the cells, and once for the answer fields
-	updated_puzzles = document.getElementsByName("puzurllink_"+puzzleID);
+	updated_puzzles = $("#puzurllink_"+puzzleID);
 	for (i=0; i < updated_puzzles.length; i++) {
 		updated_puzzles[i].href = new_link;
 	}
@@ -223,7 +212,7 @@ function new_sprd(elem, puzzleID) {
 	msgr.send();
 
 	// we'll do this twice, once for the cells, and once for the answer fields
-	updated_puzzles = document.getElementsByName("puzsprlink_"+puzzleID);
+	updated_puzzles = $("#puzsprlink_"+puzzleID);
 	for (i=0; i < updated_puzzles.length; i++) {
 		updated_puzzles[i].href = new_link;
 	}
@@ -239,7 +228,7 @@ function new_name(elem, puzzleID) {
 	msgr.send();
 
 	// we'll do this twice, once for the cells, and once for the answer fields
-	updated_puzzles = document.getElementsByName("puzttl_"+puzzleID);
+	updated_puzzles = $("[name=puzttl_" + puzzleID + "]");
 	for (i=0; i < updated_puzzles.length; i++) {
 		updated_puzzles[i].href = new_link;
 	}
@@ -255,7 +244,7 @@ function upd_notes(elem, puzzleID) {
 	msgr.send();
 
 	// we'll do this twice, once for the cells, and once for the answer fields
-	//updated_puzzles = document.getElementsByName("puzsprlink_"+puzzleID);
+	//updated_puzzles = $("[name=puzsprlink_" + puzzleID + "]");
 	//for (i=0; i < updated_puzzles.length; i++) {
 		//updated_puzzles[i].href = new_notes;
 	//}
@@ -263,7 +252,7 @@ function upd_notes(elem, puzzleID) {
 
 function delete_puzzle(puzzleID) {
 	// we need to do a number of things here. First is, check to see if there is an actual change.
-	if (!document.getElementById("areyousure").checked) {
+	if (!$("#areyousure").checked) {
 		alert ("You must check off the are you sure box.");
 		return;
 	}
@@ -311,32 +300,32 @@ function show_puzzle_input(type, metaID, userID) {
 	}
 
 	// type should be either P or M. If M, then there is no metaID needed
-	document.getElementById("new_puzzle_input").style.display = "block";
-	document.getElementById("new_puzzle_input").style.position = "absolute";
-	document.getElementById("new_puzzle_input").style.left = event.pageX + "px";
-	document.getElementById("new_puzzle_input").style.top = event.pageY + "px";
-	document.getElementById("new_puzzle_hidden_uid").value = userID;
-	document.getElementById("new_puzzle_hidden_type").value = type;
-	document.getElementById("new_puzzle_hidden_parent").value = metaID;
-	document.getElementById("new_puzzle_type").innerHTML = n_p_type;
-	document.getElementById("new_puzzle_title").select();
+	$("#new_puzzle_input").style.display = "block";
+	$("#new_puzzle_input").style.position = "absolute";
+	$("#new_puzzle_input").style.left = event.pageX + "px";
+	$("#new_puzzle_input").style.top = event.pageY + "px";
+	$("#new_puzzle_hidden_uid").value = userID;
+	$("#new_puzzle_hidden_type").value = type;
+	$("#new_puzzle_hidden_parent").value = metaID;
+	$("#new_puzzle_type").innerHTML = n_p_type;
+	$("#new_puzzle_title").select();
 	// there is no update to this
 }
 
 function abort_addition() {
-	document.getElementById("new_puzzle_input").style.display = "none";
+	$("#new_puzzle_input").style.display = "none";
 }
 
 function save_new_puzzle() {
 	// one thing we need to do is do a better job indicating saving is in progress
-    document.getElementById("new_puzzle_save").innerHTML = "Saving...please be patient";
+    $("#new_puzzle_save").innerHTML = "Saving...please be patient";
 
-	uid = document.getElementById("new_puzzle_hidden_uid").value;
-    new_ttl = document.getElementById("new_puzzle_title").value;
-    new_url = document.getElementById("new_puzzle_url").value;
+	uid = $("#new_puzzle_hidden_uid").value;
+    new_ttl = $("#new_puzzle_title").value;
+    new_url = $("#new_puzzle_url").value;
 	if (new_url == "URL") { new_url = ""};
-    new_typ = document.getElementById("new_puzzle_hidden_type").value;
-    new_par = document.getElementById("new_puzzle_hidden_parent").value;
+    new_typ = $("#new_puzzle_hidden_type").value;
+    new_par = $("#new_puzzle_hidden_parent").value;
 
 	// This is straightforward...send update into database and that's it.
 	msgr = new XMLHttpRequest();
@@ -354,7 +343,7 @@ function save_new_puzzle() {
 }
 
 function quicksave_new_puzzle(puzzle_url, metapuzzle_id) {
-	uid = document.getElementById("new_puzzle_hidden_uid").value;
+	uid = $("#new_puzzle_hidden_uid").value;
     new_ttl = process_url(puzzle_url);
     new_url = puzzle_url;
     new_typ = "puzzle in meta";

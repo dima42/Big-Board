@@ -120,8 +120,8 @@ function displayPuzzles() {
         // }
 
         // TODO: Are we still using this?
-        // $is_puz_out = /* "<img name='puzchk_".$row["PUZID"]."' src='".$on_puzzle.".png' width=14px height=14px onclick='toggle_Puzzle_Checkout(".$row["PUZID"].");'>".
-        // "&nbsp;<span name='puzwrk_".$row["PUZID"]."'>".$ants."</span>" */
+        // $is_puz_out = /* "<img id='puzchk_".$row["PUZID"]."' src='".$on_puzzle.".png' width=14px height=14px onclick='toggle_Puzzle_Checkout(".$row["PUZID"].");'>".
+        // "&nbsp;<span id='puzwrk_".$row["PUZID"]."'>".$ants."</span>" */
         // "";
     // }
 
