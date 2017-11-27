@@ -2,8 +2,6 @@
 var msgr;
 var timeout;
 var session_timeout = 18000;
-var mit_url_str = "http://www.20000puzzles.com/puzzle/";
-var mit_url_str_lng = mit_url_str.length;
 
 function handleResponse(e) {
 	if (msgr.readyState == 4 && msgr.status == 200) {
@@ -148,8 +146,6 @@ function editAnswer(elem, puzzleID, origAnswer, userID, puzzleName) {
 			msgr.send();
 			status = original_class + " open";
 			actual_answer = "";
-		} else if (elem.value.indexOf(mit_url_str)==0) {
-			quicksave_new_puzzle(elem.value, puzzleID);
 		} else {
 			// we are entering an answer
 			msgr.open("GET","ajax_handler.php?f=ANS&uid="+userID+"&ttl="+encodeURIComponent(puzzleName)+"&pid="+puzzleID+"&ans="+elem.value.toUpperCase(),true);
@@ -286,74 +282,6 @@ function add_update(elem, code, userID) {
 	msgr.open("GET","ajax_handler.php?f=NWS&uid="+userID+"&code="+code+"&news="+encodeURIComponent(elem.value),true);
 	msgr.send();
 	// there is no update to this
-}
-
-function show_puzzle_input(type, metaID, userID) {
-	if (type=="M") {
-		n_p_type = "meta";
-	} else {
-		if (metaID == 0) {
-			n_p_type = "puzzle";
-		} else {
-			n_p_type="puzzle in meta";
-		}
-	}
-
-	// type should be either P or M. If M, then there is no metaID needed
-	$("#new_puzzle_input").style.display = "block";
-	$("#new_puzzle_input").style.position = "absolute";
-	$("#new_puzzle_input").style.left = event.pageX + "px";
-	$("#new_puzzle_input").style.top = event.pageY + "px";
-	$("#new_puzzle_hidden_uid").value = userID;
-	$("#new_puzzle_hidden_type").value = type;
-	$("#new_puzzle_hidden_parent").value = metaID;
-	$("#new_puzzle_type").innerHTML = n_p_type;
-	$("#new_puzzle_title").select();
-	// there is no update to this
-}
-
-function abort_addition() {
-	$("#new_puzzle_input").style.display = "none";
-}
-
-function save_new_puzzle() {
-	// one thing we need to do is do a better job indicating saving is in progress
-    $("#new_puzzle_save").innerHTML = "Saving...please be patient";
-
-	uid = $("#new_puzzle_hidden_uid").value;
-    new_ttl = $("#new_puzzle_title").value;
-    new_url = $("#new_puzzle_url").value;
-	if (new_url == "URL") { new_url = ""};
-    new_typ = $("#new_puzzle_hidden_type").value;
-    new_par = $("#new_puzzle_hidden_parent").value;
-
-	// This is straightforward...send update into database and that's it.
-	msgr = new XMLHttpRequest();
-	msgr.onreadystatechange = handlePuzzleAddition;
-	if (new_typ == "M") {
-		msgr.open("GET","ajax_handler.php?f=ANM&uid="+uid+"&ttl="+encodeURIComponent(new_ttl)+"&url="+encodeURIComponent(new_url),true);
-	} else {
-		if (new_par == 0) {
-			msgr.open("GET","ajax_handler.php?f=ANP&uid="+uid+"&ttl="+encodeURIComponent(new_ttl)+"&url="+encodeURIComponent(new_url),true);
-		} else {
-			msgr.open("GET","ajax_handler.php?f=APIM&uid="+uid+"&par="+new_par+"&ttl="+encodeURIComponent(new_ttl)+"&url="+encodeURIComponent(new_url),true);
-		}
-	}
-	msgr.send();
-}
-
-function quicksave_new_puzzle(puzzle_url, metapuzzle_id) {
-	uid = $("#new_puzzle_hidden_uid").value;
-    new_ttl = process_url(puzzle_url);
-    new_url = puzzle_url;
-    new_typ = "puzzle in meta";
-    new_par = metapuzzle_id;
-
-	// This is straightforward...send update into database and that's it.
-	msgr = new XMLHttpRequest();
-	msgr.onreadystatechange = handlePuzzleAddition;
-	msgr.open("GET","ajax_handler.php?f=APIM&uid="+uid+"&par="+new_par+"&ttl="+encodeURIComponent(new_ttl)+"&url="+encodeURIComponent(new_url),true);
-	msgr.send();
 }
 
 function promote_puzzle(puzzleID) {
