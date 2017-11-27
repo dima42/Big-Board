@@ -1,4 +1,6 @@
 <?
+require_once "sql.php";
+
 function show_content() {
     // Show test
     if (isset($_GET['test'])) {
@@ -43,15 +45,6 @@ function show_content() {
     return displayPuzzles();
 }
 
-function getCurrentPuzzle($user_id) {
-    $results = getCurrentPuzzleSQL($user_id);
-    $my_puzzles = array();
-    while ($row=$results->fetch_array(MYSQLI_ASSOC)) {
-        $my_puzzles[$row['PUZID']] = $row['CHECKOUT'];
-    }
-    return $my_puzzles;
-}
-
 function displayError($error) {
     render('error.twig', array(
         'error' => $error,
@@ -63,6 +56,17 @@ function displayTest() {
     render('test.twig', array(
         'content' => $result,
     ));
+}
+
+function getCurrentPuzzle($user_id) {
+    $query = "select puz_id as PUZID, chk_out as CHECKOUT from puz_chk_out where usr_id = " . $user_id . " and chk_in is null";
+    $results = getData($query);
+
+    $my_puzzles = array();
+    while ($row=$results->fetch_array(MYSQLI_ASSOC)) {
+        $my_puzzles[$row['PUZID']] = $row['CHECKOUT'];
+    }
+    return $my_puzzles;
 }
 
 function displayNew() {
@@ -85,21 +89,32 @@ function displayPuzzles() {
     $total_puzzles = 0;
 
     // Count up all the puzzles in each status
-    $all_statuses = getStatusesSQL();
+    $query = "SELECT puz_stt as STATUS, COUNT(*) STATUS_SUM FROM puz_tbl GROUP BY puz_stt";
+    $all_statuses = getData($query);
+
     // while ($row = $all_statuses->fetch_assoc()) {
     //     $statuses[$row["STATUS"]] = $row["STATUS_SUM"];
     //     $total_puzzles += $row["STATUS_SUM"];
     // }
 
-	// $whos_on_what = getPuzzleAssignments();
+    $query = "select puz_id as SNACK, count(*) as ANTS ".
+             "from puz_chk_out a ".
+             "where chk_in is NULL and puz_id in (select puz_id from puz_tbl where puz_stt != 'solved') ".
+             "group by puz_id";
+    $whos_on_what = getData($query);
  //    $whos_on_what_array = array();
  //    while ($row = $whos_on_what->fetch_assoc()) {
  //    	$whos_on_what_array[$row["SNACK"]] = $row["ANTS"];
 	// }
 
-	$all_puzzles = getPuzzles();
-    $all_puzzles_by_meta = array();
+    $query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl PUZZLE_NAME, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, b.slack SLACK, ".
+             "b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
+             "from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
+             "on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
+             "order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
+    $all_puzzles = getData($query);
 
+    $all_puzzles_by_meta = array();
     while ($row = $all_puzzles->fetch_assoc()) {
         $all_puzzles_by_meta[$row['METPUZ']][] = $row;
     }
@@ -133,24 +148,36 @@ function displayPuzzles() {
 }
 
 function displayMeta($meta_id) {
-    $results = getMeta($meta_id);
+    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZZLE_NAME, a.puz_url as PUZURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as STATUS, a.puz_notes as PUZNTS, ".
+                "c.pal_id as UID, c.pal_usr_nme as UNAME, (a.puz_id = " . $meta_id . ") as META ".
+                "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
+                "where a.puz_id in (select puz_id from puz_rel_tbl where puz_par_id = " . $meta_id . ") ".
+                "order by META desc, a.puz_id";
+    $results = getData($query);
 
     render('meta.twig', array(
         'meta_id' => $meta_id,
-        'puzzles' => $results
+        'puzzles' => $results,
     ));
 }
 
 function displayLoosePuzzles() {
-	$results = getLoosePuzzles();
+    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZZLE_NAME, a.puz_url as PUZURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as STATUS, a.puz_notes as PUZNTS, ".
+                "c.pal_id as UID, c.pal_usr_nme as UNAME, FALSE as META ".
+                "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
+                "where a.puz_id not in (select puz_id from puz_rel_tbl) ".
+                "order by a.puz_id";
+    $puzzles = getData($query);
 
     render('loose.twig', array(
-        'puzzles' => $results
+        'puzzles' => $puzzles
     ));
 }
 
 function displayFeature($puzzle_id) {
-    $results = getFeaturedPuzzleIDSQL();
+    $query = "select puz_id as PUZID from puz_tbl b where puz_stt = 'featured'";
+    $results = getData($query);
+
     $featureID = "";
     while ($row = $results->fetch_assoc()) {
         $featureID = $row["PUZID"];
@@ -164,7 +191,15 @@ function displayFeature($puzzle_id) {
 }
 
 function displayPuzzle($puzzle_id) {
-    $results = getPuzzle($puzzle_id);
+    $query = "SELECT a.puz_id as PUZID, e.puz_ttl as META, e.puz_id as META_ID, a.puz_ttl as PUZZLE_NAME, a.puz_url as PUZURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as STATUS, a.puz_notes as PUZNTS, ".
+                "c.pal_id as UID, c.pal_usr_nme as UNAME ".
+                "FROM puz_tbl a " .
+                "LEFT JOIN (puz_chk_out b, pal_usr_tbl c) " .
+                "ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL " .
+                "LEFT JOIN (puz_rel_tbl d, puz_tbl e)" .
+                "on (a.puz_id = d.puz_id and d.puz_par_id = e.puz_id)" .
+                "WHERE a.puz_id = " . $puzzle_id . "";
+    $results = getData($query);
 
     $puzzle_count = $results->num_rows;
     if ($puzzle_count == 0) {
@@ -174,7 +209,9 @@ function displayPuzzle($puzzle_id) {
     }
 
     $puzzle = $results->fetch_assoc();
-    $puzzle_metas = getPuzzleMetas($puzzle_id);
+
+    $query = "select a.puz_id as MID, a.puz_ttl as MTTL, sum(b.puz_id = " . $puzzle_id . ") as INMETA from puz_tbl a, puz_rel_tbl b where a.puz_id = b.puz_par_id group by a.puz_id, a.puz_ttl";
+    $puzzle_metas = getData($query);
 
     render('puzzle.twig', array(
         'puzzle_id' => $puzzle_id,
@@ -184,16 +221,27 @@ function displayPuzzle($puzzle_id) {
 }
 
 function displayNews($filter) {
-    $results = getUpdatesSQL();
+    $query = "select a.pal_upd_txt as NEWS, a.upd_tme as WHN, b.pal_usr_nme as WHO, a.pal_upd_code as TYP ".
+             "from pal_upd_tbl a, pal_usr_tbl b ".
+             "where a.usr_id = b.pal_id ".
+             "order by a.upd_tme desc";
+    $news = getData($query);
 
     render('news.twig', array(
         'filter' => $filter,
-        'updates' => $results
+        'updates' => $$news,
     ));
 }
 
 function displayUnsolvedPuzzles() {
-    $unsolved_puzzles = getUnsolvedPuzzles();
+    $query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl PUZZLE_NAME, b.puz_ans PUZANS, b.puz_url PUZURL, a.puz_stt as STATUS, b.puz_notes PUZNTS, ".
+             "b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
+             "from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
+             "on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
+             "where b.puz_stt != 'solved' ".
+             "order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
+    $unsolved_puzzles = getData($query);
+
     $puzzles = array();
     $driveService = get_new_drive_service();
 

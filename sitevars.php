@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'vendor/autoload.php';
+require_once "sql.php";
 
 $DEBUG = false;
 
@@ -29,18 +30,23 @@ function render($template, $vars = array()) {
     $news = "Type over this text to send out a message.";
     $news_from = "";
 
-    $latest_updates = getLatestTeamUpdateSQL();
+    $query = "select a.pal_upd_txt as NEWS, b.pal_usr_nme as WHO from pal_upd_tbl a, pal_usr_tbl b " .
+                "where a.pal_upd_code = 'URG' and a.usr_id = b.pal_id " .
+                "order by a.row_id DESC " .
+                "limit 1";
+    $latest_updates = getData($query);
     $row = $latest_updates->fetch_assoc();
     $news = $row["NEWS"];
     $news_from = $row["WHO"];
-    $metas = getAllMetas();
 
     Global $twig;
     $vars['user_id'] = $_SESSION['user_id'];
     $vars['time'] = strftime('%c');
     $vars['news'] = $news;
     $vars['news_from'] = $news_from;
-    $vars['metas'] = $metas;
+
+    $query = "SELECT a.puz_id as MID, a.puz_ttl as MTTL FROM puz_tbl a, puz_rel_tbl b WHERE a.puz_id = b.puz_par_id GROUP BY a.puz_id, a.puz_ttl";
+    $vars['metas'] = getData($query);
 
     if (in_array("error_string", $_SESSION)) {
         $vars['error'] = $_SESSION['error_string'];
