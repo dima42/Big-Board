@@ -4,9 +4,13 @@
     "monolog/monolog": "^1.22",
     "twig/twig": "^2.0",
     "symfony/twig-bridge": "^3",
-    "cocur/slugify": "^3.0"
+    "cocur/slugify": "^3.0",
+    "propel/propel": "~2.0@dev"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
+  },
+  "autoload": {
+    "classmap": ["generated-classes/"]
   }
 }
