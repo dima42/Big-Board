@@ -33,8 +33,8 @@ function show_content() {
     }
 
     // Show form for new puzzle
-    if (isset($_GET['new'])) {
-        return displayNew();
+    if (isset($_GET['add'])) {
+        return displayAdd();
     }
 
     // Show a single puzzle
@@ -63,8 +63,8 @@ function displayTest() {
     ));
 }
 
-function displayNew() {
-    render('new.twig', array(
+function displayAdd() {
+    render('add.twig', array(
     ));
 }
 

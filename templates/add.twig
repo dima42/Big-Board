@@ -1,0 +1,26 @@
+{% extends 'loggedin.twig' %}
+
+{% block content %}
+<h1>Add puzzles in bulk</h1>
+<ol>
+    <li>Use <a href="https://chrome.google.com/webstore/detail/link-grabber/caodelkhipncidmoebgbbeemedohcdma/related?hl=en-US">Link Grabber</a> to scrape all the links on a given page. </li>
+    <li>Filter to only grab the right kinds of URLs.</li>
+    <li>Press the copy button.</li>
+    <li>Paste the list here.</li>
+</ol>
+<form action="/add_puzzles" method="post">
+    <div class="form-group">
+        <textarea name="urls" id="" rows="10" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="meta">If these all belong to the same meta, select it:</label>
+        <select class="form-control" name="meta">
+                <option value="" selected>- - -</option>
+            {% for meta in metas %}
+                <option value="{{ meta.MID }}">{{ meta.MTTL }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}

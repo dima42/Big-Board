@@ -25,12 +25,12 @@
             {% if sol %}
                 <td>
                     {{ puzzle. PUZANS }}
-                    <input
+{#                     <input
                     name='puzans_"{{ puzzle.PUZID }}' value='{{ puzzle.PUZANS }}'
                     class='{{ puzzle. STATUS }}'
                     style='border-width:0px; text-align: center;'
                     onchange='editAnswer(this, "{{ puzzle. PUZID }}", "{{ puzzle. PUZANS }}", {{ user_id }}, "{{ puzzle.PUZZLE_NAME }}")'
-                    >
+                    > #}
                 </td>
             {% endif %}
             {% if lastmod %}
