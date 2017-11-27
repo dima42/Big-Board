@@ -15,7 +15,7 @@
     </table>
     <table name="note" phpName="Note">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="text" type="varchar" size="255" required="true" />
+        <column name="body" type="varchar" size="255" required="true" />
         <column name="puzzle_id" type="integer" required="true"/>
         <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="Note">
             <reference local="puzzle_id" foreign="id"/>
@@ -57,8 +57,8 @@
     </table>
     <table name="news" phpName="News">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="code" type="varchar" size="16" required="false" />
-        <column name="text" type="varchar" size="255" required="true" />
+        <column name="news_type" type="varchar" size="16" required="false" />
+        <column name="content" type="varchar" size="255" required="true" />
         <column name="member_id" type="integer" required="false"/>
         <foreign-key foreignTable="member" phpName="Member" refPhpName="News">
             <reference local="member_id" foreign="id"/>
