@@ -1,5 +1,6 @@
 <?
 require_once "sql.php";
+use Propel\Runtime\ActiveQuery\Criteria;
 
 function show_content() {
     // Show test
@@ -81,6 +82,10 @@ function displayAdd() {
 function displayRoster() {
     $query = "select pal_id as ID, pal_usr_nme as FULL_NAME, slack_id as SLACK_ID, slack_handle as SLACK_HANDLE from pal_usr_tbl ORDER BY pal_usr_nme";
     $roster = getData($query);
+
+    $roster = MemberQuery::create()
+        ->orderByFullName()
+        ->find();
 
     render('roster.twig', array(
         'roster' => $roster,
@@ -167,26 +172,36 @@ function displayPuzzles() {
 }
 
 function displayMeta($meta_id) {
-    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZZLE_NAME, a.puz_url as PUZURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as STATUS, a.puz_notes as PUZNTS, ".
-                "c.pal_id as UID, c.pal_usr_nme as UNAME, (a.puz_id = " . $meta_id . ") as META ".
-                "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
-                "where a.puz_id in (select puz_id from puz_rel_tbl where puz_par_id = " . $meta_id . ") ".
-                "order by META desc, a.puz_id";
-    $results = getData($query);
+    $meta = PuzzleQuery::create()
+        ->filterByID($meta_id)
+        ->findOne();
+
+    $puzzles = PuzzleQuery::create()
+        ->usePuzzleParentQuery()
+            ->filterByParent($meta)
+        ->endUse()
+        ->find();
+
+    // TODO: if not $meta, redirect to error page
+        // "This does not appear to be a metapuzzle. There are no puzzles that are part of it."
 
     render('meta.twig', array(
-        'meta_id' => $meta_id,
-        'puzzles' => $results,
+        'meta' => $meta,
+        'puzzles' => $puzzles,
     ));
 }
 
 function displayLoosePuzzles() {
-    $query = "select a.puz_id as PUZID, a.puz_ttl as PUZZLE_NAME, a.puz_url as PUZURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as STATUS, a.puz_notes as PUZNTS, ".
-                "c.pal_id as UID, c.pal_usr_nme as UNAME, FALSE as META ".
-                "from puz_tbl a left join (puz_chk_out b, pal_usr_tbl c) ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL ".
-                "where a.puz_id not in (select puz_id from puz_rel_tbl) ".
-                "order by a.puz_id";
-    $puzzles = getData($query);
+    $all_puzzles = PuzzleQuery::create()
+        ->leftJoinWith('Puzzle.PuzzleParent')
+        ->find();
+
+    $puzzles = array();
+    foreach ($all_puzzles as $puzzle) {
+        if ($puzzle->countPuzzleParents() == 0) {
+            $puzzles[] = $puzzle;
+        }
+    }
 
     render('loose.twig', array(
         'puzzles' => $puzzles
@@ -210,27 +225,18 @@ function displayFeature($puzzle_id) {
 }
 
 function displayPuzzle($puzzle_id) {
-    $query = "SELECT a.puz_id as PUZID, e.puz_ttl as META, e.puz_id as META_ID, a.puz_ttl as PUZZLE_NAME, a.puz_url as PUZURL, a.puz_spr as PUZSPR, a.puz_ans as PUZANS, a.puz_stt as STATUS, a.puz_notes as PUZNTS, ".
-                "c.pal_id as UID, c.pal_usr_nme as UNAME ".
-                "FROM puz_tbl a " .
-                "LEFT JOIN (puz_chk_out b, pal_usr_tbl c) " .
-                "ON a.puz_id = b.puz_id AND b.usr_id = c.pal_id and b.chk_in is NULL " .
-                "LEFT JOIN (puz_rel_tbl d, puz_tbl e)" .
-                "on (a.puz_id = d.puz_id and d.puz_par_id = e.puz_id)" .
-                "WHERE a.puz_id = " . $puzzle_id . "";
-    $results = getData($query);
+    $puzzle = PuzzleQuery::create()
+        ->filterByID($puzzle_id)
+        ->findOne();
 
-    $puzzle_count = $results->num_rows;
-    if ($puzzle_count == 0) {
-        // TODO: redirect to error template
-        print "<P>This puzzle does not exist. It is a ghost puzzle.</p>";
-        return;
-    }
+    // TODO: if not $puzzle, redirect to error template
+        // "This puzzle does not exist. It is a ghost puzzle.";
 
-    $puzzle = $results->fetch_assoc();
-
-    $query = "select a.puz_id as MID, a.puz_ttl as MTTL, sum(b.puz_id = " . $puzzle_id . ") as INMETA from puz_tbl a, puz_rel_tbl b where a.puz_id = b.puz_par_id group by a.puz_id, a.puz_ttl";
-    $puzzle_metas = getData($query);
+    $puzzle_metas = PuzzleQuery::create()
+        ->join('Puzzle.PuzzleChild')
+        ->withColumn('Sum(PuzzleChild.Id = ' . $puzzle_id . ')', 'IsInMeta')
+        ->groupBy('Puzzle.Id')
+        ->find();
 
     render('puzzle.twig', array(
         'puzzle_id' => $puzzle_id,
@@ -240,33 +246,31 @@ function displayPuzzle($puzzle_id) {
 }
 
 function displayNews($filter) {
-    $query = "select a.pal_upd_txt as NEWS, a.upd_tme as WHN, b.pal_usr_nme as WHO, a.pal_upd_code as TYP ".
-             "from pal_upd_tbl a, pal_usr_tbl b ".
-             "where a.usr_id = b.pal_id ".
-             "order by a.upd_tme desc";
-    $news = getData($query);
+    $news = NewsQuery::create()
+        ->orderByCreatedAt()
+        ->find();
 
     render('news.twig', array(
         'filter' => $filter,
-        'updates' => $$news,
+        'updates' => $news,
     ));
 }
 
 function displayUnsolvedPuzzles() {
-    $query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl PUZZLE_NAME, b.puz_ans PUZANS, b.puz_url PUZURL, a.puz_stt as STATUS, b.puz_notes PUZNTS, ".
-             "b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
-             "from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
-             "on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
-             "where b.puz_stt != 'solved' ".
-             "order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
-    $unsolved_puzzles = getData($query);
+    $unsolved_puzzles = PuzzleQuery::create()
+        ->filterByStatus('solved', Criteria::NOT_EQUAL)
+        ->find();
 
     $puzzles = array();
     $driveService = get_new_drive_service();
 
     foreach ($unsolved_puzzles as $row) {
-        $fileID = substr($row['PUZSPR'], strpos($row['PUZSPR'], "ccc?key=") + 8, 44);
-        $puzzles[$fileID] = $row;
+        $fileID = substr($row->getSpreadsheetID(), strpos($row->getSpreadsheetID(), "ccc?key=") + 8, 44);
+        $puzzles[$fileID]['id'] = $row->getID();
+        $puzzles[$fileID]['title'] = $row->getTitle();
+        $puzzles[$fileID]['url'] = $row->getURL();
+        $puzzles[$fileID]['spreadsheet_id'] = $row->getSpreadsheetID();
+        $puzzles[$fileID]['slack_channel'] = $row->getSlackChannel();
 
         $file = $driveService->files->get($fileID);
         $puzzles[$fileID]['lastModBy'] = $file['lastModifyingUserName'] ?? "";

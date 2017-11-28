@@ -6,9 +6,9 @@
 <table class="table">
     {% for update in updates if filter != "Y" or update.TYP != "PUZ" %}
     <tr>
-        <td>{{ update.WHN }}</td>
-        <td>{{ update.NEWS }}</td>
-        <td>{{ update.WHO }}</td>
+        <td>{{ update.createdat|date("g:ia") }}</td>
+        <td>{{ update.content }}</td>
+        <td>{{ update.member.fullName }}</td>
     </tr>
     {% endfor %}
 </table>

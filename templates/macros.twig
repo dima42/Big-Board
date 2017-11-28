@@ -11,7 +11,6 @@
                 <th>Last mod</th>
                 <th>By</th>
             {% endif %}
-            <th>Notes</th>
             <th></th>
             <th></th>
             <th></th>
@@ -19,12 +18,12 @@
     </thead>
     <tbody>
     {% for puzzle in puzzles %}
-        <tr id="puzzle{{ puzzle.PUZID }}" class="puzzle {{ puzzle.STATUS }} {% if puzzle.META == 1 %}meta{% endif %}">
-            <td>{{ puzzle.STATUS | emojify }}</td>
-            <td><a href="/?puzzle={{ puzzle.PUZID }}">{{ puzzle.PUZZLE_NAME }}</a></td>
+        <tr id="puzzle{{ puzzle.id }}" class="puzzle {{ puzzle.status }} {% if puzzle.meta == 1 %}meta{% endif %}">
+            <td>{{ puzzle.status | emojify }}</td>
+            <td><a href="/?puzzle={{ puzzle.id }}">{{ puzzle.title }}</a></td>
             {% if sol %}
                 <td>
-                    {{ puzzle. PUZANS }}
+                    {{ puzzle.solution }}
 {#                     <input
                     name='puzans_"{{ puzzle.PUZID }}' value='{{ puzzle.PUZANS }}'
                     class='{{ puzzle. STATUS }}'
@@ -37,10 +36,8 @@
                 <td>{{ puzzle.lastMod }}</td>
                 <td>{{ puzzle.lastModBy }}</td>
             {% endif %}
-
-            <td>{{ puzzle.PUZNTS }}</td>
-            <td>{% if puzzle.PUZURL %}<a href="{{ puzzle.PUZURL }}"><img src="/img/mit.png" width="20" alt=""></a>{% endif %}</td>
-            <td><a href="{{ puzzle.PUZSPR }}"><img src="/img/drive.png" width="20" alt=""></a></td>
+            <td>{% if puzzle.url %}<a href="{{ puzzle.url }}"><img src="/img/mit.png" width="20" alt=""></a>{% endif %}</td>
+            <td><a href="{{ puzzle.spreadsheet_id }}"><img src="/img/drive.png" width="20" alt=""></a></td>
             <td><a href="http://palindrome2017.slack.com/messages/{{ puzzle.SLACK }}"><img src="/img/slack.png" width="20" alt=""></a></td>
         </tr>
     {% endfor %}

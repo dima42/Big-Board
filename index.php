@@ -88,7 +88,16 @@ function show_page($pal_drive) {
     $aboutg = $pal_drive->about->get();
     $my_name = $aboutg["user"]["displayName"];
     $my_root = $aboutg["rootFolderId"];
-    $_SESSION["user_id"] = getUserDriveID($my_root, $my_name);
+
+    $member = MemberQuery::create()
+        ->filterByGoogleID($my_root)
+        ->findOne();
+
+    if ($member) {
+        $_SESSION["user_id"] = $member->getID();
+    } else {
+        $_SESSION["user_id"] = 0;
+    }
 
     // we should always check to see if they have access
     // check to see if they have write access to the palindrome folder

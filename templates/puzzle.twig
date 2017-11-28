@@ -2,46 +2,49 @@
 
 {% block content %}
 
-<h5 class="meta">Part of <a href="/?meta={{ puzzle.META_ID }}">{{ puzzle.META }}</a></h5>
-
 <h1>
-    {{ puzzle.PUZZLE_NAME }}
-    <span class="badge badge-pill badge-secondary">{{ puzzle.STATUS | emojify }} {{ puzzle.STATUS }}</span>
+    {{ puzzle.title }}
+    <span class="badge badge-pill badge-secondary">{{ puzzle.status | emojify }} {{ puzzle.status }}</span>
 </h1>
 
-{% if puzzle.STATUS == "featured" %}
+{% if puzzle.status == "featured" %}
     <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
 {% endif %}
-{% if puzzle.STATUS == "solved" %}
+
+{% if puzzle.status == "solved" %}
     <div class="alert alert-success">
-        {{ puzzle.PUZANS }}
+        {{ puzzle.solution }}
     </div>
 {% endif %}
 
-
 <h2>Metapuzzles</h2>
 
+<table class="table">
 {% for meta in puzzle_metas %}
-    <p>
-        <input type='checkbox' {% if meta.INMETA > 0 %}checked{% endif %} name='puzinmeta_{{ meta.MID }}' onclick='change_parent(this, {{ puzzle_id }}, {{ meta.MID }})'>
-        {{ meta.MTTL }}
-    </p>
+    <tr>
+        <td>
+            <input type='checkbox' {% if meta.virtualColumns.IsInMeta %}checked{% endif %} name='puzinmeta_{{ meta.id }}' onclick='change_parent(this, {{ puzzle_id }}, {{ meta.id }})'>
+        </td>
+        <td>
+            {{ meta.title }}
+        </td>
+    </tr>
 {% endfor %}
+</table>
 {% endblock %}
 
 {% block aside %}
 <p>
-    <a name='puzurllink_{{ puzzle.PUZID }}' href='{{ puzzle.PURL }}'>Puzzle URL</a>
-    {# <input size=40 name='puzurl_{{ puzzle.PUZID }}' value='{{ puzzle.PURL }}' onchange='new_link(this, {{ puzzle.PUZID }})' > #}
+    <a name='puzurllink_{{ puzzle.id }}' href='{{ puzzle.url }}'>Puzzle URL</a>
+    {# <input size=40 name='puzurl_{{ puzzle.id }}' value='{{ puzzle.url }}' onchange='new_link(this, {{ puzzle.id }})' > #}
     <br>
-    <a name='puzsprlink_{{ puzzle.PUZID }}' href='{{ puzzle.PUZSPR }}'>Google Doc</a>
-    {# <input size=40 name='puzspr_{{ puzzle.PUZID }}' value='{{ puzzle.PUZSPR }}' onchange='new_sprd(this, {{ puzzle.PUZID }})' > #}
+    <a name='puzsprlink_{{ puzzle.id }}' href='{{ puzzle.spreadsheetId }}'>Google Doc</a>
+    {# <input size=40 name='puzspr_{{ puzzle.id }}' value='{{ puzzle.spreadsheet_id }}' onchange='new_sprd(this, {{ puzzle.id }})' > #}
 </p>
 <h4>Notes</h4>
 <p>
-    {{ puzzle.PUZNTS }}
 </p>
-{# <input size=40 name='puznts_{{ puzzle.PUZID }}' onchange='upd_notes(this, {{ puzzle.PUZID }})' value='{{ puzzle.PUZNOT }}' > #}
+{# <input size=40 name='puznts_{{ puzzle.id }}' onchange='upd_notes(this, {{ puzzle.id }})' value='{{ puzzle.notes }}' > #}
 
 <hr>
 
