@@ -268,6 +268,7 @@ function displayUnsolvedPuzzles() {
 		$fileID                             = substr($row->getSpreadsheetID(), strpos($row->getSpreadsheetID(), "ccc?key=")+8, 44);
 		$puzzles[$fileID]['id']             = $row->getID();
 		$puzzles[$fileID]['title']          = $row->getTitle();
+		$puzzles[$fileID]['status']         = $row->getStatus();
 		$puzzles[$fileID]['url']            = $row->getURL();
 		$puzzles[$fileID]['spreadsheet_id'] = $row->getSpreadsheetID();
 		$puzzles[$fileID]['slack_channel']  = $row->getSlackChannel();
