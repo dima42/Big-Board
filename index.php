@@ -115,7 +115,7 @@ function show_page($pal_drive) {
 
     if ($_SESSION["user_id"] == 0) {
         // if someone is not a member of palindrome, let's tell them to bugger off
-        render('buggeroff.twig');
+        return render('buggeroff.twig');
     }
 
     show_content();
