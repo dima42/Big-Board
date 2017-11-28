@@ -58,7 +58,16 @@ h2 {
 /* ASIDE*/
 
 aside {
-    border-left: 1px solid #eee;
+    /*border-left: 1px solid #eee;*/
+}
+
+aside small {
+    display: block;
+}
+
+.latest-news {
+    font-weight: bold;
+    color: #777;
 }
 
 /*

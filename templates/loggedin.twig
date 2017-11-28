@@ -67,7 +67,7 @@
 
 </main>
 
-<aside class="col-md-2 col-lg-3 d-none d-md-block pt-3 pl-3 mt-3">
+<aside class="col-md-2 col-lg-3 d-none d-md-block mt-3">
     {% block aside %}{% endblock %}
     {% if alert %}
     <div class="alert alert-info">{{ alert }}</div>
@@ -76,6 +76,7 @@
 
     <div class="card bg-light mb-3">
         <div class="card-body">
+            <small class="latest-news">LATEST NEWS</small>
         {{ latestNews.content }}
         {# <input id='UrgentMessage' name='UrgentMessage' value='{{ news }} ({{ news_from }})' onchange='add_update(this, "URG", "{{ user_id }}");'> #}
         </div>
@@ -89,10 +90,8 @@
     Phone: 617 715-4577<br>
     <a href="mailto:team-palindrome@mit.edu">team-palindrome@mit.edu</a><br>
     u: palindrome p: aplanacanal<br>
-    </small>
-    <small>
-        <br>{{ time }}
-        {# Page will reload every 180 seconds automatically. #}
+    {{ time }}
+    {# Page will reload every 180 seconds automatically. #}
     </small>
 
     <P>{{ error }}</p>

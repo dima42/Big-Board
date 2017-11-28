@@ -20,44 +20,24 @@
 
 <h2>Notes</h2>
 
-{# FOR EDITING #}
-{# <table class="table">
-{% for meta in puzzle_metas %}
-    <tr>
-        <td>
-            <input type='checkbox' id="meta{{meta.id}}" {% if meta.virtualColumns.IsInMeta %}checked{% endif %} name='puzinmeta_{{ meta.id }}' onclick='change_parent(this, {{ puzzle_id }}, {{ meta.id }})'>
-        </td>
-        <td>
-            <label for="meta{{meta.id}}">{{ meta.title }}</label>
-        </td>
-    </tr>
-{% endfor %}
-</table> #}
 {% endblock %}
 
 {% block aside %}
-<ul>
-    <li><a href='{{ puzzle.url }}'>Puzzle page</a></li>
-    <li><a href='{{ puzzle.spreadsheetId }}'>Google Sheet</a></li>
-    <li><a href='{{ slack_url(puzzle.slack) }}'>Slack</a></li>
-</ul>
-<strong>Part of:</strong>
-<ul>
-    {% for meta in puzzles_metas %}
-        <li><a href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a></li>
-    {% endfor %}
-</ul>
-{# <input size=40 name='puznts_{{ puzzle.id }}' onchange='upd_notes(this, {{ puzzle.id }})' value='{{ puzzle.notes }}' > #}
+<div class="list-group mb-3">
+    <a class="list-group-item list-group-item-action" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> Puzzle page ➡</a>
+    <a class="list-group-item list-group-item-action" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet ➡</a>
+    <a class="list-group-item list-group-item-action" href='{{ slack_url(puzzle.slack) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
+    <a class="list-group-item list-group-item-action list-group-item-primary" href='{{ slack_url(puzzle.slack) }}'>Edit this puzzle</a>
+</div>
+<div class="card mb-3">
+    <div class="card-body">
+        <b class="card-title">In these metas:</b><br>
+        <p class="card-text">
+            {% for meta in puzzles_metas %}
+                <a href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
+            {% endfor %}
 
-{# FOR EDITING #}
-{# <h4>Advanced options</h4>
-Do not use unless you are sure.
-<div>
-    <button onclick='promote_puzzle( {{ puzzle_id }});'>Mark this puzzle as a metapuzzle.</button>
+        </p>
+    </div>
 </div>
-<div>
-    <button onclick='delete_puzzle( {{ puzzle_id }});'>Delete this puzzle.</button>
-</div>
-<input type=checkbox id='areyousure' value='yes' >Are you sure?
- #}
 {% endblock %}
