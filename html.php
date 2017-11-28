@@ -206,6 +206,8 @@ function savePuzzle($puzzle_id, $request) {
 
 	$puzzle->setTitle($request->title);
 	$puzzle->setStatus($request->status);
+	$puzzle->setSpreadsheetId($request->spreadsheet_id);
+	$puzzle->setSlackChannel($request->slack_channel);
 	$puzzle->save();
 
 	$message = "Saved ".$puzzle->getTitle();

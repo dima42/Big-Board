@@ -30,7 +30,7 @@
 <div class="list-group mb-3">
     <a class="list-group-item list-group-item-action" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> Puzzle page ➡</a>
     <a class="list-group-item list-group-item-action" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet ➡</a>
-    <a class="list-group-item list-group-item-action" href='{{ slack_url(puzzle.slack) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
+    <a class="list-group-item list-group-item-action" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
     <a class="list-group-item list-group-item-action list-group-item-primary" href="/puzzle/{{ puzzle.id }}/edit">Edit this puzzle</a>
 </div>
 <div class="card mb-3">
