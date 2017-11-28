@@ -13,19 +13,14 @@ function show_content() {
 			return displayMeta($request->id);
 		});
 
-	$klein->respond('GET', '/test', function () {
-			return displayTest();
+	$klein->respond('GET', '/loose', function () {
+			return displayLoosePuzzles();
 		});
 
 	$klein->dispatch();
 }
 
 function show_content_bu() {
-	// Show unattached
-	if (isset($_GET['loose'])) {
-		return displayLoosePuzzles();
-	}
-
 	// Show news
 	if (isset($_GET['news'])) {
 		return displayNews($_GET['filter']);
