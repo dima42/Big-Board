@@ -2,7 +2,6 @@
 {% from 'macros.twig' import slack_url %}
 
 {% block content %}
-
     <h1>
         <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
         {{ puzzle.status | emojify }}
@@ -26,26 +25,24 @@
     {% block content_notes %}
     <h2>Notes</h2>
     {% endblock %}
-
-
 {% endblock %}
 
 {% block aside %}
-<div class="list-group mb-3">
-    <a class="list-group-item list-group-item-action" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> Puzzle page ➡</a>
-    <a class="list-group-item list-group-item-action" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet ➡</a>
-    <a class="list-group-item list-group-item-action" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
-    <a class="list-group-item list-group-item-action list-group-item-primary" href="/puzzle/{{ puzzle.id }}/edit">Edit this puzzle</a>
-</div>
-<div class="card mb-3">
-    <div class="card-body">
-        <b class="card-title">This is part of</b><br>
-        <p class="card-text">
-            {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
-                <a href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
-            {% endfor %}
-
-        </p>
+    <div class="list-group mb-3">
+        <a class="list-group-item list-group-item-action" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> Puzzle page ➡</a>
+        <a class="list-group-item list-group-item-action" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet ➡</a>
+        <a class="list-group-item list-group-item-action" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
+        <a class="list-group-item list-group-item-action list-group-item-primary" href="/puzzle/{{ puzzle.id }}/edit">Edit this puzzle</a>
     </div>
-</div>
+    <div class="card mb-3">
+        <div class="card-body">
+            <b class="card-title">This is part of</b><br>
+            <p class="card-text">
+                {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
+                    <a href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
+                {% endfor %}
+
+            </p>
+        </div>
+    </div>
 {% endblock %}

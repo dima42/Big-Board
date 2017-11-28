@@ -66,13 +66,13 @@
 <div class="col-12 offset-md-2 col-md-10 banner rounded-0 alert alert-{{ alert.type }}">{{ alert.message }}</div>
 {% endif %}
 
-<main role="main" class="col-12 ml-sm-auto col-md-8 col-lg-7 pt-3">
+<main role="main" class="col-12 col-sm-9 col-md-7 col-lg-7 pt-3 ml-sm-auto">
 
 {% block content %}{% endblock %}
 
 </main>
 
-<aside class="col-md-2 col-lg-3 d-none d-md-block mt-3">
+<aside class="col-12 col-md-3 col-sm-3 mt-3">
     {% block aside %}{% endblock %}
 
     <div class="card bg-light mb-3">
