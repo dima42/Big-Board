@@ -28,7 +28,7 @@ $emojify = new Twig_Filter('emojify', function ($status) {
         case "open":
             return "🤔";
     }
-    return "";
+    return "🤷🏻‍♀️";
 });
 $twig->addFilter($emojify);
 
