@@ -43,11 +43,7 @@ function show_content() {
 
     // Show a single puzzle
     if (isset($_GET['puzzle'])) {
-        if ($_GET['puzzle'] == 'F') {
-            return displayFeature();
-        } else {
-            return displayPuzzle($_GET['puzzle']);
-        }
+        return displayPuzzle($_GET['puzzle']);
     }
 
     // Show main page
@@ -80,9 +76,6 @@ function displayAdd() {
 }
 
 function displayRoster() {
-    $query = "select pal_id as ID, pal_usr_nme as FULL_NAME, slack_id as SLACK_ID, slack_handle as SLACK_HANDLE from pal_usr_tbl ORDER BY pal_usr_nme";
-    $roster = getData($query);
-
     $roster = MemberQuery::create()
         ->orderByFullName()
         ->find();
@@ -158,19 +151,6 @@ function displayLoosePuzzles() {
 }
 
 function displayFeature($puzzle_id) {
-    $query = "select puz_id as PUZID from puz_tbl b where puz_stt = 'featured'";
-    $results = getData($query);
-
-    $featureID = "";
-    while ($row = $results->fetch_assoc()) {
-        $featureID = $row["PUZID"];
-    }
-
-    if ($featureID != "") {
-        displayPuzzle($featureID);
-    } else {
-        displayPuzzles();
-    }
 }
 
 function displayPuzzle($puzzle_id) {
