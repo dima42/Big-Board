@@ -1,27 +1,8 @@
-{% extends 'loggedin.twig' %}
-{% from 'macros.twig' import slack_url %}
+{% extends 'puzzle.twig' %}
 
-{% block content %}
+{% block h1_small %}<small class="text-muted">meta</small></h1>{% endblock %}
 
-<h1>{{ meta.title }} <small class="text-muted">meta</small></h1>
-{% if meta.status == "solved" %}
-<div class="alert alert-success">
-    {{ meta.solution }}
-</div>
-{% endif %}
-
-{% from 'macros.twig' import puzzle_table %}
-{{ puzzle_table(puzzles) }}
-
-{% endblock %}
-
-{% block aside %}
-<ul>
-    <li><a href='{{ meta.url }}'>Puzzle page</a></li>
-    <li><a href='{{ meta.spreadsheetId }}'>Google Sheet</a></li>
-    <li><a href='{{ slack_url(meta.slack) }}'>Slack</a></li>
-</ul>
-
-<p><a href='/puzzle/{{ meta.id }}'>View this metapuzzle as a regular puzzle</a></p>
-<hr>
+{% block content_main %}
+    {% from 'macros.twig' import puzzle_table %}
+    {{ puzzle_table(puzzles) }}
 {% endblock %}

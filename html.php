@@ -138,7 +138,7 @@ function displayMeta($meta_id) {
 	// "This does not appear to be a metapuzzle. There are no puzzles that are part of it."
 
 	render('meta.twig', array(
-			'meta'    => $meta,
+			'puzzle'  => $meta,
 			'puzzles' => $puzzles,
 		));
 }

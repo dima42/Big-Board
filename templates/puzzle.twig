@@ -3,26 +3,30 @@
 
 {% block content %}
 
-<h1>
-    <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
-    {{ puzzle.status | emojify }}
-</h1>
+    <h1>
+        <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
+        {{ puzzle.status | emojify }}
+        {% block h1_small %}{% endblock %}
+    </h1>
 
-{% block content_main %}
+    {% block content_main %}
 
-{% if puzzle.status == "featured" %}
-    <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
-{% endif %}
+    {% if puzzle.status == "featured" %}
+        <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
+    {% endif %}
 
+    {% if puzzle.status == "solved" %}
+        <div class="alert alert-success">
+            {{ puzzle.solution }}
+        </div>
+    {% endif %}
 
-{% if puzzle.status == "solved" %}
-    <div class="alert alert-success">
-        {{ puzzle.solution }}
-    </div>
-{% endif %}
+    {% endblock %}
 
+    {% block content_notes %}
     <h2>Notes</h2>
-{% endblock %}
+    {% endblock %}
+
 
 {% endblock %}
 
