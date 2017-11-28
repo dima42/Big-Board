@@ -56,7 +56,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleMemberQuery rightJoinWithMember() Adds a RIGHT JOIN clause and with to the query using the Member relation
  * @method     ChildPuzzleMemberQuery innerJoinWithMember() Adds a INNER JOIN clause and with to the query using the Member relation
  *
- * @method     \PuzzleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \PuzzleQuery|\MemberQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPuzzleMember findOne(ConnectionInterface $con = null) Return the first ChildPuzzleMember matching the query
  * @method     ChildPuzzleMember findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPuzzleMember matching the query, or a new ChildPuzzleMember object populated from the query conditions when no match is found
@@ -469,29 +469,29 @@ abstract class PuzzleMemberQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Puzzle object
+     * Filter the query by a related \Member object
      *
-     * @param \Puzzle|ObjectCollection $puzzle The related object(s) to use as filter
+     * @param \Member|ObjectCollection $member The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildPuzzleMemberQuery The current query, for fluid interface
      */
-    public function filterByMember($puzzle, $comparison = null)
+    public function filterByMember($member, $comparison = null)
     {
-        if ($puzzle instanceof \Puzzle) {
+        if ($member instanceof \Member) {
             return $this
-                ->addUsingAlias(PuzzleMemberTableMap::COL_MEMBER_ID, $puzzle->getId(), $comparison);
-        } elseif ($puzzle instanceof ObjectCollection) {
+                ->addUsingAlias(PuzzleMemberTableMap::COL_MEMBER_ID, $member->getId(), $comparison);
+        } elseif ($member instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(PuzzleMemberTableMap::COL_MEMBER_ID, $puzzle->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(PuzzleMemberTableMap::COL_MEMBER_ID, $member->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByMember() only accepts arguments of type \Puzzle or Collection');
+            throw new PropelException('filterByMember() only accepts arguments of type \Member or Collection');
         }
     }
 
@@ -528,7 +528,7 @@ abstract class PuzzleMemberQuery extends ModelCriteria
     }
 
     /**
-     * Use the Member relation Puzzle object
+     * Use the Member relation Member object
      *
      * @see useQuery()
      *
@@ -536,13 +536,13 @@ abstract class PuzzleMemberQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \PuzzleQuery A secondary query class using the current class as primary query
+     * @return \MemberQuery A secondary query class using the current class as primary query
      */
     public function useMemberQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinMember($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Member', '\PuzzleQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'Member', '\MemberQuery');
     }
 
     /**

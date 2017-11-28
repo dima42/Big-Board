@@ -56,45 +56,35 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery rightJoinWithNote() Adds a RIGHT JOIN clause and with to the query using the Note relation
  * @method     ChildPuzzleQuery innerJoinWithNote() Adds a INNER JOIN clause and with to the query using the Note relation
  *
- * @method     ChildPuzzleQuery leftJoinPuzzleMemberRelatedByPuzzleId($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleMemberRelatedByPuzzleId relation
- * @method     ChildPuzzleQuery rightJoinPuzzleMemberRelatedByPuzzleId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleMemberRelatedByPuzzleId relation
- * @method     ChildPuzzleQuery innerJoinPuzzleMemberRelatedByPuzzleId($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleMemberRelatedByPuzzleId relation
+ * @method     ChildPuzzleQuery leftJoinPuzzleMember($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleMember relation
+ * @method     ChildPuzzleQuery rightJoinPuzzleMember($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleMember relation
+ * @method     ChildPuzzleQuery innerJoinPuzzleMember($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleMember relation
  *
- * @method     ChildPuzzleQuery joinWithPuzzleMemberRelatedByPuzzleId($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PuzzleMemberRelatedByPuzzleId relation
+ * @method     ChildPuzzleQuery joinWithPuzzleMember($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PuzzleMember relation
  *
- * @method     ChildPuzzleQuery leftJoinWithPuzzleMemberRelatedByPuzzleId() Adds a LEFT JOIN clause and with to the query using the PuzzleMemberRelatedByPuzzleId relation
- * @method     ChildPuzzleQuery rightJoinWithPuzzleMemberRelatedByPuzzleId() Adds a RIGHT JOIN clause and with to the query using the PuzzleMemberRelatedByPuzzleId relation
- * @method     ChildPuzzleQuery innerJoinWithPuzzleMemberRelatedByPuzzleId() Adds a INNER JOIN clause and with to the query using the PuzzleMemberRelatedByPuzzleId relation
+ * @method     ChildPuzzleQuery leftJoinWithPuzzleMember() Adds a LEFT JOIN clause and with to the query using the PuzzleMember relation
+ * @method     ChildPuzzleQuery rightJoinWithPuzzleMember() Adds a RIGHT JOIN clause and with to the query using the PuzzleMember relation
+ * @method     ChildPuzzleQuery innerJoinWithPuzzleMember() Adds a INNER JOIN clause and with to the query using the PuzzleMember relation
  *
- * @method     ChildPuzzleQuery leftJoinPuzzleMemberRelatedByMemberId($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleMemberRelatedByMemberId relation
- * @method     ChildPuzzleQuery rightJoinPuzzleMemberRelatedByMemberId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleMemberRelatedByMemberId relation
- * @method     ChildPuzzleQuery innerJoinPuzzleMemberRelatedByMemberId($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleMemberRelatedByMemberId relation
+ * @method     ChildPuzzleQuery leftJoinPuzzleParent($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleParent relation
+ * @method     ChildPuzzleQuery rightJoinPuzzleParent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleParent relation
+ * @method     ChildPuzzleQuery innerJoinPuzzleParent($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleParent relation
  *
- * @method     ChildPuzzleQuery joinWithPuzzleMemberRelatedByMemberId($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PuzzleMemberRelatedByMemberId relation
+ * @method     ChildPuzzleQuery joinWithPuzzleParent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PuzzleParent relation
  *
- * @method     ChildPuzzleQuery leftJoinWithPuzzleMemberRelatedByMemberId() Adds a LEFT JOIN clause and with to the query using the PuzzleMemberRelatedByMemberId relation
- * @method     ChildPuzzleQuery rightJoinWithPuzzleMemberRelatedByMemberId() Adds a RIGHT JOIN clause and with to the query using the PuzzleMemberRelatedByMemberId relation
- * @method     ChildPuzzleQuery innerJoinWithPuzzleMemberRelatedByMemberId() Adds a INNER JOIN clause and with to the query using the PuzzleMemberRelatedByMemberId relation
+ * @method     ChildPuzzleQuery leftJoinWithPuzzleParent() Adds a LEFT JOIN clause and with to the query using the PuzzleParent relation
+ * @method     ChildPuzzleQuery rightJoinWithPuzzleParent() Adds a RIGHT JOIN clause and with to the query using the PuzzleParent relation
+ * @method     ChildPuzzleQuery innerJoinWithPuzzleParent() Adds a INNER JOIN clause and with to the query using the PuzzleParent relation
  *
- * @method     ChildPuzzleQuery leftJoinPuzzleParentRelatedByPuzzleId($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleParentRelatedByPuzzleId relation
- * @method     ChildPuzzleQuery rightJoinPuzzleParentRelatedByPuzzleId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleParentRelatedByPuzzleId relation
- * @method     ChildPuzzleQuery innerJoinPuzzleParentRelatedByPuzzleId($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleParentRelatedByPuzzleId relation
+ * @method     ChildPuzzleQuery leftJoinPuzzleChild($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleChild relation
+ * @method     ChildPuzzleQuery rightJoinPuzzleChild($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleChild relation
+ * @method     ChildPuzzleQuery innerJoinPuzzleChild($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleChild relation
  *
- * @method     ChildPuzzleQuery joinWithPuzzleParentRelatedByPuzzleId($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PuzzleParentRelatedByPuzzleId relation
+ * @method     ChildPuzzleQuery joinWithPuzzleChild($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PuzzleChild relation
  *
- * @method     ChildPuzzleQuery leftJoinWithPuzzleParentRelatedByPuzzleId() Adds a LEFT JOIN clause and with to the query using the PuzzleParentRelatedByPuzzleId relation
- * @method     ChildPuzzleQuery rightJoinWithPuzzleParentRelatedByPuzzleId() Adds a RIGHT JOIN clause and with to the query using the PuzzleParentRelatedByPuzzleId relation
- * @method     ChildPuzzleQuery innerJoinWithPuzzleParentRelatedByPuzzleId() Adds a INNER JOIN clause and with to the query using the PuzzleParentRelatedByPuzzleId relation
- *
- * @method     ChildPuzzleQuery leftJoinPuzzleParentRelatedByParentId($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleParentRelatedByParentId relation
- * @method     ChildPuzzleQuery rightJoinPuzzleParentRelatedByParentId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleParentRelatedByParentId relation
- * @method     ChildPuzzleQuery innerJoinPuzzleParentRelatedByParentId($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleParentRelatedByParentId relation
- *
- * @method     ChildPuzzleQuery joinWithPuzzleParentRelatedByParentId($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PuzzleParentRelatedByParentId relation
- *
- * @method     ChildPuzzleQuery leftJoinWithPuzzleParentRelatedByParentId() Adds a LEFT JOIN clause and with to the query using the PuzzleParentRelatedByParentId relation
- * @method     ChildPuzzleQuery rightJoinWithPuzzleParentRelatedByParentId() Adds a RIGHT JOIN clause and with to the query using the PuzzleParentRelatedByParentId relation
- * @method     ChildPuzzleQuery innerJoinWithPuzzleParentRelatedByParentId() Adds a INNER JOIN clause and with to the query using the PuzzleParentRelatedByParentId relation
+ * @method     ChildPuzzleQuery leftJoinWithPuzzleChild() Adds a LEFT JOIN clause and with to the query using the PuzzleChild relation
+ * @method     ChildPuzzleQuery rightJoinWithPuzzleChild() Adds a RIGHT JOIN clause and with to the query using the PuzzleChild relation
+ * @method     ChildPuzzleQuery innerJoinWithPuzzleChild() Adds a INNER JOIN clause and with to the query using the PuzzleChild relation
  *
  * @method     \NoteQuery|\PuzzleMemberQuery|\PuzzleParentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
@@ -616,33 +606,33 @@ abstract class PuzzleQuery extends ModelCriteria
      *
      * @return ChildPuzzleQuery The current query, for fluid interface
      */
-    public function filterByPuzzleMemberRelatedByPuzzleId($puzzleMember, $comparison = null)
+    public function filterByPuzzleMember($puzzleMember, $comparison = null)
     {
         if ($puzzleMember instanceof \PuzzleMember) {
             return $this
                 ->addUsingAlias(PuzzleTableMap::COL_ID, $puzzleMember->getPuzzleId(), $comparison);
         } elseif ($puzzleMember instanceof ObjectCollection) {
             return $this
-                ->usePuzzleMemberRelatedByPuzzleIdQuery()
+                ->usePuzzleMemberQuery()
                 ->filterByPrimaryKeys($puzzleMember->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByPuzzleMemberRelatedByPuzzleId() only accepts arguments of type \PuzzleMember or Collection');
+            throw new PropelException('filterByPuzzleMember() only accepts arguments of type \PuzzleMember or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the PuzzleMemberRelatedByPuzzleId relation
+     * Adds a JOIN clause to the query using the PuzzleMember relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildPuzzleQuery The current query, for fluid interface
      */
-    public function joinPuzzleMemberRelatedByPuzzleId($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinPuzzleMember($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('PuzzleMemberRelatedByPuzzleId');
+        $relationMap = $tableMap->getRelation('PuzzleMember');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -657,14 +647,14 @@ abstract class PuzzleQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'PuzzleMemberRelatedByPuzzleId');
+            $this->addJoinObject($join, 'PuzzleMember');
         }
 
         return $this;
     }
 
     /**
-     * Use the PuzzleMemberRelatedByPuzzleId relation PuzzleMember object
+     * Use the PuzzleMember relation PuzzleMember object
      *
      * @see useQuery()
      *
@@ -674,84 +664,11 @@ abstract class PuzzleQuery extends ModelCriteria
      *
      * @return \PuzzleMemberQuery A secondary query class using the current class as primary query
      */
-    public function usePuzzleMemberRelatedByPuzzleIdQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function usePuzzleMemberQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinPuzzleMemberRelatedByPuzzleId($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'PuzzleMemberRelatedByPuzzleId', '\PuzzleMemberQuery');
-    }
-
-    /**
-     * Filter the query by a related \PuzzleMember object
-     *
-     * @param \PuzzleMember|ObjectCollection $puzzleMember the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildPuzzleQuery The current query, for fluid interface
-     */
-    public function filterByPuzzleMemberRelatedByMemberId($puzzleMember, $comparison = null)
-    {
-        if ($puzzleMember instanceof \PuzzleMember) {
-            return $this
-                ->addUsingAlias(PuzzleTableMap::COL_ID, $puzzleMember->getMemberId(), $comparison);
-        } elseif ($puzzleMember instanceof ObjectCollection) {
-            return $this
-                ->usePuzzleMemberRelatedByMemberIdQuery()
-                ->filterByPrimaryKeys($puzzleMember->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByPuzzleMemberRelatedByMemberId() only accepts arguments of type \PuzzleMember or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the PuzzleMemberRelatedByMemberId relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildPuzzleQuery The current query, for fluid interface
-     */
-    public function joinPuzzleMemberRelatedByMemberId($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('PuzzleMemberRelatedByMemberId');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'PuzzleMemberRelatedByMemberId');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the PuzzleMemberRelatedByMemberId relation PuzzleMember object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \PuzzleMemberQuery A secondary query class using the current class as primary query
-     */
-    public function usePuzzleMemberRelatedByMemberIdQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinPuzzleMemberRelatedByMemberId($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'PuzzleMemberRelatedByMemberId', '\PuzzleMemberQuery');
+            ->joinPuzzleMember($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'PuzzleMember', '\PuzzleMemberQuery');
     }
 
     /**
@@ -762,33 +679,33 @@ abstract class PuzzleQuery extends ModelCriteria
      *
      * @return ChildPuzzleQuery The current query, for fluid interface
      */
-    public function filterByPuzzleParentRelatedByPuzzleId($puzzleParent, $comparison = null)
+    public function filterByPuzzleParent($puzzleParent, $comparison = null)
     {
         if ($puzzleParent instanceof \PuzzleParent) {
             return $this
                 ->addUsingAlias(PuzzleTableMap::COL_ID, $puzzleParent->getPuzzleId(), $comparison);
         } elseif ($puzzleParent instanceof ObjectCollection) {
             return $this
-                ->usePuzzleParentRelatedByPuzzleIdQuery()
+                ->usePuzzleParentQuery()
                 ->filterByPrimaryKeys($puzzleParent->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByPuzzleParentRelatedByPuzzleId() only accepts arguments of type \PuzzleParent or Collection');
+            throw new PropelException('filterByPuzzleParent() only accepts arguments of type \PuzzleParent or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the PuzzleParentRelatedByPuzzleId relation
+     * Adds a JOIN clause to the query using the PuzzleParent relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildPuzzleQuery The current query, for fluid interface
      */
-    public function joinPuzzleParentRelatedByPuzzleId($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinPuzzleParent($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('PuzzleParentRelatedByPuzzleId');
+        $relationMap = $tableMap->getRelation('PuzzleParent');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -803,14 +720,14 @@ abstract class PuzzleQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'PuzzleParentRelatedByPuzzleId');
+            $this->addJoinObject($join, 'PuzzleParent');
         }
 
         return $this;
     }
 
     /**
-     * Use the PuzzleParentRelatedByPuzzleId relation PuzzleParent object
+     * Use the PuzzleParent relation PuzzleParent object
      *
      * @see useQuery()
      *
@@ -820,11 +737,11 @@ abstract class PuzzleQuery extends ModelCriteria
      *
      * @return \PuzzleParentQuery A secondary query class using the current class as primary query
      */
-    public function usePuzzleParentRelatedByPuzzleIdQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function usePuzzleParentQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinPuzzleParentRelatedByPuzzleId($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'PuzzleParentRelatedByPuzzleId', '\PuzzleParentQuery');
+            ->joinPuzzleParent($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'PuzzleParent', '\PuzzleParentQuery');
     }
 
     /**
@@ -835,33 +752,33 @@ abstract class PuzzleQuery extends ModelCriteria
      *
      * @return ChildPuzzleQuery The current query, for fluid interface
      */
-    public function filterByPuzzleParentRelatedByParentId($puzzleParent, $comparison = null)
+    public function filterByPuzzleChild($puzzleParent, $comparison = null)
     {
         if ($puzzleParent instanceof \PuzzleParent) {
             return $this
                 ->addUsingAlias(PuzzleTableMap::COL_ID, $puzzleParent->getParentId(), $comparison);
         } elseif ($puzzleParent instanceof ObjectCollection) {
             return $this
-                ->usePuzzleParentRelatedByParentIdQuery()
+                ->usePuzzleChildQuery()
                 ->filterByPrimaryKeys($puzzleParent->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByPuzzleParentRelatedByParentId() only accepts arguments of type \PuzzleParent or Collection');
+            throw new PropelException('filterByPuzzleChild() only accepts arguments of type \PuzzleParent or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the PuzzleParentRelatedByParentId relation
+     * Adds a JOIN clause to the query using the PuzzleChild relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildPuzzleQuery The current query, for fluid interface
      */
-    public function joinPuzzleParentRelatedByParentId($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinPuzzleChild($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('PuzzleParentRelatedByParentId');
+        $relationMap = $tableMap->getRelation('PuzzleChild');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -876,14 +793,14 @@ abstract class PuzzleQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'PuzzleParentRelatedByParentId');
+            $this->addJoinObject($join, 'PuzzleChild');
         }
 
         return $this;
     }
 
     /**
-     * Use the PuzzleParentRelatedByParentId relation PuzzleParent object
+     * Use the PuzzleChild relation PuzzleParent object
      *
      * @see useQuery()
      *
@@ -893,11 +810,11 @@ abstract class PuzzleQuery extends ModelCriteria
      *
      * @return \PuzzleParentQuery A secondary query class using the current class as primary query
      */
-    public function usePuzzleParentRelatedByParentIdQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function usePuzzleChildQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinPuzzleParentRelatedByParentId($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'PuzzleParentRelatedByParentId', '\PuzzleParentQuery');
+            ->joinPuzzleChild($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'PuzzleChild', '\PuzzleParentQuery');
     }
 
     /**

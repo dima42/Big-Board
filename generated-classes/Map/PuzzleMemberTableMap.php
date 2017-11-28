@@ -139,7 +139,7 @@ class PuzzleMemberTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('puzzle_id', 'PuzzleId', 'INTEGER', 'puzzle', 'id', true, null, null);
-        $this->addForeignKey('member_id', 'MemberId', 'INTEGER', 'puzzle', 'id', true, null, null);
+        $this->addForeignKey('member_id', 'MemberId', 'INTEGER', 'member', 'id', true, null, null);
     } // initialize()
 
     /**
@@ -154,7 +154,7 @@ class PuzzleMemberTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
-        $this->addRelation('Member', '\\Puzzle', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('Member', '\\Member', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':member_id',

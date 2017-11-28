@@ -6,10 +6,13 @@ use \Member as ChildMember;
 use \MemberQuery as ChildMemberQuery;
 use \News as ChildNews;
 use \NewsQuery as ChildNewsQuery;
+use \PuzzleMember as ChildPuzzleMember;
+use \PuzzleMemberQuery as ChildPuzzleMemberQuery;
 use \Exception;
 use \PDO;
 use Map\MemberTableMap;
 use Map\NewsTableMap;
+use Map\PuzzleMemberTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -107,6 +110,12 @@ abstract class Member implements ActiveRecordInterface
     protected $slack_handle;
 
     /**
+     * @var        ObjectCollection|ChildPuzzleMember[] Collection to store aggregation of ChildPuzzleMember objects.
+     */
+    protected $collPuzzleMembers;
+    protected $collPuzzleMembersPartial;
+
+    /**
      * @var        ObjectCollection|ChildNews[] Collection to store aggregation of ChildNews objects.
      */
     protected $collNews;
@@ -119,6 +128,12 @@ abstract class Member implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildPuzzleMember[]
+     */
+    protected $puzzleMembersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -653,6 +668,8 @@ abstract class Member implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collPuzzleMembers = null;
+
             $this->collNews = null;
 
         } // if (deep)
@@ -767,6 +784,23 @@ abstract class Member implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->puzzleMembersScheduledForDeletion !== null) {
+                if (!$this->puzzleMembersScheduledForDeletion->isEmpty()) {
+                    \PuzzleMemberQuery::create()
+                        ->filterByPrimaryKeys($this->puzzleMembersScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->puzzleMembersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPuzzleMembers !== null) {
+                foreach ($this->collPuzzleMembers as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->newsScheduledForDeletion !== null) {
@@ -983,6 +1017,21 @@ abstract class Member implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collPuzzleMembers) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'puzzleMembers';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'solvers';
+                        break;
+                    default:
+                        $key = 'PuzzleMembers';
+                }
+
+                $result[$key] = $this->collPuzzleMembers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collNews) {
 
                 switch ($keyType) {
@@ -1250,6 +1299,12 @@ abstract class Member implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getPuzzleMembers() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPuzzleMember($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getNews() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addNews($relObj->copy($deepCopy));
@@ -1297,10 +1352,264 @@ abstract class Member implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('PuzzleMember' == $relationName) {
+            $this->initPuzzleMembers();
+            return;
+        }
         if ('News' == $relationName) {
             $this->initNews();
             return;
         }
+    }
+
+    /**
+     * Clears out the collPuzzleMembers collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addPuzzleMembers()
+     */
+    public function clearPuzzleMembers()
+    {
+        $this->collPuzzleMembers = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collPuzzleMembers collection loaded partially.
+     */
+    public function resetPartialPuzzleMembers($v = true)
+    {
+        $this->collPuzzleMembersPartial = $v;
+    }
+
+    /**
+     * Initializes the collPuzzleMembers collection.
+     *
+     * By default this just sets the collPuzzleMembers collection to an empty array (like clearcollPuzzleMembers());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPuzzleMembers($overrideExisting = true)
+    {
+        if (null !== $this->collPuzzleMembers && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = PuzzleMemberTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collPuzzleMembers = new $collectionClassName;
+        $this->collPuzzleMembers->setModel('\PuzzleMember');
+    }
+
+    /**
+     * Gets an array of ChildPuzzleMember objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildMember is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildPuzzleMember[] List of ChildPuzzleMember objects
+     * @throws PropelException
+     */
+    public function getPuzzleMembers(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPuzzleMembersPartial && !$this->isNew();
+        if (null === $this->collPuzzleMembers || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPuzzleMembers) {
+                // return empty collection
+                $this->initPuzzleMembers();
+            } else {
+                $collPuzzleMembers = ChildPuzzleMemberQuery::create(null, $criteria)
+                    ->filterByMember($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collPuzzleMembersPartial && count($collPuzzleMembers)) {
+                        $this->initPuzzleMembers(false);
+
+                        foreach ($collPuzzleMembers as $obj) {
+                            if (false == $this->collPuzzleMembers->contains($obj)) {
+                                $this->collPuzzleMembers->append($obj);
+                            }
+                        }
+
+                        $this->collPuzzleMembersPartial = true;
+                    }
+
+                    return $collPuzzleMembers;
+                }
+
+                if ($partial && $this->collPuzzleMembers) {
+                    foreach ($this->collPuzzleMembers as $obj) {
+                        if ($obj->isNew()) {
+                            $collPuzzleMembers[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPuzzleMembers = $collPuzzleMembers;
+                $this->collPuzzleMembersPartial = false;
+            }
+        }
+
+        return $this->collPuzzleMembers;
+    }
+
+    /**
+     * Sets a collection of ChildPuzzleMember objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $puzzleMembers A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildMember The current object (for fluent API support)
+     */
+    public function setPuzzleMembers(Collection $puzzleMembers, ConnectionInterface $con = null)
+    {
+        /** @var ChildPuzzleMember[] $puzzleMembersToDelete */
+        $puzzleMembersToDelete = $this->getPuzzleMembers(new Criteria(), $con)->diff($puzzleMembers);
+
+
+        $this->puzzleMembersScheduledForDeletion = $puzzleMembersToDelete;
+
+        foreach ($puzzleMembersToDelete as $puzzleMemberRemoved) {
+            $puzzleMemberRemoved->setMember(null);
+        }
+
+        $this->collPuzzleMembers = null;
+        foreach ($puzzleMembers as $puzzleMember) {
+            $this->addPuzzleMember($puzzleMember);
+        }
+
+        $this->collPuzzleMembers = $puzzleMembers;
+        $this->collPuzzleMembersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related PuzzleMember objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related PuzzleMember objects.
+     * @throws PropelException
+     */
+    public function countPuzzleMembers(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPuzzleMembersPartial && !$this->isNew();
+        if (null === $this->collPuzzleMembers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPuzzleMembers) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPuzzleMembers());
+            }
+
+            $query = ChildPuzzleMemberQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByMember($this)
+                ->count($con);
+        }
+
+        return count($this->collPuzzleMembers);
+    }
+
+    /**
+     * Method called to associate a ChildPuzzleMember object to this object
+     * through the ChildPuzzleMember foreign key attribute.
+     *
+     * @param  ChildPuzzleMember $l ChildPuzzleMember
+     * @return $this|\Member The current object (for fluent API support)
+     */
+    public function addPuzzleMember(ChildPuzzleMember $l)
+    {
+        if ($this->collPuzzleMembers === null) {
+            $this->initPuzzleMembers();
+            $this->collPuzzleMembersPartial = true;
+        }
+
+        if (!$this->collPuzzleMembers->contains($l)) {
+            $this->doAddPuzzleMember($l);
+
+            if ($this->puzzleMembersScheduledForDeletion and $this->puzzleMembersScheduledForDeletion->contains($l)) {
+                $this->puzzleMembersScheduledForDeletion->remove($this->puzzleMembersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildPuzzleMember $puzzleMember The ChildPuzzleMember object to add.
+     */
+    protected function doAddPuzzleMember(ChildPuzzleMember $puzzleMember)
+    {
+        $this->collPuzzleMembers[]= $puzzleMember;
+        $puzzleMember->setMember($this);
+    }
+
+    /**
+     * @param  ChildPuzzleMember $puzzleMember The ChildPuzzleMember object to remove.
+     * @return $this|ChildMember The current object (for fluent API support)
+     */
+    public function removePuzzleMember(ChildPuzzleMember $puzzleMember)
+    {
+        if ($this->getPuzzleMembers()->contains($puzzleMember)) {
+            $pos = $this->collPuzzleMembers->search($puzzleMember);
+            $this->collPuzzleMembers->remove($pos);
+            if (null === $this->puzzleMembersScheduledForDeletion) {
+                $this->puzzleMembersScheduledForDeletion = clone $this->collPuzzleMembers;
+                $this->puzzleMembersScheduledForDeletion->clear();
+            }
+            $this->puzzleMembersScheduledForDeletion[]= clone $puzzleMember;
+            $puzzleMember->setMember(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Member is new, it will return
+     * an empty collection; or if this Member has previously
+     * been saved, it will retrieve related PuzzleMembers from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Member.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildPuzzleMember[] List of ChildPuzzleMember objects
+     */
+    public function getPuzzleMembersJoinPuzzle(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildPuzzleMemberQuery::create(null, $criteria);
+        $query->joinWith('Puzzle', $joinBehavior);
+
+        return $this->getPuzzleMembers($query, $con);
     }
 
     /**
@@ -1559,6 +1868,11 @@ abstract class Member implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collPuzzleMembers) {
+                foreach ($this->collPuzzleMembers as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collNews) {
                 foreach ($this->collNews as $o) {
                     $o->clearAllReferences($deep);
@@ -1566,6 +1880,7 @@ abstract class Member implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collPuzzleMembers = null;
         $this->collNews = null;
     }
 

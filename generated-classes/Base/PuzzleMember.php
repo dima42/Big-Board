@@ -2,6 +2,8 @@
 
 namespace Base;
 
+use \Member as ChildMember;
+use \MemberQuery as ChildMemberQuery;
 use \Puzzle as ChildPuzzle;
 use \PuzzleMemberQuery as ChildPuzzleMemberQuery;
 use \PuzzleQuery as ChildPuzzleQuery;
@@ -88,7 +90,7 @@ abstract class PuzzleMember implements ActiveRecordInterface
     protected $aPuzzle;
 
     /**
-     * @var        ChildPuzzle
+     * @var        ChildMember
      */
     protected $aMember;
 
@@ -862,10 +864,10 @@ abstract class PuzzleMember implements ActiveRecordInterface
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'puzzle';
+                        $key = 'member';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'puzzle';
+                        $key = 'member';
                         break;
                     default:
                         $key = 'Member';
@@ -1137,7 +1139,7 @@ abstract class PuzzleMember implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildPuzzle object, it will not be re-added.
         if ($v !== null) {
-            $v->addPuzzleMemberRelatedByPuzzleId($this);
+            $v->addPuzzleMember($this);
         }
 
 
@@ -1161,7 +1163,7 @@ abstract class PuzzleMember implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aPuzzle->addPuzzleMembersRelatedByPuzzleId($this);
+                $this->aPuzzle->addPuzzleMembers($this);
              */
         }
 
@@ -1169,13 +1171,13 @@ abstract class PuzzleMember implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildPuzzle object.
+     * Declares an association between this object and a ChildMember object.
      *
-     * @param  ChildPuzzle $v
+     * @param  ChildMember $v
      * @return $this|\PuzzleMember The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setMember(ChildPuzzle $v = null)
+    public function setMember(ChildMember $v = null)
     {
         if ($v === null) {
             $this->setMemberId(NULL);
@@ -1186,9 +1188,9 @@ abstract class PuzzleMember implements ActiveRecordInterface
         $this->aMember = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildPuzzle object, it will not be re-added.
+        // If this object has already been added to the ChildMember object, it will not be re-added.
         if ($v !== null) {
-            $v->addPuzzleMemberRelatedByMemberId($this);
+            $v->addPuzzleMember($this);
         }
 
 
@@ -1197,22 +1199,22 @@ abstract class PuzzleMember implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildPuzzle object
+     * Get the associated ChildMember object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildPuzzle The associated ChildPuzzle object.
+     * @return ChildMember The associated ChildMember object.
      * @throws PropelException
      */
     public function getMember(ConnectionInterface $con = null)
     {
         if ($this->aMember === null && ($this->member_id != 0)) {
-            $this->aMember = ChildPuzzleQuery::create()->findPk($this->member_id, $con);
+            $this->aMember = ChildMemberQuery::create()->findPk($this->member_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aMember->addPuzzleMembersRelatedByMemberId($this);
+                $this->aMember->addPuzzleMembers($this);
              */
         }
 
@@ -1227,10 +1229,10 @@ abstract class PuzzleMember implements ActiveRecordInterface
     public function clear()
     {
         if (null !== $this->aPuzzle) {
-            $this->aPuzzle->removePuzzleMemberRelatedByPuzzleId($this);
+            $this->aPuzzle->removePuzzleMember($this);
         }
         if (null !== $this->aMember) {
-            $this->aMember->removePuzzleMemberRelatedByMemberId($this);
+            $this->aMember->removePuzzleMember($this);
         }
         $this->id = null;
         $this->puzzle_id = null;

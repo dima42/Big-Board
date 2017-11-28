@@ -135,26 +135,20 @@ abstract class Puzzle implements ActiveRecordInterface
     /**
      * @var        ObjectCollection|ChildPuzzleMember[] Collection to store aggregation of ChildPuzzleMember objects.
      */
-    protected $collPuzzleMembersRelatedByPuzzleId;
-    protected $collPuzzleMembersRelatedByPuzzleIdPartial;
-
-    /**
-     * @var        ObjectCollection|ChildPuzzleMember[] Collection to store aggregation of ChildPuzzleMember objects.
-     */
-    protected $collPuzzleMembersRelatedByMemberId;
-    protected $collPuzzleMembersRelatedByMemberIdPartial;
+    protected $collPuzzleMembers;
+    protected $collPuzzleMembersPartial;
 
     /**
      * @var        ObjectCollection|ChildPuzzleParent[] Collection to store aggregation of ChildPuzzleParent objects.
      */
-    protected $collPuzzleParentsRelatedByPuzzleId;
-    protected $collPuzzleParentsRelatedByPuzzleIdPartial;
+    protected $collPuzzleParents;
+    protected $collPuzzleParentsPartial;
 
     /**
      * @var        ObjectCollection|ChildPuzzleParent[] Collection to store aggregation of ChildPuzzleParent objects.
      */
-    protected $collPuzzleParentsRelatedByParentId;
-    protected $collPuzzleParentsRelatedByParentIdPartial;
+    protected $collPuzzlechildren;
+    protected $collPuzzlechildrenPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -174,25 +168,19 @@ abstract class Puzzle implements ActiveRecordInterface
      * An array of objects scheduled for deletion.
      * @var ObjectCollection|ChildPuzzleMember[]
      */
-    protected $puzzleMembersRelatedByPuzzleIdScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildPuzzleMember[]
-     */
-    protected $puzzleMembersRelatedByMemberIdScheduledForDeletion = null;
+    protected $puzzleMembersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
      * @var ObjectCollection|ChildPuzzleParent[]
      */
-    protected $puzzleParentsRelatedByPuzzleIdScheduledForDeletion = null;
+    protected $puzzleParentsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
      * @var ObjectCollection|ChildPuzzleParent[]
      */
-    protected $puzzleParentsRelatedByParentIdScheduledForDeletion = null;
+    protected $puzzlechildrenScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Puzzle object.
@@ -789,13 +777,11 @@ abstract class Puzzle implements ActiveRecordInterface
 
             $this->collNotes = null;
 
-            $this->collPuzzleMembersRelatedByPuzzleId = null;
+            $this->collPuzzleMembers = null;
 
-            $this->collPuzzleMembersRelatedByMemberId = null;
+            $this->collPuzzleParents = null;
 
-            $this->collPuzzleParentsRelatedByPuzzleId = null;
-
-            $this->collPuzzleParentsRelatedByParentId = null;
+            $this->collPuzzlechildren = null;
 
         } // if (deep)
     }
@@ -928,68 +914,51 @@ abstract class Puzzle implements ActiveRecordInterface
                 }
             }
 
-            if ($this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion !== null) {
-                if (!$this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion->isEmpty()) {
+            if ($this->puzzleMembersScheduledForDeletion !== null) {
+                if (!$this->puzzleMembersScheduledForDeletion->isEmpty()) {
                     \PuzzleMemberQuery::create()
-                        ->filterByPrimaryKeys($this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion->getPrimaryKeys(false))
+                        ->filterByPrimaryKeys($this->puzzleMembersScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion = null;
+                    $this->puzzleMembersScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collPuzzleMembersRelatedByPuzzleId !== null) {
-                foreach ($this->collPuzzleMembersRelatedByPuzzleId as $referrerFK) {
+            if ($this->collPuzzleMembers !== null) {
+                foreach ($this->collPuzzleMembers as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
 
-            if ($this->puzzleMembersRelatedByMemberIdScheduledForDeletion !== null) {
-                if (!$this->puzzleMembersRelatedByMemberIdScheduledForDeletion->isEmpty()) {
-                    \PuzzleMemberQuery::create()
-                        ->filterByPrimaryKeys($this->puzzleMembersRelatedByMemberIdScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->puzzleMembersRelatedByMemberIdScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collPuzzleMembersRelatedByMemberId !== null) {
-                foreach ($this->collPuzzleMembersRelatedByMemberId as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion !== null) {
-                if (!$this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion->isEmpty()) {
+            if ($this->puzzleParentsScheduledForDeletion !== null) {
+                if (!$this->puzzleParentsScheduledForDeletion->isEmpty()) {
                     \PuzzleParentQuery::create()
-                        ->filterByPrimaryKeys($this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion->getPrimaryKeys(false))
+                        ->filterByPrimaryKeys($this->puzzleParentsScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion = null;
+                    $this->puzzleParentsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collPuzzleParentsRelatedByPuzzleId !== null) {
-                foreach ($this->collPuzzleParentsRelatedByPuzzleId as $referrerFK) {
+            if ($this->collPuzzleParents !== null) {
+                foreach ($this->collPuzzleParents as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
 
-            if ($this->puzzleParentsRelatedByParentIdScheduledForDeletion !== null) {
-                if (!$this->puzzleParentsRelatedByParentIdScheduledForDeletion->isEmpty()) {
+            if ($this->puzzlechildrenScheduledForDeletion !== null) {
+                if (!$this->puzzlechildrenScheduledForDeletion->isEmpty()) {
                     \PuzzleParentQuery::create()
-                        ->filterByPrimaryKeys($this->puzzleParentsRelatedByParentIdScheduledForDeletion->getPrimaryKeys(false))
+                        ->filterByPrimaryKeys($this->puzzlechildrenScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->puzzleParentsRelatedByParentIdScheduledForDeletion = null;
+                    $this->puzzlechildrenScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collPuzzleParentsRelatedByParentId !== null) {
-                foreach ($this->collPuzzleParentsRelatedByParentId as $referrerFK) {
+            if ($this->collPuzzlechildren !== null) {
+                foreach ($this->collPuzzlechildren as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1227,7 +1196,7 @@ abstract class Puzzle implements ActiveRecordInterface
 
                 $result[$key] = $this->collNotes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collPuzzleMembersRelatedByPuzzleId) {
+            if (null !== $this->collPuzzleMembers) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -1240,24 +1209,9 @@ abstract class Puzzle implements ActiveRecordInterface
                         $key = 'PuzzleMembers';
                 }
 
-                $result[$key] = $this->collPuzzleMembersRelatedByPuzzleId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collPuzzleMembers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collPuzzleMembersRelatedByMemberId) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'puzzleMembers';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'solvers';
-                        break;
-                    default:
-                        $key = 'PuzzleMembers';
-                }
-
-                $result[$key] = $this->collPuzzleMembersRelatedByMemberId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collPuzzleParentsRelatedByPuzzleId) {
+            if (null !== $this->collPuzzleParents) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -1270,9 +1224,9 @@ abstract class Puzzle implements ActiveRecordInterface
                         $key = 'PuzzleParents';
                 }
 
-                $result[$key] = $this->collPuzzleParentsRelatedByPuzzleId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collPuzzleParents->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collPuzzleParentsRelatedByParentId) {
+            if (null !== $this->collPuzzlechildren) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -1282,10 +1236,10 @@ abstract class Puzzle implements ActiveRecordInterface
                         $key = 'relationships';
                         break;
                     default:
-                        $key = 'PuzzleParents';
+                        $key = 'Puzzlechildren';
                 }
 
-                $result[$key] = $this->collPuzzleParentsRelatedByParentId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collPuzzlechildren->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1565,27 +1519,21 @@ abstract class Puzzle implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getPuzzleMembersRelatedByPuzzleId() as $relObj) {
+            foreach ($this->getPuzzleMembers() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addPuzzleMemberRelatedByPuzzleId($relObj->copy($deepCopy));
+                    $copyObj->addPuzzleMember($relObj->copy($deepCopy));
                 }
             }
 
-            foreach ($this->getPuzzleMembersRelatedByMemberId() as $relObj) {
+            foreach ($this->getPuzzleParents() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addPuzzleMemberRelatedByMemberId($relObj->copy($deepCopy));
+                    $copyObj->addPuzzleParent($relObj->copy($deepCopy));
                 }
             }
 
-            foreach ($this->getPuzzleParentsRelatedByPuzzleId() as $relObj) {
+            foreach ($this->getPuzzlechildren() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addPuzzleParentRelatedByPuzzleId($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getPuzzleParentsRelatedByParentId() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addPuzzleParentRelatedByParentId($relObj->copy($deepCopy));
+                    $copyObj->addPuzzleChild($relObj->copy($deepCopy));
                 }
             }
 
@@ -1634,20 +1582,16 @@ abstract class Puzzle implements ActiveRecordInterface
             $this->initNotes();
             return;
         }
-        if ('PuzzleMemberRelatedByPuzzleId' == $relationName) {
-            $this->initPuzzleMembersRelatedByPuzzleId();
+        if ('PuzzleMember' == $relationName) {
+            $this->initPuzzleMembers();
             return;
         }
-        if ('PuzzleMemberRelatedByMemberId' == $relationName) {
-            $this->initPuzzleMembersRelatedByMemberId();
+        if ('PuzzleParent' == $relationName) {
+            $this->initPuzzleParents();
             return;
         }
-        if ('PuzzleParentRelatedByPuzzleId' == $relationName) {
-            $this->initPuzzleParentsRelatedByPuzzleId();
-            return;
-        }
-        if ('PuzzleParentRelatedByParentId' == $relationName) {
-            $this->initPuzzleParentsRelatedByParentId();
+        if ('PuzzleChild' == $relationName) {
+            $this->initPuzzlechildren();
             return;
         }
     }
@@ -1878,31 +1822,31 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collPuzzleMembersRelatedByPuzzleId collection
+     * Clears out the collPuzzleMembers collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addPuzzleMembersRelatedByPuzzleId()
+     * @see        addPuzzleMembers()
      */
-    public function clearPuzzleMembersRelatedByPuzzleId()
+    public function clearPuzzleMembers()
     {
-        $this->collPuzzleMembersRelatedByPuzzleId = null; // important to set this to NULL since that means it is uninitialized
+        $this->collPuzzleMembers = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collPuzzleMembersRelatedByPuzzleId collection loaded partially.
+     * Reset is the collPuzzleMembers collection loaded partially.
      */
-    public function resetPartialPuzzleMembersRelatedByPuzzleId($v = true)
+    public function resetPartialPuzzleMembers($v = true)
     {
-        $this->collPuzzleMembersRelatedByPuzzleIdPartial = $v;
+        $this->collPuzzleMembersPartial = $v;
     }
 
     /**
-     * Initializes the collPuzzleMembersRelatedByPuzzleId collection.
+     * Initializes the collPuzzleMembers collection.
      *
-     * By default this just sets the collPuzzleMembersRelatedByPuzzleId collection to an empty array (like clearcollPuzzleMembersRelatedByPuzzleId());
+     * By default this just sets the collPuzzleMembers collection to an empty array (like clearcollPuzzleMembers());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1911,16 +1855,16 @@ abstract class Puzzle implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initPuzzleMembersRelatedByPuzzleId($overrideExisting = true)
+    public function initPuzzleMembers($overrideExisting = true)
     {
-        if (null !== $this->collPuzzleMembersRelatedByPuzzleId && !$overrideExisting) {
+        if (null !== $this->collPuzzleMembers && !$overrideExisting) {
             return;
         }
 
         $collectionClassName = PuzzleMemberTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collPuzzleMembersRelatedByPuzzleId = new $collectionClassName;
-        $this->collPuzzleMembersRelatedByPuzzleId->setModel('\PuzzleMember');
+        $this->collPuzzleMembers = new $collectionClassName;
+        $this->collPuzzleMembers->setModel('\PuzzleMember');
     }
 
     /**
@@ -1937,48 +1881,48 @@ abstract class Puzzle implements ActiveRecordInterface
      * @return ObjectCollection|ChildPuzzleMember[] List of ChildPuzzleMember objects
      * @throws PropelException
      */
-    public function getPuzzleMembersRelatedByPuzzleId(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getPuzzleMembers(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collPuzzleMembersRelatedByPuzzleIdPartial && !$this->isNew();
-        if (null === $this->collPuzzleMembersRelatedByPuzzleId || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collPuzzleMembersRelatedByPuzzleId) {
+        $partial = $this->collPuzzleMembersPartial && !$this->isNew();
+        if (null === $this->collPuzzleMembers || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPuzzleMembers) {
                 // return empty collection
-                $this->initPuzzleMembersRelatedByPuzzleId();
+                $this->initPuzzleMembers();
             } else {
-                $collPuzzleMembersRelatedByPuzzleId = ChildPuzzleMemberQuery::create(null, $criteria)
+                $collPuzzleMembers = ChildPuzzleMemberQuery::create(null, $criteria)
                     ->filterByPuzzle($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collPuzzleMembersRelatedByPuzzleIdPartial && count($collPuzzleMembersRelatedByPuzzleId)) {
-                        $this->initPuzzleMembersRelatedByPuzzleId(false);
+                    if (false !== $this->collPuzzleMembersPartial && count($collPuzzleMembers)) {
+                        $this->initPuzzleMembers(false);
 
-                        foreach ($collPuzzleMembersRelatedByPuzzleId as $obj) {
-                            if (false == $this->collPuzzleMembersRelatedByPuzzleId->contains($obj)) {
-                                $this->collPuzzleMembersRelatedByPuzzleId->append($obj);
+                        foreach ($collPuzzleMembers as $obj) {
+                            if (false == $this->collPuzzleMembers->contains($obj)) {
+                                $this->collPuzzleMembers->append($obj);
                             }
                         }
 
-                        $this->collPuzzleMembersRelatedByPuzzleIdPartial = true;
+                        $this->collPuzzleMembersPartial = true;
                     }
 
-                    return $collPuzzleMembersRelatedByPuzzleId;
+                    return $collPuzzleMembers;
                 }
 
-                if ($partial && $this->collPuzzleMembersRelatedByPuzzleId) {
-                    foreach ($this->collPuzzleMembersRelatedByPuzzleId as $obj) {
+                if ($partial && $this->collPuzzleMembers) {
+                    foreach ($this->collPuzzleMembers as $obj) {
                         if ($obj->isNew()) {
-                            $collPuzzleMembersRelatedByPuzzleId[] = $obj;
+                            $collPuzzleMembers[] = $obj;
                         }
                     }
                 }
 
-                $this->collPuzzleMembersRelatedByPuzzleId = $collPuzzleMembersRelatedByPuzzleId;
-                $this->collPuzzleMembersRelatedByPuzzleIdPartial = false;
+                $this->collPuzzleMembers = $collPuzzleMembers;
+                $this->collPuzzleMembersPartial = false;
             }
         }
 
-        return $this->collPuzzleMembersRelatedByPuzzleId;
+        return $this->collPuzzleMembers;
     }
 
     /**
@@ -1987,29 +1931,29 @@ abstract class Puzzle implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $puzzleMembersRelatedByPuzzleId A Propel collection.
+     * @param      Collection $puzzleMembers A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildPuzzle The current object (for fluent API support)
      */
-    public function setPuzzleMembersRelatedByPuzzleId(Collection $puzzleMembersRelatedByPuzzleId, ConnectionInterface $con = null)
+    public function setPuzzleMembers(Collection $puzzleMembers, ConnectionInterface $con = null)
     {
-        /** @var ChildPuzzleMember[] $puzzleMembersRelatedByPuzzleIdToDelete */
-        $puzzleMembersRelatedByPuzzleIdToDelete = $this->getPuzzleMembersRelatedByPuzzleId(new Criteria(), $con)->diff($puzzleMembersRelatedByPuzzleId);
+        /** @var ChildPuzzleMember[] $puzzleMembersToDelete */
+        $puzzleMembersToDelete = $this->getPuzzleMembers(new Criteria(), $con)->diff($puzzleMembers);
 
 
-        $this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion = $puzzleMembersRelatedByPuzzleIdToDelete;
+        $this->puzzleMembersScheduledForDeletion = $puzzleMembersToDelete;
 
-        foreach ($puzzleMembersRelatedByPuzzleIdToDelete as $puzzleMemberRelatedByPuzzleIdRemoved) {
-            $puzzleMemberRelatedByPuzzleIdRemoved->setPuzzle(null);
+        foreach ($puzzleMembersToDelete as $puzzleMemberRemoved) {
+            $puzzleMemberRemoved->setPuzzle(null);
         }
 
-        $this->collPuzzleMembersRelatedByPuzzleId = null;
-        foreach ($puzzleMembersRelatedByPuzzleId as $puzzleMemberRelatedByPuzzleId) {
-            $this->addPuzzleMemberRelatedByPuzzleId($puzzleMemberRelatedByPuzzleId);
+        $this->collPuzzleMembers = null;
+        foreach ($puzzleMembers as $puzzleMember) {
+            $this->addPuzzleMember($puzzleMember);
         }
 
-        $this->collPuzzleMembersRelatedByPuzzleId = $puzzleMembersRelatedByPuzzleId;
-        $this->collPuzzleMembersRelatedByPuzzleIdPartial = false;
+        $this->collPuzzleMembers = $puzzleMembers;
+        $this->collPuzzleMembersPartial = false;
 
         return $this;
     }
@@ -2023,16 +1967,16 @@ abstract class Puzzle implements ActiveRecordInterface
      * @return int             Count of related PuzzleMember objects.
      * @throws PropelException
      */
-    public function countPuzzleMembersRelatedByPuzzleId(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countPuzzleMembers(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collPuzzleMembersRelatedByPuzzleIdPartial && !$this->isNew();
-        if (null === $this->collPuzzleMembersRelatedByPuzzleId || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collPuzzleMembersRelatedByPuzzleId) {
+        $partial = $this->collPuzzleMembersPartial && !$this->isNew();
+        if (null === $this->collPuzzleMembers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPuzzleMembers) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getPuzzleMembersRelatedByPuzzleId());
+                return count($this->getPuzzleMembers());
             }
 
             $query = ChildPuzzleMemberQuery::create(null, $criteria);
@@ -2045,7 +1989,7 @@ abstract class Puzzle implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collPuzzleMembersRelatedByPuzzleId);
+        return count($this->collPuzzleMembers);
     }
 
     /**
@@ -2055,18 +1999,18 @@ abstract class Puzzle implements ActiveRecordInterface
      * @param  ChildPuzzleMember $l ChildPuzzleMember
      * @return $this|\Puzzle The current object (for fluent API support)
      */
-    public function addPuzzleMemberRelatedByPuzzleId(ChildPuzzleMember $l)
+    public function addPuzzleMember(ChildPuzzleMember $l)
     {
-        if ($this->collPuzzleMembersRelatedByPuzzleId === null) {
-            $this->initPuzzleMembersRelatedByPuzzleId();
-            $this->collPuzzleMembersRelatedByPuzzleIdPartial = true;
+        if ($this->collPuzzleMembers === null) {
+            $this->initPuzzleMembers();
+            $this->collPuzzleMembersPartial = true;
         }
 
-        if (!$this->collPuzzleMembersRelatedByPuzzleId->contains($l)) {
-            $this->doAddPuzzleMemberRelatedByPuzzleId($l);
+        if (!$this->collPuzzleMembers->contains($l)) {
+            $this->doAddPuzzleMember($l);
 
-            if ($this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion and $this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion->contains($l)) {
-                $this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion->remove($this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion->search($l));
+            if ($this->puzzleMembersScheduledForDeletion and $this->puzzleMembersScheduledForDeletion->contains($l)) {
+                $this->puzzleMembersScheduledForDeletion->remove($this->puzzleMembersScheduledForDeletion->search($l));
             }
         }
 
@@ -2074,285 +2018,85 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildPuzzleMember $puzzleMemberRelatedByPuzzleId The ChildPuzzleMember object to add.
+     * @param ChildPuzzleMember $puzzleMember The ChildPuzzleMember object to add.
      */
-    protected function doAddPuzzleMemberRelatedByPuzzleId(ChildPuzzleMember $puzzleMemberRelatedByPuzzleId)
+    protected function doAddPuzzleMember(ChildPuzzleMember $puzzleMember)
     {
-        $this->collPuzzleMembersRelatedByPuzzleId[]= $puzzleMemberRelatedByPuzzleId;
-        $puzzleMemberRelatedByPuzzleId->setPuzzle($this);
+        $this->collPuzzleMembers[]= $puzzleMember;
+        $puzzleMember->setPuzzle($this);
     }
 
     /**
-     * @param  ChildPuzzleMember $puzzleMemberRelatedByPuzzleId The ChildPuzzleMember object to remove.
+     * @param  ChildPuzzleMember $puzzleMember The ChildPuzzleMember object to remove.
      * @return $this|ChildPuzzle The current object (for fluent API support)
      */
-    public function removePuzzleMemberRelatedByPuzzleId(ChildPuzzleMember $puzzleMemberRelatedByPuzzleId)
+    public function removePuzzleMember(ChildPuzzleMember $puzzleMember)
     {
-        if ($this->getPuzzleMembersRelatedByPuzzleId()->contains($puzzleMemberRelatedByPuzzleId)) {
-            $pos = $this->collPuzzleMembersRelatedByPuzzleId->search($puzzleMemberRelatedByPuzzleId);
-            $this->collPuzzleMembersRelatedByPuzzleId->remove($pos);
-            if (null === $this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion) {
-                $this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion = clone $this->collPuzzleMembersRelatedByPuzzleId;
-                $this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion->clear();
+        if ($this->getPuzzleMembers()->contains($puzzleMember)) {
+            $pos = $this->collPuzzleMembers->search($puzzleMember);
+            $this->collPuzzleMembers->remove($pos);
+            if (null === $this->puzzleMembersScheduledForDeletion) {
+                $this->puzzleMembersScheduledForDeletion = clone $this->collPuzzleMembers;
+                $this->puzzleMembersScheduledForDeletion->clear();
             }
-            $this->puzzleMembersRelatedByPuzzleIdScheduledForDeletion[]= clone $puzzleMemberRelatedByPuzzleId;
-            $puzzleMemberRelatedByPuzzleId->setPuzzle(null);
+            $this->puzzleMembersScheduledForDeletion[]= clone $puzzleMember;
+            $puzzleMember->setPuzzle(null);
         }
 
         return $this;
     }
 
-    /**
-     * Clears out the collPuzzleMembersRelatedByMemberId collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addPuzzleMembersRelatedByMemberId()
-     */
-    public function clearPuzzleMembersRelatedByMemberId()
-    {
-        $this->collPuzzleMembersRelatedByMemberId = null; // important to set this to NULL since that means it is uninitialized
-    }
 
     /**
-     * Reset is the collPuzzleMembersRelatedByMemberId collection loaded partially.
-     */
-    public function resetPartialPuzzleMembersRelatedByMemberId($v = true)
-    {
-        $this->collPuzzleMembersRelatedByMemberIdPartial = $v;
-    }
-
-    /**
-     * Initializes the collPuzzleMembersRelatedByMemberId collection.
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Puzzle is new, it will return
+     * an empty collection; or if this Puzzle has previously
+     * been saved, it will retrieve related PuzzleMembers from storage.
      *
-     * By default this just sets the collPuzzleMembersRelatedByMemberId collection to an empty array (like clearcollPuzzleMembersRelatedByMemberId());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initPuzzleMembersRelatedByMemberId($overrideExisting = true)
-    {
-        if (null !== $this->collPuzzleMembersRelatedByMemberId && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = PuzzleMemberTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collPuzzleMembersRelatedByMemberId = new $collectionClassName;
-        $this->collPuzzleMembersRelatedByMemberId->setModel('\PuzzleMember');
-    }
-
-    /**
-     * Gets an array of ChildPuzzleMember objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildPuzzle is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Puzzle.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildPuzzleMember[] List of ChildPuzzleMember objects
-     * @throws PropelException
      */
-    public function getPuzzleMembersRelatedByMemberId(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getPuzzleMembersJoinMember(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $partial = $this->collPuzzleMembersRelatedByMemberIdPartial && !$this->isNew();
-        if (null === $this->collPuzzleMembersRelatedByMemberId || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collPuzzleMembersRelatedByMemberId) {
-                // return empty collection
-                $this->initPuzzleMembersRelatedByMemberId();
-            } else {
-                $collPuzzleMembersRelatedByMemberId = ChildPuzzleMemberQuery::create(null, $criteria)
-                    ->filterByMember($this)
-                    ->find($con);
+        $query = ChildPuzzleMemberQuery::create(null, $criteria);
+        $query->joinWith('Member', $joinBehavior);
 
-                if (null !== $criteria) {
-                    if (false !== $this->collPuzzleMembersRelatedByMemberIdPartial && count($collPuzzleMembersRelatedByMemberId)) {
-                        $this->initPuzzleMembersRelatedByMemberId(false);
-
-                        foreach ($collPuzzleMembersRelatedByMemberId as $obj) {
-                            if (false == $this->collPuzzleMembersRelatedByMemberId->contains($obj)) {
-                                $this->collPuzzleMembersRelatedByMemberId->append($obj);
-                            }
-                        }
-
-                        $this->collPuzzleMembersRelatedByMemberIdPartial = true;
-                    }
-
-                    return $collPuzzleMembersRelatedByMemberId;
-                }
-
-                if ($partial && $this->collPuzzleMembersRelatedByMemberId) {
-                    foreach ($this->collPuzzleMembersRelatedByMemberId as $obj) {
-                        if ($obj->isNew()) {
-                            $collPuzzleMembersRelatedByMemberId[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collPuzzleMembersRelatedByMemberId = $collPuzzleMembersRelatedByMemberId;
-                $this->collPuzzleMembersRelatedByMemberIdPartial = false;
-            }
-        }
-
-        return $this->collPuzzleMembersRelatedByMemberId;
+        return $this->getPuzzleMembers($query, $con);
     }
 
     /**
-     * Sets a collection of ChildPuzzleMember objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $puzzleMembersRelatedByMemberId A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildPuzzle The current object (for fluent API support)
-     */
-    public function setPuzzleMembersRelatedByMemberId(Collection $puzzleMembersRelatedByMemberId, ConnectionInterface $con = null)
-    {
-        /** @var ChildPuzzleMember[] $puzzleMembersRelatedByMemberIdToDelete */
-        $puzzleMembersRelatedByMemberIdToDelete = $this->getPuzzleMembersRelatedByMemberId(new Criteria(), $con)->diff($puzzleMembersRelatedByMemberId);
-
-
-        $this->puzzleMembersRelatedByMemberIdScheduledForDeletion = $puzzleMembersRelatedByMemberIdToDelete;
-
-        foreach ($puzzleMembersRelatedByMemberIdToDelete as $puzzleMemberRelatedByMemberIdRemoved) {
-            $puzzleMemberRelatedByMemberIdRemoved->setMember(null);
-        }
-
-        $this->collPuzzleMembersRelatedByMemberId = null;
-        foreach ($puzzleMembersRelatedByMemberId as $puzzleMemberRelatedByMemberId) {
-            $this->addPuzzleMemberRelatedByMemberId($puzzleMemberRelatedByMemberId);
-        }
-
-        $this->collPuzzleMembersRelatedByMemberId = $puzzleMembersRelatedByMemberId;
-        $this->collPuzzleMembersRelatedByMemberIdPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related PuzzleMember objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related PuzzleMember objects.
-     * @throws PropelException
-     */
-    public function countPuzzleMembersRelatedByMemberId(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collPuzzleMembersRelatedByMemberIdPartial && !$this->isNew();
-        if (null === $this->collPuzzleMembersRelatedByMemberId || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collPuzzleMembersRelatedByMemberId) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getPuzzleMembersRelatedByMemberId());
-            }
-
-            $query = ChildPuzzleMemberQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByMember($this)
-                ->count($con);
-        }
-
-        return count($this->collPuzzleMembersRelatedByMemberId);
-    }
-
-    /**
-     * Method called to associate a ChildPuzzleMember object to this object
-     * through the ChildPuzzleMember foreign key attribute.
-     *
-     * @param  ChildPuzzleMember $l ChildPuzzleMember
-     * @return $this|\Puzzle The current object (for fluent API support)
-     */
-    public function addPuzzleMemberRelatedByMemberId(ChildPuzzleMember $l)
-    {
-        if ($this->collPuzzleMembersRelatedByMemberId === null) {
-            $this->initPuzzleMembersRelatedByMemberId();
-            $this->collPuzzleMembersRelatedByMemberIdPartial = true;
-        }
-
-        if (!$this->collPuzzleMembersRelatedByMemberId->contains($l)) {
-            $this->doAddPuzzleMemberRelatedByMemberId($l);
-
-            if ($this->puzzleMembersRelatedByMemberIdScheduledForDeletion and $this->puzzleMembersRelatedByMemberIdScheduledForDeletion->contains($l)) {
-                $this->puzzleMembersRelatedByMemberIdScheduledForDeletion->remove($this->puzzleMembersRelatedByMemberIdScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildPuzzleMember $puzzleMemberRelatedByMemberId The ChildPuzzleMember object to add.
-     */
-    protected function doAddPuzzleMemberRelatedByMemberId(ChildPuzzleMember $puzzleMemberRelatedByMemberId)
-    {
-        $this->collPuzzleMembersRelatedByMemberId[]= $puzzleMemberRelatedByMemberId;
-        $puzzleMemberRelatedByMemberId->setMember($this);
-    }
-
-    /**
-     * @param  ChildPuzzleMember $puzzleMemberRelatedByMemberId The ChildPuzzleMember object to remove.
-     * @return $this|ChildPuzzle The current object (for fluent API support)
-     */
-    public function removePuzzleMemberRelatedByMemberId(ChildPuzzleMember $puzzleMemberRelatedByMemberId)
-    {
-        if ($this->getPuzzleMembersRelatedByMemberId()->contains($puzzleMemberRelatedByMemberId)) {
-            $pos = $this->collPuzzleMembersRelatedByMemberId->search($puzzleMemberRelatedByMemberId);
-            $this->collPuzzleMembersRelatedByMemberId->remove($pos);
-            if (null === $this->puzzleMembersRelatedByMemberIdScheduledForDeletion) {
-                $this->puzzleMembersRelatedByMemberIdScheduledForDeletion = clone $this->collPuzzleMembersRelatedByMemberId;
-                $this->puzzleMembersRelatedByMemberIdScheduledForDeletion->clear();
-            }
-            $this->puzzleMembersRelatedByMemberIdScheduledForDeletion[]= clone $puzzleMemberRelatedByMemberId;
-            $puzzleMemberRelatedByMemberId->setMember(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Clears out the collPuzzleParentsRelatedByPuzzleId collection
+     * Clears out the collPuzzleParents collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addPuzzleParentsRelatedByPuzzleId()
+     * @see        addPuzzleParents()
      */
-    public function clearPuzzleParentsRelatedByPuzzleId()
+    public function clearPuzzleParents()
     {
-        $this->collPuzzleParentsRelatedByPuzzleId = null; // important to set this to NULL since that means it is uninitialized
+        $this->collPuzzleParents = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collPuzzleParentsRelatedByPuzzleId collection loaded partially.
+     * Reset is the collPuzzleParents collection loaded partially.
      */
-    public function resetPartialPuzzleParentsRelatedByPuzzleId($v = true)
+    public function resetPartialPuzzleParents($v = true)
     {
-        $this->collPuzzleParentsRelatedByPuzzleIdPartial = $v;
+        $this->collPuzzleParentsPartial = $v;
     }
 
     /**
-     * Initializes the collPuzzleParentsRelatedByPuzzleId collection.
+     * Initializes the collPuzzleParents collection.
      *
-     * By default this just sets the collPuzzleParentsRelatedByPuzzleId collection to an empty array (like clearcollPuzzleParentsRelatedByPuzzleId());
+     * By default this just sets the collPuzzleParents collection to an empty array (like clearcollPuzzleParents());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -2361,16 +2105,16 @@ abstract class Puzzle implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initPuzzleParentsRelatedByPuzzleId($overrideExisting = true)
+    public function initPuzzleParents($overrideExisting = true)
     {
-        if (null !== $this->collPuzzleParentsRelatedByPuzzleId && !$overrideExisting) {
+        if (null !== $this->collPuzzleParents && !$overrideExisting) {
             return;
         }
 
         $collectionClassName = PuzzleParentTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collPuzzleParentsRelatedByPuzzleId = new $collectionClassName;
-        $this->collPuzzleParentsRelatedByPuzzleId->setModel('\PuzzleParent');
+        $this->collPuzzleParents = new $collectionClassName;
+        $this->collPuzzleParents->setModel('\PuzzleParent');
     }
 
     /**
@@ -2387,48 +2131,48 @@ abstract class Puzzle implements ActiveRecordInterface
      * @return ObjectCollection|ChildPuzzleParent[] List of ChildPuzzleParent objects
      * @throws PropelException
      */
-    public function getPuzzleParentsRelatedByPuzzleId(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getPuzzleParents(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collPuzzleParentsRelatedByPuzzleIdPartial && !$this->isNew();
-        if (null === $this->collPuzzleParentsRelatedByPuzzleId || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collPuzzleParentsRelatedByPuzzleId) {
+        $partial = $this->collPuzzleParentsPartial && !$this->isNew();
+        if (null === $this->collPuzzleParents || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPuzzleParents) {
                 // return empty collection
-                $this->initPuzzleParentsRelatedByPuzzleId();
+                $this->initPuzzleParents();
             } else {
-                $collPuzzleParentsRelatedByPuzzleId = ChildPuzzleParentQuery::create(null, $criteria)
+                $collPuzzleParents = ChildPuzzleParentQuery::create(null, $criteria)
                     ->filterByPuzzle($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collPuzzleParentsRelatedByPuzzleIdPartial && count($collPuzzleParentsRelatedByPuzzleId)) {
-                        $this->initPuzzleParentsRelatedByPuzzleId(false);
+                    if (false !== $this->collPuzzleParentsPartial && count($collPuzzleParents)) {
+                        $this->initPuzzleParents(false);
 
-                        foreach ($collPuzzleParentsRelatedByPuzzleId as $obj) {
-                            if (false == $this->collPuzzleParentsRelatedByPuzzleId->contains($obj)) {
-                                $this->collPuzzleParentsRelatedByPuzzleId->append($obj);
+                        foreach ($collPuzzleParents as $obj) {
+                            if (false == $this->collPuzzleParents->contains($obj)) {
+                                $this->collPuzzleParents->append($obj);
                             }
                         }
 
-                        $this->collPuzzleParentsRelatedByPuzzleIdPartial = true;
+                        $this->collPuzzleParentsPartial = true;
                     }
 
-                    return $collPuzzleParentsRelatedByPuzzleId;
+                    return $collPuzzleParents;
                 }
 
-                if ($partial && $this->collPuzzleParentsRelatedByPuzzleId) {
-                    foreach ($this->collPuzzleParentsRelatedByPuzzleId as $obj) {
+                if ($partial && $this->collPuzzleParents) {
+                    foreach ($this->collPuzzleParents as $obj) {
                         if ($obj->isNew()) {
-                            $collPuzzleParentsRelatedByPuzzleId[] = $obj;
+                            $collPuzzleParents[] = $obj;
                         }
                     }
                 }
 
-                $this->collPuzzleParentsRelatedByPuzzleId = $collPuzzleParentsRelatedByPuzzleId;
-                $this->collPuzzleParentsRelatedByPuzzleIdPartial = false;
+                $this->collPuzzleParents = $collPuzzleParents;
+                $this->collPuzzleParentsPartial = false;
             }
         }
 
-        return $this->collPuzzleParentsRelatedByPuzzleId;
+        return $this->collPuzzleParents;
     }
 
     /**
@@ -2437,29 +2181,29 @@ abstract class Puzzle implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $puzzleParentsRelatedByPuzzleId A Propel collection.
+     * @param      Collection $puzzleParents A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildPuzzle The current object (for fluent API support)
      */
-    public function setPuzzleParentsRelatedByPuzzleId(Collection $puzzleParentsRelatedByPuzzleId, ConnectionInterface $con = null)
+    public function setPuzzleParents(Collection $puzzleParents, ConnectionInterface $con = null)
     {
-        /** @var ChildPuzzleParent[] $puzzleParentsRelatedByPuzzleIdToDelete */
-        $puzzleParentsRelatedByPuzzleIdToDelete = $this->getPuzzleParentsRelatedByPuzzleId(new Criteria(), $con)->diff($puzzleParentsRelatedByPuzzleId);
+        /** @var ChildPuzzleParent[] $puzzleParentsToDelete */
+        $puzzleParentsToDelete = $this->getPuzzleParents(new Criteria(), $con)->diff($puzzleParents);
 
 
-        $this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion = $puzzleParentsRelatedByPuzzleIdToDelete;
+        $this->puzzleParentsScheduledForDeletion = $puzzleParentsToDelete;
 
-        foreach ($puzzleParentsRelatedByPuzzleIdToDelete as $puzzleParentRelatedByPuzzleIdRemoved) {
-            $puzzleParentRelatedByPuzzleIdRemoved->setPuzzle(null);
+        foreach ($puzzleParentsToDelete as $puzzleParentRemoved) {
+            $puzzleParentRemoved->setPuzzle(null);
         }
 
-        $this->collPuzzleParentsRelatedByPuzzleId = null;
-        foreach ($puzzleParentsRelatedByPuzzleId as $puzzleParentRelatedByPuzzleId) {
-            $this->addPuzzleParentRelatedByPuzzleId($puzzleParentRelatedByPuzzleId);
+        $this->collPuzzleParents = null;
+        foreach ($puzzleParents as $puzzleParent) {
+            $this->addPuzzleParent($puzzleParent);
         }
 
-        $this->collPuzzleParentsRelatedByPuzzleId = $puzzleParentsRelatedByPuzzleId;
-        $this->collPuzzleParentsRelatedByPuzzleIdPartial = false;
+        $this->collPuzzleParents = $puzzleParents;
+        $this->collPuzzleParentsPartial = false;
 
         return $this;
     }
@@ -2473,16 +2217,16 @@ abstract class Puzzle implements ActiveRecordInterface
      * @return int             Count of related PuzzleParent objects.
      * @throws PropelException
      */
-    public function countPuzzleParentsRelatedByPuzzleId(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countPuzzleParents(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collPuzzleParentsRelatedByPuzzleIdPartial && !$this->isNew();
-        if (null === $this->collPuzzleParentsRelatedByPuzzleId || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collPuzzleParentsRelatedByPuzzleId) {
+        $partial = $this->collPuzzleParentsPartial && !$this->isNew();
+        if (null === $this->collPuzzleParents || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPuzzleParents) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getPuzzleParentsRelatedByPuzzleId());
+                return count($this->getPuzzleParents());
             }
 
             $query = ChildPuzzleParentQuery::create(null, $criteria);
@@ -2495,7 +2239,7 @@ abstract class Puzzle implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collPuzzleParentsRelatedByPuzzleId);
+        return count($this->collPuzzleParents);
     }
 
     /**
@@ -2505,18 +2249,18 @@ abstract class Puzzle implements ActiveRecordInterface
      * @param  ChildPuzzleParent $l ChildPuzzleParent
      * @return $this|\Puzzle The current object (for fluent API support)
      */
-    public function addPuzzleParentRelatedByPuzzleId(ChildPuzzleParent $l)
+    public function addPuzzleParent(ChildPuzzleParent $l)
     {
-        if ($this->collPuzzleParentsRelatedByPuzzleId === null) {
-            $this->initPuzzleParentsRelatedByPuzzleId();
-            $this->collPuzzleParentsRelatedByPuzzleIdPartial = true;
+        if ($this->collPuzzleParents === null) {
+            $this->initPuzzleParents();
+            $this->collPuzzleParentsPartial = true;
         }
 
-        if (!$this->collPuzzleParentsRelatedByPuzzleId->contains($l)) {
-            $this->doAddPuzzleParentRelatedByPuzzleId($l);
+        if (!$this->collPuzzleParents->contains($l)) {
+            $this->doAddPuzzleParent($l);
 
-            if ($this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion and $this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion->contains($l)) {
-                $this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion->remove($this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion->search($l));
+            if ($this->puzzleParentsScheduledForDeletion and $this->puzzleParentsScheduledForDeletion->contains($l)) {
+                $this->puzzleParentsScheduledForDeletion->remove($this->puzzleParentsScheduledForDeletion->search($l));
             }
         }
 
@@ -2524,60 +2268,60 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildPuzzleParent $puzzleParentRelatedByPuzzleId The ChildPuzzleParent object to add.
+     * @param ChildPuzzleParent $puzzleParent The ChildPuzzleParent object to add.
      */
-    protected function doAddPuzzleParentRelatedByPuzzleId(ChildPuzzleParent $puzzleParentRelatedByPuzzleId)
+    protected function doAddPuzzleParent(ChildPuzzleParent $puzzleParent)
     {
-        $this->collPuzzleParentsRelatedByPuzzleId[]= $puzzleParentRelatedByPuzzleId;
-        $puzzleParentRelatedByPuzzleId->setPuzzle($this);
+        $this->collPuzzleParents[]= $puzzleParent;
+        $puzzleParent->setPuzzle($this);
     }
 
     /**
-     * @param  ChildPuzzleParent $puzzleParentRelatedByPuzzleId The ChildPuzzleParent object to remove.
+     * @param  ChildPuzzleParent $puzzleParent The ChildPuzzleParent object to remove.
      * @return $this|ChildPuzzle The current object (for fluent API support)
      */
-    public function removePuzzleParentRelatedByPuzzleId(ChildPuzzleParent $puzzleParentRelatedByPuzzleId)
+    public function removePuzzleParent(ChildPuzzleParent $puzzleParent)
     {
-        if ($this->getPuzzleParentsRelatedByPuzzleId()->contains($puzzleParentRelatedByPuzzleId)) {
-            $pos = $this->collPuzzleParentsRelatedByPuzzleId->search($puzzleParentRelatedByPuzzleId);
-            $this->collPuzzleParentsRelatedByPuzzleId->remove($pos);
-            if (null === $this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion) {
-                $this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion = clone $this->collPuzzleParentsRelatedByPuzzleId;
-                $this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion->clear();
+        if ($this->getPuzzleParents()->contains($puzzleParent)) {
+            $pos = $this->collPuzzleParents->search($puzzleParent);
+            $this->collPuzzleParents->remove($pos);
+            if (null === $this->puzzleParentsScheduledForDeletion) {
+                $this->puzzleParentsScheduledForDeletion = clone $this->collPuzzleParents;
+                $this->puzzleParentsScheduledForDeletion->clear();
             }
-            $this->puzzleParentsRelatedByPuzzleIdScheduledForDeletion[]= clone $puzzleParentRelatedByPuzzleId;
-            $puzzleParentRelatedByPuzzleId->setPuzzle(null);
+            $this->puzzleParentsScheduledForDeletion[]= clone $puzzleParent;
+            $puzzleParent->setPuzzle(null);
         }
 
         return $this;
     }
 
     /**
-     * Clears out the collPuzzleParentsRelatedByParentId collection
+     * Clears out the collPuzzlechildren collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addPuzzleParentsRelatedByParentId()
+     * @see        addPuzzlechildren()
      */
-    public function clearPuzzleParentsRelatedByParentId()
+    public function clearPuzzlechildren()
     {
-        $this->collPuzzleParentsRelatedByParentId = null; // important to set this to NULL since that means it is uninitialized
+        $this->collPuzzlechildren = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collPuzzleParentsRelatedByParentId collection loaded partially.
+     * Reset is the collPuzzlechildren collection loaded partially.
      */
-    public function resetPartialPuzzleParentsRelatedByParentId($v = true)
+    public function resetPartialPuzzlechildren($v = true)
     {
-        $this->collPuzzleParentsRelatedByParentIdPartial = $v;
+        $this->collPuzzlechildrenPartial = $v;
     }
 
     /**
-     * Initializes the collPuzzleParentsRelatedByParentId collection.
+     * Initializes the collPuzzlechildren collection.
      *
-     * By default this just sets the collPuzzleParentsRelatedByParentId collection to an empty array (like clearcollPuzzleParentsRelatedByParentId());
+     * By default this just sets the collPuzzlechildren collection to an empty array (like clearcollPuzzlechildren());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -2586,16 +2330,16 @@ abstract class Puzzle implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initPuzzleParentsRelatedByParentId($overrideExisting = true)
+    public function initPuzzlechildren($overrideExisting = true)
     {
-        if (null !== $this->collPuzzleParentsRelatedByParentId && !$overrideExisting) {
+        if (null !== $this->collPuzzlechildren && !$overrideExisting) {
             return;
         }
 
         $collectionClassName = PuzzleParentTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collPuzzleParentsRelatedByParentId = new $collectionClassName;
-        $this->collPuzzleParentsRelatedByParentId->setModel('\PuzzleParent');
+        $this->collPuzzlechildren = new $collectionClassName;
+        $this->collPuzzlechildren->setModel('\PuzzleParent');
     }
 
     /**
@@ -2612,48 +2356,48 @@ abstract class Puzzle implements ActiveRecordInterface
      * @return ObjectCollection|ChildPuzzleParent[] List of ChildPuzzleParent objects
      * @throws PropelException
      */
-    public function getPuzzleParentsRelatedByParentId(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getPuzzlechildren(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collPuzzleParentsRelatedByParentIdPartial && !$this->isNew();
-        if (null === $this->collPuzzleParentsRelatedByParentId || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collPuzzleParentsRelatedByParentId) {
+        $partial = $this->collPuzzlechildrenPartial && !$this->isNew();
+        if (null === $this->collPuzzlechildren || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPuzzlechildren) {
                 // return empty collection
-                $this->initPuzzleParentsRelatedByParentId();
+                $this->initPuzzlechildren();
             } else {
-                $collPuzzleParentsRelatedByParentId = ChildPuzzleParentQuery::create(null, $criteria)
+                $collPuzzlechildren = ChildPuzzleParentQuery::create(null, $criteria)
                     ->filterByParent($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collPuzzleParentsRelatedByParentIdPartial && count($collPuzzleParentsRelatedByParentId)) {
-                        $this->initPuzzleParentsRelatedByParentId(false);
+                    if (false !== $this->collPuzzlechildrenPartial && count($collPuzzlechildren)) {
+                        $this->initPuzzlechildren(false);
 
-                        foreach ($collPuzzleParentsRelatedByParentId as $obj) {
-                            if (false == $this->collPuzzleParentsRelatedByParentId->contains($obj)) {
-                                $this->collPuzzleParentsRelatedByParentId->append($obj);
+                        foreach ($collPuzzlechildren as $obj) {
+                            if (false == $this->collPuzzlechildren->contains($obj)) {
+                                $this->collPuzzlechildren->append($obj);
                             }
                         }
 
-                        $this->collPuzzleParentsRelatedByParentIdPartial = true;
+                        $this->collPuzzlechildrenPartial = true;
                     }
 
-                    return $collPuzzleParentsRelatedByParentId;
+                    return $collPuzzlechildren;
                 }
 
-                if ($partial && $this->collPuzzleParentsRelatedByParentId) {
-                    foreach ($this->collPuzzleParentsRelatedByParentId as $obj) {
+                if ($partial && $this->collPuzzlechildren) {
+                    foreach ($this->collPuzzlechildren as $obj) {
                         if ($obj->isNew()) {
-                            $collPuzzleParentsRelatedByParentId[] = $obj;
+                            $collPuzzlechildren[] = $obj;
                         }
                     }
                 }
 
-                $this->collPuzzleParentsRelatedByParentId = $collPuzzleParentsRelatedByParentId;
-                $this->collPuzzleParentsRelatedByParentIdPartial = false;
+                $this->collPuzzlechildren = $collPuzzlechildren;
+                $this->collPuzzlechildrenPartial = false;
             }
         }
 
-        return $this->collPuzzleParentsRelatedByParentId;
+        return $this->collPuzzlechildren;
     }
 
     /**
@@ -2662,29 +2406,29 @@ abstract class Puzzle implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $puzzleParentsRelatedByParentId A Propel collection.
+     * @param      Collection $puzzlechildren A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildPuzzle The current object (for fluent API support)
      */
-    public function setPuzzleParentsRelatedByParentId(Collection $puzzleParentsRelatedByParentId, ConnectionInterface $con = null)
+    public function setPuzzlechildren(Collection $puzzlechildren, ConnectionInterface $con = null)
     {
-        /** @var ChildPuzzleParent[] $puzzleParentsRelatedByParentIdToDelete */
-        $puzzleParentsRelatedByParentIdToDelete = $this->getPuzzleParentsRelatedByParentId(new Criteria(), $con)->diff($puzzleParentsRelatedByParentId);
+        /** @var ChildPuzzleParent[] $puzzlechildrenToDelete */
+        $puzzlechildrenToDelete = $this->getPuzzlechildren(new Criteria(), $con)->diff($puzzlechildren);
 
 
-        $this->puzzleParentsRelatedByParentIdScheduledForDeletion = $puzzleParentsRelatedByParentIdToDelete;
+        $this->puzzlechildrenScheduledForDeletion = $puzzlechildrenToDelete;
 
-        foreach ($puzzleParentsRelatedByParentIdToDelete as $puzzleParentRelatedByParentIdRemoved) {
-            $puzzleParentRelatedByParentIdRemoved->setParent(null);
+        foreach ($puzzlechildrenToDelete as $puzzleChildRemoved) {
+            $puzzleChildRemoved->setParent(null);
         }
 
-        $this->collPuzzleParentsRelatedByParentId = null;
-        foreach ($puzzleParentsRelatedByParentId as $puzzleParentRelatedByParentId) {
-            $this->addPuzzleParentRelatedByParentId($puzzleParentRelatedByParentId);
+        $this->collPuzzlechildren = null;
+        foreach ($puzzlechildren as $puzzleChild) {
+            $this->addPuzzleChild($puzzleChild);
         }
 
-        $this->collPuzzleParentsRelatedByParentId = $puzzleParentsRelatedByParentId;
-        $this->collPuzzleParentsRelatedByParentIdPartial = false;
+        $this->collPuzzlechildren = $puzzlechildren;
+        $this->collPuzzlechildrenPartial = false;
 
         return $this;
     }
@@ -2698,16 +2442,16 @@ abstract class Puzzle implements ActiveRecordInterface
      * @return int             Count of related PuzzleParent objects.
      * @throws PropelException
      */
-    public function countPuzzleParentsRelatedByParentId(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countPuzzlechildren(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collPuzzleParentsRelatedByParentIdPartial && !$this->isNew();
-        if (null === $this->collPuzzleParentsRelatedByParentId || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collPuzzleParentsRelatedByParentId) {
+        $partial = $this->collPuzzlechildrenPartial && !$this->isNew();
+        if (null === $this->collPuzzlechildren || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPuzzlechildren) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getPuzzleParentsRelatedByParentId());
+                return count($this->getPuzzlechildren());
             }
 
             $query = ChildPuzzleParentQuery::create(null, $criteria);
@@ -2720,7 +2464,7 @@ abstract class Puzzle implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collPuzzleParentsRelatedByParentId);
+        return count($this->collPuzzlechildren);
     }
 
     /**
@@ -2730,18 +2474,18 @@ abstract class Puzzle implements ActiveRecordInterface
      * @param  ChildPuzzleParent $l ChildPuzzleParent
      * @return $this|\Puzzle The current object (for fluent API support)
      */
-    public function addPuzzleParentRelatedByParentId(ChildPuzzleParent $l)
+    public function addPuzzleChild(ChildPuzzleParent $l)
     {
-        if ($this->collPuzzleParentsRelatedByParentId === null) {
-            $this->initPuzzleParentsRelatedByParentId();
-            $this->collPuzzleParentsRelatedByParentIdPartial = true;
+        if ($this->collPuzzlechildren === null) {
+            $this->initPuzzlechildren();
+            $this->collPuzzlechildrenPartial = true;
         }
 
-        if (!$this->collPuzzleParentsRelatedByParentId->contains($l)) {
-            $this->doAddPuzzleParentRelatedByParentId($l);
+        if (!$this->collPuzzlechildren->contains($l)) {
+            $this->doAddPuzzleChild($l);
 
-            if ($this->puzzleParentsRelatedByParentIdScheduledForDeletion and $this->puzzleParentsRelatedByParentIdScheduledForDeletion->contains($l)) {
-                $this->puzzleParentsRelatedByParentIdScheduledForDeletion->remove($this->puzzleParentsRelatedByParentIdScheduledForDeletion->search($l));
+            if ($this->puzzlechildrenScheduledForDeletion and $this->puzzlechildrenScheduledForDeletion->contains($l)) {
+                $this->puzzlechildrenScheduledForDeletion->remove($this->puzzlechildrenScheduledForDeletion->search($l));
             }
         }
 
@@ -2749,29 +2493,29 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildPuzzleParent $puzzleParentRelatedByParentId The ChildPuzzleParent object to add.
+     * @param ChildPuzzleParent $puzzleChild The ChildPuzzleParent object to add.
      */
-    protected function doAddPuzzleParentRelatedByParentId(ChildPuzzleParent $puzzleParentRelatedByParentId)
+    protected function doAddPuzzleChild(ChildPuzzleParent $puzzleChild)
     {
-        $this->collPuzzleParentsRelatedByParentId[]= $puzzleParentRelatedByParentId;
-        $puzzleParentRelatedByParentId->setParent($this);
+        $this->collPuzzlechildren[]= $puzzleChild;
+        $puzzleChild->setParent($this);
     }
 
     /**
-     * @param  ChildPuzzleParent $puzzleParentRelatedByParentId The ChildPuzzleParent object to remove.
+     * @param  ChildPuzzleParent $puzzleChild The ChildPuzzleParent object to remove.
      * @return $this|ChildPuzzle The current object (for fluent API support)
      */
-    public function removePuzzleParentRelatedByParentId(ChildPuzzleParent $puzzleParentRelatedByParentId)
+    public function removePuzzleChild(ChildPuzzleParent $puzzleChild)
     {
-        if ($this->getPuzzleParentsRelatedByParentId()->contains($puzzleParentRelatedByParentId)) {
-            $pos = $this->collPuzzleParentsRelatedByParentId->search($puzzleParentRelatedByParentId);
-            $this->collPuzzleParentsRelatedByParentId->remove($pos);
-            if (null === $this->puzzleParentsRelatedByParentIdScheduledForDeletion) {
-                $this->puzzleParentsRelatedByParentIdScheduledForDeletion = clone $this->collPuzzleParentsRelatedByParentId;
-                $this->puzzleParentsRelatedByParentIdScheduledForDeletion->clear();
+        if ($this->getPuzzlechildren()->contains($puzzleChild)) {
+            $pos = $this->collPuzzlechildren->search($puzzleChild);
+            $this->collPuzzlechildren->remove($pos);
+            if (null === $this->puzzlechildrenScheduledForDeletion) {
+                $this->puzzlechildrenScheduledForDeletion = clone $this->collPuzzlechildren;
+                $this->puzzlechildrenScheduledForDeletion->clear();
             }
-            $this->puzzleParentsRelatedByParentIdScheduledForDeletion[]= clone $puzzleParentRelatedByParentId;
-            $puzzleParentRelatedByParentId->setParent(null);
+            $this->puzzlechildrenScheduledForDeletion[]= clone $puzzleChild;
+            $puzzleChild->setParent(null);
         }
 
         return $this;
@@ -2815,33 +2559,27 @@ abstract class Puzzle implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collPuzzleMembersRelatedByPuzzleId) {
-                foreach ($this->collPuzzleMembersRelatedByPuzzleId as $o) {
+            if ($this->collPuzzleMembers) {
+                foreach ($this->collPuzzleMembers as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collPuzzleMembersRelatedByMemberId) {
-                foreach ($this->collPuzzleMembersRelatedByMemberId as $o) {
+            if ($this->collPuzzleParents) {
+                foreach ($this->collPuzzleParents as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collPuzzleParentsRelatedByPuzzleId) {
-                foreach ($this->collPuzzleParentsRelatedByPuzzleId as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
-            if ($this->collPuzzleParentsRelatedByParentId) {
-                foreach ($this->collPuzzleParentsRelatedByParentId as $o) {
+            if ($this->collPuzzlechildren) {
+                foreach ($this->collPuzzlechildren as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
         $this->collNotes = null;
-        $this->collPuzzleMembersRelatedByPuzzleId = null;
-        $this->collPuzzleMembersRelatedByMemberId = null;
-        $this->collPuzzleParentsRelatedByPuzzleId = null;
-        $this->collPuzzleParentsRelatedByParentId = null;
+        $this->collPuzzleMembers = null;
+        $this->collPuzzleParents = null;
+        $this->collPuzzlechildren = null;
     }
 
     /**

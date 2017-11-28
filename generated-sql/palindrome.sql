@@ -32,7 +32,7 @@ DROP TABLE IF EXISTS `note`;
 CREATE TABLE `note`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `text` VARCHAR(255) NOT NULL,
+    `body` VARCHAR(255) NOT NULL,
     `puzzle_id` INTEGER NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
@@ -74,13 +74,13 @@ CREATE TABLE `solver`
     `member_id` INTEGER NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `solver_fi_937852` (`puzzle_id`),
-    INDEX `solver_fi_8220d5` (`member_id`),
+    INDEX `solver_fi_672062` (`member_id`),
     CONSTRAINT `solver_fk_937852`
         FOREIGN KEY (`puzzle_id`)
         REFERENCES `puzzle` (`id`),
-    CONSTRAINT `solver_fk_8220d5`
+    CONSTRAINT `solver_fk_672062`
         FOREIGN KEY (`member_id`)
-        REFERENCES `puzzle` (`id`)
+        REFERENCES `member` (`id`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -114,8 +114,8 @@ DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `code` VARCHAR(16),
-    `text` VARCHAR(255) NOT NULL,
+    `news_type` VARCHAR(16),
+    `content` VARCHAR(255) NOT NULL,
     `member_id` INTEGER,
     `created_at` DATETIME,
     `updated_at` DATETIME,

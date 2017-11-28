@@ -42,6 +42,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildMemberQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildMemberQuery leftJoinPuzzleMember($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleMember relation
+ * @method     ChildMemberQuery rightJoinPuzzleMember($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleMember relation
+ * @method     ChildMemberQuery innerJoinPuzzleMember($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleMember relation
+ *
+ * @method     ChildMemberQuery joinWithPuzzleMember($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PuzzleMember relation
+ *
+ * @method     ChildMemberQuery leftJoinWithPuzzleMember() Adds a LEFT JOIN clause and with to the query using the PuzzleMember relation
+ * @method     ChildMemberQuery rightJoinWithPuzzleMember() Adds a RIGHT JOIN clause and with to the query using the PuzzleMember relation
+ * @method     ChildMemberQuery innerJoinWithPuzzleMember() Adds a INNER JOIN clause and with to the query using the PuzzleMember relation
+ *
  * @method     ChildMemberQuery leftJoinNews($relationAlias = null) Adds a LEFT JOIN clause to the query using the News relation
  * @method     ChildMemberQuery rightJoinNews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the News relation
  * @method     ChildMemberQuery innerJoinNews($relationAlias = null) Adds a INNER JOIN clause to the query using the News relation
@@ -52,7 +62,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery rightJoinWithNews() Adds a RIGHT JOIN clause and with to the query using the News relation
  * @method     ChildMemberQuery innerJoinWithNews() Adds a INNER JOIN clause and with to the query using the News relation
  *
- * @method     \NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \PuzzleMemberQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildMember findOne(ConnectionInterface $con = null) Return the first ChildMember matching the query
  * @method     ChildMember findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMember matching the query, or a new ChildMember object populated from the query conditions when no match is found
@@ -433,6 +443,79 @@ abstract class MemberQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MemberTableMap::COL_SLACK_HANDLE, $slackHandle, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \PuzzleMember object
+     *
+     * @param \PuzzleMember|ObjectCollection $puzzleMember the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMemberQuery The current query, for fluid interface
+     */
+    public function filterByPuzzleMember($puzzleMember, $comparison = null)
+    {
+        if ($puzzleMember instanceof \PuzzleMember) {
+            return $this
+                ->addUsingAlias(MemberTableMap::COL_ID, $puzzleMember->getMemberId(), $comparison);
+        } elseif ($puzzleMember instanceof ObjectCollection) {
+            return $this
+                ->usePuzzleMemberQuery()
+                ->filterByPrimaryKeys($puzzleMember->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPuzzleMember() only accepts arguments of type \PuzzleMember or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the PuzzleMember relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildMemberQuery The current query, for fluid interface
+     */
+    public function joinPuzzleMember($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('PuzzleMember');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'PuzzleMember');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the PuzzleMember relation PuzzleMember object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \PuzzleMemberQuery A secondary query class using the current class as primary query
+     */
+    public function usePuzzleMemberQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPuzzleMember($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'PuzzleMember', '\PuzzleMemberQuery');
     }
 
     /**

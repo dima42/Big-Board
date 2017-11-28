@@ -1137,7 +1137,7 @@ abstract class PuzzleParent implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildPuzzle object, it will not be re-added.
         if ($v !== null) {
-            $v->addPuzzleParentRelatedByPuzzleId($this);
+            $v->addPuzzleParent($this);
         }
 
 
@@ -1161,7 +1161,7 @@ abstract class PuzzleParent implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aPuzzle->addPuzzleParentsRelatedByPuzzleId($this);
+                $this->aPuzzle->addPuzzleParents($this);
              */
         }
 
@@ -1188,7 +1188,7 @@ abstract class PuzzleParent implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildPuzzle object, it will not be re-added.
         if ($v !== null) {
-            $v->addPuzzleParentRelatedByParentId($this);
+            $v->addPuzzleChild($this);
         }
 
 
@@ -1212,7 +1212,7 @@ abstract class PuzzleParent implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aParent->addPuzzleParentsRelatedByParentId($this);
+                $this->aParent->addPuzzlechildren($this);
              */
         }
 
@@ -1227,10 +1227,10 @@ abstract class PuzzleParent implements ActiveRecordInterface
     public function clear()
     {
         if (null !== $this->aPuzzle) {
-            $this->aPuzzle->removePuzzleParentRelatedByPuzzleId($this);
+            $this->aPuzzle->removePuzzleParent($this);
         }
         if (null !== $this->aParent) {
-            $this->aParent->removePuzzleParentRelatedByParentId($this);
+            $this->aParent->removePuzzleChild($this);
         }
         $this->id = null;
         $this->puzzle_id = null;

@@ -183,34 +183,27 @@ class PuzzleTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'Notes', false);
-        $this->addRelation('PuzzleMemberRelatedByPuzzleId', '\\PuzzleMember', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('PuzzleMember', '\\PuzzleMember', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), null, null, 'PuzzleMembersRelatedByPuzzleId', false);
-        $this->addRelation('PuzzleMemberRelatedByMemberId', '\\PuzzleMember', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':member_id',
-    1 => ':id',
-  ),
-), null, null, 'PuzzleMembersRelatedByMemberId', false);
-        $this->addRelation('PuzzleParentRelatedByPuzzleId', '\\PuzzleParent', RelationMap::ONE_TO_MANY, array (
+), null, null, 'PuzzleMembers', false);
+        $this->addRelation('PuzzleParent', '\\PuzzleParent', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), null, null, 'PuzzleParentsRelatedByPuzzleId', false);
-        $this->addRelation('PuzzleParentRelatedByParentId', '\\PuzzleParent', RelationMap::ONE_TO_MANY, array (
+), null, null, 'PuzzleParents', false);
+        $this->addRelation('PuzzleChild', '\\PuzzleParent', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':parent_id',
     1 => ':id',
   ),
-), null, null, 'PuzzleParentsRelatedByParentId', false);
+), null, null, 'Puzzlechildren', false);
     } // buildRelations()
 
     /**
