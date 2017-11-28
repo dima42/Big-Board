@@ -33,25 +33,25 @@
             <unique-column name="full_name" />
         </unique>
     </table>
-    <table name="solver" phpName="Solver">
+    <table name="solver" phpName="PuzzleMember" isCrossRef="true">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="puzzle_id" type="integer" required="true"/>
         <column name="member_id" type="integer" required="true"/>
-        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="Solver">
+        <foreign-key foreignTable="puzzle" phpName="Puzzle">
             <reference local="puzzle_id" foreign="id"/>
         </foreign-key>
-        <foreign-key foreignTable="puzzle" phpName="Parent" refPhpName="Solver">
+        <foreign-key foreignTable="member" phpName="Member">
             <reference local="member_id" foreign="id"/>
         </foreign-key>
     </table>
-    <table name="relationship" phpName="Relationship">
+    <table name="relationship" phpName="PuzzleParent" isCrossRef="true">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="puzzle_id" type="integer" required="true"/>
         <column name="parent_id" type="integer" required="true"/>
-        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="Relationship">
+        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="PuzzleParent">
             <reference local="puzzle_id" foreign="id"/>
         </foreign-key>
-        <foreign-key foreignTable="puzzle" phpName="Parent" refPhpName="Relationship">
+        <foreign-key foreignTable="puzzle" phpName="Parent" refPhpName="PuzzleChild">
             <reference local="parent_id" foreign="id"/>
         </foreign-key>
     </table>
