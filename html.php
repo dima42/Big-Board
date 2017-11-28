@@ -101,6 +101,38 @@ function displayTest() {
 	// 	));
 }
 
+function displayPuzzle($puzzle_id, $method = "get") {
+	$puzzle = PuzzleQuery::create()
+		->filterByID($puzzle_id)
+		->findOne();
+
+	// TODO: if not $puzzle, redirect to error template
+	// "This puzzle does not exist. It is a ghost puzzle.";
+
+	$all_metas = PuzzleParentQuery::create()
+		->joinWith('PuzzleParent.Parent')
+		->orderByParentId()
+		->withColumn('Sum(puzzle_id = 7)', 'IsInMeta')
+		->groupBy('Parent.Id')
+		->find();
+
+	$statuses = array('open', 'stuck', 'priority', 'solved');
+
+	$template = 'puzzle.twig';
+
+	if ($method == "edit") {
+		$template = 'puzzle-edit.twig';
+	}
+
+	render($template, array(
+			'puzzle_id'     => $puzzle_id,
+			'puzzle'        => $puzzle,
+			'puzzles_metas' => $puzzles_metas,
+			'all_metas'     => $all_metas,
+			'statuses'      => $statuses,
+		));
+}
+
 function displayAdd() {
 	render('add.twig', array(
 		));
@@ -182,38 +214,6 @@ function displayLoosePuzzles() {
 }
 
 function displayFeature($puzzle_id) {
-}
-
-function displayPuzzle($puzzle_id, $method = "get") {
-	$puzzle = PuzzleQuery::create()
-		->filterByID($puzzle_id)
-		->findOne();
-
-	// TODO: if not $puzzle, redirect to error template
-	// "This puzzle does not exist. It is a ghost puzzle.";
-
-	$all_metas = PuzzleParentQuery::create()
-		->joinWith('PuzzleParent.Parent')
-		->orderByParentId()
-		->withColumn('Sum(puzzle_id = 7)', 'IsInMeta')
-		->groupBy('Parent.Id')
-		->find();
-
-	$statuses = array('open', 'stuck', 'priority', 'solved');
-
-	$template = 'puzzle.twig';
-
-	if ($method == "edit") {
-		$template = 'puzzle-edit.twig';
-	}
-
-	render($template, array(
-			'puzzle_id'     => $puzzle_id,
-			'puzzle'        => $puzzle,
-			'puzzles_metas' => $puzzles_metas,
-			'all_metas'     => $all_metas,
-			'statuses'      => $statuses,
-		));
 }
 
 function savePuzzle($puzzle_id, $request) {
