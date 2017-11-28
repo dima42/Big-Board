@@ -48,6 +48,7 @@ function render($template, $vars = array()) {
     $vars['news_from'] = $latestNews->getMember()->getFullName();
 
     $vars['metas'] = PuzzleParentQuery::create()
+        ->joinWith('PuzzleParent.Parent')
         ->where('puzzle_id = parent_id')
         ->find();
 

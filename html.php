@@ -102,45 +102,25 @@ function displayPuzzles() {
     // }
     // return $my_puzzle_list;
 
-    $statuses = array(
-        "featured" => 0,
-        "priority" => 0,
-        "open" => 0,
-        "stuck" => 0,
-        "solved" => 0,
-    );
-
     $total_puzzles = 0;
 
-    // Count up all the puzzles in each status
-    $query = "SELECT puz_stt as STATUS, COUNT(*) STATUS_SUM FROM puz_tbl GROUP BY puz_stt";
-    $all_statuses = getData($query);
+    $statuses = PuzzleQuery::create()
+        ->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
+        ->groupBy('Puzzle.Status')
+        ->select(array('Status', 'StatusCount'))
+        ->find();
 
-    // while ($row = $all_statuses->fetch_assoc()) {
-    //     $statuses[$row["STATUS"]] = $row["STATUS_SUM"];
-    //     $total_puzzles += $row["STATUS_SUM"];
-    // }
+    foreach ($statuses as $status) {
+        $total_puzzles += $status['StatusCount'];
+    }
 
-    $query = "select puz_id as SNACK, count(*) as ANTS ".
-             "from puz_chk_out a ".
-             "where chk_in is NULL and puz_id in (select puz_id from puz_tbl where puz_stt != 'solved') ".
-             "group by puz_id";
-    $whos_on_what = getData($query);
- //    $whos_on_what_array = array();
- //    while ($row = $whos_on_what->fetch_assoc()) {
- //    	$whos_on_what_array[$row["SNACK"]] = $row["ANTS"];
-	// }
-
-    $query = "select b.puz_id as PUZID, a.puz_ttl as METPUZ, b.puz_ttl PUZZLE_NAME, b.puz_ans PUZANS, b.puz_url PUZURL, b.puz_notes PUZNTS, b.slack SLACK, ".
-             "b.puz_spr PUZSPR, b.puz_stt STATUS, c.puz_par_id = c.puz_id as META ".
-             "from puz_tbl b left join (puz_rel_tbl c, puz_tbl a) ".
-             "on (b.puz_id = c.puz_id and c.puz_par_id = a.puz_id) ".
-             "order by (c.puz_par_id is NOT NULL), c.puz_par_id desc, META desc, b.puz_id";
-    $all_puzzles = getData($query);
+    $all_puzzles = PuzzleParentQuery::create()
+        ->orderByParentId()
+        ->find();
 
     $all_puzzles_by_meta = array();
-    while ($row = $all_puzzles->fetch_assoc()) {
-        $all_puzzles_by_meta[$row['METPUZ']][] = $row;
+    foreach ($all_puzzles as $puzzle) {
+        $all_puzzles_by_meta[$puzzle->getParent()->getTitle()][] = $puzzle->getChild();
     }
 
     // while ($row = $results->fetch_assoc()) {
@@ -165,7 +145,7 @@ function displayPuzzles() {
     // }
 
     render('all.twig', array(
-        'statuses' => $all_statuses,
+        'statuses' => $statuses,
         'total_puzzles' => $total_puzzles,
         'all_puzzles_by_meta' => $all_puzzles_by_meta,
     ));
