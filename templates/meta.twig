@@ -1,4 +1,5 @@
 {% extends 'loggedin.twig' %}
+{% from 'macros.twig' import slack_url %}
 
 {% block content %}
 
@@ -15,18 +16,12 @@
 {% endblock %}
 
 {% block aside %}
-<p>
-    <a id='puzurllink_{{ meta.id }}' href='{{ meta.url }}'>Meta URL</a><br>
-    {# <input size=40 name='puzurl_{{ meta.id }}' value='{{ meta.url }}' onchange='new_link(this, {{ meta.id }})' ><br> #}
-    <a id='puzsprlink_{{ meta.id }}' href='{{ meta.spreadsheet_id }}'>Google Doc</a><br>
-    {# <input size=40 name='puzspr_{{ meta.id }}' value='{{ meta.spreadsheet_id }}' onchange='new_sprd(this, {{ meta.id }})' ><br> #}
-</p>
-<h4>Notes</h4>
-<p>
-{{ meta.PUZNTS }}
-</p>
-{# <input size=40 name='puznts_{{ meta.PUZID }}' onchange='upd_notes(this, {{ meta.PUZID }})' value='{{ meta.PUZNOT }}' > #}
+<ul>
+    <li><a href='{{ meta.url }}'>Puzzle page</a></li>
+    <li><a href='{{ meta.spreadsheetId }}'>Google Sheet</a></li>
+    <li><a href='{{ slack_url(meta.slack) }}'>Slack</a></li>
+</ul>
 
+<p><a href='/?puzzle={{ meta.id }}'>View this metapuzzle as a regular puzzle</a></p>
 <hr>
-<p><a href='index.php?puzzle={{ meta.id }}'>View this metapuzzle as a regular puzzle</a></p>
 {% endblock %}
