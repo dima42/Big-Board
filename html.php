@@ -17,15 +17,14 @@ function show_content() {
 			return displayLoosePuzzles();
 		});
 
+	$klein->respond('GET', '/news', function () {
+			return displayNews();
+		});
+
 	$klein->dispatch();
 }
 
 function show_content_bu() {
-	// Show news
-	if (isset($_GET['news'])) {
-		return displayNews($_GET['filter']);
-	}
-
 	// Show unsolved
 	if (isset($_GET['unsolved'])) {
 		return displayUnsolvedPuzzles();
@@ -183,7 +182,9 @@ function displayPuzzle($puzzle_id) {
 		));
 }
 
-function displayNews($filter) {
+function displayNews() {
+	$filter = $_GET['filter'];
+
 	$news = NewsQuery::create()
 		->orderByCreatedAt()
 		->find();
