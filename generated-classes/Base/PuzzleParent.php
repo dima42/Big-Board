@@ -85,7 +85,7 @@ abstract class PuzzleParent implements ActiveRecordInterface
     /**
      * @var        ChildPuzzle
      */
-    protected $aPuzzle;
+    protected $aChild;
 
     /**
      * @var        ChildPuzzle
@@ -392,8 +392,8 @@ abstract class PuzzleParent implements ActiveRecordInterface
             $this->modifiedColumns[PuzzleParentTableMap::COL_PUZZLE_ID] = true;
         }
 
-        if ($this->aPuzzle !== null && $this->aPuzzle->getId() !== $v) {
-            $this->aPuzzle = null;
+        if ($this->aChild !== null && $this->aChild->getId() !== $v) {
+            $this->aChild = null;
         }
 
         return $this;
@@ -497,8 +497,8 @@ abstract class PuzzleParent implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aPuzzle !== null && $this->puzzle_id !== $this->aPuzzle->getId()) {
-            $this->aPuzzle = null;
+        if ($this->aChild !== null && $this->puzzle_id !== $this->aChild->getId()) {
+            $this->aChild = null;
         }
         if ($this->aParent !== null && $this->parent_id !== $this->aParent->getId()) {
             $this->aParent = null;
@@ -542,7 +542,7 @@ abstract class PuzzleParent implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aPuzzle = null;
+            $this->aChild = null;
             $this->aParent = null;
         } // if (deep)
     }
@@ -652,11 +652,11 @@ abstract class PuzzleParent implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aPuzzle !== null) {
-                if ($this->aPuzzle->isModified() || $this->aPuzzle->isNew()) {
-                    $affectedRows += $this->aPuzzle->save($con);
+            if ($this->aChild !== null) {
+                if ($this->aChild->isModified() || $this->aChild->isNew()) {
+                    $affectedRows += $this->aChild->save($con);
                 }
-                $this->setPuzzle($this->aPuzzle);
+                $this->setChild($this->aChild);
             }
 
             if ($this->aParent !== null) {
@@ -843,7 +843,7 @@ abstract class PuzzleParent implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aPuzzle) {
+            if (null !== $this->aChild) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -853,10 +853,10 @@ abstract class PuzzleParent implements ActiveRecordInterface
                         $key = 'puzzle';
                         break;
                     default:
-                        $key = 'Puzzle';
+                        $key = 'Child';
                 }
 
-                $result[$key] = $this->aPuzzle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aChild->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aParent) {
 
@@ -1124,7 +1124,7 @@ abstract class PuzzleParent implements ActiveRecordInterface
      * @return $this|\PuzzleParent The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setPuzzle(ChildPuzzle $v = null)
+    public function setChild(ChildPuzzle $v = null)
     {
         if ($v === null) {
             $this->setPuzzleId(NULL);
@@ -1132,7 +1132,7 @@ abstract class PuzzleParent implements ActiveRecordInterface
             $this->setPuzzleId($v->getId());
         }
 
-        $this->aPuzzle = $v;
+        $this->aChild = $v;
 
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildPuzzle object, it will not be re-added.
@@ -1152,20 +1152,20 @@ abstract class PuzzleParent implements ActiveRecordInterface
      * @return ChildPuzzle The associated ChildPuzzle object.
      * @throws PropelException
      */
-    public function getPuzzle(ConnectionInterface $con = null)
+    public function getChild(ConnectionInterface $con = null)
     {
-        if ($this->aPuzzle === null && ($this->puzzle_id != 0)) {
-            $this->aPuzzle = ChildPuzzleQuery::create()->findPk($this->puzzle_id, $con);
+        if ($this->aChild === null && ($this->puzzle_id != 0)) {
+            $this->aChild = ChildPuzzleQuery::create()->findPk($this->puzzle_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aPuzzle->addPuzzleParents($this);
+                $this->aChild->addPuzzleParents($this);
              */
         }
 
-        return $this->aPuzzle;
+        return $this->aChild;
     }
 
     /**
@@ -1226,8 +1226,8 @@ abstract class PuzzleParent implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aPuzzle) {
-            $this->aPuzzle->removePuzzleParent($this);
+        if (null !== $this->aChild) {
+            $this->aChild->removePuzzleParent($this);
         }
         if (null !== $this->aParent) {
             $this->aParent->removePuzzleChild($this);
@@ -1255,7 +1255,7 @@ abstract class PuzzleParent implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aPuzzle = null;
+        $this->aChild = null;
         $this->aParent = null;
     }
 

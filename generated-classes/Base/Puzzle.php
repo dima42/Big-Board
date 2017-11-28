@@ -2140,7 +2140,7 @@ abstract class Puzzle implements ActiveRecordInterface
                 $this->initPuzzleParents();
             } else {
                 $collPuzzleParents = ChildPuzzleParentQuery::create(null, $criteria)
-                    ->filterByPuzzle($this)
+                    ->filterByChild($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -2194,7 +2194,7 @@ abstract class Puzzle implements ActiveRecordInterface
         $this->puzzleParentsScheduledForDeletion = $puzzleParentsToDelete;
 
         foreach ($puzzleParentsToDelete as $puzzleParentRemoved) {
-            $puzzleParentRemoved->setPuzzle(null);
+            $puzzleParentRemoved->setChild(null);
         }
 
         $this->collPuzzleParents = null;
@@ -2235,7 +2235,7 @@ abstract class Puzzle implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByPuzzle($this)
+                ->filterByChild($this)
                 ->count($con);
         }
 
@@ -2273,7 +2273,7 @@ abstract class Puzzle implements ActiveRecordInterface
     protected function doAddPuzzleParent(ChildPuzzleParent $puzzleParent)
     {
         $this->collPuzzleParents[]= $puzzleParent;
-        $puzzleParent->setPuzzle($this);
+        $puzzleParent->setChild($this);
     }
 
     /**
@@ -2290,7 +2290,7 @@ abstract class Puzzle implements ActiveRecordInterface
                 $this->puzzleParentsScheduledForDeletion->clear();
             }
             $this->puzzleParentsScheduledForDeletion[]= clone $puzzleParent;
-            $puzzleParent->setPuzzle(null);
+            $puzzleParent->setChild(null);
         }
 
         return $this;

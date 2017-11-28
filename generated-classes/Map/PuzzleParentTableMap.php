@@ -147,7 +147,7 @@ class PuzzleParentTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Puzzle', '\\Puzzle', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('Child', '\\Puzzle', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':puzzle_id',
