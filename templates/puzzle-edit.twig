@@ -1,0 +1,62 @@
+{% extends 'puzzle.twig' %}
+
+{% block content_main %}
+
+<form action="/puzzle/{{ puzzle.id }}/edit" method="post">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="">Title</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="title" value="{{ puzzle.title }}">
+        </div>
+    </div>
+    <fieldset class="form-group">
+        <div class="row">
+            <legend class="col-form-legend col-sm-2">Status</legend>
+            <div class="col-sm-10">
+                {% for status in statuses %}
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="status" id="status-{{ status }}" {% if status == puzzle.status %}checked{% endif %} value="{{ status }}">
+                    {{ status|capitalize }}
+                    {{ status|emojify }}
+                  </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="form-group">
+        <div class="row">
+            <legend class="col-form-legend col-sm-2">Meta(s)</legend>
+            <div class="col-sm-10">
+                {% for meta in available_metas %}
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type='checkbox' id="meta{{meta.id}}" {% if meta.virtualColumns.IsInMeta %}checked{% endif %} name='metas' value="{{ meta.id }}">
+                    {{ meta.title }}
+                  </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="form-group">
+        <div class="row">
+            <legend class="col-form-legend col-sm-2">Advanced</legend>
+            <div class="col-sm-10">
+              <label class="form-check-label">
+                <input class="form-check-input" type='checkbox' name='mark-as-meta'>
+                This is a meta!
+              </label>
+              <small class="form-text text-muted">Do not use unless you are sure.</small>
+            </div>
+        </div>
+    </fieldset>
+    <div class="form-group row">
+        <div class="offset-sm-2 sm-10">
+            <button class="btn btn-primary btn-lg">Submit</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

@@ -17,11 +17,20 @@ function show_content() {
 			return displayNews();
 		});
 
-	$klein->respond('GET', '/puzzle/[:id]', function ($request) {
-			return displayPuzzle($request->id);
+	$klein->with('/puzzle/[:id]', function () use ($klein) {
+
+			$klein->respond('GET', '/?', function ($request, $response) {
+					return displayPuzzle($request->id);
+				});
+			$klein->respond('GET', '/edit/?', function ($request, $response) {
+					return displayPuzzle($request->id, 'edit');
+				});
+			$klein->respond('POST', '/edit/?', function ($request, $response) {
+					return savePuzzle($request->id, $request);
+				});
 		});
 
-	$klein->respond('GET', '/meta/[:id]', function ($request) {
+	$klein->respond('GET', '/meta/[:id]', function ($request, $response) {
 			return displayMeta($request->id);
 		});
 
@@ -51,8 +60,8 @@ function show_content() {
 	$klein->dispatch();
 }
 
-function redirect($location, $message) {
-	$_SESSION['alert_message'] = $message;
+function redirect($location, $message, $alert_type = "info") {
+	$_SESSION['alert_message'] = array("message" => $message, "type" => $alert_type);
 	header("Location: ".$location);
 	exit();
 	ob_flush();
@@ -154,7 +163,57 @@ function displayLoosePuzzles() {
 function displayFeature($puzzle_id) {
 }
 
-function displayPuzzle($puzzle_id) {
+function displayPuzzle($puzzle_id, $method = "get") {
+	$puzzle = PuzzleQuery::create()
+		->filterByID($puzzle_id)
+		->findOne();
+
+	// TODO: if not $puzzle, redirect to error template
+	// "This puzzle does not exist. It is a ghost puzzle.";
+
+	$puzzles_metas = PuzzleParentQuery::create()
+		->joinWith('PuzzleParent.Parent')
+		->filterByPuzzleID($puzzle_id)
+		->find();
+
+	$available_metas = PuzzleQuery::create()
+		->join('Puzzle.PuzzleChild')
+		->withColumn('Sum(PuzzleChild.Id = '.$puzzle_id.')', 'IsInMeta')
+		->groupBy('Puzzle.Id')
+		->find();
+
+	$statuses = array('open', 'stuck', 'priority', 'solved');
+
+	$template = 'puzzle.twig';
+
+	if ($method == "edit") {
+		$template = 'puzzle-edit.twig';
+	}
+
+	render($template, array(
+			'puzzle_id'       => $puzzle_id,
+			'puzzle'          => $puzzle,
+			'puzzles_metas'   => $puzzles_metas,
+			'available_metas' => $available_metas,
+			'statuses'        => $statuses,
+		));
+}
+
+function savePuzzle($puzzle_id, $request) {
+	$puzzle = PuzzleQuery::create()
+		->filterByID($puzzle_id)
+		->findOne();
+
+	$puzzle->setTitle($request->title);
+	$puzzle->setStatus($request->status);
+	$puzzle->save();
+
+	$message = "Saved ".$puzzle->getTitle();
+
+	redirect('/puzzle/'.$puzzle_id.'/edit', $message);
+}
+
+function displayPuzzleEdit($puzzle_id) {
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
 		->findOne();

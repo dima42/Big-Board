@@ -13,6 +13,12 @@ if ($_SERVER['HTTP_HOST'] == "localhost:8888") {
 	$DEBUG = true;
 }
 
+function preprint($arr) {
+	echo "<pre>";
+	print_r($arr);
+	echo "</pre>";
+}
+
 // TWIG
 Global $twig;
 $loader = new Twig_Loader_Filesystem('templates');
@@ -23,12 +29,16 @@ $twig   = new Twig_Environment($loader, array(
 $emojify = new Twig_Filter('emojify',
 	function ($status) {
 		switch ($status) {
-			case "solved":
-				return "🏁";
 			case "open":
 				return "🤔";
+			case "stuck":
+				return "🤷🏻‍♀️";
+			case "priority":
+				return "❗️";
+			case "solved":
+				return "🏁";
 		}
-		return "🤷🏻‍♀️";
+		return "⚪️";
 	});
 $twig->addFilter($emojify);
 
@@ -55,6 +65,5 @@ function render($template, $vars = array()) {
 	}
 	echo $twig->render($template, $vars);
 
-	unset($_SESSION['alert_message']);
+	$_SESSION['alert_message'] = "";
 }
-?>

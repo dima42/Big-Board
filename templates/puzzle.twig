@@ -8,9 +8,12 @@
     {{ puzzle.status | emojify }}
 </h1>
 
+{% block content_main %}
+
 {% if puzzle.status == "featured" %}
     <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
 {% endif %}
+
 
 {% if puzzle.status == "solved" %}
     <div class="alert alert-success">
@@ -18,7 +21,8 @@
     </div>
 {% endif %}
 
-<h2>Notes</h2>
+    <h2>Notes</h2>
+{% endblock %}
 
 {% endblock %}
 
@@ -27,11 +31,11 @@
     <a class="list-group-item list-group-item-action" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> Puzzle page ➡</a>
     <a class="list-group-item list-group-item-action" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet ➡</a>
     <a class="list-group-item list-group-item-action" href='{{ slack_url(puzzle.slack) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
-    <a class="list-group-item list-group-item-action list-group-item-primary" href='{{ slack_url(puzzle.slack) }}'>Edit this puzzle</a>
+    <a class="list-group-item list-group-item-action list-group-item-primary" href="/puzzle/{{ puzzle.id }}/edit">Edit this puzzle</a>
 </div>
 <div class="card mb-3">
     <div class="card-body">
-        <b class="card-title">In these metas:</b><br>
+        <b class="card-title">This is part of</b><br>
         <p class="card-text">
             {% for meta in puzzles_metas %}
                 <a href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
