@@ -75,9 +75,30 @@ function displayError($error) {
 
 function displayTest() {
 	// $result = create_file_from_template("test-".rand(1000, 9999));
-	render('test.twig', array(
-			'content' => $result,
-		));
+
+	$all_puzzles = PuzzleParentQuery::create()
+		->joinWith('PuzzleParent.Parent')
+		->orderByParentId()
+		->withColumn('Sum(puzzle_id = 7)', 'IsInMeta')
+		->groupBy('Parent.Id')
+		->find();
+
+	echo "<pre>";
+	foreach ($all_puzzles as $puzzle) {
+		echo $puzzle->getParent()->getTitle();
+		// echo $puzzle->getParent();
+		echo " ";
+		echo $puzzle->getIsInMeta();
+		// echo $puzzle->getParent()->getTitle();
+		// echo " ";
+		// echo $puzzle->getChild()->getTitle();
+		echo "<br>";
+	}
+	echo "</pre>";
+
+	// render('test.twig', array(
+	// 		// 'content' => $result,
+	// 	));
 }
 
 function displayAdd() {
@@ -171,15 +192,11 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	// TODO: if not $puzzle, redirect to error template
 	// "This puzzle does not exist. It is a ghost puzzle.";
 
-	$puzzles_metas = PuzzleParentQuery::create()
+	$all_metas = PuzzleParentQuery::create()
 		->joinWith('PuzzleParent.Parent')
-		->filterByPuzzleID($puzzle_id)
-		->find();
-
-	$available_metas = PuzzleQuery::create()
-		->join('Puzzle.PuzzleChild')
-		->withColumn('Sum(PuzzleChild.Id = '.$puzzle_id.')', 'IsInMeta')
-		->groupBy('Puzzle.Id')
+		->orderByParentId()
+		->withColumn('Sum(puzzle_id = 7)', 'IsInMeta')
+		->groupBy('Parent.Id')
 		->find();
 
 	$statuses = array('open', 'stuck', 'priority', 'solved');
@@ -191,11 +208,11 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	}
 
 	render($template, array(
-			'puzzle_id'       => $puzzle_id,
-			'puzzle'          => $puzzle,
-			'puzzles_metas'   => $puzzles_metas,
-			'available_metas' => $available_metas,
-			'statuses'        => $statuses,
+			'puzzle_id'     => $puzzle_id,
+			'puzzle'        => $puzzle,
+			'puzzles_metas' => $puzzles_metas,
+			'all_metas'     => $all_metas,
+			'statuses'      => $statuses,
 		));
 }
 
@@ -228,13 +245,6 @@ function displayPuzzleEdit($puzzle_id) {
 		->joinWith('PuzzleParent.Parent')
 		->filterByPuzzleID($puzzle_id)
 		->find();
-
-	// FOR USE IN EDITING
-	// $available_metas = PuzzleQuery::create()
-	//     ->join('Puzzle.PuzzleChild')
-	//     ->withColumn('Sum(PuzzleChild.Id = ' . $puzzle_id . ')', 'IsInMeta')
-	//     ->groupBy('Puzzle.Id')
-	//     ->find();
 
 	render('puzzle.twig', array(
 			'puzzle_id'     => $puzzle_id,

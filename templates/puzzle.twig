@@ -41,7 +41,7 @@
     <div class="card-body">
         <b class="card-title">This is part of</b><br>
         <p class="card-text">
-            {% for meta in puzzles_metas %}
+            {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
                 <a href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
             {% endfor %}
 
