@@ -161,16 +161,22 @@ function displayPuzzle($puzzle_id) {
     // TODO: if not $puzzle, redirect to error template
         // "This puzzle does not exist. It is a ghost puzzle.";
 
-    $puzzle_metas = PuzzleQuery::create()
-        ->join('Puzzle.PuzzleChild')
-        ->withColumn('Sum(PuzzleChild.Id = ' . $puzzle_id . ')', 'IsInMeta')
-        ->groupBy('Puzzle.Id')
+    $puzzles_metas = PuzzleParentQuery::create()
+        ->joinWith('PuzzleParent.Parent')
+        ->filterByPuzzleID($puzzle_id)
         ->find();
+
+    // FOR USE IN EDITING
+    // $available_metas = PuzzleQuery::create()
+    //     ->join('Puzzle.PuzzleChild')
+    //     ->withColumn('Sum(PuzzleChild.Id = ' . $puzzle_id . ')', 'IsInMeta')
+    //     ->groupBy('Puzzle.Id')
+    //     ->find();
 
     render('puzzle.twig', array(
         'puzzle_id' => $puzzle_id,
         'puzzle' => $puzzle,
-        'puzzle_metas' => $puzzle_metas,
+        'puzzles_metas' => $puzzles_metas,
     ));
 }
 

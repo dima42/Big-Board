@@ -32,8 +32,7 @@ $emojify = new Twig_Filter('emojify', function ($status) {
 });
 $twig->addFilter($emojify);
 
-// render
-
+// RENDER
 function render($template, $vars = array()) {
     $latestNews = NewsQuery::create()
         ->orderByCreatedAt('desc')
