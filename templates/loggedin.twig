@@ -9,10 +9,10 @@
 <div class="collapse navbar-collapse" id="navbarsExampleDefault">
   <ul class="navbar-nav mr-auto">
     <li class="nav-item">
-      <a class="nav-link" href="/?loose">Loose</a>
+      <a class="nav-link" href="/loose">Loose</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/?unsolved">Unsolved</a>
+      <a class="nav-link" href="/unsolved">Unsolved</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="#">Featured</a>
@@ -21,13 +21,13 @@
       <a class="nav-link" href="#">Your puzzles</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/?roster">Roster</a>
+      <a class="nav-link" href="/roster">Roster</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/?news&filter=Y">News</a>
+      <a class="nav-link" href="/news?filter=Y">News</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/?add">+Add</a>
+      <a class="nav-link" href="/add">+Add</a>
     </li>
   </ul>
   <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
@@ -52,7 +52,7 @@
     <ul class="nav nav-pills flex-column">
         {% for meta in metas %}
         <li class="nav-item">
-          <a class="nav-link" href="/?meta={{ meta.parent.id }}">{{ meta.parent.title }}</a>
+          <a class="nav-link" href="/meta/{{ meta.parent.id }}">{{ meta.parent.title }}</a>
         </li>
         {% endfor %}
         <li class="nav-item">
