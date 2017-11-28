@@ -4,7 +4,7 @@
 {% block content %}
 
 <h1>
-    {{ puzzle.title }}
+    <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
     {{ puzzle.status | emojify }}
 </h1>
 
