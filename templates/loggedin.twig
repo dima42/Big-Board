@@ -65,9 +65,6 @@
 
 {% block content %}{% endblock %}
 
-<input type='hidden' id='userid' value='{{ user_id }}'>
-
-<div id='show_notes' onclick='hide_notes()'></div>
 </main>
 
 <aside class="col-md-2 col-lg-3 d-none d-md-block pt-3 pl-3 mt-3">
@@ -77,18 +74,21 @@
     <hr>
     {% endif %}
 
-    <h4>Latest news</h4>
-    <p>
-    {{ news }} ({{ news_from }})
-    {# <input id='UrgentMessage' name='UrgentMessage' value='{{ news }} ({{ news_from }})' onchange='add_update(this, "URG", "{{ user_id }}");'> #}
-    </p>
+    <div class="card bg-light mb-3">
+        <div class="card-body">
+        {{ latestNews.content }}
+        {# <input id='UrgentMessage' name='UrgentMessage' value='{{ news }} ({{ news_from }})' onchange='add_update(this, "URG", "{{ user_id }}");'> #}
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">{{ latestNews.member.fullName }} • {{ latestNews.createdAt | date("D g:i A") }}</small>
+        </div>
+    </div>
 
-    <hr>
     <small>
     HQ: 4-159, 4-146, 4-145<br>
     Phone: 617 715-4577<br>
     <a href="mailto:team-palindrome@mit.edu">team-palindrome@mit.edu</a><br>
-    palindrome/aplanacanal<br>
+    u: palindrome p: aplanacanal<br>
     </small>
     <small>
         <br>{{ time }}
@@ -99,4 +99,8 @@
 
 </aside>
 
+{% endblock %}
+
+{% block footer %}
+footer
 {% endblock %}

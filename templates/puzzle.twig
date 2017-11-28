@@ -41,15 +41,13 @@
     <li><a href='{{ puzzle.spreadsheetId }}'>Google Sheet</a></li>
     <li><a href='{{ slack_url(puzzle.slack) }}'>Slack</a></li>
 </ul>
-<h4>Metas</h4>
+<strong>Part of:</strong>
 <ul>
     {% for meta in puzzles_metas %}
         <li><a href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a></li>
     {% endfor %}
 </ul>
 {# <input size=40 name='puznts_{{ puzzle.id }}' onchange='upd_notes(this, {{ puzzle.id }})' value='{{ puzzle.notes }}' > #}
-
-<hr>
 
 {# FOR EDITING #}
 {# <h4>Advanced options</h4>
