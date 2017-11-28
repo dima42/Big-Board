@@ -65,7 +65,7 @@ function displayError($error) {
 }
 
 function displayTest() {
-	$result = create_file_from_template("test-".rand(1000, 9999));
+	// $result = create_file_from_template("test-".rand(1000, 9999));
 	render('test.twig', array(
 			'content' => $result,
 		));

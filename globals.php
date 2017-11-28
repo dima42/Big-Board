@@ -40,12 +40,10 @@ function render($template, $vars = array()) {
 		->findOne();
 
 	Global $twig;
-	$vars['user_id'] = $_SESSION['user_id'];
-	$vars['alert']   = $_SESSION['alert_message'];
-	$vars['time']    = strftime('%c');
-	$vars['news']    = $latestNews->getContent();
-	;
-	$vars['news_from'] = $latestNews->getMember()->getFullName();
+	$vars['user_id']    = $_SESSION['user_id'];
+	$vars['alert']      = $_SESSION['alert_message'];
+	$vars['time']       = strftime('%c');
+	$vars['latestNews'] = $latestNews;
 
 	$vars['metas'] = PuzzleParentQuery::create()
 		->joinWith('PuzzleParent.Parent')
