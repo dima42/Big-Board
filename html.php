@@ -25,15 +25,14 @@ function show_content() {
 			return displayUnsolvedPuzzles();
 		});
 
+	$klein->respond('GET', '/roster', function () {
+			return displayRoster();
+		});
+
 	$klein->dispatch();
 }
 
 function show_content_bu() {
-	// Show unsolved
-	if (isset($_GET['roster'])) {
-		return displayRoster();
-	}
-
 	// Show form for new puzzle
 	if (isset($_GET['add'])) {
 		if (isset($_POST['url-list'])) {
