@@ -1,5 +1,5 @@
 <?php
-require_once 'sitevars.php';
+require_once 'globals.php';
 require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 

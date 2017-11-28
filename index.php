@@ -1,5 +1,5 @@
 <?php
-require_once "sitevars.php";
+require_once "globals.php";
 require_once "new_file_management.php";
 require_once "html.php";
 require_once "sql.php";
