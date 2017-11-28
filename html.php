@@ -93,23 +93,13 @@ function displayRoster() {
 }
 
 function displayPuzzles() {
-    // We have removed the check out feature.
-    // $query = "select puz_id as PUZID, chk_out as CHECKOUT from puz_chk_out where usr_id = " . $_SESSION["user_id"] . " and chk_in is null";
-    // $results = getData($query);
-    // $my_puzzle_list = array();
-    // while ($row=$results->fetch_array(MYSQLI_ASSOC)) {
-    //     $my_puzzle_list[$row['PUZID']] = $row['CHECKOUT'];
-    // }
-    // return $my_puzzle_list;
-
-    $total_puzzles = 0;
-
     $statuses = PuzzleQuery::create()
         ->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
         ->groupBy('Puzzle.Status')
         ->select(array('Status', 'StatusCount'))
         ->find();
 
+    $total_puzzles = 0;
     foreach ($statuses as $status) {
         $total_puzzles += $status['StatusCount'];
     }
@@ -122,27 +112,6 @@ function displayPuzzles() {
     foreach ($all_puzzles as $puzzle) {
         $all_puzzles_by_meta[$puzzle->getParent()->getTitle()][] = $puzzle->getChild();
     }
-
-    // while ($row = $results->fetch_assoc()) {
-        // TODO: Show who's working on puzzle. Are we still using this?
-        // if (array_key_exists($row["PUZID"], $whos_on_what_array)) {
-        //     $ants = $whos_on_what_array[$row["PUZID"]];
-        // } else {
-        //     $ants = "";
-        // }
-
-        // TODO: If I'm working on puzzle, indicate that. Are we still using this?
-        // if (array_key_exists($row["PUZID"], $my_puzzle_list)) {
-        //     $on_puzzle = "onit";
-        // } else {
-        //     $on_puzzle = "noton";
-        // }
-
-        // TODO: Are we still using this?
-        // $is_puz_out = /* "<img id='puzchk_".$row["PUZID"]."' src='".$on_puzzle.".png' width=14px height=14px onclick='toggle_Puzzle_Checkout(".$row["PUZID"].");'>".
-        // "&nbsp;<span id='puzwrk_".$row["PUZID"]."'>".$ants."</span>" */
-        // "";
-    // }
 
     render('all.twig', array(
         'statuses' => $statuses,
