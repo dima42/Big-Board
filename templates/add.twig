@@ -17,7 +17,7 @@
         <select class="form-control" name="meta">
                 <option value="" selected>- - -</option>
             {% for meta in metas %}
-                <option value="{{ meta.MID }}">{{ meta.MTTL }}</option>
+                <option value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
             {% endfor %}
         </select>
     </div>
