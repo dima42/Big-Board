@@ -9,6 +9,10 @@ function show_content() {
 			return displayTest();
 		});
 
+	$klein->respond('GET', '/news', function () {
+			return displayNews();
+		});
+
 	$klein->respond('GET', '/meta/[:id]', function ($request) {
 			return displayMeta($request->id);
 		});
@@ -17,19 +21,14 @@ function show_content() {
 			return displayLoosePuzzles();
 		});
 
-	$klein->respond('GET', '/news', function () {
-			return displayNews();
+	$klein->respond('GET', '/unsolved', function () {
+			return displayUnsolvedPuzzles();
 		});
 
 	$klein->dispatch();
 }
 
 function show_content_bu() {
-	// Show unsolved
-	if (isset($_GET['unsolved'])) {
-		return displayUnsolvedPuzzles();
-	}
-
 	// Show unsolved
 	if (isset($_GET['roster'])) {
 		return displayRoster();
