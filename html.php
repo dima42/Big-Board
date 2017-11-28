@@ -5,12 +5,20 @@ use Propel\Runtime\ActiveQuery\Criteria;
 function show_content() {
 	$klein = new \Klein\Klein();
 
+	$klein->respond('GET', '/', function () {
+			return displayAllPuzzles();
+		});
+
 	$klein->respond('GET', '/test', function () {
 			return displayTest();
 		});
 
 	$klein->respond('GET', '/news', function () {
 			return displayNews();
+		});
+
+	$klein->respond('GET', '/puzzle/[:id]', function ($request) {
+			return displayPuzzle($request->id);
 		});
 
 	$klein->respond('GET', '/meta/[:id]', function ($request) {
@@ -29,25 +37,18 @@ function show_content() {
 			return displayRoster();
 		});
 
-	$klein->dispatch();
-}
+	$klein->respond('GET', '/add', function () {
+			return displayAdd();
+		});
 
-function show_content_bu() {
-	// Show form for new puzzle
-	if (isset($_GET['add'])) {
-		if (isset($_POST['url-list'])) {
+	// EDITING
+
+	$klein->respond('POST', '/add', function () {
+			// return addPuzzle();
 			redirect('/?add', 'hi');
-		}
-		return displayAdd();
-	}
+		});
 
-	// Show a single puzzle
-	if (isset($_GET['puzzle'])) {
-		return displayPuzzle($_GET['puzzle']);
-	}
-
-	// Show main page
-	return displayPuzzles();
+	$klein->dispatch();
 }
 
 function redirect($location, $message) {
@@ -85,7 +86,7 @@ function displayRoster() {
 		));
 }
 
-function displayPuzzles() {
+function displayAllPuzzles() {
 	$statuses = PuzzleQuery::create()
 		->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
 		->groupBy('Puzzle.Status')
