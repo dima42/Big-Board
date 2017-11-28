@@ -7,9 +7,6 @@ require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
-Global $link;
-$link = connectToDB();
-
 // Visit https://code.google.com/apis/console to generate your
 // oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
 

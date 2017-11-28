@@ -59,23 +59,4 @@ function render($template, $vars = array()) {
 
     unset($_SESSION['alert_message']);
 }
-
-function connectToDB() {
-    $url = parse_url(getenv("PALINDROME_DATABASE_URL"));
-    $server = $url["host"];
-    $username = $url["user"];
-    $password = $url["pass"];
-    $db = substr($url["path"], 1);
-
-    $link = mysqli_connect(
-       $server,
-       $username,
-       $password,
-       $db
-    );
-    if (!$link) {
-        writeHeader('Could not select database');
-    }
-    return $link;
-}
 ?>
