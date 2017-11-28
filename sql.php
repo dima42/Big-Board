@@ -33,23 +33,6 @@ function getUserID($google_id, $display_name) {
 	return $row['UID'];
 }
 
-function getUserDriveID($root_id, $display_name) {
-    Global $link;
-    $query = "select pal_id as UID from pal_usr_tbl where pal_ggl_id = '".$root_id."'";
-    pull_back_the_curtain($query);
-	$results = $link->query($query);
-    error_debug($link);
-
-	// if results are empty, return 0. there is separate logic to determine if we should create a user
-	if ($results->num_rows == 0) {
-		return 0;
-	}
-
-	// otherwise, return the ID that we found.
-	$row = $results->fetch_array(MYSQLI_ASSOC);
-	return $row['UID'];
-}
-
 function getUserRefreshToken($pal_id) {
     Global $link;
 	$query = "select pal_ggl_rfr as REFRESH_TOKEN from pal_usr_tbl where pal_id = '".$pal_id."'";

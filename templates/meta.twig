@@ -1,18 +1,14 @@
 {% extends 'loggedin.twig' %}
+{% from 'macros.twig' import slack_url %}
 
 {% block content %}
 
-{% for puzzle in puzzles if puzzle.META %}
-    <h1>{{ puzzle.PUZZLE_NAME }} <small class="text-muted">meta</small></h1>
-    {% if puzzle.STATUS == "solved" %}
-    <div class="alert alert-success">
-        {{ puzzle.PUZANS }}
-    </div>
-    {% endif %}
-
-{% else %}
-    <P>This does not appear to be a metapuzzle. There are no puzzles that are part of it.</P>
-{% endfor %}
+<h1>{{ meta.title }} <small class="text-muted">meta</small></h1>
+{% if meta.status == "solved" %}
+<div class="alert alert-success">
+    {{ meta.solution }}
+</div>
+{% endif %}
 
 {% from 'macros.twig' import puzzle_table %}
 {{ puzzle_table(puzzles) }}
@@ -20,20 +16,12 @@
 {% endblock %}
 
 {% block aside %}
-{% for puzzle in puzzles if puzzle.META %}
-<p>
-    <a id='puzurllink_{{ puzzle.PUZID }}' href='{{ puzzle.PURL }}'>Meta URL</a><br>
-    {# <input size=40 name='puzurl_{{ puzzle.PUZID }}' value='{{ puzzle.PURL }}' onchange='new_link(this, {{ puzzle.PUZID }})' ><br> #}
-    <a id='puzsprlink_{{ puzzle.PUZID }}' href='{{ puzzle.PUZSPR}}'>Google Doc</a><br>
-    {# <input size=40 name='puzspr_{{ puzzle.PUZID }}' value='{{ puzzle.PUZSPR}}' onchange='new_sprd(this, {{ puzzle.PUZID }})' ><br> #}
-</p>
-<h4>Notes</h4>
-<p>
-{{ puzzle.PUZNTS }}
-</p>
-{# <input size=40 name='puznts_{{ puzzle.PUZID }}' onchange='upd_notes(this, {{ puzzle.PUZID }})' value='{{ puzzle.PUZNOT }}' > #}
-{% endfor %}
+<ul>
+    <li><a href='{{ meta.url }}'>Puzzle page</a></li>
+    <li><a href='{{ meta.spreadsheetId }}'>Google Sheet</a></li>
+    <li><a href='{{ slack_url(meta.slack) }}'>Slack</a></li>
+</ul>
 
+<p><a href='/?puzzle={{ meta.id }}'>View this metapuzzle as a regular puzzle</a></p>
 <hr>
-<p><a href='index.php?puzzle={{ meta_id }}'>View this metapuzzle as a regular puzzle</a></p>
 {% endblock %}

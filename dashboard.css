@@ -92,3 +92,7 @@ aside {
 thead tr {
     background: #f7f7f7;
 }
+
+table label {
+    margin: 0;
+}

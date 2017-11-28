@@ -1,51 +1,58 @@
 {% extends 'loggedin.twig' %}
+{% from 'macros.twig' import slack_url %}
 
 {% block content %}
 
-<h5 class="meta">Part of <a href="/?meta={{ puzzle.META_ID }}">{{ puzzle.META }}</a></h5>
-
 <h1>
-    {{ puzzle.PUZZLE_NAME }}
-    <span class="badge badge-pill badge-secondary">{{ puzzle.STATUS | emojify }} {{ puzzle.STATUS }}</span>
+    {{ puzzle.title }}
+    {{ puzzle.status | emojify }}
 </h1>
 
-{% if puzzle.STATUS == "featured" %}
+{% if puzzle.status == "featured" %}
     <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
 {% endif %}
-{% if puzzle.STATUS == "solved" %}
+
+{% if puzzle.status == "solved" %}
     <div class="alert alert-success">
-        {{ puzzle.PUZANS }}
+        {{ puzzle.solution }}
     </div>
 {% endif %}
 
+<h2>Notes</h2>
 
-<h2>Metapuzzles</h2>
-
+{# FOR EDITING #}
+{# <table class="table">
 {% for meta in puzzle_metas %}
-    <p>
-        <input type='checkbox' {% if meta.INMETA > 0 %}checked{% endif %} name='puzinmeta_{{ meta.MID }}' onclick='change_parent(this, {{ puzzle_id }}, {{ meta.MID }})'>
-        {{ meta.MTTL }}
-    </p>
+    <tr>
+        <td>
+            <input type='checkbox' id="meta{{meta.id}}" {% if meta.virtualColumns.IsInMeta %}checked{% endif %} name='puzinmeta_{{ meta.id }}' onclick='change_parent(this, {{ puzzle_id }}, {{ meta.id }})'>
+        </td>
+        <td>
+            <label for="meta{{meta.id}}">{{ meta.title }}</label>
+        </td>
+    </tr>
 {% endfor %}
+</table> #}
 {% endblock %}
 
 {% block aside %}
-<p>
-    <a name='puzurllink_{{ puzzle.PUZID }}' href='{{ puzzle.PURL }}'>Puzzle URL</a>
-    {# <input size=40 name='puzurl_{{ puzzle.PUZID }}' value='{{ puzzle.PURL }}' onchange='new_link(this, {{ puzzle.PUZID }})' > #}
-    <br>
-    <a name='puzsprlink_{{ puzzle.PUZID }}' href='{{ puzzle.PUZSPR }}'>Google Doc</a>
-    {# <input size=40 name='puzspr_{{ puzzle.PUZID }}' value='{{ puzzle.PUZSPR }}' onchange='new_sprd(this, {{ puzzle.PUZID }})' > #}
-</p>
-<h4>Notes</h4>
-<p>
-    {{ puzzle.PUZNTS }}
-</p>
-{# <input size=40 name='puznts_{{ puzzle.PUZID }}' onchange='upd_notes(this, {{ puzzle.PUZID }})' value='{{ puzzle.PUZNOT }}' > #}
+<ul>
+    <li><a href='{{ puzzle.url }}'>Puzzle page</a></li>
+    <li><a href='{{ puzzle.spreadsheetId }}'>Google Sheet</a></li>
+    <li><a href='{{ slack_url(puzzle.slack) }}'>Slack</a></li>
+</ul>
+<h4>Metas</h4>
+<ul>
+    {% for meta in puzzles_metas %}
+        <li><a href='/?meta={{ meta.parent.id }}'>{{ meta.parent.title }}</a></li>
+    {% endfor %}
+</ul>
+{# <input size=40 name='puznts_{{ puzzle.id }}' onchange='upd_notes(this, {{ puzzle.id }})' value='{{ puzzle.notes }}' > #}
 
 <hr>
 
-<h4>Advanced options</h4>
+{# FOR EDITING #}
+{# <h4>Advanced options</h4>
 Do not use unless you are sure.
 <div>
     <button onclick='promote_puzzle( {{ puzzle_id }});'>Mark this puzzle as a metapuzzle.</button>
@@ -54,5 +61,5 @@ Do not use unless you are sure.
     <button onclick='delete_puzzle( {{ puzzle_id }});'>Delete this puzzle.</button>
 </div>
 <input type=checkbox id='areyousure' value='yes' >Are you sure?
-
+ #}
 {% endblock %}

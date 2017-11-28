@@ -52,7 +52,7 @@
     <ul class="nav nav-pills flex-column">
         {% for meta in metas %}
         <li class="nav-item">
-          <a class="nav-link" href="/?meta={{ meta.MID }}">{{ meta.MTTL }}</a>
+          <a class="nav-link" href="/?meta={{ meta.parent.id }}">{{ meta.parent.title }}</a>
         </li>
         {% endfor %}
         <li class="nav-item">

@@ -7,9 +7,6 @@ require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
-Global $link;
-$link = connectToDB();
-
 // Visit https://code.google.com/apis/console to generate your
 // oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
 
@@ -88,7 +85,16 @@ function show_page($pal_drive) {
     $aboutg = $pal_drive->about->get();
     $my_name = $aboutg["user"]["displayName"];
     $my_root = $aboutg["rootFolderId"];
-    $_SESSION["user_id"] = getUserDriveID($my_root, $my_name);
+
+    $member = MemberQuery::create()
+        ->filterByGoogleID($my_root)
+        ->findOne();
+
+    if ($member) {
+        $_SESSION["user_id"] = $member->getID();
+    } else {
+        $_SESSION["user_id"] = 0;
+    }
 
     // we should always check to see if they have access
     // check to see if they have write access to the palindrome folder
@@ -115,7 +121,7 @@ function show_page($pal_drive) {
 
     if ($_SESSION["user_id"] == 0) {
         // if someone is not a member of palindrome, let's tell them to bugger off
-        render('buggeroff.twig');
+        return render('buggeroff.twig');
     }
 
     show_content();

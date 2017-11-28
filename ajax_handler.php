@@ -4,9 +4,6 @@ require_once "sitevars.php";
 require_once "new_file_management.php";
 require_once "slack_functions.php";
 
-Global $link;
-$link = connectToDB();
-
 // as commands come in, we need to process them
 
 $f = $_GET{"f"};
