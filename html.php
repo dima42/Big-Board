@@ -3,16 +3,24 @@ require_once "sql.php";
 use Propel\Runtime\ActiveQuery\Criteria;
 
 function show_content() {
-	// Show test
-	if (isset($_GET['test'])) {
-		return displayTest();
-	}
+	$klein = new \Klein\Klein();
 
-	// Show a meta
-	if (isset($_GET['meta'])) {
-		return displayMeta($_GET['meta']);
-	}
+	$klein->respond('GET', '/test', function () {
+			return displayTest();
+		});
 
+	$klein->respond('GET', '/meta/[:id]', function ($request) {
+			return displayMeta($request->id);
+		});
+
+	$klein->respond('GET', '/test', function () {
+			return displayTest();
+		});
+
+	$klein->dispatch();
+}
+
+function show_content_bu() {
 	// Show unattached
 	if (isset($_GET['loose'])) {
 		return displayLoosePuzzles();
@@ -225,4 +233,3 @@ function displayUnsolvedPuzzles() {
 			'puzzles' => $puzzles,
 		));
 }
-?>
