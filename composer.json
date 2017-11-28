@@ -5,7 +5,8 @@
     "twig/twig": "^2.0",
     "symfony/twig-bridge": "^3",
     "cocur/slugify": "^3.0",
-    "propel/propel": "~2.0@dev"
+    "propel/propel": "~2.0@dev",
+    "klein/klein": "^2.1"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
