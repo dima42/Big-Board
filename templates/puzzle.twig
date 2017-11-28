@@ -8,41 +8,60 @@
         {% block h1_small %}{% endblock %}
     </h1>
 
+    <h6>
+        <span class="a-part-of">This puzzle is in:</span>
+        {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
+            <a href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
+        {% endfor %}
+    </h6>
+
+    <hr>
+
+
     {% block content_main %}
 
     {% if puzzle.status == "featured" %}
         <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
     {% endif %}
 
+    {% endblock %}
+
+    {% block content_notes %}
+    <h2>Notes</h2>
+
+    {% for note in notes %}
+        <div class="card border mb-3">
+          <div class="card-header"><small>FIRST LAST • {{ note.createdAt|date("D g:i A") }}</small></div>
+          <div class="card-body">
+            <p class="card-text">{{ note.body }}</p>
+          </div>
+        </div>
+    {% endfor %}
+
+    <h2>New note</h2>
+    <form action="" method="post">
+        <div class="form-group">
+            <textarea type="text" class="form-control" name="new-note" rows="4"></textarea>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Submit new note</button>
+        </div>
+    </form>
+    {% endblock %}
+{% endblock %}
+
+{% block aside %}
     {% if puzzle.status == "solved" %}
         <div class="alert alert-success">
             {{ puzzle.solution }}
         </div>
     {% endif %}
 
-    {% endblock %}
-
-    {% block content_notes %}
-    <h2>Notes</h2>
-    {% endblock %}
-{% endblock %}
-
-{% block aside %}
     <div class="list-group mb-3">
         <a class="list-group-item list-group-item-action" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> Puzzle page ➡</a>
         <a class="list-group-item list-group-item-action" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet ➡</a>
         <a class="list-group-item list-group-item-action" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
         <a class="list-group-item list-group-item-action list-group-item-primary" href="/puzzle/{{ puzzle.id }}/edit">Edit this puzzle</a>
     </div>
-    <div class="card mb-3">
-        <div class="card-body">
-            <b class="card-title">This is part of</b><br>
-            <p class="card-text">
-                {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
-                    <a href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
-                {% endfor %}
 
-            </p>
-        </div>
-    </div>
 {% endblock %}

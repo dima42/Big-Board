@@ -76,22 +76,18 @@ function displayError($error) {
 function displayTest() {
 	// $result = create_file_from_template("test-".rand(1000, 9999));
 
-	$all_puzzles = PuzzleParentQuery::create()
-		->joinWith('PuzzleParent.Parent')
-		->orderByParentId()
-		->withColumn('Sum(puzzle_id = 7)', 'IsInMeta')
-		->groupBy('Parent.Id')
+	$puzzle = PuzzleQuery::create()
+		->filterByID(12)
+		->findOne();
+
+	$notes = NoteQuery::create()
+		->filterByPuzzle($puzzle)
 		->find();
 
 	echo "<pre>";
-	foreach ($all_puzzles as $puzzle) {
-		echo $puzzle->getParent()->getTitle();
-		// echo $puzzle->getParent();
+	foreach ($notes as $note) {
+		preprint($note->getBody());
 		echo " ";
-		echo $puzzle->getIsInMeta();
-		// echo $puzzle->getParent()->getTitle();
-		// echo " ";
-		// echo $puzzle->getChild()->getTitle();
 		echo "<br>";
 	}
 	echo "</pre>";
@@ -105,6 +101,10 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
 		->findOne();
+
+	$notes = NoteQuery::create()
+		->filterByPuzzle($puzzle)
+		->find();
 
 	// TODO: if not $puzzle, redirect to error template
 	// "This puzzle does not exist. It is a ghost puzzle.";
@@ -127,6 +127,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	render($template, array(
 			'puzzle_id'     => $puzzle_id,
 			'puzzle'        => $puzzle,
+			'notes'         => $notes,
 			'puzzles_metas' => $puzzles_metas,
 			'all_metas'     => $all_metas,
 			'statuses'      => $statuses,
