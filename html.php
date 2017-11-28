@@ -257,7 +257,7 @@ function displayNews() {
 	$filter = $_GET['filter'];
 
 	$news = NewsQuery::create()
-		->orderByCreatedAt()
+		->orderByCreatedAt('desc')
 		->find();
 
 	render('news.twig', array(
