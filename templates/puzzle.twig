@@ -14,21 +14,27 @@
             {{ puzzle.status | emojify }}
             {% block h1_small %}{% endblock %}
         </h1>
-
-        <ul class="nav nav-pills">
-        <li class="nav-item">
-            <a class="border rounded-0 nav-link" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> The puzzle ➡</a>
-        </li>
-        <li class="nav-item">
-            <a class="border border-left-0 rounded-0 nav-link" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Sheet ➡</a>
-        </li>
-        <li class="nav-item">
-            <a class="border border-left-0 rounded-0 nav-link" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
-        </li>
-        </ul>
     </div>
 
     {% block content_main %}
+
+        <ul class="puzzle-nav nav nav-pills">
+            <li class="nav-item">
+                <a class="border rounded-0 nav-link" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> The puzzle ➡</a>
+            </li>
+            <li class="nav-item">
+                <a class="border border-left-0 rounded-0 nav-link" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Sheet ➡</a>
+            </li>
+            <li class="nav-item">
+                <a class="border border-left-0 rounded-0 nav-link" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
+            </li>
+        </ul>
+
+        {% if puzzle.status == "solved" %}
+            <div class="alert alert-success">
+                {{ puzzle.solution }}
+            </div>
+        {% endif %}
 
         {% if puzzle.status == "featured" %}
             <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
@@ -42,7 +48,7 @@
                 {% for note in notes %}
                     <div class="col-sm-3">
                         {{ note.author.fullName }}<br>
-                        <small>{{ note.createdAt|date("D g:i A") }}</small>
+                        <small class="text-muted">{{ note.createdAt|date("D g:i A") }}</small>
                     </div>
                     <div class="col-sm-9"><div class="border rounded p-3 mb-3">{{ note.body }}</div></div>
                 {% endfor %}
