@@ -226,9 +226,9 @@ function joinPuzzle($puzzle_id) {
 		$newPuzzleMember->setPuzzleId($puzzle_id);
 		$newPuzzleMember->setMember($member);
 		$newPuzzleMember->save();
-		$message = "You joined ".$puzzle->getTitle();
+		$message = "You joined ".$puzzle->getTitle().".";
 	} catch (Exception $e) {
-		$message = "You are already a solver on this puzzle.";
+		$message = "You already joined this puzzle.";
 	}
 
 	redirect('/puzzle/'.$puzzle_id, $message);
