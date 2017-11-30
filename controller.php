@@ -31,6 +31,9 @@ function show_content() {
 			$klein->respond('POST', '/add-note/?', function ($request, $response) {
 					return addNote($request->id, $request);
 				});
+			$klein->respond('POST', '/claim/?', function ($request, $response) {
+					return joinPuzzle($request->id);
+				});
 		});
 
 	$klein->respond('GET', '/meta/[:id]', function ($request, $response) {
@@ -110,6 +113,11 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		->orderByCreatedAt('desc')
 		->find();
 
+	$members = PuzzleMemberQuery::create()
+		->joinWith('PuzzleMember.Member')
+		->filterByPuzzle($puzzle)
+		->find();
+
 	// TODO: if not $puzzle, redirect to error template
 	// "This puzzle does not exist. It is a ghost puzzle.";
 
@@ -132,6 +140,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'puzzle_id' => $puzzle_id,
 			'puzzle'    => $puzzle,
 			'notes'     => $notes,
+			'members'   => $members,
 			'all_metas' => $all_metas,
 			'statuses'  => $statuses,
 		));
@@ -182,6 +191,25 @@ function addNote($puzzle_id, $request) {
 	$note->save();
 
 	$message = "Saved a note to ".$puzzle->getTitle();
+
+	redirect('/puzzle/'.$puzzle_id, $message);
+}
+
+function joinPuzzle($puzzle_id) {
+	$puzzle = PuzzleQuery::create()
+		->filterByID($puzzle_id)
+		->findOne();
+
+	$member = MemberQuery::create()
+		->filterByID($_SESSION['user_id'])
+		->findOne();
+
+	$newPuzzleMember = new PuzzleMember();
+	$newPuzzleMember->setPuzzleId($puzzle_id);
+	$newPuzzleMember->setMember($member);
+	$newPuzzleMember->save();
+
+	$message = $member->getFullName()." joined ".$puzzle->getTitle();
 
 	redirect('/puzzle/'.$puzzle_id, $message);
 }

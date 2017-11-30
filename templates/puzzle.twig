@@ -75,7 +75,11 @@
         </div>
     {% endif %}
 
-    <a class="btn btn-primary" href="/puzzle/{{ puzzle.id }}/edit">Edit this puzzle</a>
+    <form action="/puzzle/{{ puzzle.id }}/claim" method="post">
+        <button type="submit" class="btn btn-primary" href="/puzzle/{{ puzzle.id }}/claim">Join this puzzle</button>
+    </form>
+    <br>
+    <a class="btn btn-primary" href="/puzzle/{{ puzzle.id }}/edit">Update this puzzle</a>
     <br><br>
 
 
