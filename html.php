@@ -112,7 +112,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	$all_metas = PuzzleParentQuery::create()
 		->joinWith('PuzzleParent.Parent')
 		->orderByParentId()
-		->withColumn('Sum(puzzle_id = 7)', 'IsInMeta')
+		->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
 		->groupBy('Parent.Id')
 		->find();
 
@@ -125,13 +125,41 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	}
 
 	render($template, array(
-			'puzzle_id'     => $puzzle_id,
-			'puzzle'        => $puzzle,
-			'notes'         => $notes,
-			'puzzles_metas' => $puzzles_metas,
-			'all_metas'     => $all_metas,
-			'statuses'      => $statuses,
+			'puzzle_id' => $puzzle_id,
+			'puzzle'    => $puzzle,
+			'notes'     => $notes,
+			'all_metas' => $all_metas,
+			'statuses'  => $statuses,
 		));
+}
+
+function savePuzzle($puzzle_id, $request) {
+	$puzzle = PuzzleQuery::create()
+		->filterByID($puzzle_id)
+		->findOne();
+
+	$puzzle->setTitle($request->title);
+	$puzzle->setSolution($request->solution);
+	$puzzle->setStatus($request->status);
+	$puzzle->setSpreadsheetId($request->spreadsheet_id);
+	$puzzle->setSlackChannel($request->slack_channel);
+	$puzzle->save();
+
+	$oldParents = PuzzleParentQuery::create()
+		->filterByPuzzleId($puzzle_id)
+		->find();
+	$oldParents->delete();
+
+	foreach ($request->metas as $meta) {
+		$puzzleParent = new PuzzleParent();
+		$puzzleParent->setPuzzleId($puzzle_id);
+		$puzzleParent->setParentId($meta);
+		$puzzleParent->save();
+	}
+
+	$message = "Saved ".$puzzle->getTitle();
+
+	redirect('/puzzle/'.$puzzle_id.'/edit', $message);
 }
 
 function displayAdd() {
@@ -215,23 +243,6 @@ function displayLoosePuzzles() {
 }
 
 function displayFeature($puzzle_id) {
-}
-
-function savePuzzle($puzzle_id, $request) {
-	$puzzle = PuzzleQuery::create()
-		->filterByID($puzzle_id)
-		->findOne();
-
-	$puzzle->setTitle($request->title);
-	$puzzle->setSolution($request->solution);
-	$puzzle->setStatus($request->status);
-	$puzzle->setSpreadsheetId($request->spreadsheet_id);
-	$puzzle->setSlackChannel($request->slack_channel);
-	$puzzle->save();
-
-	$message = "Saved ".$puzzle->getTitle();
-
-	redirect('/puzzle/'.$puzzle_id.'/edit', $message);
 }
 
 function displayPuzzleEdit($puzzle_id) {
