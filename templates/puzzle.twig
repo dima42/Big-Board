@@ -9,9 +9,8 @@
     </h1>
 
     <h6>
-        <span class="a-part-of">This puzzle is in:</span>
         {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
-            <a href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
+            <a class="badge badge-pill badge-primary" href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
         {% endfor %}
     </h6>
 
