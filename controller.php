@@ -221,11 +221,15 @@ function joinPuzzle($puzzle_id) {
 		->findOne();
 
 	$newPuzzleMember = new PuzzleMember();
-	$newPuzzleMember->setPuzzleId($puzzle_id);
-	$newPuzzleMember->setMember($member);
-	$newPuzzleMember->save();
 
-	$message = $member->getFullName()." joined ".$puzzle->getTitle();
+	try {
+		$newPuzzleMember->setPuzzleId($puzzle_id);
+		$newPuzzleMember->setMember($member);
+		$newPuzzleMember->save();
+		$message = "You joined ".$puzzle->getTitle();
+	} catch (Exception $e) {
+		$message = "You are already a solver on this puzzle.";
+	}
 
 	redirect('/puzzle/'.$puzzle_id, $message);
 }

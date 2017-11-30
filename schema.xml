@@ -48,6 +48,10 @@
         <foreign-key foreignTable="member" phpName="Member">
             <reference local="member_id" foreign="id"/>
         </foreign-key>
+        <unique>
+            <unique-column name="puzzle_id" />
+            <unique-column name="member_id" />
+        </unique>
     </table>
     <table name="relationship" phpName="PuzzleParent" isCrossRef="true">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
