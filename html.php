@@ -191,6 +191,20 @@ function displayAdd() {
 		));
 }
 
+function addPuzzle() {
+	// # check for URL in DB
+	// # check for slack channel too?
+
+	// # create puzzle object
+	// # create google drive spreadsheet
+	// create_file_from_template($_GET["ttl"]);
+	// # create slack channel
+	// createNewSlackChannel($_GET{"ttl"});
+	// # post to slack channel
+	// # post update?
+	// # redirect
+}
+
 function displayRoster() {
 	$roster = MemberQuery::create()
 		->orderByFullName()
