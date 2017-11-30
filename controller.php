@@ -19,22 +19,22 @@ function show_content() {
 
 	$klein->with('/puzzle/[:id]', function () use ($klein) {
 
-			$klein->respond('GET', '/?', function ($request, $response) {
+			$klein->respond('GET', '/?', function ($request) {
 					return displayPuzzle($request->id);
 				});
-			$klein->respond('GET', '/edit/?', function ($request, $response) {
+			$klein->respond('GET', '/edit/?', function ($request) {
 					return displayPuzzle($request->id, 'edit');
 				});
-			$klein->respond('POST', '/edit/?', function ($request, $response) {
+			$klein->respond('POST', '/edit/?', function ($request) {
 					return savePuzzle($request->id, $request);
 				});
-			$klein->respond('POST', '/solve/?', function ($request, $response) {
+			$klein->respond('POST', '/solve/?', function ($request) {
 					return solvePuzzle($request->id, $request);
 				});
-			$klein->respond('POST', '/add-note/?', function ($request, $response) {
+			$klein->respond('POST', '/add-note/?', function ($request) {
 					return addNote($request->id, $request);
 				});
-			$klein->respond('POST', '/claim/?', function ($request, $response) {
+			$klein->respond('POST', '/claim/?', function ($request) {
 					return joinPuzzle($request->id);
 				});
 		});
@@ -45,16 +45,16 @@ function show_content() {
 
 	$klein->with('/member/[:id]', function () use ($klein) {
 
-			$klein->respond('GET', '/?', function ($request, $response) {
+			$klein->respond('GET', '/?', function ($request) {
 					return displayMember($request->id);
 				});
-			$klein->respond('GET', '/edit/?', function ($request, $response) {
+			$klein->respond('GET', '/edit/?', function ($request) {
 					if ($request->id == $_SESSION['user_id']) {
 						return displayMember($request->id, 'edit');
 					}
 					redirect('/roster');
 				});
-			$klein->respond('POST', '/edit/?', function ($request, $response) {
+			$klein->respond('POST', '/edit/?', function ($request) {
 					if ($request->id == $_SESSION['user_id']) {
 						return saveMember($request->id, $request);
 					}
@@ -62,7 +62,7 @@ function show_content() {
 				});
 		});
 
-	$klein->respond('GET', '/meta/[:id]', function ($request, $response) {
+	$klein->respond('GET', '/meta/[:id]', function ($request) {
 			return displayMeta($request->id);
 		});
 
