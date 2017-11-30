@@ -113,6 +113,13 @@ abstract class Member implements ActiveRecordInterface
     protected $slack_handle;
 
     /**
+     * The value for the strengths field.
+     *
+     * @var        string
+     */
+    protected $strengths;
+
+    /**
      * @var        ObjectCollection|ChildNote[] Collection to store aggregation of ChildNote objects.
      */
     protected $collNotes;
@@ -442,6 +449,16 @@ abstract class Member implements ActiveRecordInterface
     }
 
     /**
+     * Get the [strengths] column value.
+     *
+     * @return string
+     */
+    public function getStrengths()
+    {
+        return $this->strengths;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param int $v new value
@@ -562,6 +579,26 @@ abstract class Member implements ActiveRecordInterface
     } // setSlackHandle()
 
     /**
+     * Set the value of [strengths] column.
+     *
+     * @param string $v new value
+     * @return $this|\Member The current object (for fluent API support)
+     */
+    public function setStrengths($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->strengths !== $v) {
+            $this->strengths = $v;
+            $this->modifiedColumns[MemberTableMap::COL_STRENGTHS] = true;
+        }
+
+        return $this;
+    } // setStrengths()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -614,6 +651,9 @@ abstract class Member implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : MemberTableMap::translateFieldName('SlackHandle', TableMap::TYPE_PHPNAME, $indexType)];
             $this->slack_handle = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : MemberTableMap::translateFieldName('Strengths', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->strengths = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -622,7 +662,7 @@ abstract class Member implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = MemberTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = MemberTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Member'), 0, $e);
@@ -899,6 +939,9 @@ abstract class Member implements ActiveRecordInterface
         if ($this->isColumnModified(MemberTableMap::COL_SLACK_HANDLE)) {
             $modifiedColumns[':p' . $index++]  = 'slack_handle';
         }
+        if ($this->isColumnModified(MemberTableMap::COL_STRENGTHS)) {
+            $modifiedColumns[':p' . $index++]  = 'strengths';
+        }
 
         $sql = sprintf(
             'INSERT INTO member (%s) VALUES (%s)',
@@ -927,6 +970,9 @@ abstract class Member implements ActiveRecordInterface
                         break;
                     case 'slack_handle':
                         $stmt->bindValue($identifier, $this->slack_handle, PDO::PARAM_STR);
+                        break;
+                    case 'strengths':
+                        $stmt->bindValue($identifier, $this->strengths, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1008,6 +1054,9 @@ abstract class Member implements ActiveRecordInterface
             case 5:
                 return $this->getSlackHandle();
                 break;
+            case 6:
+                return $this->getStrengths();
+                break;
             default:
                 return null;
                 break;
@@ -1044,6 +1093,7 @@ abstract class Member implements ActiveRecordInterface
             $keys[3] => $this->getGoogleReferrer(),
             $keys[4] => $this->getSlackId(),
             $keys[5] => $this->getSlackHandle(),
+            $keys[6] => $this->getStrengths(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1148,6 +1198,9 @@ abstract class Member implements ActiveRecordInterface
             case 5:
                 $this->setSlackHandle($value);
                 break;
+            case 6:
+                $this->setStrengths($value);
+                break;
         } // switch()
 
         return $this;
@@ -1191,6 +1244,9 @@ abstract class Member implements ActiveRecordInterface
         }
         if (array_key_exists($keys[5], $arr)) {
             $this->setSlackHandle($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setStrengths($arr[$keys[6]]);
         }
     }
 
@@ -1250,6 +1306,9 @@ abstract class Member implements ActiveRecordInterface
         }
         if ($this->isColumnModified(MemberTableMap::COL_SLACK_HANDLE)) {
             $criteria->add(MemberTableMap::COL_SLACK_HANDLE, $this->slack_handle);
+        }
+        if ($this->isColumnModified(MemberTableMap::COL_STRENGTHS)) {
+            $criteria->add(MemberTableMap::COL_STRENGTHS, $this->strengths);
         }
 
         return $criteria;
@@ -1342,6 +1401,7 @@ abstract class Member implements ActiveRecordInterface
         $copyObj->setGoogleReferrer($this->getGoogleReferrer());
         $copyObj->setSlackId($this->getSlackId());
         $copyObj->setSlackHandle($this->getSlackHandle());
+        $copyObj->setStrengths($this->getStrengths());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2159,6 +2219,7 @@ abstract class Member implements ActiveRecordInterface
         $this->google_referrer = null;
         $this->slack_id = null;
         $this->slack_handle = null;
+        $this->strengths = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
