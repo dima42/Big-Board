@@ -20,13 +20,13 @@
 
         <ul class="puzzle-nav nav nav-pills">
             <li class="nav-item">
-                <a class="border rounded-0 nav-link" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> The puzzle ➡</a>
+                <a class="border rounded-0 nav-link" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> The puzzle</a>
             </li>
             <li class="nav-item">
-                <a class="border border-left-0 rounded-0 nav-link" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Sheet ➡</a>
+                <a class="border border-left-0 rounded-0 nav-link" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Sheet</a>
             </li>
             <li class="nav-item">
-                <a class="border border-left-0 rounded-0 nav-link" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
+                <a class="border border-left-0 rounded-0 nav-link" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack</a>
             </li>
         </ul>
 
@@ -83,6 +83,8 @@
         <div class="card-body">
             {% for member in members %}
                 {{ member.member.fullName }}<br>
+            {% else %}
+                No one 😔
             {% endfor %}
         </div>
     </div>
