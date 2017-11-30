@@ -42,6 +42,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildMemberQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildMemberQuery leftJoinNote($relationAlias = null) Adds a LEFT JOIN clause to the query using the Note relation
+ * @method     ChildMemberQuery rightJoinNote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Note relation
+ * @method     ChildMemberQuery innerJoinNote($relationAlias = null) Adds a INNER JOIN clause to the query using the Note relation
+ *
+ * @method     ChildMemberQuery joinWithNote($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Note relation
+ *
+ * @method     ChildMemberQuery leftJoinWithNote() Adds a LEFT JOIN clause and with to the query using the Note relation
+ * @method     ChildMemberQuery rightJoinWithNote() Adds a RIGHT JOIN clause and with to the query using the Note relation
+ * @method     ChildMemberQuery innerJoinWithNote() Adds a INNER JOIN clause and with to the query using the Note relation
+ *
  * @method     ChildMemberQuery leftJoinPuzzleMember($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleMember relation
  * @method     ChildMemberQuery rightJoinPuzzleMember($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleMember relation
  * @method     ChildMemberQuery innerJoinPuzzleMember($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleMember relation
@@ -62,7 +72,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery rightJoinWithNews() Adds a RIGHT JOIN clause and with to the query using the News relation
  * @method     ChildMemberQuery innerJoinWithNews() Adds a INNER JOIN clause and with to the query using the News relation
  *
- * @method     \PuzzleMemberQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \NoteQuery|\PuzzleMemberQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildMember findOne(ConnectionInterface $con = null) Return the first ChildMember matching the query
  * @method     ChildMember findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMember matching the query, or a new ChildMember object populated from the query conditions when no match is found
@@ -443,6 +453,79 @@ abstract class MemberQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MemberTableMap::COL_SLACK_HANDLE, $slackHandle, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \Note object
+     *
+     * @param \Note|ObjectCollection $note the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMemberQuery The current query, for fluid interface
+     */
+    public function filterByNote($note, $comparison = null)
+    {
+        if ($note instanceof \Note) {
+            return $this
+                ->addUsingAlias(MemberTableMap::COL_ID, $note->getMemberId(), $comparison);
+        } elseif ($note instanceof ObjectCollection) {
+            return $this
+                ->useNoteQuery()
+                ->filterByPrimaryKeys($note->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByNote() only accepts arguments of type \Note or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Note relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildMemberQuery The current query, for fluid interface
+     */
+    public function joinNote($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Note');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Note');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Note relation Note object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \NoteQuery A secondary query class using the current class as primary query
+     */
+    public function useNoteQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinNote($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Note', '\NoteQuery');
     }
 
     /**

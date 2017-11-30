@@ -164,6 +164,13 @@ class MemberTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Note', '\\Note', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':member_id',
+    1 => ':id',
+  ),
+), null, null, 'Notes', false);
         $this->addRelation('PuzzleMember', '\\PuzzleMember', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

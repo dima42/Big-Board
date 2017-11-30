@@ -59,7 +59,7 @@ class NoteTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class NoteTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the id field
@@ -85,6 +85,11 @@ class NoteTableMap extends TableMap
      * the column name for the puzzle_id field
      */
     const COL_PUZZLE_ID = 'note.puzzle_id';
+
+    /**
+     * the column name for the member_id field
+     */
+    const COL_MEMBER_ID = 'note.member_id';
 
     /**
      * the column name for the created_at field
@@ -108,11 +113,11 @@ class NoteTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Body', 'PuzzleId', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'body', 'puzzleId', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(NoteTableMap::COL_ID, NoteTableMap::COL_BODY, NoteTableMap::COL_PUZZLE_ID, NoteTableMap::COL_CREATED_AT, NoteTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'body', 'puzzle_id', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Id', 'Body', 'PuzzleId', 'MemberId', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'body', 'puzzleId', 'memberId', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(NoteTableMap::COL_ID, NoteTableMap::COL_BODY, NoteTableMap::COL_PUZZLE_ID, NoteTableMap::COL_MEMBER_ID, NoteTableMap::COL_CREATED_AT, NoteTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'body', 'puzzle_id', 'member_id', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -122,11 +127,11 @@ class NoteTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Body' => 1, 'PuzzleId' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'body' => 1, 'puzzleId' => 2, 'createdAt' => 3, 'updatedAt' => 4, ),
-        self::TYPE_COLNAME       => array(NoteTableMap::COL_ID => 0, NoteTableMap::COL_BODY => 1, NoteTableMap::COL_PUZZLE_ID => 2, NoteTableMap::COL_CREATED_AT => 3, NoteTableMap::COL_UPDATED_AT => 4, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'body' => 1, 'puzzle_id' => 2, 'created_at' => 3, 'updated_at' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Body' => 1, 'PuzzleId' => 2, 'MemberId' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'body' => 1, 'puzzleId' => 2, 'memberId' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
+        self::TYPE_COLNAME       => array(NoteTableMap::COL_ID => 0, NoteTableMap::COL_BODY => 1, NoteTableMap::COL_PUZZLE_ID => 2, NoteTableMap::COL_MEMBER_ID => 3, NoteTableMap::COL_CREATED_AT => 4, NoteTableMap::COL_UPDATED_AT => 5, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'body' => 1, 'puzzle_id' => 2, 'member_id' => 3, 'created_at' => 4, 'updated_at' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -149,6 +154,7 @@ class NoteTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('body', 'Body', 'VARCHAR', true, 255, null);
         $this->addForeignKey('puzzle_id', 'PuzzleId', 'INTEGER', 'puzzle', 'id', true, null, null);
+        $this->addForeignKey('member_id', 'MemberId', 'INTEGER', 'member', 'id', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
@@ -162,6 +168,13 @@ class NoteTableMap extends TableMap
   0 =>
   array (
     0 => ':puzzle_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Author', '\\Member', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':member_id',
     1 => ':id',
   ),
 ), null, null, null, false);
@@ -324,12 +337,14 @@ class NoteTableMap extends TableMap
             $criteria->addSelectColumn(NoteTableMap::COL_ID);
             $criteria->addSelectColumn(NoteTableMap::COL_BODY);
             $criteria->addSelectColumn(NoteTableMap::COL_PUZZLE_ID);
+            $criteria->addSelectColumn(NoteTableMap::COL_MEMBER_ID);
             $criteria->addSelectColumn(NoteTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(NoteTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.body');
             $criteria->addSelectColumn($alias . '.puzzle_id');
+            $criteria->addSelectColumn($alias . '.member_id');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }

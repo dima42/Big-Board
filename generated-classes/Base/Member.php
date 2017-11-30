@@ -6,12 +6,15 @@ use \Member as ChildMember;
 use \MemberQuery as ChildMemberQuery;
 use \News as ChildNews;
 use \NewsQuery as ChildNewsQuery;
+use \Note as ChildNote;
+use \NoteQuery as ChildNoteQuery;
 use \PuzzleMember as ChildPuzzleMember;
 use \PuzzleMemberQuery as ChildPuzzleMemberQuery;
 use \Exception;
 use \PDO;
 use Map\MemberTableMap;
 use Map\NewsTableMap;
+use Map\NoteTableMap;
 use Map\PuzzleMemberTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -110,6 +113,12 @@ abstract class Member implements ActiveRecordInterface
     protected $slack_handle;
 
     /**
+     * @var        ObjectCollection|ChildNote[] Collection to store aggregation of ChildNote objects.
+     */
+    protected $collNotes;
+    protected $collNotesPartial;
+
+    /**
      * @var        ObjectCollection|ChildPuzzleMember[] Collection to store aggregation of ChildPuzzleMember objects.
      */
     protected $collPuzzleMembers;
@@ -128,6 +137,12 @@ abstract class Member implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildNote[]
+     */
+    protected $notesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -668,6 +683,8 @@ abstract class Member implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collNotes = null;
+
             $this->collPuzzleMembers = null;
 
             $this->collNews = null;
@@ -784,6 +801,23 @@ abstract class Member implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->notesScheduledForDeletion !== null) {
+                if (!$this->notesScheduledForDeletion->isEmpty()) {
+                    \NoteQuery::create()
+                        ->filterByPrimaryKeys($this->notesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->notesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collNotes !== null) {
+                foreach ($this->collNotes as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->puzzleMembersScheduledForDeletion !== null) {
@@ -1017,6 +1051,21 @@ abstract class Member implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collNotes) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'notes';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'notes';
+                        break;
+                    default:
+                        $key = 'Notes';
+                }
+
+                $result[$key] = $this->collNotes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collPuzzleMembers) {
 
                 switch ($keyType) {
@@ -1299,6 +1348,12 @@ abstract class Member implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getNotes() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addNote($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getPuzzleMembers() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPuzzleMember($relObj->copy($deepCopy));
@@ -1352,6 +1407,10 @@ abstract class Member implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('Note' == $relationName) {
+            $this->initNotes();
+            return;
+        }
         if ('PuzzleMember' == $relationName) {
             $this->initPuzzleMembers();
             return;
@@ -1360,6 +1419,256 @@ abstract class Member implements ActiveRecordInterface
             $this->initNews();
             return;
         }
+    }
+
+    /**
+     * Clears out the collNotes collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addNotes()
+     */
+    public function clearNotes()
+    {
+        $this->collNotes = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collNotes collection loaded partially.
+     */
+    public function resetPartialNotes($v = true)
+    {
+        $this->collNotesPartial = $v;
+    }
+
+    /**
+     * Initializes the collNotes collection.
+     *
+     * By default this just sets the collNotes collection to an empty array (like clearcollNotes());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initNotes($overrideExisting = true)
+    {
+        if (null !== $this->collNotes && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = NoteTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collNotes = new $collectionClassName;
+        $this->collNotes->setModel('\Note');
+    }
+
+    /**
+     * Gets an array of ChildNote objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildMember is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildNote[] List of ChildNote objects
+     * @throws PropelException
+     */
+    public function getNotes(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collNotesPartial && !$this->isNew();
+        if (null === $this->collNotes || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collNotes) {
+                // return empty collection
+                $this->initNotes();
+            } else {
+                $collNotes = ChildNoteQuery::create(null, $criteria)
+                    ->filterByAuthor($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collNotesPartial && count($collNotes)) {
+                        $this->initNotes(false);
+
+                        foreach ($collNotes as $obj) {
+                            if (false == $this->collNotes->contains($obj)) {
+                                $this->collNotes->append($obj);
+                            }
+                        }
+
+                        $this->collNotesPartial = true;
+                    }
+
+                    return $collNotes;
+                }
+
+                if ($partial && $this->collNotes) {
+                    foreach ($this->collNotes as $obj) {
+                        if ($obj->isNew()) {
+                            $collNotes[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collNotes = $collNotes;
+                $this->collNotesPartial = false;
+            }
+        }
+
+        return $this->collNotes;
+    }
+
+    /**
+     * Sets a collection of ChildNote objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $notes A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildMember The current object (for fluent API support)
+     */
+    public function setNotes(Collection $notes, ConnectionInterface $con = null)
+    {
+        /** @var ChildNote[] $notesToDelete */
+        $notesToDelete = $this->getNotes(new Criteria(), $con)->diff($notes);
+
+
+        $this->notesScheduledForDeletion = $notesToDelete;
+
+        foreach ($notesToDelete as $noteRemoved) {
+            $noteRemoved->setAuthor(null);
+        }
+
+        $this->collNotes = null;
+        foreach ($notes as $note) {
+            $this->addNote($note);
+        }
+
+        $this->collNotes = $notes;
+        $this->collNotesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Note objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Note objects.
+     * @throws PropelException
+     */
+    public function countNotes(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collNotesPartial && !$this->isNew();
+        if (null === $this->collNotes || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collNotes) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getNotes());
+            }
+
+            $query = ChildNoteQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAuthor($this)
+                ->count($con);
+        }
+
+        return count($this->collNotes);
+    }
+
+    /**
+     * Method called to associate a ChildNote object to this object
+     * through the ChildNote foreign key attribute.
+     *
+     * @param  ChildNote $l ChildNote
+     * @return $this|\Member The current object (for fluent API support)
+     */
+    public function addNote(ChildNote $l)
+    {
+        if ($this->collNotes === null) {
+            $this->initNotes();
+            $this->collNotesPartial = true;
+        }
+
+        if (!$this->collNotes->contains($l)) {
+            $this->doAddNote($l);
+
+            if ($this->notesScheduledForDeletion and $this->notesScheduledForDeletion->contains($l)) {
+                $this->notesScheduledForDeletion->remove($this->notesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildNote $note The ChildNote object to add.
+     */
+    protected function doAddNote(ChildNote $note)
+    {
+        $this->collNotes[]= $note;
+        $note->setAuthor($this);
+    }
+
+    /**
+     * @param  ChildNote $note The ChildNote object to remove.
+     * @return $this|ChildMember The current object (for fluent API support)
+     */
+    public function removeNote(ChildNote $note)
+    {
+        if ($this->getNotes()->contains($note)) {
+            $pos = $this->collNotes->search($note);
+            $this->collNotes->remove($pos);
+            if (null === $this->notesScheduledForDeletion) {
+                $this->notesScheduledForDeletion = clone $this->collNotes;
+                $this->notesScheduledForDeletion->clear();
+            }
+            $this->notesScheduledForDeletion[]= clone $note;
+            $note->setAuthor(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Member is new, it will return
+     * an empty collection; or if this Member has previously
+     * been saved, it will retrieve related Notes from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Member.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildNote[] List of ChildNote objects
+     */
+    public function getNotesJoinPuzzle(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildNoteQuery::create(null, $criteria);
+        $query->joinWith('Puzzle', $joinBehavior);
+
+        return $this->getNotes($query, $con);
     }
 
     /**
@@ -1868,6 +2177,11 @@ abstract class Member implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collNotes) {
+                foreach ($this->collNotes as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collPuzzleMembers) {
                 foreach ($this->collPuzzleMembers as $o) {
                     $o->clearAllReferences($deep);
@@ -1880,6 +2194,7 @@ abstract class Member implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collNotes = null;
         $this->collPuzzleMembers = null;
         $this->collNews = null;
     }

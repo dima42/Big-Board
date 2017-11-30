@@ -23,12 +23,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNoteQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildNoteQuery orderByBody($order = Criteria::ASC) Order by the body column
  * @method     ChildNoteQuery orderByPuzzleId($order = Criteria::ASC) Order by the puzzle_id column
+ * @method     ChildNoteQuery orderByMemberId($order = Criteria::ASC) Order by the member_id column
  * @method     ChildNoteQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildNoteQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method     ChildNoteQuery groupById() Group by the id column
  * @method     ChildNoteQuery groupByBody() Group by the body column
  * @method     ChildNoteQuery groupByPuzzleId() Group by the puzzle_id column
+ * @method     ChildNoteQuery groupByMemberId() Group by the member_id column
  * @method     ChildNoteQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildNoteQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -50,7 +52,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNoteQuery rightJoinWithPuzzle() Adds a RIGHT JOIN clause and with to the query using the Puzzle relation
  * @method     ChildNoteQuery innerJoinWithPuzzle() Adds a INNER JOIN clause and with to the query using the Puzzle relation
  *
- * @method     \PuzzleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildNoteQuery leftJoinAuthor($relationAlias = null) Adds a LEFT JOIN clause to the query using the Author relation
+ * @method     ChildNoteQuery rightJoinAuthor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Author relation
+ * @method     ChildNoteQuery innerJoinAuthor($relationAlias = null) Adds a INNER JOIN clause to the query using the Author relation
+ *
+ * @method     ChildNoteQuery joinWithAuthor($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Author relation
+ *
+ * @method     ChildNoteQuery leftJoinWithAuthor() Adds a LEFT JOIN clause and with to the query using the Author relation
+ * @method     ChildNoteQuery rightJoinWithAuthor() Adds a RIGHT JOIN clause and with to the query using the Author relation
+ * @method     ChildNoteQuery innerJoinWithAuthor() Adds a INNER JOIN clause and with to the query using the Author relation
+ *
+ * @method     \PuzzleQuery|\MemberQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildNote findOne(ConnectionInterface $con = null) Return the first ChildNote matching the query
  * @method     ChildNote findOneOrCreate(ConnectionInterface $con = null) Return the first ChildNote matching the query, or a new ChildNote object populated from the query conditions when no match is found
@@ -58,6 +70,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNote findOneById(int $id) Return the first ChildNote filtered by the id column
  * @method     ChildNote findOneByBody(string $body) Return the first ChildNote filtered by the body column
  * @method     ChildNote findOneByPuzzleId(int $puzzle_id) Return the first ChildNote filtered by the puzzle_id column
+ * @method     ChildNote findOneByMemberId(int $member_id) Return the first ChildNote filtered by the member_id column
  * @method     ChildNote findOneByCreatedAt(string $created_at) Return the first ChildNote filtered by the created_at column
  * @method     ChildNote findOneByUpdatedAt(string $updated_at) Return the first ChildNote filtered by the updated_at column *
 
@@ -67,6 +80,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNote requireOneById(int $id) Return the first ChildNote filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNote requireOneByBody(string $body) Return the first ChildNote filtered by the body column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNote requireOneByPuzzleId(int $puzzle_id) Return the first ChildNote filtered by the puzzle_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildNote requireOneByMemberId(int $member_id) Return the first ChildNote filtered by the member_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNote requireOneByCreatedAt(string $created_at) Return the first ChildNote filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNote requireOneByUpdatedAt(string $updated_at) Return the first ChildNote filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -74,6 +88,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNote[]|ObjectCollection findById(int $id) Return ChildNote objects filtered by the id column
  * @method     ChildNote[]|ObjectCollection findByBody(string $body) Return ChildNote objects filtered by the body column
  * @method     ChildNote[]|ObjectCollection findByPuzzleId(int $puzzle_id) Return ChildNote objects filtered by the puzzle_id column
+ * @method     ChildNote[]|ObjectCollection findByMemberId(int $member_id) Return ChildNote objects filtered by the member_id column
  * @method     ChildNote[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildNote objects filtered by the created_at column
  * @method     ChildNote[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildNote objects filtered by the updated_at column
  * @method     ChildNote[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -174,7 +189,7 @@ abstract class NoteQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, body, puzzle_id, created_at, updated_at FROM note WHERE id = :p0';
+        $sql = 'SELECT id, body, puzzle_id, member_id, created_at, updated_at FROM note WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -374,6 +389,49 @@ abstract class NoteQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the member_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMemberId(1234); // WHERE member_id = 1234
+     * $query->filterByMemberId(array(12, 34)); // WHERE member_id IN (12, 34)
+     * $query->filterByMemberId(array('min' => 12)); // WHERE member_id > 12
+     * </code>
+     *
+     * @see       filterByAuthor()
+     *
+     * @param     mixed $memberId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildNoteQuery The current query, for fluid interface
+     */
+    public function filterByMemberId($memberId = null, $comparison = null)
+    {
+        if (is_array($memberId)) {
+            $useMinMax = false;
+            if (isset($memberId['min'])) {
+                $this->addUsingAlias(NoteTableMap::COL_MEMBER_ID, $memberId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($memberId['max'])) {
+                $this->addUsingAlias(NoteTableMap::COL_MEMBER_ID, $memberId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NoteTableMap::COL_MEMBER_ID, $memberId, $comparison);
+    }
+
+    /**
      * Filter the query on the created_at column
      *
      * Example usage:
@@ -534,6 +592,83 @@ abstract class NoteQuery extends ModelCriteria
         return $this
             ->joinPuzzle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Puzzle', '\PuzzleQuery');
+    }
+
+    /**
+     * Filter the query by a related \Member object
+     *
+     * @param \Member|ObjectCollection $member The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildNoteQuery The current query, for fluid interface
+     */
+    public function filterByAuthor($member, $comparison = null)
+    {
+        if ($member instanceof \Member) {
+            return $this
+                ->addUsingAlias(NoteTableMap::COL_MEMBER_ID, $member->getId(), $comparison);
+        } elseif ($member instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(NoteTableMap::COL_MEMBER_ID, $member->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByAuthor() only accepts arguments of type \Member or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Author relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildNoteQuery The current query, for fluid interface
+     */
+    public function joinAuthor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Author');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Author');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Author relation Member object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \MemberQuery A secondary query class using the current class as primary query
+     */
+    public function useAuthorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAuthor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Author', '\MemberQuery');
     }
 
     /**

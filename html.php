@@ -171,10 +171,14 @@ function addNote($puzzle_id, $request) {
 		->filterByID($puzzle_id)
 		->findOne();
 
+	$author = MemberQuery::create()
+		->filterByID($_SESSION['user_id'])
+		->findOne();
+
 	$note = new Note();
 	$note->setPuzzleId($puzzle_id);
 	$note->setBody($request->body);
-	// $note->setAuthor($_SESSION['user_id']); // we don't have this field yet
+	$note->setAuthor($author);
 	$note->save();
 
 	$message = "Saved a note to ".$puzzle->getTitle();
