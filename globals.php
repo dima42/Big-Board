@@ -42,6 +42,15 @@ $emojify = new Twig_Filter('emojify',
 	});
 $twig->addFilter($emojify);
 
+$default = new Twig_Filter('default',
+	function ($input, $default) {
+		if (!$input) {
+			return $default;
+		}
+		return $input;
+	});
+$twig->addFilter($default);
+
 // RENDER
 function render($template, $vars = array()) {
 	$latestNews = NewsQuery::create()
