@@ -28,6 +28,9 @@ function show_content() {
 			$klein->respond('POST', '/edit/?', function ($request, $response) {
 					return savePuzzle($request->id, $request);
 				});
+			$klein->respond('POST', '/add-note/?', function ($request, $response) {
+					return addNote($request->id, $request);
+				});
 		});
 
 	$klein->respond('GET', '/meta/[:id]', function ($request, $response) {
@@ -104,6 +107,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 
 	$notes = NoteQuery::create()
 		->filterByPuzzle($puzzle)
+		->orderByCreatedAt('desc')
 		->find();
 
 	// TODO: if not $puzzle, redirect to error template
@@ -160,6 +164,22 @@ function savePuzzle($puzzle_id, $request) {
 	$message = "Saved ".$puzzle->getTitle();
 
 	redirect('/puzzle/'.$puzzle_id.'/edit', $message);
+}
+
+function addNote($puzzle_id, $request) {
+	$puzzle = PuzzleQuery::create()
+		->filterByID($puzzle_id)
+		->findOne();
+
+	$note = new Note();
+	$note->setPuzzleId($puzzle_id);
+	$note->setBody($request->body);
+	// $note->setAuthor($_SESSION['user_id']); // we don't have this field yet
+	$note->save();
+
+	$message = "Saved a note to ".$puzzle->getTitle();
+
+	redirect('/puzzle/'.$puzzle_id, $message);
 }
 
 function displayAdd() {
