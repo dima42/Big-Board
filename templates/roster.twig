@@ -1,13 +1,14 @@
 {% extends 'loggedin.twig' %}
 
 {% block content %}
-<h1>Latest news</h1>
+<h1>Team Palindrome</h1>
 
 <table class="table">
     <thead>
         <tr>
             <th>Name</th>
-            <th>Slack username</th>
+            <th><img src="/img/slack.png" width="15px" alt=""></th>
+            <th>Strengths</th>
             <th>Working on…</th>
         </tr>
     </thead>
@@ -15,7 +16,8 @@
     {% for person in roster %}
     <tr>
         <td>{{ person.fullName }}</td>
-        <td>{{ person.slackHandle }}</td>
+        <th>{% if person.slackID %}<a href="http://palindrome2018.slack.com/team/{{ person.slackId }}"><img src="/img/slack.png" width="15px" alt=""></a>{% endif %}</th>
+        <td>{{ person.strengths }}</td>
         <td></td>
     </tr>
     {% endfor %}
