@@ -39,6 +39,25 @@ function show_content() {
 				});
 		});
 
+	$klein->with('/member/[:id]', function () use ($klein) {
+
+			$klein->respond('GET', '/?', function ($request, $response) {
+					return displayMember($request->id);
+				});
+			$klein->respond('GET', '/edit/?', function ($request, $response) {
+					if ($request->id == $_SESSION['user_id']) {
+						return displayMember($request->id, 'edit');
+					}
+					redirect('/roster');
+				});
+			$klein->respond('POST', '/edit/?', function ($request, $response) {
+					if ($request->id == $_SESSION['user_id']) {
+						return saveMember($request->id, $request);
+					}
+					redirect('/roster');
+				});
+		});
+
 	$klein->respond('GET', '/meta/[:id]', function ($request, $response) {
 			return displayMeta($request->id);
 		});
@@ -69,7 +88,7 @@ function show_content() {
 	$klein->dispatch();
 }
 
-function redirect($location, $message, $alert_type = "info") {
+function redirect($location, $message = "", $alert_type = "info") {
 	$_SESSION['alert_message'] = array("message" => $message, "type" => $alert_type);
 	header("Location: ".$location);
 	exit();
@@ -230,6 +249,8 @@ function joinPuzzle($puzzle_id) {
 	redirect('/puzzle/'.$puzzle_id, $message);
 }
 
+// ADDING PUZZLES
+
 function displayAdd() {
 	render('add.twig', array(
 		));
@@ -249,6 +270,8 @@ function addPuzzle() {
 	// # redirect
 }
 
+// MEMBERS
+
 function displayRoster() {
 	$roster = MemberQuery::create()
 		->orderByFullName()
@@ -258,6 +281,34 @@ function displayRoster() {
 			'roster' => $roster,
 		));
 }
+
+function displayMember($member_id, $method = "get") {
+	$template = 'member.twig';
+
+	if ($method == "edit") {
+		$template = 'member-edit.twig';
+	}
+
+	render($template, array(
+			'member' => $_SESSION['user'],
+		));
+}
+
+function saveMember($member_id, $request) {
+	$member = $_SESSION['user'];
+
+	$member->setFullName($request->full_name);
+	$member->setStrengths($request->strengths);
+	$member->setSlackHandle($request->slack_handle);
+	$member->setSlackId($request->slack_id);
+	$member->save();
+
+	$message = "Saved your profile changes.";
+
+	redirect('/member/'.$member_id.'/edit', $message);
+}
+
+// LISTS
 
 function displayAllPuzzles() {
 	$statuses = PuzzleQuery::create()
