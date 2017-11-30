@@ -1,7 +1,54 @@
 {% extends 'loggedin.twig' %}
 
-{% block body %}
-    <p>
-    {{ content }}
-    </p>
+{% block content %}
+<form id="addForm" action="" method="post">
+    <div class="form-group">
+        <textarea name="url-list" id="urls" rows="10" class="form-control">http://web.mit.edu/puzzle/www/2016/puzzle/dog_food/
+http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
+    </div>
+    <div class="form-group">
+        <label for="meta">If these all belong to the same meta, select it:</label>
+        <select class="form-control newPuzzleMeta" name="meta">
+                <option value="">- - -</option>
+            {% for meta in metas %}
+                <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="btn btn-primary" type="button" id="scrape-button">Go to step 2 &rarr;</button>
+
+</form>
+<div id="puzzleInputTemplate" class="form-group d-none">
+    <input class="form-control newPuzzleTitle" type="text" name="">
+    <input class="form-control newPuzzleURL" type="text" name="">
+        <select class="form-control newPuzzleMeta" name="meta">
+                <option value="">- - -</option>
+            {% for meta in metas %}
+                <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
+            {% endfor %}
+        </select>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('#scrape-button').click(function() {
+        var urls = $('#urls').val();
+        var data = {
+            'urls': urls
+        }
+        $.get('/puzzle_scrape', data, function(response) {
+            $.each(response, function(i, puzzle) {
+                var newPuzzleForm = $('#puzzleInputTemplate').clone();
+                newPuzzleForm.attr('id', i).removeClass('d-none');
+                newPuzzleForm.find('.newPuzzleTitle').val(puzzle['title']).attr('name', 'newPuzzleTitle[' + i + '][title]');
+                newPuzzleForm.find('.newPuzzleURL').val(puzzle['url']).attr('name', 'newPuzzleURL[' + i + '][url]');
+                // clone meta from original form and put it here, since it'll be pre-selected (i think?)
+                $('#addForm').append(newPuzzleForm);
+            });
+        });
+    });
+});
+</script>
 {% endblock %}

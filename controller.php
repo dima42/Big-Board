@@ -1,5 +1,6 @@
 <?
 require_once "sql.php";
+
 use Propel\Runtime\ActiveQuery\Criteria;
 
 function show_content() {
@@ -93,6 +94,10 @@ function show_content() {
 				});
 		});
 
+	$klein->respond('GET', '/puzzle_scrape', function ($request, $response) {
+			return puzzleScrape($request, $response);
+		});
+
 	$klein->dispatch();
 }
 
@@ -112,25 +117,17 @@ function displayError($error) {
 function displayTest() {
 	// $result = create_file_from_template("test-".rand(1000, 9999));
 
-	$puzzle = PuzzleQuery::create()
-		->filterByID(12)
-		->findOne();
+	$doc = hQuery::fromUrl('http://web.mit.edu/puzzle/www/2016/puzzle/dog_food/', ['Accept' => 'text/html']);
 
-	$notes = NoteQuery::create()
-		->filterByPuzzle($puzzle)
-		->find();
+	// echo "<pre>";
 
-	echo "<pre>";
-	foreach ($notes as $note) {
-		preprint($note->getBody());
-		echo " ";
-		echo "<br>";
-	}
-	echo "</pre>";
+	// echo $doc->find('title');
 
-	// render('test.twig', array(
-	// 		// 'content' => $result,
-	// 	));
+	// echo "</pre>";
+
+	render('test.twig', array(
+			// 'content' => $result,
+		));
 }
 
 function displayPuzzle($puzzle_id, $method = "get") {
@@ -263,6 +260,25 @@ function displayAdd($meta_id = '') {
 	render('add.twig', array(
 			'meta_id' => $meta_id,
 		));
+}
+
+function puzzleScrape($request, $response) {
+	$urls_string = $request->urls;
+	$urls        = explode("\n", $urls_string);
+
+	$json = array();
+	foreach ($urls as $url) {
+		if (filter_var($url, FILTER_VALIDATE_URL)) {
+			$doc    = hQuery::fromUrl($url, ['Accept' => 'text/html']);
+			$title  = $doc->find('title')->text();
+			$json[] = array(
+				"url"   => $url,
+				"title" => $title,
+			);
+		}
+	}
+
+	return $response->json($json);
 }
 
 function addPuzzle() {
