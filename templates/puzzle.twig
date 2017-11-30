@@ -50,7 +50,7 @@
                         {{ note.author.fullName }}<br>
                         <small class="text-muted">{{ note.createdAt|date("D g:i A") }}</small>
                     </div>
-                    <div class="col-sm-9"><div class="border rounded p-3 mb-3">{{ note.body }}</div></div>
+                    <div class="col-sm-9"><div class="bg-light border rounded p-3 mb-3">{{ note.body }}</div></div>
                 {% endfor %}
 
                 <div class="col-12">
@@ -65,7 +65,7 @@
                 </div>
                 <div class="col-sm-9">
                     <form action="/puzzle/{{ puzzle.id }}/add-note" method="post">
-                        <textarea type="text" class="form-control" name="body" rows="4"></textarea>
+                        <textarea type="text" class="form-control" name="body" rows="2"></textarea>
                         <br>
                         <button class="btn btn-primary" type="submit">Submit new note</button>
                     </form>
@@ -75,26 +75,24 @@
 {% endblock %}
 
 {% block aside %}
+    <div class="mb-3">
+        <a class="btn btn-light border" href="/puzzle/{{ puzzle.id }}/edit">✏️  Update this puzzle</a>
+    </div>
 
     <div class="card mb-3">
-        <div class="card-header">
-          <small>Working on this puzzle</small>
-        </div>
         <div class="card-body">
+            <small class="solvers">SOLVERS</small>
             {% for member in members %}
                 {{ member.member.fullName }}<br>
             {% else %}
                 No one 😔
             {% endfor %}
         </div>
+        <div class="card-footer">
+            <form action="/puzzle/{{ puzzle.id }}/claim" method="post">
+                <button type="submit" class="join-this-puzzle btn btn-link" href="/puzzle/{{ puzzle.id }}/claim">Join this puzzle</button>
+            </form>
+        </div>
     </div>
-
-    <form action="/puzzle/{{ puzzle.id }}/claim" method="post">
-        <button type="submit" class="btn btn-primary" href="/puzzle/{{ puzzle.id }}/claim">Join this puzzle</button>
-    </form>
-    <br>
-    <a class="btn btn-primary" href="/puzzle/{{ puzzle.id }}/edit">Update this puzzle</a>
-    <br><br>
-
 
 {% endblock %}
