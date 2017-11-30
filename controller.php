@@ -39,6 +39,10 @@ function show_content() {
 				});
 		});
 
+	$klein->respond('GET', '/me', function () {
+			redirect('/member/'.$_SESSION['user_id'].'/edit');
+		});
+
 	$klein->with('/member/[:id]', function () use ($klein) {
 
 			$klein->respond('GET', '/?', function ($request, $response) {
