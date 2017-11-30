@@ -72,6 +72,7 @@ aside {
 
 %card-subhead {
     font-weight: bold;
+    text-transform: uppercase;
     color: #777;
 }
 
@@ -79,8 +80,6 @@ aside {
     @extend %card-subhead;
 }
 
-
-/* DASHBOARD */
 
 /* PLACEHOLDERS */
 

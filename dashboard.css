@@ -47,9 +47,9 @@ aside {
 
 .latest-news, .solvers {
   font-weight: bold;
+  text-transform: uppercase;
   color: #777; }
 
-/* DASHBOARD */
 /* PLACEHOLDERS */
 .placeholders {
   padding-bottom: 3rem; }
