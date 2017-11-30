@@ -2,17 +2,29 @@
 {% from 'macros.twig' import slack_url %}
 
 {% block content %}
+    <div class="puzzle-metas">
+        {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
+            <a class="badge badge-pill badge-primary" href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
+        {% endfor %}
+    </div>
+
     <h1>
         <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
         {{ puzzle.status | emojify }}
         {% block h1_small %}{% endblock %}
     </h1>
 
-    <h6>
-        {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
-            <a class="badge badge-pill badge-primary" href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
-        {% endfor %}
-    </h6>
+    <ul class="nav nav-pills">
+    <li class="nav-item">
+        <a class="border rounded-0 nav-link" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> The puzzle ➡</a>
+    </li>
+    <li class="nav-item">
+        <a class="border border-left-0 rounded-0 nav-link" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Sheet ➡</a>
+    </li>
+    <li class="nav-item">
+        <a class="border border-left-0 rounded-0 nav-link" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
+    </li>
+    </ul>
 
     <hr>
 
@@ -65,11 +77,8 @@
         </div>
     {% endif %}
 
-    <div class="list-group mb-3">
-        <a class="list-group-item list-group-item-action" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> Puzzle page ➡</a>
-        <a class="list-group-item list-group-item-action" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet ➡</a>
-        <a class="list-group-item list-group-item-action" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
-        <a class="list-group-item list-group-item-action list-group-item-primary" href="/puzzle/{{ puzzle.id }}/edit">Edit this puzzle</a>
-    </div>
+    <a class="btn btn-primary" href="/puzzle/{{ puzzle.id }}/edit">Edit this puzzle</a>
+    <br><br>
+
 
 {% endblock %}
