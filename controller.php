@@ -78,15 +78,19 @@ function show_content() {
 			return displayRoster();
 		});
 
-	$klein->respond('GET', '/add', function () {
-			return displayAdd();
-		});
+	// ADDING
 
-	// EDITING
+	$klein->with('/add', function () use ($klein) {
 
-	$klein->respond('POST', '/add', function () {
-			// return addPuzzle();
-			redirect('/?add', 'hi');
+			$klein->respond('GET', '/?', function ($request) {
+					return displayAdd();
+				});
+			$klein->respond('GET', '/[:meta_id]/?', function ($request) {
+					return displayAdd($request->meta_id);
+				});
+			$klein->respond('POST', '/?', function ($request) {
+					return addPuzzle($request->meta_id);
+				});
 		});
 
 	$klein->dispatch();
@@ -255,8 +259,9 @@ function joinPuzzle($puzzle_id) {
 
 // ADDING PUZZLES
 
-function displayAdd() {
+function displayAdd($meta_id = '') {
 	render('add.twig', array(
+			'meta_id' => $meta_id,
 		));
 }
 

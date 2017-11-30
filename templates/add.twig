@@ -15,9 +15,9 @@
     <div class="form-group">
         <label for="meta">If these all belong to the same meta, select it:</label>
         <select class="form-control" name="meta">
-                <option value="" selected>- - -</option>
+                <option value="">- - -</option>
             {% for meta in metas %}
-                <option value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
+                <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
             {% endfor %}
         </select>
     </div>
