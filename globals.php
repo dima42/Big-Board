@@ -50,6 +50,7 @@ function render($template, $vars = array()) {
 		->findOne();
 
 	Global $twig;
+	$vars['user']       = $_SESSION['user'];
 	$vars['user_id']    = $_SESSION['user_id'];
 	$vars['alert']      = $_SESSION['alert_message'];
 	$vars['time']       = strftime('%c');

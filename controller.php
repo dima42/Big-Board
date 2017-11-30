@@ -196,9 +196,7 @@ function addNote($puzzle_id, $request) {
 		->filterByID($puzzle_id)
 		->findOne();
 
-	$author = MemberQuery::create()
-		->filterByID($_SESSION['user_id'])
-		->findOne();
+	$author = $_SESSION['user'];
 
 	$note = new Note();
 	$note->setPuzzleId($puzzle_id);
@@ -216,9 +214,7 @@ function joinPuzzle($puzzle_id) {
 		->filterByID($puzzle_id)
 		->findOne();
 
-	$member = MemberQuery::create()
-		->filterByID($_SESSION['user_id'])
-		->findOne();
+	$member = $_SESSION['user'];
 
 	$newPuzzleMember = new PuzzleMember();
 

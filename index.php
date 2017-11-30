@@ -91,7 +91,8 @@ function show_page($pal_drive) {
 		->findOne();
 
 	if ($member) {
-		$_SESSION["user_id"] = $member->getID();
+		$_SESSION['user']    = $member;
+		$_SESSION['user_id'] = $member->getID();
 	} else {
 		$_SESSION["user_id"] = 0;
 	}
