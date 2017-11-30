@@ -16,7 +16,6 @@
         </h1>
     </div>
 
-    {% block content_main %}
 
         <ul class="puzzle-nav nav nav-pills">
             <li class="nav-item">
@@ -40,10 +39,7 @@
             </div>
         </form>
 
-        {% if puzzle.status == "featured" %}
-            <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
-        {% endif %}
-
+    {% block content_main %}
     {% endblock %}
 
     {% block content_notes %}
@@ -82,6 +78,10 @@
     <div class="mb-3">
         <a class="btn btn-light border" href="/puzzle/{{ puzzle.id }}/edit">✏️  Update this puzzle</a>
     </div>
+
+    {% if puzzle.status == "featured" %}
+        <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
+    {% endif %}
 
     <div class="card mb-3">
         <div class="card-body">
