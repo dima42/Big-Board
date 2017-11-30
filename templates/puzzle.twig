@@ -69,11 +69,17 @@
 {% endblock %}
 
 {% block aside %}
-    {% if puzzle.status == "solved" %}
-        <div class="alert alert-success">
-            {{ puzzle.solution }}
+
+    <div class="card mb-3">
+        <div class="card-header">
+          <small>Working on this puzzle</small>
         </div>
-    {% endif %}
+        <div class="card-body">
+            {% for member in members %}
+                {{ member.member.fullName }}<br>
+            {% endfor %}
+        </div>
+    </div>
 
     <form action="/puzzle/{{ puzzle.id }}/claim" method="post">
         <button type="submit" class="btn btn-primary" href="/puzzle/{{ puzzle.id }}/claim">Join this puzzle</button>
