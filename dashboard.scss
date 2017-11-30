@@ -2,6 +2,8 @@
  * Base structure
  */
 
+$monospace: Inconsolata, monospace;
+
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
     padding-top: 3.5rem;
@@ -68,6 +70,16 @@ aside {
     }
 }
 
+%card-subhead {
+    font-weight: bold;
+    color: #777;
+}
+
+.latest-news {
+    @extend %card-subhead;
+}
+
+
 /* DASHBOARD */
 
 /* PLACEHOLDERS */
@@ -90,7 +102,7 @@ aside {
 
     td, th {
         padding: .5rem;
-        font-family: Inconsolata, monospace;
+        font-family: $monospace;
         /*font-size: .9rem;*/
     }
 
@@ -105,13 +117,8 @@ aside {
 
 /* PUZZLE PAGE */
 
-%card-subhead {
-    font-weight: bold;
-    color: #777;
-}
-
-.latest-news {
-    @extend %card-subhead;
+.solution-field {
+    font-family: $monospace;
 }
 
 .puzzle-header {

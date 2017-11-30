@@ -28,6 +28,9 @@ function show_content() {
 			$klein->respond('POST', '/edit/?', function ($request, $response) {
 					return savePuzzle($request->id, $request);
 				});
+			$klein->respond('POST', '/solve/?', function ($request, $response) {
+					return solvePuzzle($request->id, $request);
+				});
 			$klein->respond('POST', '/add-note/?', function ($request, $response) {
 					return addNote($request->id, $request);
 				});
@@ -152,7 +155,7 @@ function savePuzzle($puzzle_id, $request) {
 		->findOne();
 
 	$puzzle->setTitle($request->title);
-	$puzzle->setSolution($request->solution);
+	$puzzle->setSolution(strtoupper($request->solution));
 	$puzzle->setStatus($request->status);
 	$puzzle->setSpreadsheetId($request->spreadsheet_id);
 	$puzzle->setSlackChannel($request->slack_channel);
@@ -173,6 +176,19 @@ function savePuzzle($puzzle_id, $request) {
 	$message = "Saved ".$puzzle->getTitle();
 
 	redirect('/puzzle/'.$puzzle_id.'/edit', $message);
+}
+
+function solvePuzzle($puzzle_id, $request) {
+	$puzzle = PuzzleQuery::create()
+		->filterByID($puzzle_id)
+		->findOne();
+
+	$puzzle->setSolution(strtoupper($request->solution));
+	$puzzle->save();
+
+	$message = $puzzle->getTitle()." is solved! Great work, team! 🎓";
+
+	redirect('/puzzle/'.$puzzle_id, $message);
 }
 
 function addNote($puzzle_id, $request) {

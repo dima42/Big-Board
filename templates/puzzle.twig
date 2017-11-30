@@ -30,11 +30,15 @@
             </li>
         </ul>
 
-        {% if puzzle.status == "solved" %}
-            <div class="alert alert-success">
-                {{ puzzle.solution }}
+        <form action="/puzzle/{{ puzzle.id }}/solve" method="post" class="mb-5">
+            <div class="input-group input-group">
+                <span class="input-group-addon">Solution</span>
+                <input type="text" class="solution-field form-control" name="solution" placeholder="Enter solution here" value="{{ puzzle.solution }}">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Solve!</button>
+                </span>
             </div>
-        {% endif %}
+        </form>
 
         {% if puzzle.status == "featured" %}
             <div class="alert alert-info">This puzzle is the Featured Puzzle</div>

@@ -45,6 +45,10 @@ aside {
   aside small {
     display: block; }
 
+.latest-news, .solvers {
+  font-weight: bold;
+  color: #777; }
+
 /* DASHBOARD */
 /* PLACEHOLDERS */
 .placeholders {
@@ -68,9 +72,8 @@ aside {
     margin: 0; }
 
 /* PUZZLE PAGE */
-.latest-news, .solvers {
-  font-weight: bold;
-  color: #777; }
+.solution-field {
+  font-family: Inconsolata, monospace; }
 
 .puzzle-header {
   margin-bottom: 1em; }
