@@ -110,123 +110,6 @@ function iQuitSQL($pid, $uid) {
 	}
 }
 
-function gameChangerSQL($pid, $stt) {
-	Global $link;
-	// if $stt is featured, then it is the only puzzle that can have that status
-	$query = "";
-	if ($stt == "featured") {
-		$query = "update puz_tbl set puz_stt = 'priority' where puz_stt = 'featured'; ";
-		$link->query($query);
-	}
-	$query = "update puz_tbl set puz_ans = '', puz_stt='".$stt."' where puz_id = ".$pid;
-	$link->query($query);
-	if ($link->error == "") {
-		return "I have changed the status of this puzzle to ".$stt;
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
-
-function eurekaSQL($pid, $ans) {
-	Global $link;
-	$query = "update puz_tbl set puz_ans = '".$ans."', puz_stt='solved' where puz_id = ".$pid;
-	$link->query($query);
-	$query = "update puz_chk_out set chk_in = current_timestamp where puz_id = ".$pid;
-	$link->query($query);
-	if ($link->error == "") {
-		return "Another answer! We are well on our way to winning!";
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
-
-function thepuzzleiswhereSQL($pid, $link) {
-	Global $link;
-	$query = "update puz_tbl set puz_url = '".$link."' where puz_id = ".$pid;
-	$link->query($query);
-	if ($link->error == "") {
-		return "Okay! We'll go there instead .  (".$link.")";
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
-
-function workrelocationSQL($pid, $link) {
-	Global $link;
-	$query = "update puz_tbl set puz_spr = '".$link."' where puz_id = ".$pid;
-	$link->query($query);
-	if ($link->error == "") {
-		return "Okay! We'll work there instead .  (".$link.")";
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
-
-function knightswhonolongersayniSQL($pid, $title) {
-	Global $link;
-	$query = "update puz_tbl set puz_ttl = '".$title."' where puz_id = ".$pid;
-	$link->query($query);
-	if ($link->error == "") {
-		return "Okay! This puzzle's title has changed .  (".$title.")";
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
-
-function newDaddySQL($pid, $mid) {
-	Global $link;
-	$query = "insert into puz_rel_tbl (puz_id, puz_par_id) values (".$pid.", ".$mid.")";
-	$link->query($query);
-	if ($link->error == "") {
-		return "This puzzle is now in a new metapuzzle.";
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
-
-function abandonedSQL($pid, $mid) {
-	Global $link;
-	$query = "delete from puz_rel_tbl where puz_id = ".$pid." and puz_par_id = ".$mid."";
-	$link->query($query);
-	if ($link->error == "") {
-		return "This puzzle is now in no longer part of that metapuzzle.";
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
-
-function addUpdateSQL($uid, $cde, $nws) {
-	Global $link;
-	$query = "insert into pal_upd_tbl (pal_upd_code, pal_upd_txt, usr_id) values ('".$cde."', '".$nws."', ".$uid.")";
-	$link->query($query);
-	if ($link->error == "") {
-		return $nws;
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
-
-// Add a puzzle. Each of the next three functions do the same basic thing, but with specific results.
-function addNewMetaSQL($ttl, $url, $fid, $slack) {
-	Global $link;
-	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid, $slack);
-	addPuzzleRelationSQL($new_puzzle_id, $new_puzzle_id);
-	return "M".$new_puzzle_id;
-}
-
-function addLoosePuzzleSQL($ttl, $url, $fid, $slack) {
-	Global $link;
-	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid, $slack);
-	return "P".$new_puzzle_id;
-}
-
-function addPuzzleInMetaSQL($ttl, $url, $par, $fid, $slack) {
-	Global $link;
-	$new_puzzle_id = addPuzzleSQL($ttl, $url, $fid, $slack);
-	addPuzzleRelationSQL($new_puzzle_id, $par);
-	return "P".$new_puzzle_id."M".$par;
-}
-
 function addPuzzleSQL($ttl, $url, $fid, $slack) {
 	Global $link;
 	$ttl   = $link->real_escape_string($ttl);
@@ -235,12 +118,6 @@ function addPuzzleSQL($ttl, $url, $fid, $slack) {
 	$link->query($query);
 	$new_puz_id = $link->insert_id;
 	return $new_puz_id;
-}
-
-function addPuzzleRelationSQL($pid, $par) {
-	Global $link;
-	$query = "insert into puz_rel_tbl (puz_id, puz_par_id) values (".$pid.", ".$par.")";
-	$link->query($query);
 }
 
 function deletePuzzleSQL($pid) {
@@ -270,25 +147,3 @@ function promotePuzzleSQL($pid) {
 		return $link->error." (".$query.")";
 	}
 }
-
-function checkForExistingPuzzleSQL($title) {
-	Global $link;
-	$title = $link->real_escape_string($title);
-	$query = "select count(*) as TITLE_COUNT from puz_tbl ".
-	"where puz_ttl = '".$title."'";
-	$results = $link->query($query);
-	$row     = $results->fetch_array(MYSQLI_ASSOC);
-	return $row["TITLE_COUNT"];
-}
-
-function updateNotesSQL($pid, $notes) {
-	Global $link;
-	$query = "update puz_tbl set puz_notes = '".$notes."' where puz_id = ".$pid;
-	$link->query($query);
-	if ($link->error == "") {
-		return "Okay! This puzzle's notes have changed. (".$notes.")";
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
-?>

@@ -10,10 +10,12 @@
 {{ puzzle_table(puzzles) }}
 {% endfor %}
 
-<p><strong>Instructions:</strong> <span class='fake_button' id='instruction_status' onclick='toggle_instructions();'>show</span>
-<div id='instructions'>
-    <b>!!!</b> = the puzzle is the feature puzzle. Only one puzzle can be the featured puzzle.<br/>
-</div>
+<p>
+    <strong>Instructions:</strong>
+    <div id='instructions'>
+        <b>!!!</b> = the puzzle is the feature puzzle. Only one puzzle can be the featured puzzle.<br/>
+    </div>
+</p>
 {% endblock %}
 
 {% block aside %}

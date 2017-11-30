@@ -55,52 +55,6 @@ function handlePuzzleAddition(e) {
 	}
 }
 
-function toggle_Puzzle_Checkout(puzzleID) {
-	updated_puzzles = $("#puzchk_"+puzzleID);
-	elem = updated_puzzles[0];
-	msgr = new XMLHttpRequest();
-	msgr.onreadystatechange = handleResponse;
-	if (elem.src.indexOf("noton") == -1) {
-		msgr.open("GET","ajax_handler.php?f=QWT&pid="+puzzleID+"&uid="+$("#userid").value,true);
-		msgr.send();
-		new_image = "noton.png"; adjustment = -1;
-	} else {
-		msgr.open("GET","ajax_handler.php?f=CHK&pid="+puzzleID+"&uid="+$("#userid").value,true);
-		msgr.send();
-		new_image = "onit.png"; adjustment = 1;
-	}
-
-	for (i=0; i < updated_puzzles.length; i++) {
-		updated_puzzles[i].src = new_image;
-	}
-
-	updated_puzzles = $("#puzwrk_"+puzzleID);
-	if (updated_puzzles[0].innerHTML == "" && adjustment == -1) {
-		newTotal = ""
-	} else {
-		newTotal = (updated_puzzles[0].innerHTML*1)+adjustment;
-	}
-	for (i=0; i < updated_puzzles.length; i++) {
-		if (newTotal == 0) { updated_puzzles[i].innerHTML =""; }
-		else {updated_puzzles[i].innerHTML =newTotal}
-	}
-}
-
-function toggle_instructions() {
-	if ($("#instructions").style.display == "block") {
-		$("#instructions").style.display = "none";
-		$("#instruction_status").innerHTML = "show";
-	} else {
-		$("#instructions").style.display = "block";
-		$("#instruction_status").innerHTML = "hide";
-	}
-}
-
-function hide_notes() {
-	// all this is showing the notes for a given puzzle
-	$("#show_notes").style.display = "none";
-}
-
 function editAnswer(elem, puzzleID, origAnswer, userID, puzzleName) {
 	// we need to do a number of things here. First is, check to see if there is an actual change.
 	urlForSlack = "";
@@ -182,70 +136,6 @@ function updateSlack(uri) {
 	//alert(uri);
 }
 
-function new_link(elem, puzzleID) {
-	// we need to do a number of things here. First is, check to see if there is an actual change.
-	new_link = elem.value;
-
-	msgr = new XMLHttpRequest();
-	msgr.onreadystatechange = handleResponse;
-	msgr.open("GET","ajax_handler.php?f=NPL&pid="+puzzleID+"&link="+encodeURIComponent(new_link),true);
-	msgr.send();
-
-	// we'll do this twice, once for the cells, and once for the answer fields
-	updated_puzzles = $("#puzurllink_"+puzzleID);
-	for (i=0; i < updated_puzzles.length; i++) {
-		updated_puzzles[i].href = new_link;
-	}
-}
-
-function new_sprd(elem, puzzleID) {
-	// we need to do a number of things here. First is, check to see if there is an actual change.
-	new_link = elem.value;
-
-	msgr = new XMLHttpRequest();
-	msgr.onreadystatechange = handleResponse;
-	msgr.open("GET","ajax_handler.php?f=NPS&pid="+puzzleID+"&link="+encodeURIComponent(new_link),true);
-	msgr.send();
-
-	// we'll do this twice, once for the cells, and once for the answer fields
-	updated_puzzles = $("#puzsprlink_"+puzzleID);
-	for (i=0; i < updated_puzzles.length; i++) {
-		updated_puzzles[i].href = new_link;
-	}
-}
-
-function new_name(elem, puzzleID) {
-	// we need to do a number of things here. First is, check to see if there is an actual change.
-	new_link = elem.value;
-
-	msgr = new XMLHttpRequest();
-	msgr.onreadystatechange = handleResponse;
-	msgr.open("GET","ajax_handler.php?f=NPN&pid="+puzzleID+"&ttl="+encodeURIComponent(new_link),true);
-	msgr.send();
-
-	// we'll do this twice, once for the cells, and once for the answer fields
-	updated_puzzles = $("[name=puzttl_" + puzzleID + "]");
-	for (i=0; i < updated_puzzles.length; i++) {
-		updated_puzzles[i].href = new_link;
-	}
-}
-
-function upd_notes(elem, puzzleID) {
-	// we need to do a number of things here. First is, check to see if there is an actual change.
-	new_notes = elem.value;
-
-	msgr = new XMLHttpRequest();
-	msgr.onreadystatechange = handleResponse;
-	msgr.open("GET","ajax_handler.php?f=UNS&pid="+puzzleID+"&nts="+encodeURIComponent(new_notes),true);
-	msgr.send();
-
-	// we'll do this twice, once for the cells, and once for the answer fields
-	//updated_puzzles = $("[name=puzsprlink_" + puzzleID + "]");
-	//for (i=0; i < updated_puzzles.length; i++) {
-		//updated_puzzles[i].href = new_notes;
-	//}
-}
-
 function delete_puzzle(puzzleID) {
 	// we need to do a number of things here. First is, check to see if there is an actual change.
 	if (!$("#areyousure").checked) {
@@ -259,22 +149,6 @@ function delete_puzzle(puzzleID) {
 	msgr.send();
 }
 
-function change_parent(elem, puzzleID, metaID) {
-	// we need to do a number of things here. First is, check to see if there is an actual change.
-	if (elem.checked) {
-		fnct = "APM";
-	} else {
-		fnct = "RPM";
-	}
-
-	msgr = new XMLHttpRequest();
-	msgr.onreadystatechange = handleResponse;
-	msgr.open("GET","ajax_handler.php?f="+fnct+"&pid="+puzzleID+"&mid="+metaID,true);
-	msgr.send();
-
-	// there is no update to this
-}
-
 function add_update(elem, code, userID) {
 	// This is straightforward...send update into database and that's it.
 	msgr = new XMLHttpRequest();
@@ -282,14 +156,6 @@ function add_update(elem, code, userID) {
 	msgr.open("GET","ajax_handler.php?f=NWS&uid="+userID+"&code="+code+"&news="+encodeURIComponent(elem.value),true);
 	msgr.send();
 	// there is no update to this
-}
-
-function promote_puzzle(puzzleID) {
-	// Promoting a puzzle is pretty easy...all you have to do is add a relationship to itself
-	msgr = new XMLHttpRequest();
-	msgr.onreadystatechange = handlePuzzle;
-	msgr.open("GET","ajax_handler.php?f=PRO&pid="+puzzleID,true);
-	msgr.send();
 }
 
 function idle_hands() {
