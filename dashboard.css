@@ -18,9 +18,12 @@ h1 {
     /*margin-bottom: 0;*/
 }
 
-/*
- * Sidebar
- */
+h2 {
+    font-size: 1.5rem;
+}
+
+
+/* SIDEBAR */
 
 .sidebar {
   position: fixed;
@@ -104,4 +107,10 @@ thead tr {
 
 table label {
     margin: 0;
+}
+
+/* PUZZLE PAGE */
+
+.puzzle-header {
+    margin-bottom: 1em;
 }
