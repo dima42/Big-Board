@@ -41,7 +41,7 @@
             {% endif %}
             <td><a href="/puzzle/{{ puzzle.id }}/edit">✏️</a></td>
             <td>{% if puzzle.url %}<a href="{{ puzzle.url }}"><img src="/img/mit.png" width="20" alt=""></a>{% endif %}</td>
-            <td><a href="{{ puzzle.spreadsheetId }}"><img src="/img/drive.png" width="20" alt=""></a></td>
+            <td><a href="https://docs.google.com/spreadsheets/d/{{ puzzle.spreadsheetId }}"><img src="/img/drive.png" width="20" alt=""></a></td>
             <td><a href="http://palindrome2017.slack.com/messages/{{ puzzle.slackChannel }}"><img src="/img/slack.png" width="20" alt=""></a></td>
         </tr>
     {% endfor %}
