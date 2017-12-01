@@ -90,3 +90,10 @@ aside {
   padding: 0;
   width: 100%;
   text-align: left; }
+
+.puzzleInputGroup {
+  margin-bottom: 1.5em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #ddd; }
+  .puzzleInputGroup .input-group-addon {
+    width: 10%; }

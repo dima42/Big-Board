@@ -144,3 +144,15 @@ aside {
     width: 100%;
     text-align: left;
 }
+
+// ADD PUZZLE
+
+.puzzleInputGroup {
+    margin-bottom: 1.5em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #ddd;
+
+    .input-group-addon {
+        width: 10%;
+    }
+}

@@ -1,6 +1,6 @@
 <?
 require_once "sql.php";
-
+use Cocur\Slugify\Slugify;
 use Propel\Runtime\ActiveQuery\Criteria;
 
 function show_content() {
@@ -265,6 +265,7 @@ function displayAdd($meta_id = '') {
 function puzzleScrape($request, $response) {
 	$urls_string = $request->urls;
 	$urls        = explode("\n", $urls_string);
+	$slugify     = new Slugify();
 
 	$json = array();
 	foreach ($urls as $url) {
@@ -274,6 +275,7 @@ function puzzleScrape($request, $response) {
 			$json[] = array(
 				"url"   => $url,
 				"title" => $title,
+				"slack" => $slugify->slugify($title)
 			);
 		}
 	}

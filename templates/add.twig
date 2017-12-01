@@ -1,26 +1,82 @@
 {% extends 'loggedin.twig' %}
 
 {% block content %}
-<h1>Add puzzles in bulk</h1>
-<ol>
-    <li>Use <a href="https://chrome.google.com/webstore/detail/link-grabber/caodelkhipncidmoebgbbeemedohcdma/related?hl=en-US">Link Grabber</a> to scrape all the links on a given page. </li>
-    <li>Filter to only grab the right kinds of URLs.</li>
-    <li>Press the copy button.</li>
-    <li>Paste the list here.</li>
-</ol>
-<form id="addForm" action="" method="post">
+<h1>Add puzzle(s)</h1>
+<form id="scrapeForm" action="" method="get">
+    <ol>
+        <li>Use <a href="https://chrome.google.com/webstore/detail/link-grabber/caodelkhipncidmoebgbbeemedohcdma/related?hl=en-US">Link Grabber</a> to scrape all the links on a given page. </li>
+        <li>Filter to only grab the right kinds of URLs.</li>
+        <li>Press the copy button.</li>
+        <li>Paste the list here.</li>
+    </ol>
     <div class="form-group">
-        <textarea name="url-list" id="" rows="10" class="form-control"></textarea>
+        <textarea name="url-list" id="urls" rows="10" class="form-control">http://web.mit.edu/puzzle/www/2016/puzzle/dog_food/
+http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
     </div>
     <div class="form-group">
         <label for="meta">If these all belong to the same meta, select it:</label>
-        <select class="form-control" name="meta">
+        <select id="metaSelect" class="form-control" name="meta">
                 <option value="">- - -</option>
             {% for meta in metas %}
                 <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
             {% endfor %}
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button class="btn btn-primary" type="button" id="scrape-button">Go to step 2 &rarr;</button>
+
 </form>
+
+<form id="addForm" class="d-none" action="/addPuzzles" method="post">
+    <div id="form-controls"></div>
+    <button class="btn btn-primary" type="submit">Submit these</button>
+</form>
+
+<div id="puzzleInputTemplate" class="puzzleInputGroup form-group d-none">
+    <div class="input-group newPuzzleTitle mb-2">
+        <span class="input-group-addon">Title</span>
+        <input type="text" class="form-control" name="">
+    </div>
+    <div class="input-group newPuzzleURL mb-2">
+        <span class="input-group-addon">URL</span>
+        <input type="text" class="form-control" name="">
+    </div>
+    <div class="input-group newPuzzleMeta mb-2">
+        <span class="input-group-addon">Meta</span>
+
+    </div>
+    <div class="input-group newPuzzleSlack mb-2">
+        <span class="input-group-addon"><img src="/img/slack.png" width="15px" alt=""></span>
+        <input type="text" class="form-control" name="">
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('#scrape-button').click(function() {
+        var urls = $('#urls').val();
+        var data = {
+            'urls': urls
+        }
+        $('#scrapeForm').hide();
+        $('#addForm').removeClass('d-none');
+        $.get('/puzzle_scrape', data, function(response) {
+            $.each(response, function(i, puzzle) {
+                var newPuzzleForm = $('#puzzleInputTemplate').clone();
+                var metaSelect = $('#metaSelect');
+
+                newPuzzleForm.attr('id', 'puzzleGroup' + i).removeClass('d-none');
+                newPuzzleForm.find('.newPuzzleTitle input').val(puzzle['title']).attr('name', 'newPuzzleTitle[' + i + '][title]');
+                newPuzzleForm.find('.newPuzzleURL input').val(puzzle['url']).attr('name', 'newPuzzleURL[' + i + '][url]');
+                newPuzzleForm.find('.newPuzzleSlack input').val(puzzle['slack']).attr('name', 'newPuzzleSlack[' + i + '][slack]');
+                metaSelect.clone().val(metaSelect.val()).attr('name', 'newPuzzleMeta[' + i + '][title]').appendTo(newPuzzleForm.find('.newPuzzleMeta'));
+
+                // clone meta from original form and put it here, since it'll be pre-selected (i think?)
+                $('#addForm #form-controls').append(newPuzzleForm);
+            });
+        });
+    });
+});
+</script>
 {% endblock %}
