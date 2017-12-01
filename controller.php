@@ -118,10 +118,12 @@ function displayError($error) {
 
 function displayTest() {
 	$puzzle = PuzzleQuery::create()
-		->filterByID(202)
+		->filterByID(203)
 		->findOne();
 
-	postPuzzle($puzzle, $puzzle->getSlackChannel());
+	// postPuzzle($puzzle, $puzzle->getSlackChannel());
+	postSolve($puzzle, $puzzle->getSlackChannel());
+	// postSolve($puzzle);
 
 	return;
 
@@ -226,9 +228,11 @@ function solvePuzzle($puzzle_id, $request) {
 	$puzzle->setSolution(strtoupper($request->solution));
 	$puzzle->save();
 
-	$message = $puzzle->getTitle()." is solved! Great work, team! 🎓";
+	postSolve($puzzle, $puzzle->getSlackChannel());
+	postSolve($puzzle);
 
-	redirect('/puzzle/'.$puzzle_id, $message);
+	$alert = $puzzle->getTitle()." is solved! Great work, team! 🎓";
+	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 
 function addNote($puzzle_id, $request) {

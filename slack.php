@@ -1,4 +1,4 @@
-<?php
+<?
 use Maknz\Slack\Attachment;
 
 function createNewSlackChannel($slug) {
@@ -13,16 +13,16 @@ function createNewSlackChannel($slug) {
 	return $result;
 }
 
-function getSlackClient() {
+function getSlackClient($icon = ":boar:", $username = "Big Board Bot") {
 	$settings = [
-		// 'username' => 'Cyril',
+		'username'                => $username,
+		'icon'                    => $icon,
 		'link_names'              => true,
 		'markdown_in_attachments' => array('text'),
 	];
 
-	$client = new Maknz\Slack\Client('https://hooks.slack.com/services/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');
+	$client = new Maknz\Slack\Client('https://hooks.slack.com/services/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', $settings);
 	return $client;
-
 }
 
 function postToChannel($message, $channel = "sandbox") {
@@ -50,4 +50,16 @@ function postPuzzle($puzzle, $channel = "big-board") {
 	$message->setText('*'.$puzzle->getTitle().'*');
 	$message->setChannel('#'.$channel);
 	$message->send();
+}
+
+function postSolve($puzzle, $channel = "big-board") {
+	$content = ':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board> '.
+	':bar_chart: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Spreadsheet> '.
+	':slack: <#'.$puzzle->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>';
+
+	$client = getSlackClient(":checkered_flag:", "Solve Bot");
+	$client->to($channel)->attach([
+			'text'  => $content,
+			'color' => '#000000',
+		])->send('*'.$puzzle->getTitle().'* is solved: `'.$puzzle->getSolution().'`');
 }
