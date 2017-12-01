@@ -327,6 +327,19 @@ function addPuzzle($request, $response) {
 			$newPuzzle->setStatus('open');
 			$newPuzzle->save();
 
+			$meta = $puzzleContent['meta'];
+
+			if ($meta >= 0) {
+				$parentID = $meta;
+				if ($meta == 0) {// it's a meta, so set Parent to itself
+					$parentID = $newPuzzle->getID();
+				}
+				$newPuzzleParent = new PuzzleParent();
+				$newPuzzleParent->setChild($newPuzzle);
+				$newPuzzleParent->setParentId($parentID);
+				$newPuzzleParent->save();
+			}
+
 			$newPuzzles[] = array(
 				'puzzleID' => $puzzleId,
 				'title'    => $puzzleContent['title'],
@@ -342,8 +355,6 @@ function addPuzzle($request, $response) {
 			'newPuzzles'     => $newPuzzles,
 		));
 
-	// # create meta if it's a meta
-	// # create meta connection if it's not a meta itself
 	// # send post to slack channel
 	// # post news update?
 }

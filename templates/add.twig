@@ -23,7 +23,7 @@ http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
                 <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
             {% endfor %}
                 <option value="">- - -</option>
-                <option value="0">This is a new meta</option>
+                <option value="0">🆕 This is a new meta</option>
         </select>
     </div>
     <button class="btn btn-primary" type="button" id="scrape-button">Submit URLs &rarr;</button>
@@ -61,7 +61,9 @@ http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
 
 <div id="puzzleCardTemplate" class="card">
     <div class="card-body">
-        <span class="puzzleTitle"></span> was created. <a class="puzzleLink" href="#">Visit it now &rarr;</a>
+        Created<br>
+        <strong class="puzzleTitle"></strong><br>
+        <a class="puzzleLink" href="#">Visit it now &rarr;</a>
     </div>
 </div>
 </div>
