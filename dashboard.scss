@@ -144,3 +144,53 @@ aside {
     width: 100%;
     text-align: left;
 }
+
+// ADD PUZZLE
+
+.puzzleInputGroup {
+    margin-bottom: 2.5em;
+
+    .input-group-addon {
+        width: 10%;
+    }
+}
+
+.addPuzzle {
+    .templates {
+        display: none;
+    }
+
+    .working {
+        display: none;
+    }
+
+    .addForm {
+        display: none;
+    }
+
+    .addFormError {
+        display: none;
+    }
+
+    &[data-step='scraping'] {
+        .working {
+            display: block;
+        }
+    }
+
+    &[data-step='step2'] {
+        .addForm {
+            display: block;
+        }
+    }
+
+    &[data-step='checking-for-dupes'] {
+        .addForm {
+        }
+    }
+
+    &.trippy {
+        background:transparent url('https://media.giphy.com/media/l378z9JqBTfYDrXUI/source.gif') no-repeat;
+        background-size: cover;
+    }
+}

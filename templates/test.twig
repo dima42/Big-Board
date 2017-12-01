@@ -1,7 +1,69 @@
 {% extends 'loggedin.twig' %}
 
-{% block body %}
-    <p>
-    {{ content }}
-    </p>
+{% block content %}
+<h1>Add puzzles in bulk</h1>
+<form id="scrapeForm" action="" method="get">
+    <ol>
+        <li>Use <a href="https://chrome.google.com/webstore/detail/link-grabber/caodelkhipncidmoebgbbeemedohcdma/related?hl=en-US">Link Grabber</a> to scrape all the links on a given page. </li>
+        <li>Filter to only grab the right kinds of URLs.</li>
+        <li>Press the copy button.</li>
+        <li>Paste the list here.</li>
+    </ol>
+    <div class="form-group">
+        <textarea name="url-list" id="urls" rows="10" class="form-control">http://web.mit.edu/puzzle/www/2016/puzzle/dog_food/
+http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
+    </div>
+    <div class="form-group">
+        <label for="meta">If these all belong to the same meta, select it:</label>
+        <select id="metaSelect" class="form-control" name="meta">
+                <option value="">- - -</option>
+            {% for meta in metas %}
+                <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="btn btn-primary" type="button" id="scrape-button">Go to step 2 &rarr;</button>
+
+</form>
+
+<form id="addForm" class="d-none" action="/addPuzzles" method="post">
+    <div id="form-controls"></div>
+    <button class="btn btn-primary" type="submit">Submit these</button>
+</form>
+
+<div id="puzzleInputTemplate" class="puzzleInputGroup form-group d-none">
+    <input class="form-control newPuzzleTitle" type="text" name="">
+    <input class="form-control newPuzzleURL" type="text" name="">
+    <input class="form-control newPuzzleSlack" type="text" name="">
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('#scrape-button').click(function() {
+        var urls = $('#urls').val();
+        var data = {
+            'urls': urls
+        }
+        $('#scrapeForm').hide();
+        $('#addForm').removeClass('d-none');
+        $.get('/puzzle_scrape', data, function(response) {
+            $.each(response, function(i, puzzle) {
+                var newPuzzleForm = $('#puzzleInputTemplate').clone();
+                newPuzzleForm.attr('id', 'puzzleGroup' + i).removeClass('d-none');
+                newPuzzleForm.find('.newPuzzleTitle').val(puzzle['title']).attr('name', 'newPuzzleTitle[' + i + '][title]');
+                newPuzzleForm.find('.newPuzzleURL').val(puzzle['url']).attr('name', 'newPuzzleURL[' + i + '][url]');
+                newPuzzleForm.find('.newPuzzleSlack').val(puzzle['slack']).attr('name', 'newPuzzleSlack[' + i + '][slack]');
+
+                var metaSelect = $('#metaSelect');
+                metaSelect.clone().attr('name', 'newPuzzleMeta[' + i + '][title]').val(metaSelect.val()).appendTo(newPuzzleForm);
+
+                // clone meta from original form and put it here, since it'll be pre-selected (i think?)
+                $('#addForm #form-controls').append(newPuzzleForm);
+            });
+        });
+    });
+});
+</script>
 {% endblock %}

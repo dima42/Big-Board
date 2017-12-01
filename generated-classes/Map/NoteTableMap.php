@@ -170,7 +170,7 @@ class NoteTableMap extends TableMap
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), null, null, null, false);
+), 'CASCADE', null, null, false);
         $this->addRelation('Author', '\\Member', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (

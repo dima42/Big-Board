@@ -1,5 +1,7 @@
 <?
 require_once "sql.php";
+require_once "new_file_management.php";
+use Cocur\Slugify\Slugify;
 use Propel\Runtime\ActiveQuery\Criteria;
 
 function show_content() {
@@ -88,9 +90,13 @@ function show_content() {
 			$klein->respond('GET', '/[:meta_id]/?', function ($request) {
 					return displayAdd($request->meta_id);
 				});
-			$klein->respond('POST', '/?', function ($request) {
-					return addPuzzle($request->meta_id);
+			$klein->respond('POST', '/?', function ($request, $response) {
+					return addPuzzle($request, $response);
 				});
+		});
+
+	$klein->respond('GET', '/puzzle_scrape', function ($request, $response) {
+			return puzzleScrape($request, $response);
 		});
 
 	$klein->dispatch();
@@ -112,25 +118,17 @@ function displayError($error) {
 function displayTest() {
 	// $result = create_file_from_template("test-".rand(1000, 9999));
 
-	$puzzle = PuzzleQuery::create()
-		->filterByID(12)
-		->findOne();
+	$doc = hQuery::fromUrl('http://web.mit.edu/puzzle/www/2016/puzzle/dog_food/', ['Accept' => 'text/html']);
 
-	$notes = NoteQuery::create()
-		->filterByPuzzle($puzzle)
-		->find();
+	// echo "<pre>";
 
-	echo "<pre>";
-	foreach ($notes as $note) {
-		preprint($note->getBody());
-		echo " ";
-		echo "<br>";
-	}
-	echo "</pre>";
+	// echo $doc->find('title');
 
-	// render('test.twig', array(
-	// 		// 'content' => $result,
-	// 	));
+	// echo "</pre>";
+
+	render('test.twig', array(
+			// 'content' => $result,
+		));
 }
 
 function displayPuzzle($puzzle_id, $method = "get") {
@@ -265,18 +263,100 @@ function displayAdd($meta_id = '') {
 		));
 }
 
-function addPuzzle() {
-	// # check for URL in DB
-	// # check for slack channel too?
+function puzzleScrape($request, $response) {
+	$urls_string = $request->urls;
+	$urls        = explode("\n", $urls_string);
+	$slugify     = new Slugify();
 
-	// # create puzzle object
-	// # create google drive spreadsheet
-	// create_file_from_template($_GET["ttl"]);
-	// # create slack channel
-	// createNewSlackChannel($_GET{"ttl"});
-	// # post to slack channel
-	// # post update?
-	// # redirect
+	$json = array();
+	foreach ($urls as $url) {
+		if (filter_var($url, FILTER_VALIDATE_URL)) {
+			$doc    = hQuery::fromUrl($url, ['Accept' => 'text/html']);
+			$title  = $doc->find('title')->text();
+			$json[] = array(
+				"url"   => $url,
+				"title" => $title,
+				"slack" => substr($slugify->slugify($title), 0, 21)
+			);
+		}
+	}
+
+	return $response->json($json);
+}
+
+function addPuzzle($request, $response) {
+	$existingURLs   = array();
+	$existingTitles = array();
+	$existingSlacks = array();
+	$newPuzzles     = array();
+
+	foreach ($request->newPuzzles as $puzzleKey => $puzzleContent) {
+		$puzzleId = "puzzleGroup".$puzzleKey;
+
+		$puzzleURLExists = PuzzleQuery::create()
+			->filterByURL($puzzleContent['url'])
+			->findOne();
+		$puzzleTitleExists = PuzzleQuery::create()
+			->filterByTitle($puzzleContent['title'])
+			->findOne();
+
+		if ($puzzleURLExists) {
+			$existingURLs[] = $puzzleId;
+		}
+
+		if ($puzzleTitleExists) {
+			$existingTitles[] = $puzzleId;
+		}
+
+		if (!$puzzleURLExists && !$puzzleTitleExists) {
+			$slack_response = json_decode(createNewSlackChannel($puzzleContent['slack']), true);
+
+			if (!$slack_response['ok']) {
+				$existingSlacks[] = $puzzleId;
+				continue;
+			}
+
+			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
+
+			$newPuzzle = new Puzzle();
+			$newPuzzle->setTitle($puzzleContent['title']);
+			$newPuzzle->setUrl($puzzleContent['url']);
+			$newPuzzle->setSpreadsheetId($spreadsheet_id);
+			$newPuzzle->setSlackChannel($slack_response['channel']['name']);
+			$newPuzzle->setSlackChannelId($slack_response['channel']['id']);
+			$newPuzzle->setStatus('open');
+			$newPuzzle->save();
+
+			$meta = $puzzleContent['meta'];
+
+			if ($meta >= 0) {
+				$parentID = $meta;
+				if ($meta == 0) {// it's a meta, so set Parent to itself
+					$parentID = $newPuzzle->getID();
+				}
+				$newPuzzleParent = new PuzzleParent();
+				$newPuzzleParent->setChild($newPuzzle);
+				$newPuzzleParent->setParentId($parentID);
+				$newPuzzleParent->save();
+			}
+
+			$newPuzzles[] = array(
+				'puzzleID' => $puzzleId,
+				'title'    => $puzzleContent['title'],
+				'pkID'     => $newPuzzle->getID(),
+			);
+		}
+	}
+
+	return $response->json(array(
+			'existingURLs'   => $existingURLs,
+			'existingTitles' => $existingTitles,
+			'existingSlacks' => $existingSlacks,
+			'newPuzzles'     => $newPuzzles,
+		));
+
+	// # send post to slack channel
+	// # post news update?
 }
 
 // MEMBERS

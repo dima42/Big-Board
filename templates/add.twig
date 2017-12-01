@@ -1,26 +1,151 @@
 {% extends 'loggedin.twig' %}
 
+{% block bodyclass %}addPuzzle{% endblock %}
+
 {% block content %}
-<h1>Add puzzles in bulk</h1>
-<ol>
-    <li>Use <a href="https://chrome.google.com/webstore/detail/link-grabber/caodelkhipncidmoebgbbeemedohcdma/related?hl=en-US">Link Grabber</a> to scrape all the links on a given page. </li>
-    <li>Filter to only grab the right kinds of URLs.</li>
-    <li>Press the copy button.</li>
-    <li>Paste the list here.</li>
-</ol>
-<form action="" method="post">
+<h1>Add puzzle(s)</h1>
+<form id="scrapeForm" action="" method="get">
+    <ol>
+        <li>Use <a href="https://chrome.google.com/webstore/detail/link-grabber/caodelkhipncidmoebgbbeemedohcdma/related?hl=en-US">Link Grabber</a> to scrape all the links on a given page. </li>
+        <li>Filter to only grab the right kinds of URLs.</li>
+        <li>Press the copy button.</li>
+        <li>Paste the list here.</li>
+    </ol>
     <div class="form-group">
-        <textarea name="url-list" id="" rows="10" class="form-control"></textarea>
+        <textarea name="url-list" id="urls" rows="10" class="form-control">http://web.mit.edu/puzzle/www/2016/puzzle/dog_food/
+http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
     </div>
     <div class="form-group">
-        <label for="meta">If these all belong to the same meta, select it:</label>
-        <select class="form-control" name="meta">
+        <label for="meta">Meta info:</label>
+        <select id="metaSelect" class="form-control" name="meta">
                 <option value="">- - -</option>
             {% for meta in metas %}
                 <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
             {% endfor %}
+                <option value="">- - -</option>
+                <option value="0">🆕 This is a new meta</option>
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button class="btn btn-primary" type="button" id="scrape-button">Submit URLs &rarr;</button>
+
 </form>
+
+<img class="working" src="https://media.giphy.com/media/ule4vhcY1xEKQ/giphy.gif" alt="">
+
+<form class="addForm" action="/add" method="post">
+    <div class="addFormError alert alert-danger"></div>
+    <div id="form-controls"></div>
+    <button id="submit-button" class="btn btn-primary" type="submit">Submit puzzles</button>
+</form>
+
+<div class="templates">
+<div id="puzzleInputTemplate" class="puzzleInputGroup form-group">
+    <h4>New puzzle #<span class="puzzleNum"></span> <a class="small removePuzzle" href="#">Remove?</a></h4>
+    <div class="input-group newPuzzleTitle mb-2">
+        <span class="input-group-addon">Title</span>
+        <input type="text" class="form-control" name="">
+    </div>
+    <div class="input-group newPuzzleURL mb-2">
+        <span class="input-group-addon">URL</span>
+        <input type="text" class="form-control" name="">
+    </div>
+    <div class="input-group newPuzzleMeta mb-2">
+        <span class="input-group-addon">Meta</span>
+
+    </div>
+    <div class="input-group newPuzzleSlack mb-2">
+        <span class="input-group-addon"><img src="/img/slack.png" width="15px" alt=""></span>
+        <input type="text" class="form-control" name="" maxlength="21">
+    </div>
+</div>
+
+<div id="puzzleCardTemplate" class="card">
+    <div class="card-body">
+        Created<br>
+        <strong class="puzzleTitle"></strong><br>
+        <a class="puzzleLink" href="#">Visit it now &rarr;</a>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('#scrape-button').click(function(e) {
+        e.preventDefault();
+        var urls = $('#urls').val();
+        var data = {
+            'urls': urls
+        }
+        $('#scrapeForm').hide();
+        $('body').attr('data-step', 'scraping');
+        $.get('/puzzle_scrape', data, function(response) {
+            $('body').attr('data-step', 'step2');
+            $.each(response, function(i, puzzle) {
+                var newPuzzleForm = $('#puzzleInputTemplate').clone(true);
+                var metaSelect = $('#metaSelect');
+
+                newPuzzleForm.attr('id', 'puzzleGroup' + i);
+                newPuzzleForm.find('.puzzleNum').text(i + 1);
+                newPuzzleForm.find('.newPuzzleTitle input').val(puzzle['title']).attr('name', 'newPuzzles[' + i + '][title]');
+                newPuzzleForm.find('.newPuzzleURL input').val(puzzle['url']).attr('name', 'newPuzzles[' + i + '][url]');
+                newPuzzleForm.find('.newPuzzleSlack input').val(puzzle['slack']).attr('name', 'newPuzzles[' + i + '][slack]');
+                metaSelect.clone().val(metaSelect.val()).attr('name', 'newPuzzles[' + i + '][meta]').appendTo(newPuzzleForm.find('.newPuzzleMeta'));
+
+                // clone meta from original form and put it here, since it'll be pre-selected (i think?)
+                $('.addForm #form-controls').append(newPuzzleForm);
+                $('.addForm #form-controls').append(newPuzzleForm);
+            });
+        });
+    });
+
+    $('.addForm').submit(function(e) {
+        e.preventDefault();
+
+        // If form has already bene submitted, don't allow it to be submitted again
+        if ($('#submit-button').prop('disabled')) {
+            return;
+        }
+
+        $('.addFormError').hide();
+        $('.is-invalid').removeClass('is-invalid');
+        $('#submit-button').prop('disabled', true);
+        $('body').addClass('trippy');
+
+        $.post('/add', $('.addForm').serialize(), function(response) {
+            $('body').removeClass('trippy');
+            $.each(response['existingTitles'], function(i, puzzleID) {
+                $('#' + puzzleID).find('.newPuzzleTitle input').addClass('is-invalid');
+            });
+            $.each(response['existingURLs'], function(i, puzzleID) {
+                $('#' + puzzleID).find('.newPuzzleURL input').addClass('is-invalid');
+            });
+            $.each(response['existingSlacks'], function(i, puzzleID) {
+                $('#' + puzzleID).find('.newPuzzleSlack input').addClass('is-invalid');
+            });
+
+            if ($('.is-invalid').length) {
+                $('.addFormError').html('The fields outlined in red are already used in our system. Please enter something unique and re-submit.').show();
+                $('#submit-button').prop('disabled', false);
+            } else {
+                $('#submit-button').hide();
+            }
+
+            $.each(response['newPuzzles'], function(i, puzzle) {
+                var puzzleCard = $('#puzzleCardTemplate').clone();
+                puzzleCard.attr('id', '');
+                puzzleCard.find('.puzzleTitle').html(puzzle['title']);
+                puzzleCard.find('.puzzleLink').attr('href', '/puzzle/' + puzzle['pkID']);
+                $('#' + puzzle['puzzleID']).removeClass('puzzleGroup').html(puzzleCard);
+            });
+
+        });
+    });
+
+    $('.removePuzzle').click(function() {
+        $(this).closest('.puzzleInputGroup').remove();
+    });
+});
+</script>
 {% endblock %}

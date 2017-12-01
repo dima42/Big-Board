@@ -1,6 +1,7 @@
 *.codekit3
 .DS_Store
 *.phpintel
+*.php-tmp
 error_log*
 
 /vendor/*

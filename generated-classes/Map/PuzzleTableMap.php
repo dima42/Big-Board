@@ -182,7 +182,7 @@ class PuzzleTableMap extends TableMap
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), null, null, 'Notes', false);
+), 'CASCADE', null, 'Notes', false);
         $this->addRelation('PuzzleMember', '\\PuzzleMember', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -205,6 +205,15 @@ class PuzzleTableMap extends TableMap
   ),
 ), null, null, 'Puzzlechildren', false);
     } // buildRelations()
+    /**
+     * Method to invalidate the instance pool of all tables related to puzzle     * by a foreign key with ON DELETE CASCADE
+     */
+    public static function clearRelatedInstancePool()
+    {
+        // Invalidate objects in related instance pools,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        NoteTableMap::clearInstancePool();
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
