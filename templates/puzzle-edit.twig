@@ -66,7 +66,7 @@
             <legend class="col-form-legend col-sm-3">Advanced</legend>
             <div class="col-sm-9">
               <label class="form-check-label">
-                <input class="form-check-input" type='checkbox' name='mark-as-meta'>
+                <input class="form-check-input" type="checkbox" name="i_am_meta" {{ i_am_meta|yesno('checked') }} value="y">
                 This is a meta!
               </label>
               <small class="form-text text-muted">Do not use unless you are sure.</small>

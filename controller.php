@@ -150,12 +150,18 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	// TODO: if not $puzzle, redirect to error template
 	// "This puzzle does not exist. It is a ghost puzzle.";
 
-	$all_metas = PuzzleParentQuery::create()
+	$metas_to_show = PuzzleParentQuery::create()
 		->joinWith('PuzzleParent.Parent')
 		->orderByParentId()
 		->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
+		->filterByParentId($puzzle_id, CRITERIA::NOT_EQUAL)
 		->groupBy('Parent.Id')
 		->find();
+
+	$me_as_meta = PuzzleParentQuery::create()
+		->filterByParent($puzzle)
+		->filterByChild($puzzle)
+		->count();
 
 	$statuses = array('open', 'stuck', 'priority', 'solved');
 
@@ -170,8 +176,9 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'puzzle'    => $puzzle,
 			'notes'     => $notes,
 			'members'   => $members,
-			'all_metas' => $all_metas,
+			'all_metas' => $metas_to_show,
 			'statuses'  => $statuses,
+			'i_am_meta' => $me_as_meta > 0,
 		));
 }
 
@@ -187,15 +194,24 @@ function editPuzzle($puzzle_id, $request) {
 	$puzzle->setSlackChannel($request->slack_channel);
 	$puzzle->save();
 
+	// Remove all parents, even myself (if I'm a meta)
 	$oldParents = PuzzleParentQuery::create()
 		->filterByPuzzleId($puzzle_id)
 		->find();
 	$oldParents->delete();
 
+	// Assign parents
 	foreach ($request->metas as $meta) {
 		$puzzleParent = new PuzzleParent();
 		$puzzleParent->setPuzzleId($puzzle_id);
 		$puzzleParent->setParentId($meta);
+		$puzzleParent->save();
+	}
+
+	if ($request->i_am_meta == "y") {
+		$puzzleParent = new PuzzleParent();
+		$puzzleParent->setPuzzleId($puzzle_id);
+		$puzzleParent->setParentId($puzzle_id);
 		$puzzleParent->save();
 	}
 
