@@ -36,7 +36,7 @@ function postPuzzle($puzzle, $channel = "big-board") {
 	$messages = array(
 		':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board>',
 		':page_facing_up: <'.$puzzle->getUrl().'|MIT puzzle page>',
-		':bar_chart: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Google Spreadsheet>',
+		':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Google Spreadsheet>',
 		':slack: <#'.$puzzle->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>',
 	);
 
@@ -54,7 +54,7 @@ function postPuzzle($puzzle, $channel = "big-board") {
 
 function postSolve($puzzle, $channel = "big-board") {
 	$content = ':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board> '.
-	':bar_chart: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Spreadsheet> '.
+	':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Spreadsheet> '.
 	':slack: <#'.$puzzle->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>';
 
 	$client = getSlackClient(":checkered_flag:", "Solve Bot");
