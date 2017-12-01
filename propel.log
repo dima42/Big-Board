@@ -1,1 +1,0 @@
-[2017-12-01 04:28:04] defaultLogger.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Dog Food — Dog Show — MIT Mystery Hunt 2016' for key 'puzzle_u_639136' [] []

@@ -6,5 +6,6 @@ error_log*
 
 /vendor/*
 propel
+propel.log
 
 generated-conf/config.php
