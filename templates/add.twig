@@ -20,6 +20,8 @@ http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
             {% for meta in metas %}
                 <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
             {% endfor %}
+                <option value="">- - -</option>
+                <option value="0">This is a new meta</option>
         </select>
     </div>
     <button class="btn btn-primary" type="button" id="scrape-button">Go to step 2 &rarr;</button>
@@ -32,7 +34,7 @@ http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
 </form>
 
 <div id="puzzleInputTemplate" class="puzzleInputGroup form-group d-none">
-    <h4>New puzzle #<span class="puzzleNum"></span> <a class="small" href="#">Remove?</a></h4>
+    <h4>New puzzle #<span class="puzzleNum"></span> <a class="small removePuzzle" href="#">Remove?</a></h4>
     <div class="input-group newPuzzleTitle mb-2">
         <span class="input-group-addon">Title</span>
         <input type="text" class="form-control" name="">
@@ -64,7 +66,7 @@ $(function() {
         $('#addForm').removeClass('d-none');
         $.get('/puzzle_scrape', data, function(response) {
             $.each(response, function(i, puzzle) {
-                var newPuzzleForm = $('#puzzleInputTemplate').clone();
+                var newPuzzleForm = $('#puzzleInputTemplate').clone(true);
                 var metaSelect = $('#metaSelect');
 
                 newPuzzleForm.attr('id', 'puzzleGroup' + i).removeClass('d-none');
@@ -80,6 +82,10 @@ $(function() {
             });
         });
         // TODO: only show 'SUBMIT' button after all form fields are shown
+    });
+
+    $('.removePuzzle').click(function() {
+        $(this).closest('.puzzleInputGroup').remove();
     });
 });
 </script>
