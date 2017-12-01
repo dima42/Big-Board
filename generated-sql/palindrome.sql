@@ -42,7 +42,8 @@ CREATE TABLE `note`
     INDEX `note_fi_672062` (`member_id`),
     CONSTRAINT `note_fk_937852`
         FOREIGN KEY (`puzzle_id`)
-        REFERENCES `puzzle` (`id`),
+        REFERENCES `puzzle` (`id`)
+        ON DELETE CASCADE,
     CONSTRAINT `note_fk_672062`
         FOREIGN KEY (`member_id`)
         REFERENCES `member` (`id`)
