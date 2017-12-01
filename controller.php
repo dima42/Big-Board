@@ -1,7 +1,6 @@
 <?
 require_once "sql.php";
 require_once "new_file_management.php";
-require_once "slack_functions.php";
 use Cocur\Slugify\Slugify;
 use Propel\Runtime\ActiveQuery\Criteria;
 
