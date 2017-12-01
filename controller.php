@@ -90,8 +90,8 @@ function show_content() {
 			$klein->respond('GET', '/[:meta_id]/?', function ($request) {
 					return displayAdd($request->meta_id);
 				});
-			$klein->respond('POST', '/?', function ($request) {
-					return addPuzzle($request);
+			$klein->respond('POST', '/?', function ($request, $response) {
+					return addPuzzle($request, $response);
 				});
 		});
 
@@ -284,40 +284,58 @@ function puzzleScrape($request, $response) {
 	return $response->json($json);
 }
 
-function addPuzzle($request) {
-	// preprint($request);
-	// return;
+function addPuzzle($request, $response) {
+	$existingURLs   = array();
+	$existingTitles = array();
+	$newPuzzles     = array();
 
-	$existingPuzzles = array();
-	$newPuzzles      = array();
-	foreach ($request->newPuzzles as $puzzleContent) {
-		$puzzleExists = PuzzleQuery::create()
+	foreach ($request->newPuzzles as $puzzleKey => $puzzleContent) {
+		$puzzleId        = "puzzleGroup".$puzzleKey;
+		$puzzleURLExists = PuzzleQuery::create()
 			->filterByURL($puzzleContent['url'])
 			->findOne();
-		if ($puzzleExists) {
-			$existingPuzzles[] = $puzzleContent;
+		$puzzleTitleExists = PuzzleQuery::create()
+			->filterByTitle($puzzleContent['title'])
+			->findOne();
+		if ($puzzleURLExists) {
+			$existingURLs[] = $puzzleId;
+		} elseif ($puzzleTitleExists) {
+			$existingTitles[] = $puzzleId;
 		} else {
-			// # create puzzle object
 			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
 			$slack_channel  = createNewSlackChannel($puzzleContent['slack']);
 
 			$newPuzzle = new Puzzle();
 			$newPuzzle->setTitle($puzzleContent['title']);
+			$newPuzzle->setUrl($puzzleContent['url']);
 			$newPuzzle->setSpreadsheetId($spreadsheet_id);
 			$newPuzzle->setSlackChannel($slack_channel);
+			$newPuzzle->setStatus('open');
 			$newPuzzle->save();
 
-			$newPuzzles[] = $newPuzzle;
+			$newPuzzles[] = array(
+				'puzzleID' => $puzzleId,
+				'title'    => $puzzleContent['title'],
+				'pkID'     => $newPuzzle->getID(),
+			);
 		}
 	}
 
-	preprint($existingPuzzles);
-	preprint($newPuzzles);
+	// preprint($existingURLs);
+	// preprint($existingTitles);
+	// preprint($newPuzzles);
 
-	// # check for slack channel too?
-	// # create meta
-	// # post to slack channel
-	// # post update?
+	return $response->json(array(
+			'existingURLs'   => $existingURLs,
+			'existingTitles' => $existingTitles,
+			'newPuzzles'     => $newPuzzles,
+		));
+
+	// # check for slack channel name too?
+	// # create meta if it's a meta
+	// # create meta connection if it's not
+	// # send post to slack channel
+	// # post news update?
 	// # redirect
 }
 

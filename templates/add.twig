@@ -29,8 +29,9 @@ http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
 </form>
 
 <form id="addForm" class="d-none" action="/add" method="post">
+    <div class="addFormError d-none alert alert-danger"></div>
     <div id="form-controls"></div>
-    <button class="btn btn-primary" type="submit">Submit puzzles</button>
+    <button id="submit-button" class="btn btn-primary" type="submit">Submit puzzles</button>
 </form>
 
 <div id="puzzleInputTemplate" class="puzzleInputGroup form-group d-none">
@@ -52,12 +53,19 @@ http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
         <input type="text" class="form-control" name="" maxlength="21">
     </div>
 </div>
+
+<div id="puzzleCardTemplate" class="card d-none">
+    <div class="card-body">
+        <span class="puzzleTitle"></span> was created. <a class="puzzleLink" href="#">Visit it now &rarr;</a>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
 <script>
 $(function() {
-    $('#scrape-button').click(function() {
+    $('#scrape-button').click(function(e) {
+        e.preventDefault();
         var urls = $('#urls').val();
         var data = {
             'urls': urls
@@ -82,6 +90,35 @@ $(function() {
             });
         });
         // TODO: only show 'SUBMIT' button after all form fields are shown
+    });
+
+    $('#addForm').submit(function(e) {
+        e.preventDefault();
+        $('.addFormError').addClass('d-none');
+        $('.is-invalid').removeClass('is-invalid');
+        $.post('/add', $('#addForm').serialize(), function(response) {
+            $.each(response['existingTitles'], function(i, puzzleID) {
+                $('#' + puzzleID).find('.newPuzzleTitle input').addClass('is-invalid');
+            });
+            $.each(response['existingURLs'], function(i, puzzleID) {
+                $('#' + puzzleID).find('.newPuzzleURL input').addClass('is-invalid');
+            });
+
+            if (response['existingTitles'].length || response['existingURLs'].length) {
+                $('.addFormError').removeClass('d-none').html('The fields outlined in red are already used in our system. Please enter something unique and re-submit.');
+            } else {
+                $('#submit-button').hide();
+            }
+
+            $.each(response['newPuzzles'], function(i, puzzle) {
+                var puzzleCard = $('#puzzleCardTemplate').clone();
+                puzzleCard.attr('id', '').removeClass('d-none');
+                puzzleCard.find('.puzzleTitle').html(puzzle['title']);
+                puzzleCard.find('.puzzleLink').attr('href', '/puzzle/' + puzzle['pkID']);
+                $('#' + puzzle['puzzleID']).removeClass('puzzleGroup').html(puzzleCard);
+            });
+
+        });
     });
 
     $('.removePuzzle').click(function() {
