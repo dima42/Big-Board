@@ -10,7 +10,6 @@
         <div class="card-body">
             <small class="latest-news">LATEST NEWS</small>
         {{ latestNews.content }}
-        {# <input id='UrgentMessage' name='UrgentMessage' value='{{ news }} ({{ news_from }})' onchange='add_update(this, "URG", "{{ user_id }}");'> #}
         </div>
         <div class="card-footer">
           <small class="text-muted">{{ latestNews.member.fullName }} • {{ latestNews.createdAt | date("D g:i A") }}</small>

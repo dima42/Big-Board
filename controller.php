@@ -225,13 +225,22 @@ function solvePuzzle($puzzle_id, $request) {
 		->filterByID($puzzle_id)
 		->findOne();
 
-	$puzzle->setSolution(strtoupper($request->solution));
+	$new_solution = strtoupper(trim($request->solution));
+
+	$puzzle->setSolution($new_solution);
+
+	if ($new_solution != '') {
+		$puzzle->setStatus('solved');
+		postSolve($puzzle, $puzzle->getSlackChannel());
+		postSolve($puzzle);
+		$alert = $puzzle->getTitle()." is solved! Great work, team! 🎓";
+	} else {
+		$puzzle->setStatus('open');
+		$alert = $puzzle->getTitle()." is open again.";
+	}
+
 	$puzzle->save();
 
-	postSolve($puzzle, $puzzle->getSlackChannel());
-	postSolve($puzzle);
-
-	$alert = $puzzle->getTitle()." is solved! Great work, team! 🎓";
 	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 
