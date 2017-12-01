@@ -84,8 +84,9 @@ function createNewSlackChannel($slug) {
 
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_URL, "https://slack.com/api/channels.create?token=".$drawkwards_token."&name=".$slug);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	$result = curl_exec($curl);
 	curl_close($curl);
 
-	return $slug;
+	return $result;
 }

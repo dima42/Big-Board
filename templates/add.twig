@@ -103,8 +103,11 @@ $(function() {
             $.each(response['existingURLs'], function(i, puzzleID) {
                 $('#' + puzzleID).find('.newPuzzleURL input').addClass('is-invalid');
             });
+            $.each(response['existingSlacks'], function(i, puzzleID) {
+                $('#' + puzzleID).find('.newPuzzleSlack input').addClass('is-invalid');
+            });
 
-            if (response['existingTitles'].length || response['existingURLs'].length) {
+            if ($('.is-invalid').length) {
                 $('.addFormError').removeClass('d-none').html('The fields outlined in red are already used in our system. Please enter something unique and re-submit.');
             } else {
                 $('#submit-button').hide();

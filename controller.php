@@ -287,29 +287,43 @@ function puzzleScrape($request, $response) {
 function addPuzzle($request, $response) {
 	$existingURLs   = array();
 	$existingTitles = array();
+	$existingSlacks = array();
 	$newPuzzles     = array();
 
 	foreach ($request->newPuzzles as $puzzleKey => $puzzleContent) {
-		$puzzleId        = "puzzleGroup".$puzzleKey;
+		$puzzleId = "puzzleGroup".$puzzleKey;
+
 		$puzzleURLExists = PuzzleQuery::create()
 			->filterByURL($puzzleContent['url'])
 			->findOne();
 		$puzzleTitleExists = PuzzleQuery::create()
 			->filterByTitle($puzzleContent['title'])
 			->findOne();
+
 		if ($puzzleURLExists) {
 			$existingURLs[] = $puzzleId;
-		} elseif ($puzzleTitleExists) {
+		}
+
+		if ($puzzleTitleExists) {
 			$existingTitles[] = $puzzleId;
-		} else {
+		}
+
+		if (!$puzzleURLExists && !$puzzleTitleExists) {
+			$slack_response = json_decode(createNewSlackChannel($puzzleContent['slack']), true);
+
+			if (!$slack_response['ok']) {
+				$existingSlacks[] = $puzzleId;
+				continue;
+			}
+
 			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
-			$slack_channel  = createNewSlackChannel($puzzleContent['slack']);
 
 			$newPuzzle = new Puzzle();
 			$newPuzzle->setTitle($puzzleContent['title']);
 			$newPuzzle->setUrl($puzzleContent['url']);
 			$newPuzzle->setSpreadsheetId($spreadsheet_id);
-			$newPuzzle->setSlackChannel($slack_channel);
+			$newPuzzle->setSlackChannel($slack_response['channel']['name']);
+			$newPuzzle->setSlackChannelId($slack_response['channel']['id']);
 			$newPuzzle->setStatus('open');
 			$newPuzzle->save();
 
@@ -321,13 +335,10 @@ function addPuzzle($request, $response) {
 		}
 	}
 
-	// preprint($existingURLs);
-	// preprint($existingTitles);
-	// preprint($newPuzzles);
-
 	return $response->json(array(
 			'existingURLs'   => $existingURLs,
 			'existingTitles' => $existingTitles,
+			'existingSlacks' => $existingSlacks,
 			'newPuzzles'     => $newPuzzles,
 		));
 
