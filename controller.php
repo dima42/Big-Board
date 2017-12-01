@@ -276,6 +276,7 @@ function joinPuzzle($puzzle_id) {
 		$newPuzzleMember->setMember($member);
 		$newPuzzleMember->save();
 		$message = "You joined ".$puzzle->getTitle().".";
+		postJoin($member, $puzzle->getSlackChannel());
 	} catch (Exception $e) {
 		$message = "You already joined this puzzle.";
 	}

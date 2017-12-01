@@ -52,12 +52,20 @@ function postPuzzle($puzzle, $channel = "big-board") {
 	$message->send();
 }
 
+function postJoin($member, $channel = "sandbox") {
+	$client = getSlackClient(":wave:", "JoinBot");
+	$client->to($channel)->attach([
+			'text'  => $member->getFullName(),
+			'color' => 'good',
+		])->send('New member!');
+}
+
 function postSolve($puzzle, $channel = "big-board") {
 	$content = ':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board> '.
 	':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Spreadsheet> '.
 	':slack: <#'.$puzzle->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>';
 
-	$client = getSlackClient(":checkered_flag:", "Solve Bot");
+	$client = getSlackClient(":checkered_flag:", "SolveBot");
 	$client->to($channel)->attach([
 			'text'  => $content,
 			'color' => '#000000',
