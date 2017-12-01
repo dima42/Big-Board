@@ -14,7 +14,7 @@
 http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
     </div>
     <div class="form-group">
-        <label for="meta">If these all belong to the same meta, select it:</label>
+        <label for="meta">Meta info:</label>
         <select id="metaSelect" class="form-control" name="meta">
                 <option value="">- - -</option>
             {% for meta in metas %}
@@ -24,13 +24,13 @@ http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
                 <option value="0">This is a new meta</option>
         </select>
     </div>
-    <button class="btn btn-primary" type="button" id="scrape-button">Go to step 2 &rarr;</button>
+    <button class="btn btn-primary" type="button" id="scrape-button">Submit URLs &rarr;</button>
 
 </form>
 
 <form id="addForm" class="d-none" action="/add" method="post">
     <div id="form-controls"></div>
-    <button class="btn btn-primary" type="submit">Submit these</button>
+    <button class="btn btn-primary" type="submit">Submit puzzles</button>
 </form>
 
 <div id="puzzleInputTemplate" class="puzzleInputGroup form-group d-none">
