@@ -34,13 +34,18 @@ CREATE TABLE `note`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `body` VARCHAR(255) NOT NULL,
     `puzzle_id` INTEGER NOT NULL,
+    `member_id` INTEGER NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`id`),
     INDEX `note_fi_937852` (`puzzle_id`),
+    INDEX `note_fi_672062` (`member_id`),
     CONSTRAINT `note_fk_937852`
         FOREIGN KEY (`puzzle_id`)
-        REFERENCES `puzzle` (`id`)
+        REFERENCES `puzzle` (`id`),
+    CONSTRAINT `note_fk_672062`
+        FOREIGN KEY (`member_id`)
+        REFERENCES `member` (`id`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -57,6 +62,7 @@ CREATE TABLE `member`
     `google_referrer` VARCHAR(64),
     `slack_id` VARCHAR(24),
     `slack_handle` VARCHAR(48),
+    `strengths` VARCHAR(128),
     PRIMARY KEY (`id`),
     UNIQUE INDEX `member_u_060aec` (`full_name`)
 ) ENGINE=InnoDB;
@@ -73,7 +79,7 @@ CREATE TABLE `solver`
     `puzzle_id` INTEGER NOT NULL,
     `member_id` INTEGER NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `solver_fi_937852` (`puzzle_id`),
+    UNIQUE INDEX `solver_u_b374db` (`puzzle_id`, `member_id`),
     INDEX `solver_fi_672062` (`member_id`),
     CONSTRAINT `solver_fk_937852`
         FOREIGN KEY (`puzzle_id`)
