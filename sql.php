@@ -109,33 +109,6 @@ function iQuitSQL($pid, $uid) {
 		return $link->error." (".$query.")";
 	}
 }
-
-function addPuzzleSQL($ttl, $url, $fid, $slack) {
-	Global $link;
-	$ttl   = $link->real_escape_string($ttl);
-	$query = "insert into puz_tbl (puz_ttl, puz_url, puz_spr, slack) ".
-	"values ('".$ttl."', '".$url."', 'https://docs.google.com/spreadsheet/ccc?key=".$fid."', '".$slack."')";
-	$link->query($query);
-	$new_puz_id = $link->insert_id;
-	return $new_puz_id;
-}
-
-function deletePuzzleSQL($pid) {
-	Global $link;
-	// there are three places to remove puzzles...the puzzle table, puzzle check out, and puzzle relation table
-	$query = "delete from puz_tbl where puz_id = ".$pid;
-	$link->query($query);
-	$query = "delete from puz_rel_tbl where puz_id = ".$pid." or puz_par_id = ".$pid;
-	$link->query($query);
-	$query = "delete from puz_chk_out where puz_id = ".$pid;
-	$link->query($query);
-	if ($link->error == "") {
-		return "This puzzle has been erased from the database.";
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
-
 function promotePuzzleSQL($pid) {
 	Global $link;
 	// there are three places to remove puzzles...the puzzle table, puzzle check out, and puzzle relation table
