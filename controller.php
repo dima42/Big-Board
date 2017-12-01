@@ -29,7 +29,7 @@ function show_content() {
 					return displayPuzzle($request->id, 'edit');
 				});
 			$klein->respond('POST', '/edit/?', function ($request) {
-					return savePuzzle($request->id, $request);
+					return editPuzzle($request->id, $request);
 				});
 			$klein->respond('POST', '/solve/?', function ($request) {
 					return solvePuzzle($request->id, $request);
@@ -175,7 +175,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		));
 }
 
-function savePuzzle($puzzle_id, $request) {
+function editPuzzle($puzzle_id, $request) {
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
 		->findOne();
