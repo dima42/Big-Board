@@ -163,7 +163,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		->filterByChild($puzzle)
 		->count();
 
-	$statuses = array('open', 'stuck', 'priority', 'solved');
+	$statuses = array('open', 'stuck', 'priority', 'urgent', 'solved');
 
 	$template = 'puzzle.twig';
 

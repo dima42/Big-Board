@@ -36,6 +36,8 @@ $emojify = new Twig_Filter('emojify',
 				return "🤷🏻‍♀️";
 			case "priority":
 				return "❗️";
+			case "urgent":
+				return "🚨";
 			case "solved":
 				return "🏁";
 		}
