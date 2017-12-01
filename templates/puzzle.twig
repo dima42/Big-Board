@@ -75,9 +75,11 @@
 {% endblock %}
 
 {% block aside %}
+    {% block edit_button %}
     <div class="mb-3">
         <a class="btn btn-light border" href="/puzzle/{{ puzzle.id }}/edit">✏️  Edit this puzzle</a>
     </div>
+    {% endblock %}
 
     {% if puzzle.status == "featured" %}
         <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
