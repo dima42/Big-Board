@@ -117,15 +117,13 @@ function displayError($error) {
 }
 
 function displayTest() {
-	// $result = create_file_from_template("test-".rand(1000, 9999));
+	$puzzle = PuzzleQuery::create()
+		->filterByID(202)
+		->findOne();
 
-	$doc = hQuery::fromUrl('http://web.mit.edu/puzzle/www/2016/puzzle/dog_food/', ['Accept' => 'text/html']);
+	postPuzzle($puzzle, $puzzle->getSlackChannel());
 
-	// echo "<pre>";
-
-	// echo $doc->find('title');
-
-	// echo "</pre>";
+	return;
 
 	render('test.twig', array(
 			// 'content' => $result,
@@ -362,6 +360,9 @@ function addPuzzle($request, $response) {
 				'title'    => $puzzleContent['title'],
 				'pkID'     => $newPuzzle->getID(),
 			);
+
+			postPuzzle($newPuzzle, $puzzleContent['slack']);
+			postPuzzle($newPuzzle);// big-board channel
 		}
 	}
 
