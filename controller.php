@@ -342,12 +342,10 @@ function addPuzzle($request, $response) {
 			'newPuzzles'     => $newPuzzles,
 		));
 
-	// # check for slack channel name too?
 	// # create meta if it's a meta
-	// # create meta connection if it's not
+	// # create meta connection if it's not a meta itself
 	// # send post to slack channel
 	// # post news update?
-	// # redirect
 }
 
 // MEMBERS
