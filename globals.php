@@ -43,13 +43,22 @@ $emojify = new Twig_Filter('emojify',
 $twig->addFilter($emojify);
 
 $default = new Twig_Filter('default',
-	function ($input, $default) {
-		if (!$input) {
-			return $default;
-		}
-		return $input;
-	});
+    function ($input, $default) {
+        if (!$input) {
+            return $default;
+        }
+        return $input;
+    });
 $twig->addFilter($default);
+
+$yesno = new Twig_Filter('yesno',
+	function ($input, $ifyes, $ifno = "") {
+		if ($input) {
+			return $ifyes;
+		}
+		return $ifno;
+	});
+$twig->addFilter($yesno);
 
 // RENDER
 function render($template, $vars = array()) {
