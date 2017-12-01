@@ -125,7 +125,7 @@ $(function() {
             });
 
             if ($('.is-invalid').length) {
-                $('.addFormError').html('The fields outlined in red are already used in our system. Please enter something unique and re-submit.').show();
+                $('.addFormError').html('The values outlined in red are already in use. Please enter something unique and re-submit.').show();
                 $('#submit-button').prop('disabled', false);
             } else {
                 $('#submit-button').hide();
