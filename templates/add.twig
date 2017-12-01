@@ -26,12 +26,13 @@ http://web.mit.edu/puzzle/www/2016/puzzle/always_amusing/</textarea>
 
 </form>
 
-<form id="addForm" class="d-none" action="/addPuzzles" method="post">
+<form id="addForm" class="d-none" action="/add" method="post">
     <div id="form-controls"></div>
     <button class="btn btn-primary" type="submit">Submit these</button>
 </form>
 
 <div id="puzzleInputTemplate" class="puzzleInputGroup form-group d-none">
+    <h4>New puzzle #<span class="puzzleNum"></span> <a class="small" href="#">Remove?</a></h4>
     <div class="input-group newPuzzleTitle mb-2">
         <span class="input-group-addon">Title</span>
         <input type="text" class="form-control" name="">
@@ -67,15 +68,18 @@ $(function() {
                 var metaSelect = $('#metaSelect');
 
                 newPuzzleForm.attr('id', 'puzzleGroup' + i).removeClass('d-none');
-                newPuzzleForm.find('.newPuzzleTitle input').val(puzzle['title']).attr('name', 'newPuzzleTitle[' + i + '][title]');
-                newPuzzleForm.find('.newPuzzleURL input').val(puzzle['url']).attr('name', 'newPuzzleURL[' + i + '][url]');
-                newPuzzleForm.find('.newPuzzleSlack input').val(puzzle['slack']).attr('name', 'newPuzzleSlack[' + i + '][slack]');
-                metaSelect.clone().val(metaSelect.val()).attr('name', 'newPuzzleMeta[' + i + '][title]').appendTo(newPuzzleForm.find('.newPuzzleMeta'));
+                newPuzzleForm.find('.puzzleNum').text(i + 1);
+                newPuzzleForm.find('.newPuzzleTitle input').val(puzzle['title']).attr('name', 'newPuzzles[' + i + '][title]');
+                newPuzzleForm.find('.newPuzzleURL input').val(puzzle['url']).attr('name', 'newPuzzles[' + i + '][url]');
+                newPuzzleForm.find('.newPuzzleSlack input').val(puzzle['slack']).attr('name', 'newPuzzles[' + i + '][slack]');
+                metaSelect.clone().val(metaSelect.val()).attr('name', 'newPuzzles[' + i + '][meta]').appendTo(newPuzzleForm.find('.newPuzzleMeta'));
 
                 // clone meta from original form and put it here, since it'll be pre-selected (i think?)
                 $('#addForm #form-controls').append(newPuzzleForm);
+                $('#addForm #form-controls').append(newPuzzleForm);
             });
         });
+        // TODO: only show 'SUBMIT' button after all form fields are shown
     });
 });
 </script>

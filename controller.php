@@ -90,7 +90,7 @@ function show_content() {
 					return displayAdd($request->meta_id);
 				});
 			$klein->respond('POST', '/?', function ($request) {
-					return addPuzzle($request->meta_id);
+					return addPuzzle($request);
 				});
 		});
 
@@ -283,7 +283,9 @@ function puzzleScrape($request, $response) {
 	return $response->json($json);
 }
 
-function addPuzzle() {
+function addPuzzle($request) {
+	preprint($request);
+	return;
 	// # check for URL in DB
 	// # check for slack channel too?
 
