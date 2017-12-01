@@ -1,5 +1,7 @@
 <?
 require_once "sql.php";
+require_once "new_file_management.php";
+require_once "slack_functions.php";
 use Cocur\Slugify\Slugify;
 use Propel\Runtime\ActiveQuery\Criteria;
 
@@ -275,7 +277,7 @@ function puzzleScrape($request, $response) {
 			$json[] = array(
 				"url"   => $url,
 				"title" => $title,
-				"slack" => $slugify->slugify($title)
+				"slack" => substr($slugify->slugify($title), 0, 21)
 			);
 		}
 	}
@@ -284,16 +286,37 @@ function puzzleScrape($request, $response) {
 }
 
 function addPuzzle($request) {
-	preprint($request);
-	return;
-	// # check for URL in DB
-	// # check for slack channel too?
+	// preprint($request);
+	// return;
 
-	// # create puzzle object
-	// # create google drive spreadsheet
-	// create_file_from_template($_GET["ttl"]);
-	// # create slack channel
-	// createNewSlackChannel($_GET{"ttl"});
+	$existingPuzzles = array();
+	$newPuzzles      = array();
+	foreach ($request->newPuzzles as $puzzleContent) {
+		$puzzleExists = PuzzleQuery::create()
+			->filterByURL($puzzleContent['url'])
+			->findOne();
+		if ($puzzleExists) {
+			$existingPuzzles[] = $puzzleContent;
+		} else {
+			// # create puzzle object
+			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
+			$slack_channel  = createNewSlackChannel($puzzleContent['slack']);
+
+			$newPuzzle = new Puzzle();
+			$newPuzzle->setTitle($puzzleContent['title']);
+			$newPuzzle->setSpreadsheetId($spreadsheet_id);
+			$newPuzzle->setSlackChannel($slack_channel);
+			$newPuzzle->save();
+
+			$newPuzzles[] = $newPuzzle;
+		}
+	}
+
+	preprint($existingPuzzles);
+	preprint($newPuzzles);
+
+	// # check for slack channel too?
+	// # create meta
 	// # post to slack channel
 	// # post update?
 	// # redirect
