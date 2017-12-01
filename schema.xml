@@ -52,6 +52,7 @@
             <unique-column name="puzzle_id" />
             <unique-column name="member_id" />
         </unique>
+        <behavior name="timestampable" />
     </table>
     <table name="relationship" phpName="PuzzleParent" isCrossRef="true">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
