@@ -2,6 +2,7 @@
 require_once "sql.php";
 require_once "new_file_management.php";
 use Cocur\Slugify\Slugify;
+
 use Propel\Runtime\ActiveQuery\Criteria;
 
 function show_content() {
@@ -465,26 +466,6 @@ function displayLoosePuzzles() {
 }
 
 function displayFeature($puzzle_id) {
-}
-
-function displayPuzzleEdit($puzzle_id) {
-	$puzzle = PuzzleQuery::create()
-		->filterByID($puzzle_id)
-		->findOne();
-
-	// TODO: if not $puzzle, redirect to error template
-	// "This puzzle does not exist. It is a ghost puzzle.";
-
-	$puzzles_metas = PuzzleParentQuery::create()
-		->joinWith('PuzzleParent.Parent')
-		->filterByPuzzleID($puzzle_id)
-		->find();
-
-	render('puzzle.twig', array(
-			'puzzle_id'     => $puzzle_id,
-			'puzzle'        => $puzzle,
-			'puzzles_metas' => $puzzles_metas,
-		));
 }
 
 function displayNews() {
