@@ -6,58 +6,40 @@ require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
-// Visit https://code.google.com/apis/console to generate your
-// oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
+$klein = new \Klein\Klein();
 
-$pal_client = new Google_Client();
-$pal_client->setAccessType("offline");
-$pal_client->setApplicationName("Palindrome Big Board");
-$pal_client->setClientId('938479797888.apps.googleusercontent.com');
-$pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
-$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
+$klein->respond('POST', '/board', function ($request, $response) {
+		return bigBoardBot($request, $response);
+	});
 
-$pal_drive = new Google_DriveService($pal_client);
+$klein->respond(function ($request, $response) {
+		return everythingElse();
+	});
 
-$noAccessYet = TRUE;
+$klein->dispatch();
 
-// user is logging out
-if (isset($_REQUEST['logout'])) {
-	unset($_SESSION['access_token']);
-	session_destroy();
-}
+function everythingElse() {
 
-// let's get the persons access token for future use. This is automatica only the login takes place.
-if (isset($_GET['code'])) {
-	$pal_client->authenticate($_GET['code']);
-	$_SESSION['access_token'] = $pal_client->getAccessToken();
-	setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
-	header('Location: /');
+	// Visit https://code.google.com/apis/console to generate your
+	// oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
 
-	$token_dump                = json_decode($_SESSION['access_token']);
-	$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
-	setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
+	$pal_client = new Google_Client();
+	$pal_client->setAccessType("offline");
+	$pal_client->setApplicationName("Palindrome Big Board");
+	$pal_client->setClientId('938479797888.apps.googleusercontent.com');
+	$pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
+	$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
 
-	$noAccessYet = FALSE;
-}
+	$pal_drive = new Google_DriveService($pal_client);
 
-// let's check to see if we have an access token. If we do, then we can get all sorts of fun information
-// if we do not have a session token, check the cookies
-if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) {
-	$_SESSION['access_token'] = stripslashes($_COOKIE['PAL_ACCESS_TOKEN']);
-}
+	$noAccessYet = TRUE;
 
-if (isset($_SESSION['access_token'])) {
-	$pal_client->setAccessToken($_SESSION['access_token']);
-	if (!$pal_client->isAccessTokenExpired()) {
-		$noAccessYet = FALSE;
-	}
-}
-
-if ($noAccessYet) {
-	if (isset($_COOKIE['refresh_token'])) {
-		$pal_client->refreshToken($_COOKIE['refresh_token']);
+	// let's get the persons access token for future use. This is automatica only the login takes place.
+	if (isset($_GET['code'])) {
+		$pal_client->authenticate($_GET['code']);
 		$_SESSION['access_token'] = $pal_client->getAccessToken();
 		setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
+		header('Location: /');
 
 		$token_dump                = json_decode($_SESSION['access_token']);
 		$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
@@ -65,16 +47,43 @@ if ($noAccessYet) {
 
 		$noAccessYet = FALSE;
 	}
-}
 
-// if there is no access token, user has not authorized app. So let's begin by checking that.
-if ($noAccessYet) {
-	$authUrl = $pal_client->createAuthUrl();
-	render('loggedout.twig', array(
-			'auth_url' => $authUrl,
-		));
-} else {
-	show_page($pal_drive);
+	// let's check to see if we have an access token. If we do, then we can get all sorts of fun information
+	// if we do not have a session token, check the cookies
+	if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) {
+		$_SESSION['access_token'] = stripslashes($_COOKIE['PAL_ACCESS_TOKEN']);
+	}
+
+	if (isset($_SESSION['access_token'])) {
+		$pal_client->setAccessToken($_SESSION['access_token']);
+		if (!$pal_client->isAccessTokenExpired()) {
+			$noAccessYet = FALSE;
+		}
+	}
+
+	if ($noAccessYet) {
+		if (isset($_COOKIE['refresh_token'])) {
+			$pal_client->refreshToken($_COOKIE['refresh_token']);
+			$_SESSION['access_token'] = $pal_client->getAccessToken();
+			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
+
+			$token_dump                = json_decode($_SESSION['access_token']);
+			$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
+			setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
+
+			$noAccessYet = FALSE;
+		}
+	}
+
+	// if there is no access token, user has not authorized app. So let's begin by checking that.
+	if ($noAccessYet) {
+		$authUrl = $pal_client->createAuthUrl();
+		render('loggedout.twig', array(
+				'auth_url' => $authUrl,
+			));
+	} else {
+		show_page($pal_drive);
+	}
 }
 
 function show_page($pal_drive) {
