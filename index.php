@@ -8,8 +8,19 @@ require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
 $klein = new \Klein\Klein();
 
-$klein->respond('POST', '/board', function ($request, $response) {
-		return bigBoardBot($request, $response);
+$klein->with('/api', function () use ($klein) {
+		$klein->respond('POST', '/board', function ($request, $response) {
+				return bigBoardBot($request, $response);
+			});
+
+		$klein->respond('POST', '/solve', function ($request, $response) {
+				return solveBot($request, $response);
+			});
+
+		$klein->respond('POST', '/info', function ($request, $response) {
+				return infoBot($request, $response);
+			});
+
 	});
 
 $klein->respond(function ($request, $response) {

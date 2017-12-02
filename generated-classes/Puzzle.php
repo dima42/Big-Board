@@ -1,5 +1,4 @@
 <?php
-
 use Base\Puzzle as BasePuzzle;
 
 /**
@@ -12,7 +11,9 @@ use Base\Puzzle as BasePuzzle;
  * long as it does not already exist in the output directory.
  *
  */
-class Puzzle extends BasePuzzle
-{
 
+class Puzzle extends BasePuzzle {
+	// public function postUpdate() {
+	// return true;
+	// }
 }

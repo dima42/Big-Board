@@ -563,7 +563,7 @@ function displayUnsolvedPuzzles() {
 		));
 }
 
-// BOT
+// BOTS
 
 function bigBoardBot($request, $response) {
 	if ($request->token != getenv('PALINDROME_SLACKBOT_TOKEN')) {
@@ -573,8 +573,6 @@ function bigBoardBot($request, $response) {
 	$parameter        = $request->text;
 	$puzzleQuery      = PuzzleQuery::create();
 	$channel_response = ['text' => 'I got nothing, sorry. Try again.'];
-	$style            = "list";
-	$error            = "";
 
 	if ($parameter == "") {
 		$puzzleQuery->filterByStatus('solved', Criteria::NOT_EQUAL);
@@ -584,56 +582,107 @@ function bigBoardBot($request, $response) {
 		$puzzleQuery->filterByStatus($parameter);
 		$count   = $puzzleQuery->count();
 		$pretext = $count." puzzles marked `".strtoupper($parameter)."`:";
-	} elseif (in_array($parameter, ['this', 'info'])) {
-		$style      = "single";
-		$channel_id = $request->channel_id;
-		$puzzleQuery->filterBySlackChannelId($channel_id);
 	} else {
 		$puzzleQuery->filterByTitle('%'.$parameter.'%', Criteria::LIKE);
 		$count   = $puzzleQuery->count();
 		$pretext = $count." puzzle titles match a search for `".strtoupper($parameter)."`:";
 	}
 
-	if ($style == "list") {
-		$puzzles     = $puzzleQuery->find();
-		$attachments = [];
-		foreach ($puzzles as $puzzle) {
-			$puzzleInfo = [
-				emojify($puzzle                                        ->getStatus()),
-				'<http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|:boar:> ',
-				'<https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|:drive:> ',
-				'*'.$puzzle                                            ->getTitle().'*',
-				'<#'.$puzzle                                           ->getSlackChannelId().'>',
-			];
+	$puzzles     = $puzzleQuery->find();
+	$attachments = [];
+	foreach ($puzzles as $puzzle) {
+		$puzzleInfo = [
+			emojify($puzzle                                        ->getStatus()),
+			'<http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|:boar:> ',
+			'<https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|:drive:> ',
+			'*'.$puzzle                                            ->getTitle().'*',
+			'<#'.$puzzle                                           ->getSlackChannelId().'>',
+		];
 
-			$attachments[] = [
-				"text"      => join(" ", $puzzleInfo),
-				'color'     => 'good',
-				"mrkdwn_in" => ['text'],
-			];
-		}
+		$attachments[] = [
+			"text"      => join(" ", $puzzleInfo),
+			'color'     => 'good',
+			"mrkdwn_in" => ['text'],
+		];
+	}
 
+	$channel_response = [
+		'link_names'    => true,
+		"response_type" => "in_channel",
+		"text"          => $pretext,
+		"attachments"   => $attachments,
+	];
+
+	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
+	// possible to blast this to everyone?
+	// $human_response = [];
+
+	return $response->json($channel_response);
+}
+
+function infoBot($request, $response) {
+	if ($request->token != getenv('PALINDROME_SLACKBOT_TOKEN')) {
+		return $response->json(['text' => 'Nothing here. Go away.']);
+	}
+
+	$parameter        = $request->text;
+	$channel_response = ['text' => "Sorry, I'm stumped."];
+	$channel_id       = $request->channel_id;
+
+	$puzzle = PuzzleQuery::create()
+		->filterBySlackChannelId($channel_id)
+		->findOne();
+
+	if (!$puzzle) {
+		$channel_response = [
+			"text" => "`/info` can only be used inside a puzzle channel.",
+		];
+	} else {
 		$channel_response = [
 			'link_names'    => true,
 			"response_type" => "in_channel",
-			"text"          => $pretext,
-			"attachments"   => $attachments,
+			"text"          => "*".$puzzle->getTitle()."*",
+			"attachments"   => getPuzzleInfo($puzzle),
 		];
-	} elseif ($style == "single") {
-		$puzzle = $puzzleQuery->findOne();
-		if (!$puzzle) {
-			$channel_response = [
-				"text" => "`/board info` can only be used inside a puzzle channel.",
-			];
-		} else {
+	}
 
-			$channel_response = [
-				'link_names'    => true,
-				"response_type" => "in_channel",
-				"text"          => "*".$puzzle->getTitle()."*",
-				"attachments"   => getPuzzleInfo($puzzle),
-			];
-		}
+	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
+	// possible to blast this to everyone?
+	// $human_response = [];
+
+	return $response->json($channel_response);
+}
+
+function solveBot($request, $response) {
+	if ($request->token != getenv('PALINDROME_SLACKBOT_TOKEN')) {
+		return $response->json(['text' => 'Nothing here. Go away.']);
+	}
+
+	$channel_response = ['text' => 'Not sure what you mean. Seek help.'];
+	$channel_id       = $request->channel_id;
+	$solution         = strtoupper($request->text);
+
+	$puzzle = PuzzleQuery::create()
+		->filterBySlackChannelId($channel_id)
+		->findOne();
+
+	if (!$puzzle) {
+		$channel_response = [
+			"text" => "`/solve` can only be used inside a puzzle channel.",
+		];
+	} elseif (!$solution) {
+		$channel_response = [
+			"text" => "Please include a solution, like so: `/solve LOVE`.",
+		];
+	} else {
+		$puzzle->setSolution($solution);
+		$puzzle->save();
+		$channel_response = [
+			'link_names' => true,
+			"text"       => "Got it. I posted `".$solution."` as a solution to *".$puzzle->getTitle()."*.",
+		];
+		postSolve($puzzle);
+		// TODO: post to #general too. Really this should be handled in the postUpdate command.
 	}
 
 	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
