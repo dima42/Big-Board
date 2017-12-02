@@ -570,50 +570,71 @@ function bigBoardBot($request, $response) {
 		return $response->json(['text' => 'Nothing here. Go away.']);
 	}
 
-	$parameter   = $request->text;
-	$puzzleQuery = PuzzleQuery::create();
+	$parameter        = $request->text;
+	$puzzleQuery      = PuzzleQuery::create();
+	$channel_response = ['text' => 'I got nothing, sorry. Try again.'];
+	$style            = "list";
+	$error            = "";
 
 	if ($parameter == "") {
 		$puzzleQuery->filterByStatus('solved', Criteria::NOT_EQUAL);
 		$count   = $puzzleQuery->count();
 		$pretext = $count." unsolved puzzles:";
-
 	} elseif (in_array($parameter, ['open', 'priority', 'urgent', 'solved'])) {
 		$puzzleQuery->filterByStatus($parameter);
-
 		$count   = $puzzleQuery->count();
 		$pretext = $count." puzzles marked `".strtoupper($parameter)."`:";
-		// } elseif parameter.isdigit() {
-
-		// } else {
+	} elseif (in_array($parameter, ['this', 'info'])) {
+		$style      = "single";
+		$channel_id = $request->channel_id;
+		$puzzleQuery->filterBySlackChannelId($channel_id);
+	} else {
+		$puzzleQuery->filterByTitle('%'.$parameter.'%', Criteria::LIKE);
+		$count   = $puzzleQuery->count();
+		$pretext = $count." puzzle titles match a search for `".strtoupper($parameter)."`:";
 	}
 
-	$attachments = [];
-	foreach ($puzzleQuery->find() as $puzzle) {
-		$puzzleInfo = [
-			emojify($puzzle                                        ->getStatus()),
-			'<http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|:boar:> ',
-			'<https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|:drive:> ',
-			'*'.$puzzle                                            ->getTitle().'*',
-			'<#'.$puzzle                                           ->getSlackChannelId().'>',
-		];
+	if ($style == "list") {
+		$puzzles     = $puzzleQuery->find();
+		$attachments = [];
+		foreach ($puzzles as $puzzle) {
+			$puzzleInfo = [
+				emojify($puzzle                                        ->getStatus()),
+				'<http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|:boar:> ',
+				'<https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|:drive:> ',
+				'*'.$puzzle                                            ->getTitle().'*',
+				'<#'.$puzzle                                           ->getSlackChannelId().'>',
+			];
 
-		$attachments[] = [
-			"text"      => join(" ", $puzzleInfo),
-			'color'     => 'good',
-			"mrkdwn_in" => ['text'],
+			$attachments[] = [
+				"text"      => join(" ", $puzzleInfo),
+				'color'     => 'good',
+				"mrkdwn_in" => ['text'],
+			];
+		}
+
+		$channel_response = [
+			'link_names'    => true,
+			"response_type" => "in_channel",
+			"text"          => $pretext,
+			"attachments"   => $attachments,
 		];
+	} elseif ($style == "single") {
+		$puzzle = $puzzleQuery->findOne();
+		if (!$puzzle) {
+			$channel_response = [
+				"text" => "`/board info` can only be used inside a puzzle channel.",
+			];
+		} else {
+
+			$channel_response = [
+				'link_names'    => true,
+				"response_type" => "in_channel",
+				"text"          => "*".$puzzle->getTitle()."*",
+				"attachments"   => getPuzzleInfo($puzzle),
+			];
+		}
 	}
-
-	// TODO: if this is /info and it comes from a channel, show info about that puzzle
-	// $channel_id = $request->channel_id;
-
-	$channel_response = [
-		'link_names'    => true,
-		"response_type" => "in_channel",
-		"text"          => $pretext,
-		"attachments"   => $attachments,
-	];
 
 	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
 	// possible to blast this to everyone?

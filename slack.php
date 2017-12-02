@@ -1,5 +1,4 @@
 <?
-use Maknz\Slack\Attachment;
 
 function createNewSlackChannel($slug) {
 	$slack_key = getenv('PALINDROME_SLACK_KEY');
@@ -30,23 +29,27 @@ function postToChannel($message, $channel = "sandbox") {
 	$client->to('#'.$channel)->send($message);
 }
 
+function getPuzzleInfo($puzzle) {
+	$attachments = [
+		':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle ->getId().'|Big Board>',
+		':page_facing_up: <'.$puzzle                                   ->getUrl().'|MIT puzzle page>',
+		':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Google Spreadsheet>',
+		':slack: <#'.$puzzle                                           ->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>',
+	];
+
+	return array_map(function ($msg) use (&$message) {
+			return [
+				'text'  => $msg,
+				'color' => 'good',
+			];
+		}, $attachments);
+}
+
 function postPuzzle($puzzle, $channel = "big-board") {
 	$client = getSlackClient();
 
-	$messages = array(
-		':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board>',
-		':page_facing_up: <'.$puzzle->getUrl().'|MIT puzzle page>',
-		':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Google Spreadsheet>',
-		':slack: <#'.$puzzle->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>',
-	);
-
 	$message     = $client->createMessage();
-	$attachments = array_map(function ($msg) use (&$message) {
-			$message->attach(new Attachment([
-						'text'  => $msg,
-						'color' => 'good',
-					]));
-		}, $messages);
+	$attachments = getPuzzleInfo($puzzle);
 	$message->setText('*'.$puzzle->getTitle().'*');
 	$message->setChannel('#'.$channel);
 	$message->send();
@@ -60,14 +63,10 @@ function postJoin($member, $channel = "sandbox") {
 		])->send('New member!');
 }
 
-function getPuzzleInfo($puzzle) {
-	return ':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board> '.
+function postSolve($puzzle, $channel = "big-board") {
+	$content = ':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board> '.
 	':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Spreadsheet> '.
 	':slack: <#'.$puzzle->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>';
-}
-
-function postSolve($puzzle, $channel = "big-board") {
-	$content = getPuzzleInfo($puzzle);
 
 	$client = getSlackClient(":checkered_flag:", "SolveBot");
 	$client->to($channel)->attach([
