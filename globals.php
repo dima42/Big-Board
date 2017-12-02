@@ -27,22 +27,24 @@ $twig   = new Twig_Environment($loader, array(
 	));
 
 // TWIG FILTERS
-$emojify = new Twig_Filter('emojify',
-	function ($status) {
-		switch ($status) {
-			case "open":
-				return "🤔";
-			case "stuck":
-				return "🤷🏻‍♀️";
-			case "priority":
-				return "❗️";
-			case "urgent":
-				return "🚨";
-			case "solved":
-				return "🏁";
-		}
-		return "⚪️";
-	});
+function emojify($status) {
+	switch ($status) {
+		case "open":
+			return "🤔";
+		case "stuck":
+			return "🤷🏻‍♀️";
+		case "priority":
+			return "❗️";
+		case "urgent":
+			return "🚨";
+		case "solved":
+			return "🏁";
+	}
+
+	return "⚪️";
+}
+
+$emojify = new Twig_Filter('emojify', 'emojify');
 $twig->addFilter($emojify);
 
 $default = new Twig_Filter('default',
