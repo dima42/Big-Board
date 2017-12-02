@@ -1,0 +1,14 @@
+{% extends 'two-col.twig' %}
+
+{% block content %}
+
+<h1>Unsolved puzzles that you're working on</h1>
+
+{% from 'macros.twig' import puzzle_table %}
+{{ puzzle_table(puzzles) }}
+
+{% endblock %}
+
+{% block aside %}
+    <h4>About you</h4>
+{% endblock %}

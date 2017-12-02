@@ -42,7 +42,11 @@ function show_content() {
 		});
 
 	$klein->respond('GET', '/me', function () {
-			redirect('/member/'.$_SESSION['user_id'].'/edit');
+			redirect('/member/'.$_SESSION['user_id']);
+		});
+
+	$klein->respond('GET', '/you', function () {
+			redirect('/member/'.$_SESSION['user_id']);
 		});
 
 	$klein->with('/member/[:id]', function () use ($klein) {
@@ -420,13 +424,24 @@ function displayRoster() {
 
 function displayMember($member_id, $method = "get") {
 	$template = 'member.twig';
+	$member   = $_SESSION['user'];
 
 	if ($method == "edit") {
 		$template = 'member-edit.twig';
 	}
 
+	$puzzleMembers = $member->getPuzzleMembersJoinPuzzle();
+	$puzzles       = [];
+	foreach ($puzzleMembers as $key => $puzzleMember) {
+		$puzzle = $puzzleMember->getPuzzle();
+		if ($puzzle->getStatus() != "solved") {
+			$puzzles[] = $puzzle;
+		}
+	}
+
 	render($template, array(
-			'member' => $_SESSION['user'],
+			'member'  => $member,
+			'puzzles' => $puzzles,
 		));
 }
 
