@@ -60,10 +60,14 @@ function postJoin($member, $channel = "sandbox") {
 		])->send('New member!');
 }
 
-function postSolve($puzzle, $channel = "big-board") {
-	$content = ':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board> '.
+function getPuzzleInfo($puzzle) {
+	return ':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board> '.
 	':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Spreadsheet> '.
 	':slack: <#'.$puzzle->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>';
+}
+
+function postSolve($puzzle, $channel = "big-board") {
+	$content = getPuzzleInfo($puzzle);
 
 	$client = getSlackClient(":checkered_flag:", "SolveBot");
 	$client->to($channel)->attach([
