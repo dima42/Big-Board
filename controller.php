@@ -100,6 +100,15 @@ function show_content() {
 			return puzzleScrape($request, $response);
 		});
 
+	// SLACK BOT
+
+	$klein->with('/board', function () use ($klein) {
+
+			$klein->respond('POST', '/?', function ($request, $response) {
+					return bigBoardBot($request, $response);
+				});
+		});
+
 	$klein->dispatch();
 }
 
@@ -546,4 +555,25 @@ function displayUnsolvedPuzzles() {
 	render('unsolved.twig', array(
 			'puzzles' => $puzzles,
 		));
+}
+
+// BOT
+
+function bigBoardBot($request, $response) {
+	if ($request->token != "tra9SwDDyrYulyn2kuskXCIt") {
+		return;// throw error
+	}
+
+	$parameter = $request->text;
+
+	$channel_response = [
+		"text"        => "I hear ya",
+		"attachments" => [
+			"text"       => "Something interesting goes here."
+		]
+	];
+
+	$human_response = [];
+
+	return $response->json($channel_response);
 }
