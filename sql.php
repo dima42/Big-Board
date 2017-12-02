@@ -109,14 +109,3 @@ function iQuitSQL($pid, $uid) {
 		return $link->error." (".$query.")";
 	}
 }
-function promotePuzzleSQL($pid) {
-	Global $link;
-	// there are three places to remove puzzles...the puzzle table, puzzle check out, and puzzle relation table
-	$query = "insert into puz_rel_tbl (puz_id, puz_par_id) values (".$pid.", ".$pid.")";
-	$link->query($query);
-	if ($link->error == "") {
-		return "This puzzle is now a metapuzzle.";
-	} else {
-		return $link->error." (".$query.")";
-	}
-}
