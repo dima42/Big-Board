@@ -141,7 +141,7 @@ function displayTest() {
 		->findOne();
 
 	// postPuzzle($puzzle, $puzzle->getSlackChannel());
-	postSolve($puzzle, $puzzle->getSlackChannel());
+	// postSolve($puzzle, $puzzle->getSlackChannel());
 	// postSolve($puzzle);
 
 	return;
@@ -250,8 +250,7 @@ function solvePuzzle($puzzle_id, $request) {
 
 	if ($new_solution != '') {
 		$puzzle->setStatus('solved');
-		postSolve($puzzle, $puzzle->getSlackChannel());
-		postSolve($puzzle);
+		$puzzle->postSolve();
 		$alert = $puzzle->getTitle()." is solved! Great work, team! 🎓";
 	} else {
 		$puzzle->setStatus('open');
@@ -696,8 +695,7 @@ function solveBot($request, $response) {
 			'link_names' => true,
 			"text"       => "Got it. I posted `".$solution."` as a solution to *".$puzzle->getTitle()."*.",
 		];
-		postSolve($puzzle);
-		// TODO: post to #general too. Really this should be handled in the postUpdate command.
+		$puzzle->postSolve();
 	}
 
 	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
