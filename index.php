@@ -36,16 +36,16 @@ $klein->respond(function ($request, $response) {
     $pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
     $pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
 
-    // SET UP DRIVE SERVICE OBJECT
+    $pal_drive = new Google_DriveService($pal_client);
 
 	if (!is_authorized($pal_client)) {
 		$authUrl = $pal_client->createAuthUrl();
-		render('loggedout.twig', array(
+		return render('loggedout.twig', array(
 				'auth_url' => $authUrl,
 			));
 	}
 
-    if (!is_in_palindrome($pal_client)) {
+    if (!is_in_palindrome($pal_drive)) {
         return render('buggeroff.twig');
     }
 
@@ -94,16 +94,17 @@ function is_authorized($pal_client) {
 
 		return true;
 	}
+
+    return false;
 }
 
-function is_in_palindrome($pal_client) {
+function is_in_palindrome($pal_drive) {
     // If 'user_id' is set in SESSION and 'user' is a Member, then we're good.
     if ($_SESSION["user_id"] > 0 && is_a($_SESSION['user'], 'Member')) {
         return true;
     }
 
     // If root folder ID is in our DB, then we're good
-    $pal_drive = new Google_DriveService($pal_client);
 	$drive_user  = $pal_drive->about->get();
 	$user_google_id = $drive_user["rootFolderId"];
     $user_full_name = $drive_user["user"]["displayName"];
