@@ -35,9 +35,7 @@ $klein->dispatch();
 
 function everythingElse() {
 
-	// Visit https://code.google.com/apis/console to generate your
-	// oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
-
+	// SET UP GOOGLE_CLIENT OBJECT
 	$pal_client = new Google_Client();
 	$pal_client->setAccessType("offline");
 	$pal_client->setApplicationName("Palindrome Big Board");
@@ -45,11 +43,13 @@ function everythingElse() {
 	$pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
 	$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
 
+	// SET UP DRIVE SERVICE OBJECT
 	$pal_drive = new Google_DriveService($pal_client);
 
+	// TRACK STATUS
 	$noAccessYet = TRUE;
 
-	// let's get the persons access token for future use. This is automatica only the login takes place.
+	// let's get the persons access token for future use. This is where the login takes place.
 	if (isset($_GET['code'])) {
 		$pal_client->authenticate($_GET['code']);
 		$_SESSION['access_token'] = $pal_client->getAccessToken();
