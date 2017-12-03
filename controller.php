@@ -131,8 +131,8 @@ function show_content() {
 	// LOGOUT
 
 	$klein->respond('GET', '/logout', function ($request, $response) {
-			unset($_SESSION['access_token']);
-			session_destroy();
+			session_unset();
+            header("Location: /");
 		});
 
 	$klein->dispatch();
