@@ -137,14 +137,16 @@ function displayError($error) {
 
 function displayTest() {
 	$puzzle = PuzzleQuery::create()
-		->filterByID(203)
+		->filterByID(184)
 		->findOne();
+
+	$puzzle->postInfoToSlack();
 
 	// postPuzzle($puzzle, $puzzle->getSlackChannel());
 	// postSolve($puzzle, $puzzle->getSlackChannel());
 	// postSolve($puzzle);
 
-	return;
+	return "";
 
 	render('test.twig', array(
 			// 'content' => $result,
@@ -370,17 +372,20 @@ function addPuzzle($request, $response) {
 			$newPuzzle->setStatus('open');
 			$newPuzzle->save();
 
-			$meta = $puzzleContent['meta'];
+			$meta_id = $puzzleContent['meta'];
 
-			if ($meta >= 0) {
-				$parentID = $meta;
-				if ($meta == 0) {// it's a meta, so set Parent to itself
-					$parentID = $newPuzzle->getID();
-				}
-				$newPuzzleParent = new PuzzleParent();
-				$newPuzzleParent->setChild($newPuzzle);
-				$newPuzzleParent->setParentId($parentID);
-				$newPuzzleParent->save();
+			if ($meta_id == 0) {
+				// it's a meta, so set Parent to itself
+				$meta = $newPuzzle;
+			} elseif ($meta_id > 0) {
+				$meta = PuzzleQuery::create()
+					->filterByID($meta_id)
+					->findOne();
+			}
+
+			if ($meta) {
+				$newPuzzle->addParent($meta);
+				$newPuzzle->save();
 			}
 
 			$newPuzzles[] = array(
@@ -389,8 +394,7 @@ function addPuzzle($request, $response) {
 				'pkID'     => $newPuzzle->getID(),
 			);
 
-			postPuzzle($newPuzzle, $puzzleContent['slack']);
-			postPuzzle($newPuzzle);// big-board channel
+			$puzzle->postInfoToSlack();
 		}
 	}
 
@@ -495,6 +499,7 @@ function displayMeta($meta_id) {
 }
 
 function displayLoosePuzzles() {
+	// TODO: refactor this to use COUNT() mechanism
 	$all_puzzles = PuzzleQuery::create()
 		->leftJoinWith('Puzzle.PuzzleParent')
 		->find();
