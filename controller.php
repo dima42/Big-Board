@@ -461,7 +461,8 @@ function displayAllPuzzles() {
 		$total_puzzles += $status['StatusCount'];
 	}
 
-	$all_puzzles = PuzzleParentQuery::create()
+	// TODO: fix this query to start with puzzles and use .getPuzzleChildren
+	$all_puzzles = PuzzlePuzzleQuery::create()
 		->orderByParentId()
 		->find();
 
