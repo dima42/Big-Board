@@ -98,7 +98,8 @@ require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
 function get_new_drive_service() {
-	$pal_client = new Google_Client();
+	$_SESSION['error_string'] = "";
+	$pal_client               = new Google_Client();
 	$pal_client->setAccessType("offline");
 	$pal_client->setApplicationName("Palindrome Big Board");
 	$pal_client->setClientId('938479797888.apps.googleusercontent.com');
