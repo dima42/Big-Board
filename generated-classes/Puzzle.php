@@ -17,6 +17,15 @@ class Puzzle extends BasePuzzle {
 	// return true;
 	// }
 
+	public function addNewMember($member) {
+		$this->addmember($member);
+		$this->save();
+		$message = "You joined ".$this->getTitle().".";
+		$this->postJoin($member);
+	}
+
+	// SLACK STUFF
+
 	public function postInfoToSlack() {
 		postPuzzle($this, $this->getSlackChannel());
 		postPuzzle($this);// big-board channel
@@ -27,4 +36,10 @@ class Puzzle extends BasePuzzle {
 		// postSolve($this, 'general');
 		// TODO: uncomment above
 	}
+
+	public function postJoin($member) {
+		postJoin($member, $this->getSlackChannel());
+		// TODO: list all members
+	}
+
 }

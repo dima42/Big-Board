@@ -305,10 +305,7 @@ function joinPuzzle($puzzle_id) {
 	$member = $_SESSION['user'];
 
 	try {
-		$member->addPuzzle($puzzle);
-		$member->save();
-		$message = "You joined ".$puzzle->getTitle().".";
-		postJoin($member, $puzzle->getSlackChannel());
+		$puzzle->addNewMember($member);
 	} catch (Exception $e) {
 		$message = "You already joined this puzzle.";
 	}
@@ -671,13 +668,50 @@ function infoBot($request, $response) {
 			'link_names'    => true,
 			"response_type" => "in_channel",
 			"text"          => "*".$puzzle->getTitle()."*",
-			"attachments"   => getPuzzleInfo($puzzle),
+			"attachments"   => getPuzzleAttachments($puzzle),
 		];
 	}
 
 	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
 	// possible to blast this to everyone?
 	// $human_response = [];
+
+	return $response->json($channel_response);
+}
+
+function joinBot($request, $response) {
+	if ($request->token != getenv('PALINDROME_SLACKBOT_TOKEN')) {
+		return $response->json(['text' => 'Nothing here. Go away.']);
+	}
+
+	$parameter        = $request->text;
+	$channel_response = ['text' => "Hmm, maybe ask a human for help. This computer is confused."];
+	$channel_id       = $request->channel_id;
+	$slack_user_id    = $request->user_id;
+
+	$puzzle = PuzzleQuery::create()
+		->filterBySlackChannelId($channel_id)
+		->findOne();
+
+	$member = MemberQuery::create()
+		->filterBySlackId($slack_user_id)
+		->findOne();
+
+	if (!$puzzle) {
+		$channel_response = [
+			"text" => "`".$request->command."` can only be used inside a puzzle channel.",
+		];
+	} elseif (!$member) {
+		$channel_response = [
+			"text" => "Hi there! Before you can use the `".$request->command."` command, I need to know who you are. Click this link then try the command again.
+http://team-palindrome.herokuapp.com/assign_slack_id/".$slack_user_id,
+		];
+	} else {
+		$puzzle->addNewMember($member);
+		$channel_response = [
+			"text" => "Got it. You joined ".$puzzle->getTitle().".",
+		];
+	}
 
 	return $response->json($channel_response);
 }

@@ -21,6 +21,10 @@ $klein->with('/api', function () use ($klein) {
 				return infoBot($request, $response);
 			});
 
+		$klein->respond('POST', '/join', function ($request, $response) {
+				return joinBot($request, $response);
+			});
+
 	});
 
 $klein->respond(function ($request, $response) {
