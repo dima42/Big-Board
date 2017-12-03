@@ -1,9 +1,9 @@
 <?php
 
-use Base\Relationship as BaseRelationship;
+use Base\PuzzlePuzzleQuery as BasePuzzlePuzzleQuery;
 
 /**
- * Skeleton subclass for representing a row from the 'relationship' table.
+ * Skeleton subclass for performing query and update operations on the 'relationship' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\Relationship as BaseRelationship;
  * long as it does not already exist in the output directory.
  *
  */
-class Relationship extends BaseRelationship
+class PuzzlePuzzleQuery extends BasePuzzlePuzzleQuery
 {
 
 }

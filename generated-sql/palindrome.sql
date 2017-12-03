@@ -76,10 +76,11 @@ DROP TABLE IF EXISTS `solver`;
 
 CREATE TABLE `solver`
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `puzzle_id` INTEGER NOT NULL,
     `member_id` INTEGER NOT NULL,
-    PRIMARY KEY (`id`),
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`puzzle_id`,`member_id`),
     UNIQUE INDEX `solver_u_b374db` (`puzzle_id`, `member_id`),
     INDEX `solver_fi_672062` (`member_id`),
     CONSTRAINT `solver_fk_937852`
@@ -98,11 +99,9 @@ DROP TABLE IF EXISTS `relationship`;
 
 CREATE TABLE `relationship`
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `puzzle_id` INTEGER NOT NULL,
     `parent_id` INTEGER NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `relationship_fi_937852` (`puzzle_id`),
+    PRIMARY KEY (`puzzle_id`,`parent_id`),
     INDEX `relationship_fi_f840ee` (`parent_id`),
     CONSTRAINT `relationship_fk_937852`
         FOREIGN KEY (`puzzle_id`)

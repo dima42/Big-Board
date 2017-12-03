@@ -86,7 +86,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery rightJoinWithPuzzleChild() Adds a RIGHT JOIN clause and with to the query using the PuzzleChild relation
  * @method     ChildPuzzleQuery innerJoinWithPuzzleChild() Adds a INNER JOIN clause and with to the query using the PuzzleChild relation
  *
- * @method     \NoteQuery|\PuzzleMemberQuery|\PuzzleParentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \NoteQuery|\PuzzleMemberQuery|\PuzzlePuzzleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPuzzle findOne(ConnectionInterface $con = null) Return the first ChildPuzzle matching the query
  * @method     ChildPuzzle findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPuzzle matching the query, or a new ChildPuzzle object populated from the query conditions when no match is found
@@ -672,25 +672,25 @@ abstract class PuzzleQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \PuzzleParent object
+     * Filter the query by a related \PuzzlePuzzle object
      *
-     * @param \PuzzleParent|ObjectCollection $puzzleParent the related object to use as filter
+     * @param \PuzzlePuzzle|ObjectCollection $puzzlePuzzle the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildPuzzleQuery The current query, for fluid interface
      */
-    public function filterByPuzzleParent($puzzleParent, $comparison = null)
+    public function filterByPuzzleParent($puzzlePuzzle, $comparison = null)
     {
-        if ($puzzleParent instanceof \PuzzleParent) {
+        if ($puzzlePuzzle instanceof \PuzzlePuzzle) {
             return $this
-                ->addUsingAlias(PuzzleTableMap::COL_ID, $puzzleParent->getPuzzleId(), $comparison);
-        } elseif ($puzzleParent instanceof ObjectCollection) {
+                ->addUsingAlias(PuzzleTableMap::COL_ID, $puzzlePuzzle->getPuzzleId(), $comparison);
+        } elseif ($puzzlePuzzle instanceof ObjectCollection) {
             return $this
                 ->usePuzzleParentQuery()
-                ->filterByPrimaryKeys($puzzleParent->getPrimaryKeys())
+                ->filterByPrimaryKeys($puzzlePuzzle->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByPuzzleParent() only accepts arguments of type \PuzzleParent or Collection');
+            throw new PropelException('filterByPuzzleParent() only accepts arguments of type \PuzzlePuzzle or Collection');
         }
     }
 
@@ -727,7 +727,7 @@ abstract class PuzzleQuery extends ModelCriteria
     }
 
     /**
-     * Use the PuzzleParent relation PuzzleParent object
+     * Use the PuzzleParent relation PuzzlePuzzle object
      *
      * @see useQuery()
      *
@@ -735,35 +735,35 @@ abstract class PuzzleQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \PuzzleParentQuery A secondary query class using the current class as primary query
+     * @return \PuzzlePuzzleQuery A secondary query class using the current class as primary query
      */
     public function usePuzzleParentQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinPuzzleParent($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'PuzzleParent', '\PuzzleParentQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'PuzzleParent', '\PuzzlePuzzleQuery');
     }
 
     /**
-     * Filter the query by a related \PuzzleParent object
+     * Filter the query by a related \PuzzlePuzzle object
      *
-     * @param \PuzzleParent|ObjectCollection $puzzleParent the related object to use as filter
+     * @param \PuzzlePuzzle|ObjectCollection $puzzlePuzzle the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildPuzzleQuery The current query, for fluid interface
      */
-    public function filterByPuzzleChild($puzzleParent, $comparison = null)
+    public function filterByPuzzleChild($puzzlePuzzle, $comparison = null)
     {
-        if ($puzzleParent instanceof \PuzzleParent) {
+        if ($puzzlePuzzle instanceof \PuzzlePuzzle) {
             return $this
-                ->addUsingAlias(PuzzleTableMap::COL_ID, $puzzleParent->getParentId(), $comparison);
-        } elseif ($puzzleParent instanceof ObjectCollection) {
+                ->addUsingAlias(PuzzleTableMap::COL_ID, $puzzlePuzzle->getParentId(), $comparison);
+        } elseif ($puzzlePuzzle instanceof ObjectCollection) {
             return $this
                 ->usePuzzleChildQuery()
-                ->filterByPrimaryKeys($puzzleParent->getPrimaryKeys())
+                ->filterByPrimaryKeys($puzzlePuzzle->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByPuzzleChild() only accepts arguments of type \PuzzleParent or Collection');
+            throw new PropelException('filterByPuzzleChild() only accepts arguments of type \PuzzlePuzzle or Collection');
         }
     }
 
@@ -800,7 +800,7 @@ abstract class PuzzleQuery extends ModelCriteria
     }
 
     /**
-     * Use the PuzzleChild relation PuzzleParent object
+     * Use the PuzzleChild relation PuzzlePuzzle object
      *
      * @see useQuery()
      *
@@ -808,13 +808,13 @@ abstract class PuzzleQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \PuzzleParentQuery A secondary query class using the current class as primary query
+     * @return \PuzzlePuzzleQuery A secondary query class using the current class as primary query
      */
     public function usePuzzleChildQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinPuzzleChild($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'PuzzleChild', '\PuzzleParentQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'PuzzleChild', '\PuzzlePuzzleQuery');
     }
 
     /**
@@ -831,6 +831,40 @@ abstract class PuzzleQuery extends ModelCriteria
         return $this
             ->usePuzzleMemberQuery()
             ->filterByMember($member, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Puzzle object
+     * using the relationship table as cross reference
+     *
+     * @param Puzzle $puzzle the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterByParent($puzzle, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->usePuzzleParentQuery()
+            ->filterByParent($puzzle, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Puzzle object
+     * using the relationship table as cross reference
+     *
+     * @param Puzzle $puzzle the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterByChild($puzzle, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->usePuzzleChildQuery()
+            ->filterByChild($puzzle, $comparison)
             ->endUse();
     }
 
