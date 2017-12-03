@@ -28,27 +28,29 @@ $klein->with('/api', function () use ($klein) {
 	});
 
 $klein->respond(function ($request, $response) {
-		return everythingElse();
-	});
+    // SET UP GOOGLE_CLIENT OBJECT
+    $pal_client = new Google_Client();
+    $pal_client->setAccessType("offline");
+    $pal_client->setApplicationName("Palindrome Big Board");
+    $pal_client->setClientId('938479797888.apps.googleusercontent.com');
+    $pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
+    $pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
+
+    // SET UP DRIVE SERVICE OBJECT
+
+	if (!is_authorized($pal_client)) {
+		$authUrl = $pal_client->createAuthUrl();
+		render('loggedout.twig', array(
+				'auth_url' => $authUrl,
+			));
+	} else {
+		show_page($pal_client);
+	}
+});
 
 $klein->dispatch();
 
-function everythingElse() {
-
-	// SET UP GOOGLE_CLIENT OBJECT
-	$pal_client = new Google_Client();
-	$pal_client->setAccessType("offline");
-	$pal_client->setApplicationName("Palindrome Big Board");
-	$pal_client->setClientId('938479797888.apps.googleusercontent.com');
-	$pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
-	$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
-
-	// SET UP DRIVE SERVICE OBJECT
-	$pal_drive = new Google_DriveService($pal_client);
-
-	// TRACK STATUS
-	$noAccessYet = TRUE;
-
+function is_authorized($pal_client) {
 	// let's get the persons access token for future use. This is where the login takes place.
 	if (isset($_GET['code'])) {
 		$pal_client->authenticate($_GET['code']);
@@ -60,48 +62,42 @@ function everythingElse() {
 		$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
 		setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
 
-		$noAccessYet = FALSE;
+		return true;
 	}
 
-	// let's check to see if we have an access token. If we do, then we can get all sorts of fun information
-	// if we do not have a session token, check the cookies
+	// If no access_token in session, check the cookies
 	if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) {
 		$_SESSION['access_token'] = stripslashes($_COOKIE['PAL_ACCESS_TOKEN']);
 	}
 
+    // Now check for access_token in the SESSION
 	if (isset($_SESSION['access_token'])) {
 		$pal_client->setAccessToken($_SESSION['access_token']);
 		if (!$pal_client->isAccessTokenExpired()) {
-			$noAccessYet = FALSE;
+			return true;
 		}
 	}
 
-	if ($noAccessYet) {
-		if (isset($_COOKIE['refresh_token'])) {
-			$pal_client->refreshToken($_COOKIE['refresh_token']);
-			$_SESSION['access_token'] = $pal_client->getAccessToken();
-			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
+    // If no access_token in SESSION, check cookies for refresh_token, and refresh
+	if (isset($_COOKIE['refresh_token'])) {
+		$pal_client->refreshToken($_COOKIE['refresh_token']);
+		$_SESSION['access_token'] = $pal_client->getAccessToken();
+		setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
 
-			$token_dump                = json_decode($_SESSION['access_token']);
-			$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
-			setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
+		$token_dump                = json_decode($_SESSION['access_token']);
+		$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
+		setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
 
-			$noAccessYet = FALSE;
-		}
+		return true;
 	}
 
-	// if there is no access token, user has not authorized app. So let's begin by checking that.
-	if ($noAccessYet) {
-		$authUrl = $pal_client->createAuthUrl();
-		render('loggedout.twig', array(
-				'auth_url' => $authUrl,
-			));
-	} else {
-		show_page($pal_drive);
-	}
+    // If none of that worked, no access granted
+	return false;
 }
 
-function show_page($pal_drive) {
+function show_page($pal_client) {
+    $pal_drive = new Google_DriveService($pal_client);
+
 	// first, let's try to get the user from the database based on root folder ID
 
 	// this will get the user ID of someone already established as a palindrome member
