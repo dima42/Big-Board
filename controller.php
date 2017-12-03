@@ -137,14 +137,16 @@ function displayError($error) {
 
 function displayTest() {
 	$puzzle = PuzzleQuery::create()
-		->filterByID(203)
+		->filterByID(184)
 		->findOne();
+
+	$puzzle->postInfoToSlack();
 
 	// postPuzzle($puzzle, $puzzle->getSlackChannel());
 	// postSolve($puzzle, $puzzle->getSlackChannel());
 	// postSolve($puzzle);
 
-	return;
+	return "";
 
 	render('test.twig', array(
 			// 'content' => $result,
@@ -166,15 +168,17 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	// TODO: if not $puzzle, redirect to error template
 	// "This puzzle does not exist. It is a ghost puzzle.";
 
-	$metas_to_show = PuzzleParentQuery::create()
-		->joinWith('PuzzleParent.Parent')
+	// TODO: Can we use $puzzle->getParents() for this?
+	$metas_to_show = PuzzlePuzzleQuery::create()
+		->joinWith('PuzzlePuzzle.Parent')
 		->orderByParentId()
 		->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
 		->filterByParentId($puzzle_id, CRITERIA::NOT_EQUAL)
 		->groupBy('Parent.Id')
 		->find();
 
-	$me_as_meta = PuzzleParentQuery::create()
+	// TODO: Can we use $puzzle->getParents() for this?
+	$me_as_meta = PuzzlePuzzleQuery::create()
 		->filterByParent($puzzle)
 		->filterByChild($puzzle)
 		->count();
@@ -210,26 +214,26 @@ function editPuzzle($puzzle_id, $request) {
 	$puzzle->setSlackChannel($request->slack_channel);
 	$puzzle->save();
 
-	// Remove all parents, even myself (if I'm a meta)
-	$oldParents = PuzzleParentQuery::create()
+	// Remove all parents, even myself if I'm a meta
+	$oldParents = PuzzlePuzzleQuery::create()
 		->filterByPuzzleId($puzzle_id)
 		->find();
 	$oldParents->delete();
 
 	// Assign parents
-	foreach ($request->metas as $meta) {
-		$puzzleParent = new PuzzleParent();
-		$puzzleParent->setPuzzleId($puzzle_id);
-		$puzzleParent->setParentId($meta);
-		$puzzleParent->save();
+	foreach ($request->metas as $meta_id) {
+		$meta = PuzzleQuery::create()
+			->filterById($meta_id)
+			->findOne();
+		$puzzle->addParent($meta);
 	}
 
+	// Add self as parent if it's a meta
 	if ($request->i_am_meta == "y") {
-		$puzzleParent = new PuzzleParent();
-		$puzzleParent->setPuzzleId($puzzle_id);
-		$puzzleParent->setParentId($puzzle_id);
-		$puzzleParent->save();
+		$puzzle->addParent($puzzle);
 	}
+
+	$puzzle->save();
 
 	$message = "Saved ".$puzzle->getTitle();
 
@@ -368,17 +372,20 @@ function addPuzzle($request, $response) {
 			$newPuzzle->setStatus('open');
 			$newPuzzle->save();
 
-			$meta = $puzzleContent['meta'];
+			$meta_id = $puzzleContent['meta'];
 
-			if ($meta >= 0) {
-				$parentID = $meta;
-				if ($meta == 0) {// it's a meta, so set Parent to itself
-					$parentID = $newPuzzle->getID();
-				}
-				$newPuzzleParent = new PuzzleParent();
-				$newPuzzleParent->setChild($newPuzzle);
-				$newPuzzleParent->setParentId($parentID);
-				$newPuzzleParent->save();
+			if ($meta_id == 0) {
+				// it's a meta, so set Parent to itself
+				$meta = $newPuzzle;
+			} elseif ($meta_id > 0) {
+				$meta = PuzzleQuery::create()
+					->filterByID($meta_id)
+					->findOne();
+			}
+
+			if ($meta) {
+				$newPuzzle->addParent($meta);
+				$newPuzzle->save();
 			}
 
 			$newPuzzles[] = array(
@@ -387,8 +394,7 @@ function addPuzzle($request, $response) {
 				'pkID'     => $newPuzzle->getID(),
 			);
 
-			postPuzzle($newPuzzle, $puzzleContent['slack']);
-			postPuzzle($newPuzzle);// big-board channel
+			$puzzle->postInfoToSlack();
 		}
 	}
 
@@ -459,7 +465,8 @@ function displayAllPuzzles() {
 		$total_puzzles += $status['StatusCount'];
 	}
 
-	$all_puzzles = PuzzleParentQuery::create()
+	// TODO: fix this query to start with puzzles and use .getPuzzleChildren
+	$all_puzzles = PuzzlePuzzleQuery::create()
 		->orderByParentId()
 		->find();
 
@@ -480,11 +487,7 @@ function displayMeta($meta_id) {
 		->filterByID($meta_id)
 		->findOne();
 
-	$puzzles = PuzzleQuery::create()
-		->usePuzzleParentQuery()
-		->filterByParent($meta)
-		->endUse()
-		->find();
+	$puzzles = $meta->getChildren();
 
 	// TODO: if not $meta, redirect to error page
 	// "This does not appear to be a metapuzzle. There are no puzzles that are part of it."
@@ -496,6 +499,7 @@ function displayMeta($meta_id) {
 }
 
 function displayLoosePuzzles() {
+	// TODO: refactor this to use COUNT() mechanism
 	$all_puzzles = PuzzleQuery::create()
 		->leftJoinWith('Puzzle.PuzzleParent')
 		->find();

@@ -1,6 +1,6 @@
 <?php
 
-use Base\PuzzleParent as BasePuzzleParent;
+use Base\PuzzlePuzzle as BasePuzzlePuzzle;
 
 /**
  * Skeleton subclass for representing a row from the 'relationship' table.
@@ -12,7 +12,7 @@ use Base\PuzzleParent as BasePuzzleParent;
  * long as it does not already exist in the output directory.
  *
  */
-class PuzzleParent extends BasePuzzleParent
+class PuzzlePuzzle extends BasePuzzlePuzzle
 {
 
 }

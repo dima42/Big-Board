@@ -16,6 +16,12 @@ class Puzzle extends BasePuzzle {
 	// public function postUpdate() {
 	// return true;
 	// }
+
+	public function postInfoToSlack() {
+		postPuzzle($this, $this->getSlackChannel());
+		postPuzzle($this);// big-board channel
+	}
+
 	public function postSolve() {
 		postSolve($this, $this->getSlackChannel());
 		// postSolve($this, 'general');

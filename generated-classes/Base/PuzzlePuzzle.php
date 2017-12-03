@@ -3,11 +3,11 @@
 namespace Base;
 
 use \Puzzle as ChildPuzzle;
+use \PuzzlePuzzleQuery as ChildPuzzlePuzzleQuery;
 use \PuzzleQuery as ChildPuzzleQuery;
-use \RelationshipQuery as ChildRelationshipQuery;
 use \Exception;
 use \PDO;
-use Map\RelationshipTableMap;
+use Map\PuzzlePuzzleTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -27,12 +27,12 @@ use Propel\Runtime\Parser\AbstractParser;
  *
  * @package    propel.generator..Base
  */
-abstract class Relationship implements ActiveRecordInterface
+abstract class PuzzlePuzzle implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\RelationshipTableMap';
+    const TABLE_MAP = '\\Map\\PuzzlePuzzleTableMap';
 
 
     /**
@@ -62,13 +62,6 @@ abstract class Relationship implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the id field.
-     *
-     * @var        int
-     */
-    protected $id;
-
-    /**
      * The value for the puzzle_id field.
      *
      * @var        int
@@ -85,7 +78,7 @@ abstract class Relationship implements ActiveRecordInterface
     /**
      * @var        ChildPuzzle
      */
-    protected $aPuzzle;
+    protected $aChild;
 
     /**
      * @var        ChildPuzzle
@@ -101,7 +94,7 @@ abstract class Relationship implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Base\Relationship object.
+     * Initializes internal state of Base\PuzzlePuzzle object.
      */
     public function __construct()
     {
@@ -196,9 +189,9 @@ abstract class Relationship implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Relationship</code> instance.  If
-     * <code>obj</code> is an instance of <code>Relationship</code>, delegates to
-     * <code>equals(Relationship)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>PuzzlePuzzle</code> instance.  If
+     * <code>obj</code> is an instance of <code>PuzzlePuzzle</code>, delegates to
+     * <code>equals(PuzzlePuzzle)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -264,7 +257,7 @@ abstract class Relationship implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Relationship The current object, for fluid interface
+     * @return $this|PuzzlePuzzle The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -326,16 +319,6 @@ abstract class Relationship implements ActiveRecordInterface
     }
 
     /**
-     * Get the [id] column value.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Get the [puzzle_id] column value.
      *
      * @return int
@@ -356,30 +339,10 @@ abstract class Relationship implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [id] column.
-     *
-     * @param int $v new value
-     * @return $this|\Relationship The current object (for fluent API support)
-     */
-    public function setId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[RelationshipTableMap::COL_ID] = true;
-        }
-
-        return $this;
-    } // setId()
-
-    /**
      * Set the value of [puzzle_id] column.
      *
      * @param int $v new value
-     * @return $this|\Relationship The current object (for fluent API support)
+     * @return $this|\PuzzlePuzzle The current object (for fluent API support)
      */
     public function setPuzzleId($v)
     {
@@ -389,11 +352,11 @@ abstract class Relationship implements ActiveRecordInterface
 
         if ($this->puzzle_id !== $v) {
             $this->puzzle_id = $v;
-            $this->modifiedColumns[RelationshipTableMap::COL_PUZZLE_ID] = true;
+            $this->modifiedColumns[PuzzlePuzzleTableMap::COL_PUZZLE_ID] = true;
         }
 
-        if ($this->aPuzzle !== null && $this->aPuzzle->getId() !== $v) {
-            $this->aPuzzle = null;
+        if ($this->aChild !== null && $this->aChild->getId() !== $v) {
+            $this->aChild = null;
         }
 
         return $this;
@@ -403,7 +366,7 @@ abstract class Relationship implements ActiveRecordInterface
      * Set the value of [parent_id] column.
      *
      * @param int $v new value
-     * @return $this|\Relationship The current object (for fluent API support)
+     * @return $this|\PuzzlePuzzle The current object (for fluent API support)
      */
     public function setParentId($v)
     {
@@ -413,7 +376,7 @@ abstract class Relationship implements ActiveRecordInterface
 
         if ($this->parent_id !== $v) {
             $this->parent_id = $v;
-            $this->modifiedColumns[RelationshipTableMap::COL_PARENT_ID] = true;
+            $this->modifiedColumns[PuzzlePuzzleTableMap::COL_PARENT_ID] = true;
         }
 
         if ($this->aParent !== null && $this->aParent->getId() !== $v) {
@@ -459,13 +422,10 @@ abstract class Relationship implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : RelationshipTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RelationshipTableMap::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PuzzlePuzzleTableMap::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->puzzle_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RelationshipTableMap::translateFieldName('ParentId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PuzzlePuzzleTableMap::translateFieldName('ParentId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->parent_id = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -475,10 +435,10 @@ abstract class Relationship implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = RelationshipTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 2; // 2 = PuzzlePuzzleTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Relationship'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\PuzzlePuzzle'), 0, $e);
         }
     }
 
@@ -497,8 +457,8 @@ abstract class Relationship implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aPuzzle !== null && $this->puzzle_id !== $this->aPuzzle->getId()) {
-            $this->aPuzzle = null;
+        if ($this->aChild !== null && $this->puzzle_id !== $this->aChild->getId()) {
+            $this->aChild = null;
         }
         if ($this->aParent !== null && $this->parent_id !== $this->aParent->getId()) {
             $this->aParent = null;
@@ -526,13 +486,13 @@ abstract class Relationship implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(RelationshipTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(PuzzlePuzzleTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildRelationshipQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildPuzzlePuzzleQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -542,7 +502,7 @@ abstract class Relationship implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aPuzzle = null;
+            $this->aChild = null;
             $this->aParent = null;
         } // if (deep)
     }
@@ -553,8 +513,8 @@ abstract class Relationship implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Relationship::setDeleted()
-     * @see Relationship::isDeleted()
+     * @see PuzzlePuzzle::setDeleted()
+     * @see PuzzlePuzzle::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -563,11 +523,11 @@ abstract class Relationship implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(RelationshipTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PuzzlePuzzleTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildRelationshipQuery::create()
+            $deleteQuery = ChildPuzzlePuzzleQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -602,7 +562,7 @@ abstract class Relationship implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(RelationshipTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PuzzlePuzzleTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -621,7 +581,7 @@ abstract class Relationship implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                RelationshipTableMap::addInstanceToPool($this);
+                PuzzlePuzzleTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -652,11 +612,11 @@ abstract class Relationship implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aPuzzle !== null) {
-                if ($this->aPuzzle->isModified() || $this->aPuzzle->isNew()) {
-                    $affectedRows += $this->aPuzzle->save($con);
+            if ($this->aChild !== null) {
+                if ($this->aChild->isModified() || $this->aChild->isNew()) {
+                    $affectedRows += $this->aChild->save($con);
                 }
-                $this->setPuzzle($this->aPuzzle);
+                $this->setChild($this->aChild);
             }
 
             if ($this->aParent !== null) {
@@ -697,19 +657,12 @@ abstract class Relationship implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[RelationshipTableMap::COL_ID] = true;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . RelationshipTableMap::COL_ID . ')');
-        }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(RelationshipTableMap::COL_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'id';
-        }
-        if ($this->isColumnModified(RelationshipTableMap::COL_PUZZLE_ID)) {
+        if ($this->isColumnModified(PuzzlePuzzleTableMap::COL_PUZZLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'puzzle_id';
         }
-        if ($this->isColumnModified(RelationshipTableMap::COL_PARENT_ID)) {
+        if ($this->isColumnModified(PuzzlePuzzleTableMap::COL_PARENT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'parent_id';
         }
 
@@ -723,9 +676,6 @@ abstract class Relationship implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
-                        break;
                     case 'puzzle_id':
                         $stmt->bindValue($identifier, $this->puzzle_id, PDO::PARAM_INT);
                         break;
@@ -739,13 +689,6 @@ abstract class Relationship implements ActiveRecordInterface
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), 0, $e);
         }
-
-        try {
-            $pk = $con->lastInsertId();
-        } catch (Exception $e) {
-            throw new PropelException('Unable to get autoincrement id.', 0, $e);
-        }
-        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -778,7 +721,7 @@ abstract class Relationship implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = RelationshipTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = PuzzlePuzzleTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -795,12 +738,9 @@ abstract class Relationship implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getId();
-                break;
-            case 1:
                 return $this->getPuzzleId();
                 break;
-            case 2:
+            case 1:
                 return $this->getParentId();
                 break;
             default:
@@ -827,15 +767,14 @@ abstract class Relationship implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Relationship'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['PuzzlePuzzle'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Relationship'][$this->hashCode()] = true;
-        $keys = RelationshipTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['PuzzlePuzzle'][$this->hashCode()] = true;
+        $keys = PuzzlePuzzleTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getId(),
-            $keys[1] => $this->getPuzzleId(),
-            $keys[2] => $this->getParentId(),
+            $keys[0] => $this->getPuzzleId(),
+            $keys[1] => $this->getParentId(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -843,7 +782,7 @@ abstract class Relationship implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aPuzzle) {
+            if (null !== $this->aChild) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -853,10 +792,10 @@ abstract class Relationship implements ActiveRecordInterface
                         $key = 'puzzle';
                         break;
                     default:
-                        $key = 'Puzzle';
+                        $key = 'Child';
                 }
 
-                $result[$key] = $this->aPuzzle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aChild->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aParent) {
 
@@ -887,11 +826,11 @@ abstract class Relationship implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Relationship
+     * @return $this|\PuzzlePuzzle
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = RelationshipTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = PuzzlePuzzleTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -902,18 +841,15 @@ abstract class Relationship implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Relationship
+     * @return $this|\PuzzlePuzzle
      */
     public function setByPosition($pos, $value)
     {
         switch ($pos) {
             case 0:
-                $this->setId($value);
-                break;
-            case 1:
                 $this->setPuzzleId($value);
                 break;
-            case 2:
+            case 1:
                 $this->setParentId($value);
                 break;
         } // switch()
@@ -940,16 +876,13 @@ abstract class Relationship implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = RelationshipTableMap::getFieldNames($keyType);
+        $keys = PuzzlePuzzleTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setId($arr[$keys[0]]);
+            $this->setPuzzleId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setPuzzleId($arr[$keys[1]]);
-        }
-        if (array_key_exists($keys[2], $arr)) {
-            $this->setParentId($arr[$keys[2]]);
+            $this->setParentId($arr[$keys[1]]);
         }
     }
 
@@ -970,7 +903,7 @@ abstract class Relationship implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Relationship The current object, for fluid interface
+     * @return $this|\PuzzlePuzzle The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -990,16 +923,13 @@ abstract class Relationship implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(RelationshipTableMap::DATABASE_NAME);
+        $criteria = new Criteria(PuzzlePuzzleTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(RelationshipTableMap::COL_ID)) {
-            $criteria->add(RelationshipTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(PuzzlePuzzleTableMap::COL_PUZZLE_ID)) {
+            $criteria->add(PuzzlePuzzleTableMap::COL_PUZZLE_ID, $this->puzzle_id);
         }
-        if ($this->isColumnModified(RelationshipTableMap::COL_PUZZLE_ID)) {
-            $criteria->add(RelationshipTableMap::COL_PUZZLE_ID, $this->puzzle_id);
-        }
-        if ($this->isColumnModified(RelationshipTableMap::COL_PARENT_ID)) {
-            $criteria->add(RelationshipTableMap::COL_PARENT_ID, $this->parent_id);
+        if ($this->isColumnModified(PuzzlePuzzleTableMap::COL_PARENT_ID)) {
+            $criteria->add(PuzzlePuzzleTableMap::COL_PARENT_ID, $this->parent_id);
         }
 
         return $criteria;
@@ -1017,8 +947,9 @@ abstract class Relationship implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildRelationshipQuery::create();
-        $criteria->add(RelationshipTableMap::COL_ID, $this->id);
+        $criteria = ChildPuzzlePuzzleQuery::create();
+        $criteria->add(PuzzlePuzzleTableMap::COL_PUZZLE_ID, $this->puzzle_id);
+        $criteria->add(PuzzlePuzzleTableMap::COL_PARENT_ID, $this->parent_id);
 
         return $criteria;
     }
@@ -1031,10 +962,25 @@ abstract class Relationship implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getId();
+        $validPk = null !== $this->getPuzzleId() &&
+            null !== $this->getParentId();
 
-        $validPrimaryKeyFKs = 0;
+        $validPrimaryKeyFKs = 2;
         $primaryKeyFKs = [];
+
+        //relation relationship_fk_937852 to table puzzle
+        if ($this->aChild && $hash = spl_object_hash($this->aChild)) {
+            $primaryKeyFKs[] = $hash;
+        } else {
+            $validPrimaryKeyFKs = false;
+        }
+
+        //relation relationship_fk_f840ee to table puzzle
+        if ($this->aParent && $hash = spl_object_hash($this->aParent)) {
+            $primaryKeyFKs[] = $hash;
+        } else {
+            $validPrimaryKeyFKs = false;
+        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1046,23 +992,29 @@ abstract class Relationship implements ActiveRecordInterface
     }
 
     /**
-     * Returns the primary key for this object (row).
-     * @return int
+     * Returns the composite primary key for this object.
+     * The array elements will be in same order as specified in XML.
+     * @return array
      */
     public function getPrimaryKey()
     {
-        return $this->getId();
+        $pks = array();
+        $pks[0] = $this->getPuzzleId();
+        $pks[1] = $this->getParentId();
+
+        return $pks;
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Set the [composite] primary key.
      *
-     * @param       int $key Primary key.
+     * @param      array $keys The elements of the composite key (order must match the order in XML file).
      * @return void
      */
-    public function setPrimaryKey($key)
+    public function setPrimaryKey($keys)
     {
-        $this->setId($key);
+        $this->setPuzzleId($keys[0]);
+        $this->setParentId($keys[1]);
     }
 
     /**
@@ -1071,7 +1023,7 @@ abstract class Relationship implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return null === $this->getId();
+        return (null === $this->getPuzzleId()) && (null === $this->getParentId());
     }
 
     /**
@@ -1080,7 +1032,7 @@ abstract class Relationship implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Relationship (or compatible) type.
+     * @param      object $copyObj An object of \PuzzlePuzzle (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1091,7 +1043,6 @@ abstract class Relationship implements ActiveRecordInterface
         $copyObj->setParentId($this->getParentId());
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1104,7 +1055,7 @@ abstract class Relationship implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Relationship Clone of current object.
+     * @return \PuzzlePuzzle Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1121,10 +1072,10 @@ abstract class Relationship implements ActiveRecordInterface
      * Declares an association between this object and a ChildPuzzle object.
      *
      * @param  ChildPuzzle $v
-     * @return $this|\Relationship The current object (for fluent API support)
+     * @return $this|\PuzzlePuzzle The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setPuzzle(ChildPuzzle $v = null)
+    public function setChild(ChildPuzzle $v = null)
     {
         if ($v === null) {
             $this->setPuzzleId(NULL);
@@ -1132,12 +1083,12 @@ abstract class Relationship implements ActiveRecordInterface
             $this->setPuzzleId($v->getId());
         }
 
-        $this->aPuzzle = $v;
+        $this->aChild = $v;
 
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildPuzzle object, it will not be re-added.
         if ($v !== null) {
-            $v->addRelationship($this);
+            $v->addPuzzleParent($this);
         }
 
 
@@ -1152,27 +1103,27 @@ abstract class Relationship implements ActiveRecordInterface
      * @return ChildPuzzle The associated ChildPuzzle object.
      * @throws PropelException
      */
-    public function getPuzzle(ConnectionInterface $con = null)
+    public function getChild(ConnectionInterface $con = null)
     {
-        if ($this->aPuzzle === null && ($this->puzzle_id != 0)) {
-            $this->aPuzzle = ChildPuzzleQuery::create()->findPk($this->puzzle_id, $con);
+        if ($this->aChild === null && ($this->puzzle_id != 0)) {
+            $this->aChild = ChildPuzzleQuery::create()->findPk($this->puzzle_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aPuzzle->addRelationships($this);
+                $this->aChild->addPuzzleParents($this);
              */
         }
 
-        return $this->aPuzzle;
+        return $this->aChild;
     }
 
     /**
      * Declares an association between this object and a ChildPuzzle object.
      *
      * @param  ChildPuzzle $v
-     * @return $this|\Relationship The current object (for fluent API support)
+     * @return $this|\PuzzlePuzzle The current object (for fluent API support)
      * @throws PropelException
      */
     public function setParent(ChildPuzzle $v = null)
@@ -1188,7 +1139,7 @@ abstract class Relationship implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildPuzzle object, it will not be re-added.
         if ($v !== null) {
-            $v->addRelationship($this);
+            $v->addPuzzleChild($this);
         }
 
 
@@ -1212,7 +1163,7 @@ abstract class Relationship implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aParent->addRelationships($this);
+                $this->aParent->addPuzzlechildren($this);
              */
         }
 
@@ -1226,13 +1177,12 @@ abstract class Relationship implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aPuzzle) {
-            $this->aPuzzle->removeRelationship($this);
+        if (null !== $this->aChild) {
+            $this->aChild->removePuzzleParent($this);
         }
         if (null !== $this->aParent) {
-            $this->aParent->removeRelationship($this);
+            $this->aParent->removePuzzleChild($this);
         }
-        $this->id = null;
         $this->puzzle_id = null;
         $this->parent_id = null;
         $this->alreadyInSave = false;
@@ -1255,7 +1205,7 @@ abstract class Relationship implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aPuzzle = null;
+        $this->aChild = null;
         $this->aParent = null;
     }
 
@@ -1266,7 +1216,7 @@ abstract class Relationship implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(RelationshipTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(PuzzlePuzzleTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

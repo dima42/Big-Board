@@ -53,10 +53,9 @@
         </unique>
         <behavior name="timestampable" />
     </table>
-    <table name="relationship" phpName="PuzzleParent" isCrossRef="true">
-        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="puzzle_id" type="integer" required="true"/>
-        <column name="parent_id" type="integer" required="true"/>
+    <table name="relationship" phpName="PuzzlePuzzle" isCrossRef="true">
+        <column name="puzzle_id" type="integer" primaryKey="true" />
+        <column name="parent_id" type="integer" primaryKey="true" />
         <foreign-key foreignTable="puzzle" phpName="Child" refPhpName="PuzzleParent">
             <reference local="puzzle_id" foreign="id"/>
         </foreign-key>
