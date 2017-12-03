@@ -161,10 +161,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		->orderByCreatedAt('desc')
 		->find();
 
-	$members = PuzzleMemberQuery::create()
-		->joinWith('PuzzleMember.Member')
-		->filterByPuzzle($puzzle)
-		->find();
+	$members = $puzzle->getMembers();
 
 	// TODO: if not $puzzle, redirect to error template
 	// "This puzzle does not exist. It is a ghost puzzle.";
@@ -287,12 +284,9 @@ function joinPuzzle($puzzle_id) {
 
 	$member = $_SESSION['user'];
 
-	$newPuzzleMember = new PuzzleMember();
-
 	try {
-		$newPuzzleMember->setPuzzleId($puzzle_id);
-		$newPuzzleMember->setMember($member);
-		$newPuzzleMember->save();
+		$member->addPuzzle($puzzle);
+		$member->save();
 		$message = "You joined ".$puzzle->getTitle().".";
 		postJoin($member, $puzzle->getSlackChannel());
 	} catch (Exception $e) {
@@ -429,14 +423,7 @@ function displayMember($member_id, $method = "get") {
 		$template = 'member-edit.twig';
 	}
 
-	$puzzleMembers = $member->getPuzzleMembersJoinPuzzle();
-	$puzzles       = [];
-	foreach ($puzzleMembers as $key => $puzzleMember) {
-		$puzzle = $puzzleMember->getPuzzle();
-		if ($puzzle->getStatus() != "solved") {
-			$puzzles[] = $puzzle;
-		}
-	}
+	$puzzles = $member->getPuzzles();
 
 	render($template, array(
 			'member'  => $member,
