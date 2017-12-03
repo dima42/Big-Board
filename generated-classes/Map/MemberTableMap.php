@@ -87,9 +87,9 @@ class MemberTableMap extends TableMap
     const COL_GOOGLE_ID = 'member.google_id';
 
     /**
-     * the column name for the google_referrer field
+     * the column name for the google_refresh field
      */
-    const COL_GOOGLE_REFERRER = 'member.google_referrer';
+    const COL_GOOGLE_REFRESH = 'member.google_refresh';
 
     /**
      * the column name for the slack_id field
@@ -118,10 +118,10 @@ class MemberTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'FullName', 'GoogleId', 'GoogleReferrer', 'SlackId', 'SlackHandle', 'Strengths', ),
-        self::TYPE_CAMELNAME     => array('id', 'fullName', 'googleId', 'googleReferrer', 'slackId', 'slackHandle', 'strengths', ),
-        self::TYPE_COLNAME       => array(MemberTableMap::COL_ID, MemberTableMap::COL_FULL_NAME, MemberTableMap::COL_GOOGLE_ID, MemberTableMap::COL_GOOGLE_REFERRER, MemberTableMap::COL_SLACK_ID, MemberTableMap::COL_SLACK_HANDLE, MemberTableMap::COL_STRENGTHS, ),
-        self::TYPE_FIELDNAME     => array('id', 'full_name', 'google_id', 'google_referrer', 'slack_id', 'slack_handle', 'strengths', ),
+        self::TYPE_PHPNAME       => array('Id', 'FullName', 'GoogleId', 'GoogleRefresh', 'SlackId', 'SlackHandle', 'Strengths', ),
+        self::TYPE_CAMELNAME     => array('id', 'fullName', 'googleId', 'googleRefresh', 'slackId', 'slackHandle', 'strengths', ),
+        self::TYPE_COLNAME       => array(MemberTableMap::COL_ID, MemberTableMap::COL_FULL_NAME, MemberTableMap::COL_GOOGLE_ID, MemberTableMap::COL_GOOGLE_REFRESH, MemberTableMap::COL_SLACK_ID, MemberTableMap::COL_SLACK_HANDLE, MemberTableMap::COL_STRENGTHS, ),
+        self::TYPE_FIELDNAME     => array('id', 'full_name', 'google_id', 'google_refresh', 'slack_id', 'slack_handle', 'strengths', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
@@ -132,10 +132,10 @@ class MemberTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'FullName' => 1, 'GoogleId' => 2, 'GoogleReferrer' => 3, 'SlackId' => 4, 'SlackHandle' => 5, 'Strengths' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'fullName' => 1, 'googleId' => 2, 'googleReferrer' => 3, 'slackId' => 4, 'slackHandle' => 5, 'strengths' => 6, ),
-        self::TYPE_COLNAME       => array(MemberTableMap::COL_ID => 0, MemberTableMap::COL_FULL_NAME => 1, MemberTableMap::COL_GOOGLE_ID => 2, MemberTableMap::COL_GOOGLE_REFERRER => 3, MemberTableMap::COL_SLACK_ID => 4, MemberTableMap::COL_SLACK_HANDLE => 5, MemberTableMap::COL_STRENGTHS => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'full_name' => 1, 'google_id' => 2, 'google_referrer' => 3, 'slack_id' => 4, 'slack_handle' => 5, 'strengths' => 6, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'FullName' => 1, 'GoogleId' => 2, 'GoogleRefresh' => 3, 'SlackId' => 4, 'SlackHandle' => 5, 'Strengths' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'fullName' => 1, 'googleId' => 2, 'googleRefresh' => 3, 'slackId' => 4, 'slackHandle' => 5, 'strengths' => 6, ),
+        self::TYPE_COLNAME       => array(MemberTableMap::COL_ID => 0, MemberTableMap::COL_FULL_NAME => 1, MemberTableMap::COL_GOOGLE_ID => 2, MemberTableMap::COL_GOOGLE_REFRESH => 3, MemberTableMap::COL_SLACK_ID => 4, MemberTableMap::COL_SLACK_HANDLE => 5, MemberTableMap::COL_STRENGTHS => 6, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'full_name' => 1, 'google_id' => 2, 'google_refresh' => 3, 'slack_id' => 4, 'slack_handle' => 5, 'strengths' => 6, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
@@ -159,7 +159,7 @@ class MemberTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('full_name', 'FullName', 'VARCHAR', true, 64, null);
         $this->addColumn('google_id', 'GoogleId', 'VARCHAR', false, 64, null);
-        $this->addColumn('google_referrer', 'GoogleReferrer', 'VARCHAR', false, 64, null);
+        $this->addColumn('google_refresh', 'GoogleRefresh', 'VARCHAR', false, 64, null);
         $this->addColumn('slack_id', 'SlackId', 'VARCHAR', false, 24, null);
         $this->addColumn('slack_handle', 'SlackHandle', 'VARCHAR', false, 48, null);
         $this->addColumn('strengths', 'Strengths', 'VARCHAR', false, 128, null);
@@ -338,7 +338,7 @@ class MemberTableMap extends TableMap
             $criteria->addSelectColumn(MemberTableMap::COL_ID);
             $criteria->addSelectColumn(MemberTableMap::COL_FULL_NAME);
             $criteria->addSelectColumn(MemberTableMap::COL_GOOGLE_ID);
-            $criteria->addSelectColumn(MemberTableMap::COL_GOOGLE_REFERRER);
+            $criteria->addSelectColumn(MemberTableMap::COL_GOOGLE_REFRESH);
             $criteria->addSelectColumn(MemberTableMap::COL_SLACK_ID);
             $criteria->addSelectColumn(MemberTableMap::COL_SLACK_HANDLE);
             $criteria->addSelectColumn(MemberTableMap::COL_STRENGTHS);
@@ -346,7 +346,7 @@ class MemberTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.full_name');
             $criteria->addSelectColumn($alias . '.google_id');
-            $criteria->addSelectColumn($alias . '.google_referrer');
+            $criteria->addSelectColumn($alias . '.google_refresh');
             $criteria->addSelectColumn($alias . '.slack_id');
             $criteria->addSelectColumn($alias . '.slack_handle');
             $criteria->addSelectColumn($alias . '.strengths');
