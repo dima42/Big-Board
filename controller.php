@@ -166,15 +166,17 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	// TODO: if not $puzzle, redirect to error template
 	// "This puzzle does not exist. It is a ghost puzzle.";
 
-	$metas_to_show = PuzzleParentQuery::create()
-		->joinWith('PuzzleParent.Parent')
+	// TODO: Can we use $puzzle->getParents() for this?
+	$metas_to_show = PuzzlePuzzleQuery::create()
+		->joinWith('PuzzlePuzzle.Parent')
 		->orderByParentId()
 		->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
 		->filterByParentId($puzzle_id, CRITERIA::NOT_EQUAL)
 		->groupBy('Parent.Id')
 		->find();
 
-	$me_as_meta = PuzzleParentQuery::create()
+	// TODO: Can we use $puzzle->getParents() for this?
+	$me_as_meta = PuzzlePuzzleQuery::create()
 		->filterByParent($puzzle)
 		->filterByChild($puzzle)
 		->count();
