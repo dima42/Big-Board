@@ -24,6 +24,8 @@
 {% endblock %}
 
 {% block aside %}
+    {% from 'macros.twig' import member_card %}
+
     <div class="mb-3">
         <h4>{{ total_puzzles }} total</h4>
         <ul class="list-unstyled">
@@ -33,16 +35,5 @@
         </ul>
     </div>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <small class="solvers">You are logged in as</small>
-            <strong>{{ user.fullName }}</strong><br>
-            {{ user.strengths|default("(No strengths listed) 😿") }}<br>
-            <img src="/img/slack.png" width="15px" alt=""> {{ user.slackHandle|default("(missing) 😿") }}
-        </div>
-
-        <div class="card-footer">
-            <a href="/member/{{ user_id }}/edit">Edit your profile</a>
-        </div>
-    </div>
+    {{ member_card(user) }}
 {% endblock %}

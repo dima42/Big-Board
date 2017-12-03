@@ -10,5 +10,7 @@
 {% endblock %}
 
 {% block aside %}
-    <h4>About you</h4>
+    {% from 'macros.twig' import member_card %}
+
+    {{ member_card(user) }}
 {% endblock %}
