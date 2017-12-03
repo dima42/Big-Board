@@ -79,8 +79,8 @@ function render($template, $vars = array()) {
 	$vars['time']       = strftime('%c');
 	$vars['latestNews'] = $latestNews;
 
-	$vars['metas'] = PuzzleParentQuery::create()
-		->joinWith('PuzzleParent.Parent')
+	$vars['metas'] = PuzzlePuzzleQuery::create()
+		->joinWith('PuzzlePuzzle.Parent')
 		->where('puzzle_id = parent_id')
 		->find();
 
