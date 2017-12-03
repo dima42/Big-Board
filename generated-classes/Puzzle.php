@@ -38,17 +38,21 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function postJoin($member) {
-		$client = getSlackClient(":wave:", "JoinBot");
-		$client->to($this->getSlackChannel())->attach([
-				'text'  => $member->getNameForSlack(),
-				'color' => 'good',
-			])->send('New member!');
+		$memberCount = $this->countMembers();
+		if ($$memberCount > 0) {
+			$this->postMembers($member->getNameForSlack()." joined *".$this->getTitle()."*! All members:");
+		} else {
+			$client = getSlackClient(":wave:", "JoinBot");
+			$client->to($this->getSlackChannel())->attach([
+					'text'  => $member->getNameForSlack(),
+					'color' => 'good',
+				])->send('First member of *'.$this->getTitle().'*!');
+		}
 
-		$this->postMembers();
 		// TODO: list all members
 	}
 
-	public function postMembers() {
+	public function postMembers($header_msg = "All members:") {
 		$members = $this->getMembers();
 		$text    = [];
 		foreach ($members as $key => $member) {
@@ -59,6 +63,6 @@ class Puzzle extends BasePuzzle {
 		$client->to($channel)->attach([
 				'text'  => join("\n", $text),
 				'color' => 'good',
-			])->send('All members:');
+			])->send($header_msg);
 	}
 }
