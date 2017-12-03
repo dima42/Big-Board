@@ -483,11 +483,7 @@ function displayMeta($meta_id) {
 		->filterByID($meta_id)
 		->findOne();
 
-	$puzzles = PuzzleQuery::create()
-		->usePuzzleParentQuery()
-		->filterByParent($meta)
-		->endUse()
-		->find();
+	$puzzles = $meta->getChildren();
 
 	// TODO: if not $meta, redirect to error page
 	// "This does not appear to be a metapuzzle. There are no puzzles that are part of it."
