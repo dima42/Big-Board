@@ -20,13 +20,11 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
- * @method     ChildPuzzleMemberQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildPuzzleMemberQuery orderByPuzzleId($order = Criteria::ASC) Order by the puzzle_id column
  * @method     ChildPuzzleMemberQuery orderByMemberId($order = Criteria::ASC) Order by the member_id column
  * @method     ChildPuzzleMemberQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildPuzzleMemberQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
- * @method     ChildPuzzleMemberQuery groupById() Group by the id column
  * @method     ChildPuzzleMemberQuery groupByPuzzleId() Group by the puzzle_id column
  * @method     ChildPuzzleMemberQuery groupByMemberId() Group by the member_id column
  * @method     ChildPuzzleMemberQuery groupByCreatedAt() Group by the created_at column
@@ -65,7 +63,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleMember findOne(ConnectionInterface $con = null) Return the first ChildPuzzleMember matching the query
  * @method     ChildPuzzleMember findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPuzzleMember matching the query, or a new ChildPuzzleMember object populated from the query conditions when no match is found
  *
- * @method     ChildPuzzleMember findOneById(int $id) Return the first ChildPuzzleMember filtered by the id column
  * @method     ChildPuzzleMember findOneByPuzzleId(int $puzzle_id) Return the first ChildPuzzleMember filtered by the puzzle_id column
  * @method     ChildPuzzleMember findOneByMemberId(int $member_id) Return the first ChildPuzzleMember filtered by the member_id column
  * @method     ChildPuzzleMember findOneByCreatedAt(string $created_at) Return the first ChildPuzzleMember filtered by the created_at column
@@ -74,14 +71,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleMember requirePk($key, ConnectionInterface $con = null) Return the ChildPuzzleMember by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzleMember requireOne(ConnectionInterface $con = null) Return the first ChildPuzzleMember matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPuzzleMember requireOneById(int $id) Return the first ChildPuzzleMember filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzleMember requireOneByPuzzleId(int $puzzle_id) Return the first ChildPuzzleMember filtered by the puzzle_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzleMember requireOneByMemberId(int $member_id) Return the first ChildPuzzleMember filtered by the member_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzleMember requireOneByCreatedAt(string $created_at) Return the first ChildPuzzleMember filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzleMember requireOneByUpdatedAt(string $updated_at) Return the first ChildPuzzleMember filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPuzzleMember[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPuzzleMember objects based on current ModelCriteria
- * @method     ChildPuzzleMember[]|ObjectCollection findById(int $id) Return ChildPuzzleMember objects filtered by the id column
  * @method     ChildPuzzleMember[]|ObjectCollection findByPuzzleId(int $puzzle_id) Return ChildPuzzleMember objects filtered by the puzzle_id column
  * @method     ChildPuzzleMember[]|ObjectCollection findByMemberId(int $member_id) Return ChildPuzzleMember objects filtered by the member_id column
  * @method     ChildPuzzleMember[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildPuzzleMember objects filtered by the created_at column
@@ -135,10 +130,10 @@ abstract class PuzzleMemberQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj  = $c->findPk(12, $con);
+     * $obj = $c->findPk(array(12, 34), $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param array[$puzzle_id, $member_id] $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildPuzzleMember|array|mixed the result, formatted by the current formatter
@@ -163,7 +158,7 @@ abstract class PuzzleMemberQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = PuzzleMemberTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = PuzzleMemberTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]))))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -184,10 +179,11 @@ abstract class PuzzleMemberQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, puzzle_id, member_id, created_at, updated_at FROM solver WHERE id = :p0';
+        $sql = 'SELECT puzzle_id, member_id, created_at, updated_at FROM solver WHERE puzzle_id = :p0 AND member_id = :p1';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
+            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -198,7 +194,7 @@ abstract class PuzzleMemberQuery extends ModelCriteria
             /** @var ChildPuzzleMember $obj */
             $obj = new ChildPuzzleMember();
             $obj->hydrate($row);
-            PuzzleMemberTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            PuzzleMemberTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]));
         }
         $stmt->closeCursor();
 
@@ -227,7 +223,7 @@ abstract class PuzzleMemberQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(12, 56, 832), $con);
+     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -257,8 +253,10 @@ abstract class PuzzleMemberQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
+        $this->addUsingAlias(PuzzleMemberTableMap::COL_PUZZLE_ID, $key[0], Criteria::EQUAL);
+        $this->addUsingAlias(PuzzleMemberTableMap::COL_MEMBER_ID, $key[1], Criteria::EQUAL);
 
-        return $this->addUsingAlias(PuzzleMemberTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this;
     }
 
     /**
@@ -270,49 +268,17 @@ abstract class PuzzleMemberQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-
-        return $this->addUsingAlias(PuzzleMemberTableMap::COL_ID, $keys, Criteria::IN);
-    }
-
-    /**
-     * Filter the query on the id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id > 12
-     * </code>
-     *
-     * @param     mixed $id The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildPuzzleMemberQuery The current query, for fluid interface
-     */
-    public function filterById($id = null, $comparison = null)
-    {
-        if (is_array($id)) {
-            $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(PuzzleMemberTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(PuzzleMemberTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
+        if (empty($keys)) {
+            return $this->add(null, '1<>1', Criteria::CUSTOM);
+        }
+        foreach ($keys as $key) {
+            $cton0 = $this->getNewCriterion(PuzzleMemberTableMap::COL_PUZZLE_ID, $key[0], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(PuzzleMemberTableMap::COL_MEMBER_ID, $key[1], Criteria::EQUAL);
+            $cton0->addAnd($cton1);
+            $this->addOr($cton0);
         }
 
-        return $this->addUsingAlias(PuzzleMemberTableMap::COL_ID, $id, $comparison);
+        return $this;
     }
 
     /**
@@ -651,7 +617,9 @@ abstract class PuzzleMemberQuery extends ModelCriteria
     public function prune($puzzleMember = null)
     {
         if ($puzzleMember) {
-            $this->addUsingAlias(PuzzleMemberTableMap::COL_ID, $puzzleMember->getId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond0', $this->getAliasedColName(PuzzleMemberTableMap::COL_PUZZLE_ID), $puzzleMember->getPuzzleId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond1', $this->getAliasedColName(PuzzleMemberTableMap::COL_MEMBER_ID), $puzzleMember->getMemberId(), Criteria::NOT_EQUAL);
+            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
         }
 
         return $this;

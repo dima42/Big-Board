@@ -59,7 +59,7 @@ class PuzzleMemberTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,12 +69,7 @@ class PuzzleMemberTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
-
-    /**
-     * the column name for the id field
-     */
-    const COL_ID = 'solver.id';
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the puzzle_id field
@@ -108,11 +103,11 @@ class PuzzleMemberTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'PuzzleId', 'MemberId', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'puzzleId', 'memberId', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(PuzzleMemberTableMap::COL_ID, PuzzleMemberTableMap::COL_PUZZLE_ID, PuzzleMemberTableMap::COL_MEMBER_ID, PuzzleMemberTableMap::COL_CREATED_AT, PuzzleMemberTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'puzzle_id', 'member_id', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('PuzzleId', 'MemberId', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('puzzleId', 'memberId', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(PuzzleMemberTableMap::COL_PUZZLE_ID, PuzzleMemberTableMap::COL_MEMBER_ID, PuzzleMemberTableMap::COL_CREATED_AT, PuzzleMemberTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('puzzle_id', 'member_id', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -122,11 +117,11 @@ class PuzzleMemberTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'PuzzleId' => 1, 'MemberId' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'puzzleId' => 1, 'memberId' => 2, 'createdAt' => 3, 'updatedAt' => 4, ),
-        self::TYPE_COLNAME       => array(PuzzleMemberTableMap::COL_ID => 0, PuzzleMemberTableMap::COL_PUZZLE_ID => 1, PuzzleMemberTableMap::COL_MEMBER_ID => 2, PuzzleMemberTableMap::COL_CREATED_AT => 3, PuzzleMemberTableMap::COL_UPDATED_AT => 4, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'puzzle_id' => 1, 'member_id' => 2, 'created_at' => 3, 'updated_at' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('PuzzleId' => 0, 'MemberId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, ),
+        self::TYPE_CAMELNAME     => array('puzzleId' => 0, 'memberId' => 1, 'createdAt' => 2, 'updatedAt' => 3, ),
+        self::TYPE_COLNAME       => array(PuzzleMemberTableMap::COL_PUZZLE_ID => 0, PuzzleMemberTableMap::COL_MEMBER_ID => 1, PuzzleMemberTableMap::COL_CREATED_AT => 2, PuzzleMemberTableMap::COL_UPDATED_AT => 3, ),
+        self::TYPE_FIELDNAME     => array('puzzle_id' => 0, 'member_id' => 1, 'created_at' => 2, 'updated_at' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -144,12 +139,11 @@ class PuzzleMemberTableMap extends TableMap
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\PuzzleMember');
         $this->setPackage('');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         $this->setIsCrossRef(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('puzzle_id', 'PuzzleId', 'INTEGER', 'puzzle', 'id', true, null, null);
-        $this->addForeignKey('member_id', 'MemberId', 'INTEGER', 'member', 'id', true, null, null);
+        $this->addForeignPrimaryKey('puzzle_id', 'PuzzleId', 'INTEGER' , 'puzzle', 'id', true, null, null);
+        $this->addForeignPrimaryKey('member_id', 'MemberId', 'INTEGER' , 'member', 'id', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
@@ -189,6 +183,59 @@ class PuzzleMemberTableMap extends TableMap
     } // getBehaviors()
 
     /**
+     * Adds an object to the instance pool.
+     *
+     * Propel keeps cached copies of objects in an instance pool when they are retrieved
+     * from the database. In some cases you may need to explicitly add objects
+     * to the cache in order to ensure that the same objects are always returned by find*()
+     * and findPk*() calls.
+     *
+     * @param \PuzzleMember $obj A \PuzzleMember object.
+     * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
+     */
+    public static function addInstanceToPool($obj, $key = null)
+    {
+        if (Propel::isInstancePoolingEnabled()) {
+            if (null === $key) {
+                $key = serialize([(null === $obj->getPuzzleId() || is_scalar($obj->getPuzzleId()) || is_callable([$obj->getPuzzleId(), '__toString']) ? (string) $obj->getPuzzleId() : $obj->getPuzzleId()), (null === $obj->getMemberId() || is_scalar($obj->getMemberId()) || is_callable([$obj->getMemberId(), '__toString']) ? (string) $obj->getMemberId() : $obj->getMemberId())]);
+            } // if key === null
+            self::$instances[$key] = $obj;
+        }
+    }
+
+    /**
+     * Removes an object from the instance pool.
+     *
+     * Propel keeps cached copies of objects in an instance pool when they are retrieved
+     * from the database.  In some cases -- especially when you override doDelete
+     * methods in your stub classes -- you may need to explicitly remove objects
+     * from the cache in order to prevent returning objects that no longer exist.
+     *
+     * @param mixed $value A \PuzzleMember object or a primary key value.
+     */
+    public static function removeInstanceFromPool($value)
+    {
+        if (Propel::isInstancePoolingEnabled() && null !== $value) {
+            if (is_object($value) && $value instanceof \PuzzleMember) {
+                $key = serialize([(null === $value->getPuzzleId() || is_scalar($value->getPuzzleId()) || is_callable([$value->getPuzzleId(), '__toString']) ? (string) $value->getPuzzleId() : $value->getPuzzleId()), (null === $value->getMemberId() || is_scalar($value->getMemberId()) || is_callable([$value->getMemberId(), '__toString']) ? (string) $value->getMemberId() : $value->getMemberId())]);
+
+            } elseif (is_array($value) && count($value) === 2) {
+                // assume we've been passed a primary key";
+                $key = serialize([(null === $value[0] || is_scalar($value[0]) || is_callable([$value[0], '__toString']) ? (string) $value[0] : $value[0]), (null === $value[1] || is_scalar($value[1]) || is_callable([$value[1], '__toString']) ? (string) $value[1] : $value[1])]);
+            } elseif ($value instanceof Criteria) {
+                self::$instances = [];
+
+                return;
+            } else {
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \PuzzleMember object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
+                throw $e;
+            }
+
+            unset(self::$instances[$key]);
+        }
+    }
+
+    /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
      *
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -204,11 +251,11 @@ class PuzzleMemberTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)])]);
     }
 
     /**
@@ -225,11 +272,20 @@ class PuzzleMemberTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        return (int) $row[
+            $pks = [];
+
+        $pks[] = (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
-                : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)
         ];
+        $pks[] = (int) $row[
+            $indexType == TableMap::TYPE_NUM
+                ? 1 + $offset
+                : self::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)
+        ];
+
+        return $pks;
     }
 
     /**
@@ -329,13 +385,11 @@ class PuzzleMemberTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(PuzzleMemberTableMap::COL_ID);
             $criteria->addSelectColumn(PuzzleMemberTableMap::COL_PUZZLE_ID);
             $criteria->addSelectColumn(PuzzleMemberTableMap::COL_MEMBER_ID);
             $criteria->addSelectColumn(PuzzleMemberTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(PuzzleMemberTableMap::COL_UPDATED_AT);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.puzzle_id');
             $criteria->addSelectColumn($alias . '.member_id');
             $criteria->addSelectColumn($alias . '.created_at');
@@ -391,7 +445,17 @@ class PuzzleMemberTableMap extends TableMap
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(PuzzleMemberTableMap::DATABASE_NAME);
-            $criteria->add(PuzzleMemberTableMap::COL_ID, (array) $values, Criteria::IN);
+            // primary key is composite; we therefore, expect
+            // the primary key passed to be an array of pkey values
+            if (count($values) == count($values, COUNT_RECURSIVE)) {
+                // array is not multi-dimensional
+                $values = array($values);
+            }
+            foreach ($values as $value) {
+                $criterion = $criteria->getNewCriterion(PuzzleMemberTableMap::COL_PUZZLE_ID, $value[0]);
+                $criterion->addAnd($criteria->getNewCriterion(PuzzleMemberTableMap::COL_MEMBER_ID, $value[1]));
+                $criteria->addOr($criterion);
+            }
         }
 
         $query = PuzzleMemberQuery::create()->mergeWith($criteria);
@@ -437,10 +501,6 @@ class PuzzleMemberTableMap extends TableMap
             $criteria = clone $criteria; // rename for clarity
         } else {
             $criteria = $criteria->buildCriteria(); // build Criteria from PuzzleMember object
-        }
-
-        if ($criteria->containsKey(PuzzleMemberTableMap::COL_ID) && $criteria->keyContainsValue(PuzzleMemberTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.PuzzleMemberTableMap::COL_ID.')');
         }
 
 

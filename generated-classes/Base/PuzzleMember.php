@@ -67,13 +67,6 @@ abstract class PuzzleMember implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the id field.
-     *
-     * @var        int
-     */
-    protected $id;
-
-    /**
      * The value for the puzzle_id field.
      *
      * @var        int
@@ -345,16 +338,6 @@ abstract class PuzzleMember implements ActiveRecordInterface
     }
 
     /**
-     * Get the [id] column value.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Get the [puzzle_id] column value.
      *
      * @return int
@@ -413,26 +396,6 @@ abstract class PuzzleMember implements ActiveRecordInterface
             return $this->updated_at instanceof \DateTimeInterface ? $this->updated_at->format($format) : null;
         }
     }
-
-    /**
-     * Set the value of [id] column.
-     *
-     * @param int $v new value
-     * @return $this|\PuzzleMember The current object (for fluent API support)
-     */
-    public function setId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[PuzzleMemberTableMap::COL_ID] = true;
-        }
-
-        return $this;
-    } // setId()
 
     /**
      * Set the value of [puzzle_id] column.
@@ -558,22 +521,19 @@ abstract class PuzzleMember implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PuzzleMemberTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PuzzleMemberTableMap::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PuzzleMemberTableMap::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->puzzle_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PuzzleMemberTableMap::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PuzzleMemberTableMap::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->member_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PuzzleMemberTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PuzzleMemberTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PuzzleMemberTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PuzzleMemberTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -586,7 +546,7 @@ abstract class PuzzleMember implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = PuzzleMemberTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = PuzzleMemberTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\PuzzleMember'), 0, $e);
@@ -820,15 +780,8 @@ abstract class PuzzleMember implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[PuzzleMemberTableMap::COL_ID] = true;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . PuzzleMemberTableMap::COL_ID . ')');
-        }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(PuzzleMemberTableMap::COL_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'id';
-        }
         if ($this->isColumnModified(PuzzleMemberTableMap::COL_PUZZLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'puzzle_id';
         }
@@ -852,9 +805,6 @@ abstract class PuzzleMember implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
-                        break;
                     case 'puzzle_id':
                         $stmt->bindValue($identifier, $this->puzzle_id, PDO::PARAM_INT);
                         break;
@@ -874,13 +824,6 @@ abstract class PuzzleMember implements ActiveRecordInterface
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), 0, $e);
         }
-
-        try {
-            $pk = $con->lastInsertId();
-        } catch (Exception $e) {
-            throw new PropelException('Unable to get autoincrement id.', 0, $e);
-        }
-        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -930,18 +873,15 @@ abstract class PuzzleMember implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getId();
-                break;
-            case 1:
                 return $this->getPuzzleId();
                 break;
-            case 2:
+            case 1:
                 return $this->getMemberId();
                 break;
-            case 3:
+            case 2:
                 return $this->getCreatedAt();
                 break;
-            case 4:
+            case 3:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -974,18 +914,17 @@ abstract class PuzzleMember implements ActiveRecordInterface
         $alreadyDumpedObjects['PuzzleMember'][$this->hashCode()] = true;
         $keys = PuzzleMemberTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getId(),
-            $keys[1] => $this->getPuzzleId(),
-            $keys[2] => $this->getMemberId(),
-            $keys[3] => $this->getCreatedAt(),
-            $keys[4] => $this->getUpdatedAt(),
+            $keys[0] => $this->getPuzzleId(),
+            $keys[1] => $this->getMemberId(),
+            $keys[2] => $this->getCreatedAt(),
+            $keys[3] => $this->getUpdatedAt(),
         );
-        if ($result[$keys[3]] instanceof \DateTimeInterface) {
-            $result[$keys[3]] = $result[$keys[3]]->format('c');
+        if ($result[$keys[2]] instanceof \DateTimeInterface) {
+            $result[$keys[2]] = $result[$keys[2]]->format('c');
         }
 
-        if ($result[$keys[4]] instanceof \DateTimeInterface) {
-            $result[$keys[4]] = $result[$keys[4]]->format('c');
+        if ($result[$keys[3]] instanceof \DateTimeInterface) {
+            $result[$keys[3]] = $result[$keys[3]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1059,18 +998,15 @@ abstract class PuzzleMember implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                $this->setId($value);
-                break;
-            case 1:
                 $this->setPuzzleId($value);
                 break;
-            case 2:
+            case 1:
                 $this->setMemberId($value);
                 break;
-            case 3:
+            case 2:
                 $this->setCreatedAt($value);
                 break;
-            case 4:
+            case 3:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1100,19 +1036,16 @@ abstract class PuzzleMember implements ActiveRecordInterface
         $keys = PuzzleMemberTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setId($arr[$keys[0]]);
+            $this->setPuzzleId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setPuzzleId($arr[$keys[1]]);
+            $this->setMemberId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setMemberId($arr[$keys[2]]);
+            $this->setCreatedAt($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setCreatedAt($arr[$keys[3]]);
-        }
-        if (array_key_exists($keys[4], $arr)) {
-            $this->setUpdatedAt($arr[$keys[4]]);
+            $this->setUpdatedAt($arr[$keys[3]]);
         }
     }
 
@@ -1155,9 +1088,6 @@ abstract class PuzzleMember implements ActiveRecordInterface
     {
         $criteria = new Criteria(PuzzleMemberTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(PuzzleMemberTableMap::COL_ID)) {
-            $criteria->add(PuzzleMemberTableMap::COL_ID, $this->id);
-        }
         if ($this->isColumnModified(PuzzleMemberTableMap::COL_PUZZLE_ID)) {
             $criteria->add(PuzzleMemberTableMap::COL_PUZZLE_ID, $this->puzzle_id);
         }
@@ -1187,7 +1117,8 @@ abstract class PuzzleMember implements ActiveRecordInterface
     public function buildPkeyCriteria()
     {
         $criteria = ChildPuzzleMemberQuery::create();
-        $criteria->add(PuzzleMemberTableMap::COL_ID, $this->id);
+        $criteria->add(PuzzleMemberTableMap::COL_PUZZLE_ID, $this->puzzle_id);
+        $criteria->add(PuzzleMemberTableMap::COL_MEMBER_ID, $this->member_id);
 
         return $criteria;
     }
@@ -1200,10 +1131,25 @@ abstract class PuzzleMember implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getId();
+        $validPk = null !== $this->getPuzzleId() &&
+            null !== $this->getMemberId();
 
-        $validPrimaryKeyFKs = 0;
+        $validPrimaryKeyFKs = 2;
         $primaryKeyFKs = [];
+
+        //relation solver_fk_937852 to table puzzle
+        if ($this->aPuzzle && $hash = spl_object_hash($this->aPuzzle)) {
+            $primaryKeyFKs[] = $hash;
+        } else {
+            $validPrimaryKeyFKs = false;
+        }
+
+        //relation solver_fk_672062 to table member
+        if ($this->aMember && $hash = spl_object_hash($this->aMember)) {
+            $primaryKeyFKs[] = $hash;
+        } else {
+            $validPrimaryKeyFKs = false;
+        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1215,23 +1161,29 @@ abstract class PuzzleMember implements ActiveRecordInterface
     }
 
     /**
-     * Returns the primary key for this object (row).
-     * @return int
+     * Returns the composite primary key for this object.
+     * The array elements will be in same order as specified in XML.
+     * @return array
      */
     public function getPrimaryKey()
     {
-        return $this->getId();
+        $pks = array();
+        $pks[0] = $this->getPuzzleId();
+        $pks[1] = $this->getMemberId();
+
+        return $pks;
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Set the [composite] primary key.
      *
-     * @param       int $key Primary key.
+     * @param      array $keys The elements of the composite key (order must match the order in XML file).
      * @return void
      */
-    public function setPrimaryKey($key)
+    public function setPrimaryKey($keys)
     {
-        $this->setId($key);
+        $this->setPuzzleId($keys[0]);
+        $this->setMemberId($keys[1]);
     }
 
     /**
@@ -1240,7 +1192,7 @@ abstract class PuzzleMember implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return null === $this->getId();
+        return (null === $this->getPuzzleId()) && (null === $this->getMemberId());
     }
 
     /**
@@ -1262,7 +1214,6 @@ abstract class PuzzleMember implements ActiveRecordInterface
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1403,7 +1354,6 @@ abstract class PuzzleMember implements ActiveRecordInterface
         if (null !== $this->aMember) {
             $this->aMember->removePuzzleMember($this);
         }
-        $this->id = null;
         $this->puzzle_id = null;
         $this->member_id = null;
         $this->created_at = null;

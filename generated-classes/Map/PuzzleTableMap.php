@@ -204,6 +204,7 @@ class PuzzleTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'Puzzlechildren', false);
+        $this->addRelation('Member', '\\Member', RelationMap::MANY_TO_MANY, array(), null, null, 'Members');
     } // buildRelations()
     /**
      * Method to invalidate the instance pool of all tables related to puzzle     * by a foreign key with ON DELETE CASCADE

@@ -8,8 +8,10 @@ use \News as ChildNews;
 use \NewsQuery as ChildNewsQuery;
 use \Note as ChildNote;
 use \NoteQuery as ChildNoteQuery;
+use \Puzzle as ChildPuzzle;
 use \PuzzleMember as ChildPuzzleMember;
 use \PuzzleMemberQuery as ChildPuzzleMemberQuery;
+use \PuzzleQuery as ChildPuzzleQuery;
 use \Exception;
 use \PDO;
 use Map\MemberTableMap;
@@ -138,12 +140,28 @@ abstract class Member implements ActiveRecordInterface
     protected $collNewsPartial;
 
     /**
+     * @var        ObjectCollection|ChildPuzzle[] Cross Collection to store aggregation of ChildPuzzle objects.
+     */
+    protected $collPuzzles;
+
+    /**
+     * @var bool
+     */
+    protected $collPuzzlesPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildPuzzle[]
+     */
+    protected $puzzlesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -729,6 +747,7 @@ abstract class Member implements ActiveRecordInterface
 
             $this->collNews = null;
 
+            $this->collPuzzles = null;
         } // if (deep)
     }
 
@@ -842,6 +861,35 @@ abstract class Member implements ActiveRecordInterface
                 }
                 $this->resetModified();
             }
+
+            if ($this->puzzlesScheduledForDeletion !== null) {
+                if (!$this->puzzlesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    foreach ($this->puzzlesScheduledForDeletion as $entry) {
+                        $entryPk = [];
+
+                        $entryPk[1] = $this->getId();
+                        $entryPk[0] = $entry->getId();
+                        $pks[] = $entryPk;
+                    }
+
+                    \PuzzleMemberQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+
+                    $this->puzzlesScheduledForDeletion = null;
+                }
+
+            }
+
+            if ($this->collPuzzles) {
+                foreach ($this->collPuzzles as $puzzle) {
+                    if (!$puzzle->isDeleted() && ($puzzle->isNew() || $puzzle->isModified())) {
+                        $puzzle->save($con);
+                    }
+                }
+            }
+
 
             if ($this->notesScheduledForDeletion !== null) {
                 if (!$this->notesScheduledForDeletion->isEmpty()) {
@@ -1851,7 +1899,10 @@ abstract class Member implements ActiveRecordInterface
         $puzzleMembersToDelete = $this->getPuzzleMembers(new Criteria(), $con)->diff($puzzleMembers);
 
 
-        $this->puzzleMembersScheduledForDeletion = $puzzleMembersToDelete;
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->puzzleMembersScheduledForDeletion = clone $puzzleMembersToDelete;
 
         foreach ($puzzleMembersToDelete as $puzzleMemberRemoved) {
             $puzzleMemberRemoved->setMember(null);
@@ -2207,6 +2258,249 @@ abstract class Member implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collPuzzles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addPuzzles()
+     */
+    public function clearPuzzles()
+    {
+        $this->collPuzzles = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Initializes the collPuzzles crossRef collection.
+     *
+     * By default this just sets the collPuzzles collection to an empty collection (like clearPuzzles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initPuzzles()
+    {
+        $collectionClassName = PuzzleMemberTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collPuzzles = new $collectionClassName;
+        $this->collPuzzlesPartial = true;
+        $this->collPuzzles->setModel('\Puzzle');
+    }
+
+    /**
+     * Checks if the collPuzzles collection is loaded.
+     *
+     * @return bool
+     */
+    public function isPuzzlesLoaded()
+    {
+        return null !== $this->collPuzzles;
+    }
+
+    /**
+     * Gets a collection of ChildPuzzle objects related by a many-to-many relationship
+     * to the current object by way of the solver cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildMember is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return ObjectCollection|ChildPuzzle[] List of ChildPuzzle objects
+     */
+    public function getPuzzles(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPuzzlesPartial && !$this->isNew();
+        if (null === $this->collPuzzles || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collPuzzles) {
+                    $this->initPuzzles();
+                }
+            } else {
+
+                $query = ChildPuzzleQuery::create(null, $criteria)
+                    ->filterByMember($this);
+                $collPuzzles = $query->find($con);
+                if (null !== $criteria) {
+                    return $collPuzzles;
+                }
+
+                if ($partial && $this->collPuzzles) {
+                    //make sure that already added objects gets added to the list of the database.
+                    foreach ($this->collPuzzles as $obj) {
+                        if (!$collPuzzles->contains($obj)) {
+                            $collPuzzles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPuzzles = $collPuzzles;
+                $this->collPuzzlesPartial = false;
+            }
+        }
+
+        return $this->collPuzzles;
+    }
+
+    /**
+     * Sets a collection of Puzzle objects related by a many-to-many relationship
+     * to the current object by way of the solver cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param  Collection $puzzles A Propel collection.
+     * @param  ConnectionInterface $con Optional connection object
+     * @return $this|ChildMember The current object (for fluent API support)
+     */
+    public function setPuzzles(Collection $puzzles, ConnectionInterface $con = null)
+    {
+        $this->clearPuzzles();
+        $currentPuzzles = $this->getPuzzles();
+
+        $puzzlesScheduledForDeletion = $currentPuzzles->diff($puzzles);
+
+        foreach ($puzzlesScheduledForDeletion as $toDelete) {
+            $this->removePuzzle($toDelete);
+        }
+
+        foreach ($puzzles as $puzzle) {
+            if (!$currentPuzzles->contains($puzzle)) {
+                $this->doAddPuzzle($puzzle);
+            }
+        }
+
+        $this->collPuzzlesPartial = false;
+        $this->collPuzzles = $puzzles;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Puzzle objects related by a many-to-many relationship
+     * to the current object by way of the solver cross-reference table.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      boolean $distinct Set to true to force count distinct
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return int the number of related Puzzle objects
+     */
+    public function countPuzzles(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPuzzlesPartial && !$this->isNew();
+        if (null === $this->collPuzzles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPuzzles) {
+                return 0;
+            } else {
+
+                if ($partial && !$criteria) {
+                    return count($this->getPuzzles());
+                }
+
+                $query = ChildPuzzleQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByMember($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collPuzzles);
+        }
+    }
+
+    /**
+     * Associate a ChildPuzzle to this object
+     * through the solver cross reference table.
+     *
+     * @param ChildPuzzle $puzzle
+     * @return ChildMember The current object (for fluent API support)
+     */
+    public function addPuzzle(ChildPuzzle $puzzle)
+    {
+        if ($this->collPuzzles === null) {
+            $this->initPuzzles();
+        }
+
+        if (!$this->getPuzzles()->contains($puzzle)) {
+            // only add it if the **same** object is not already associated
+            $this->collPuzzles->push($puzzle);
+            $this->doAddPuzzle($puzzle);
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param ChildPuzzle $puzzle
+     */
+    protected function doAddPuzzle(ChildPuzzle $puzzle)
+    {
+        $puzzleMember = new ChildPuzzleMember();
+
+        $puzzleMember->setPuzzle($puzzle);
+
+        $puzzleMember->setMember($this);
+
+        $this->addPuzzleMember($puzzleMember);
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$puzzle->isMembersLoaded()) {
+            $puzzle->initMembers();
+            $puzzle->getMembers()->push($this);
+        } elseif (!$puzzle->getMembers()->contains($this)) {
+            $puzzle->getMembers()->push($this);
+        }
+
+    }
+
+    /**
+     * Remove puzzle of this object
+     * through the solver cross reference table.
+     *
+     * @param ChildPuzzle $puzzle
+     * @return ChildMember The current object (for fluent API support)
+     */
+    public function removePuzzle(ChildPuzzle $puzzle)
+    {
+        if ($this->getPuzzles()->contains($puzzle)) {
+            $puzzleMember = new ChildPuzzleMember();
+            $puzzleMember->setPuzzle($puzzle);
+            if ($puzzle->isMembersLoaded()) {
+                //remove the back reference if available
+                $puzzle->getMembers()->removeObject($this);
+            }
+
+            $puzzleMember->setMember($this);
+            $this->removePuzzleMember(clone $puzzleMember);
+            $puzzleMember->clear();
+
+            $this->collPuzzles->remove($this->collPuzzles->search($puzzle));
+
+            if (null === $this->puzzlesScheduledForDeletion) {
+                $this->puzzlesScheduledForDeletion = clone $this->collPuzzles;
+                $this->puzzlesScheduledForDeletion->clear();
+            }
+
+            $this->puzzlesScheduledForDeletion->push($puzzle);
+        }
+
+
+        return $this;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -2253,11 +2547,17 @@ abstract class Member implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collPuzzles) {
+                foreach ($this->collPuzzles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collNotes = null;
         $this->collPuzzleMembers = null;
         $this->collNews = null;
+        $this->collPuzzles = null;
     }
 
     /**

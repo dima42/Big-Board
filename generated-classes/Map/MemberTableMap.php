@@ -191,6 +191,7 @@ class MemberTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'News', false);
+        $this->addRelation('Puzzle', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), null, null, 'Puzzles');
     } // buildRelations()
 
     /**

@@ -818,6 +818,23 @@ abstract class PuzzleQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Member object
+     * using the solver table as cross reference
+     *
+     * @param Member $member the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterByMember($member, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->usePuzzleMemberQuery()
+            ->filterByMember($member, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   ChildPuzzle $puzzle Object to remove from the list of results
