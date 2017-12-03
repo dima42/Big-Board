@@ -43,15 +43,19 @@ $klein->respond(function ($request, $response) {
 		render('loggedout.twig', array(
 				'auth_url' => $authUrl,
 			));
-	} else {
-		show_page($pal_client);
 	}
+
+    if (!is_in_palindrome($pal_client)) {
+        return render('buggeroff.twig');
+    }
+
+    show_content();
 });
 
 $klein->dispatch();
 
 function is_authorized($pal_client) {
-	// let's get the persons access token for future use. This is where the login takes place.
+	// If 'code' is set in the request, that's Google trying to authenticate (I think)
 	if (isset($_GET['code'])) {
 		$pal_client->authenticate($_GET['code']);
 		$_SESSION['access_token'] = $pal_client->getAccessToken();
@@ -90,59 +94,42 @@ function is_authorized($pal_client) {
 
 		return true;
 	}
-
-    // If none of that worked, no access granted
-	return false;
 }
 
-function show_page($pal_client) {
+function is_in_palindrome($pal_client) {
+    // If 'user_id' is set in SESSION and 'user' is a Member, then we're good.
+    if ($_SESSION["user_id"] > 0 && is_a($_SESSION['user'], 'Member')) {
+        return true;
+    }
+
+    // If root folder ID is in our DB, then we're good
     $pal_drive = new Google_DriveService($pal_client);
+	$drive_user  = $pal_drive->about->get();
+	$user_google_id = $drive_user["rootFolderId"];
+    $user_full_name = $drive_user["user"]["displayName"];
 
-	// first, let's try to get the user from the database based on root folder ID
+    $member = MemberQuery::create()
+        ->filterByGoogleID($user_google_id)
+        ->findOne();
 
-	// this will get the user ID of someone already established as a palindrome member
-	$aboutg  = $pal_drive->about->get();
-	$my_name = $aboutg["user"]["displayName"];
-	$my_root = $aboutg["rootFolderId"];
+    if ($member) {
+        $_SESSION['user']    = $member;
+        $_SESSION['user_id'] = $member->getID();
+        return true;
+    }
 
-	$member = MemberQuery::create()
-		->filterByGoogleID($my_root)
-		->findOne();
-
-	if ($member) {
-		$_SESSION['user']    = $member;
-		$_SESSION['user_id'] = $member->getID();
-	} else {
-		$_SESSION["user_id"] = 0;
-	}
-
-	// we should always check to see if they have access
-	// check to see if they have write access to the palindrome folder
-	//let's check to see if the user has access
-	$isUserInPalindrome = FALSE;
-
-	// Find the current Mystery Hunt folder.
+	// If it's a new user, make sure they have access to our drive
 	$hunt_folder = new Google_DriveFile();
 	try {
 		$hunt_folder = $pal_drive->files->get("0B5NGrtZ8ORMrYzY0MzFjYWEtZDRkZC00ZDNhLTg2N2YtZDljM2FiNmJhMjg5");
 		if ($hunt_folder["userPermission"]["id"] == "me") {
-			$isUserInPalindrome = TRUE;
-		} else {
-			$isUserInPalindrome = FALSE;
-		}
-	} catch (Exception $e) {
-		return displayError($e->getMessage());
-	}
+            // TODO: set up both user and user_id session vars
+            $_SESSION["user_id"] = createUserDriveID($user_google_id, $user_full_name);
+        }
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+    }
 
-	// if they do have access, let's take root and name from before and create a user
-	if ($isUserInPalindrome && $_SESSION["user_id"] == 0) {
-		$_SESSION["user_id"] = createUserDriveID($my_root, $my_name);
-	}
-
-	if ($_SESSION["user_id"] == 0) {
-		// if someone is not a member of palindrome, let's tell them to bugger off
-		return render('buggeroff.twig');
-	}
-
-	show_content();
+    // If none of that worked, they're not on the team
+    return false;
 }
