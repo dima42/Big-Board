@@ -20,7 +20,7 @@ function getSlackClient($icon = ":boar:", $username = "Big Board Bot") {
 		'markdown_in_attachments' => array('text'),
 	];
 
-	$client = new Maknz\Slack\Client('https://hooks.slack.com/services/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', $settings);
+	$client = new Maknz\Slack\Client('https://hooks.slack.com/services/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', $settings);
 	return $client;
 }
 
@@ -45,7 +45,7 @@ function getPuzzleAttachments($puzzle) {
 		}, $puzzle_info);
 }
 
-function postPuzzle($puzzle, $channel = "big-board") {
+function postPuzzle($puzzle, $channel = "sandbox") {
 	$client = getSlackClient();
 
 	$message = $client->createMessage();
@@ -55,15 +55,7 @@ function postPuzzle($puzzle, $channel = "big-board") {
 	$message->send();
 }
 
-function postJoin($member, $channel = "sandbox") {
-	$client = getSlackClient(":wave:", "JoinBot");
-	$client->to($channel)->attach([
-			'text'  => $member->getFullName(),
-			'color' => 'good',
-		])->send('New member!');
-}
-
-function postSolve($puzzle, $channel = "big-board") {
+function postSolve($puzzle, $channel = "sandbox") {
 	$content = ':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board> '.
 	':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Spreadsheet> '.
 	':slack: <#'.$puzzle->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>';

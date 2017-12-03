@@ -12,7 +12,13 @@ use Base\Member as BaseMember;
  * long as it does not already exist in the output directory.
  *
  */
-class Member extends BaseMember
-{
 
+class Member extends BaseMember {
+	public function getNameForSlack() {
+		if ($this->getSlackID()) {
+			return "<@".$this->getSlackID().">";
+		} else {
+			return $this->getFullName();
+		}
+	}
 }
