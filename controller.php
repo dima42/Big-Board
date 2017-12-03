@@ -210,26 +210,26 @@ function editPuzzle($puzzle_id, $request) {
 	$puzzle->setSlackChannel($request->slack_channel);
 	$puzzle->save();
 
-	// Remove all parents, even myself (if I'm a meta)
-	$oldParents = PuzzleParentQuery::create()
+	// Remove all parents, even myself if I'm a meta
+	$oldParents = PuzzlePuzzleQuery::create()
 		->filterByPuzzleId($puzzle_id)
 		->find();
 	$oldParents->delete();
 
 	// Assign parents
-	foreach ($request->metas as $meta) {
-		$puzzleParent = new PuzzleParent();
-		$puzzleParent->setPuzzleId($puzzle_id);
-		$puzzleParent->setParentId($meta);
-		$puzzleParent->save();
+	foreach ($request->metas as $meta_id) {
+		$meta = PuzzleQuery::create()
+			->filterById($meta_id)
+			->findOne();
+		$puzzle->addParent($meta);
 	}
 
+	// Add self as parent if it's a meta
 	if ($request->i_am_meta == "y") {
-		$puzzleParent = new PuzzleParent();
-		$puzzleParent->setPuzzleId($puzzle_id);
-		$puzzleParent->setParentId($puzzle_id);
-		$puzzleParent->save();
+		$puzzle->addParent($puzzle);
 	}
+
+	$puzzle->save();
 
 	$message = "Saved ".$puzzle->getTitle();
 
