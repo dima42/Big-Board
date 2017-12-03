@@ -55,7 +55,7 @@
         <small class="solvers">You are logged in as</small>
         <strong>{{ member.fullName }}</strong><br>
         {{ member.strengths|default("(No strengths listed) 😿") }}<br>
-        <img src="/img/slack.png" width="15px" alt=""> {{ member.slackHandle|default("(missing) 😿") }}
+        <img src="/img/slack.png" width="15px" alt=""> {{ member.slackId|default("(missing) 😿") }}
     </div>
     <div class="card-footer">
         <a href="/member/{{ member.id }}/edit">Edit your profile</a>

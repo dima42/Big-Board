@@ -19,6 +19,8 @@ function show_content() {
 			return displayNews();
 		});
 
+	// PUZZLES
+
 	$klein->with('/puzzle/[:id]', function () use ($klein) {
 
 			$klein->respond('GET', '/?', function ($request) {
@@ -41,11 +43,23 @@ function show_content() {
 				});
 		});
 
+	// META
+
+	$klein->respond('GET', '/meta/[:id]', function ($request) {
+			return displayMeta($request->id);
+		});
+
+	// MEMBER
+
 	$klein->respond('GET', '/me', function () {
 			redirect('/member/'.$_SESSION['user_id']);
 		});
 
 	$klein->respond('GET', '/you', function () {
+			redirect('/member/'.$_SESSION['user_id']);
+		});
+
+	$klein->respond('GET', '/member', function () {
 			redirect('/member/'.$_SESSION['user_id']);
 		});
 
@@ -68,9 +82,11 @@ function show_content() {
 				});
 		});
 
-	$klein->respond('GET', '/meta/[:id]', function ($request) {
-			return displayMeta($request->id);
+	$klein->respond('GET', '/assign_slack_id/[:slack_id]', function ($request) {
+			return assignSlackId($request->slack_id);
 		});
+
+	// OTHER LISTS
 
 	$klein->respond('GET', '/loose', function () {
 			return displayLoosePuzzles();
@@ -447,8 +463,16 @@ function saveMember($member_id, $request) {
 	$member->save();
 
 	$message = "Saved your profile changes.";
-
 	redirect('/member/'.$member_id.'/edit', $message);
+}
+
+function assignSlackId($slack_id) {
+	$member = $_SESSION['user'];
+	$member->setSlackId($slack_id);
+	$member->save();
+
+	$message = "Thanks! Saved your Slack ID.";
+	redirect('/member/'.$member->getId(), $message);
 }
 
 // LISTS
