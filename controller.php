@@ -130,9 +130,11 @@ function show_content() {
 
 	// LOGOUT
 
-	$klein->respond('GET', '/logout', function ($request, $response) {
+	$klein->respond('GET', '/logout', function () {
 			session_unset();
-            header("Location: /");
+			setcookie("PAL_ACCESS_TOKEN", "", time()-3600);
+			setcookie("refresh_token", "", time()-3600);
+			return redirect("/");
 		});
 
 	$klein->dispatch();
