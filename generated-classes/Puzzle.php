@@ -57,9 +57,9 @@ class Puzzle extends BasePuzzle {
 	// LAST MOD
 
 	public function getLastMod() {
-		$driveService = get_drive_service();
-		$fileID       = $this->parseSpreadsheetID();
-		$file         = $driveService->files->get($fileID);
+		Global $pal_drive;
+		$fileID = $this->parseSpreadsheetID();
+		$file   = $pal_drive->files->get($fileID);
 		debug('Fetching Google file info for '.$this->title);
 
 		$age_in_minutes = (time()-strtotime($file['modifiedDate']??"2017-12-31"))/60;
