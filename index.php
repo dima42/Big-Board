@@ -137,8 +137,8 @@ function is_in_palindrome($pal_drive) {
 			$member->setGoogleId($user_google_id);
 			$member->setGoogleRefresh($_SESSION['refresh_token']);
 			$member->save();
-			$_SESSION["user"]    = $member;
-			$_SESSION["user_id"] = $member->getId();
+			$_SESSION['user']    = $member;
+			$_SESSION['user_id'] = $member->getId();
 			return true;
 		}
 	} catch (Exception $e) {
