@@ -19,6 +19,10 @@ class Puzzle extends BasePuzzle {
 		return "http://palindrome2017.slack.com/messages/".$this->getSlackChannel();
 	}
 
+	public function getSpreadsheetURL() {
+		return "https://docs.google.com/spreadsheets/d/".$this->parseSpreadsheetID();
+	}
+
 	public function parseSpreadsheetID() {
 		$sid = $this->getSpreadsheetID();
 		if (substr($sid, 0, 4) == "http") {
