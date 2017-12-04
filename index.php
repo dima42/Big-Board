@@ -39,7 +39,7 @@ $pal_drive = new Google_DriveService($pal_client);
 
 $klein->respond('GET', '/oauth', function ($request, $response) use ($pal_client) {
 		// If 'code' is set in the request, that's Google trying to authenticate
-		error_log("OAUTH. Code: ".$_GET['code']);
+		debug("OAUTH. Code: ".$_GET['code']);
 		if (isset($_GET['code'])) {
 			$pal_client->authenticate($_GET['code']);
 			$_SESSION['access_token'] = $pal_client->getAccessToken();
@@ -72,13 +72,13 @@ $klein->dispatch();
 function is_authorized($pal_client) {
 	// If no access_token in session, check the cookies
 	if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) {
-		error_log("No access_token IN SESSION, checking cookies");
+		debug("No access_token IN SESSION, checking cookies");
 		$_SESSION['access_token'] = stripslashes($_COOKIE['PAL_ACCESS_TOKEN']);
 	}
 
 	// Now check for access_token in the SESSION
 	if (isset($_SESSION['access_token'])) {
-		error_log("access token in SESSION: ".$_SESSION['access_token']);
+		debug("access token in SESSION: ".$_SESSION['access_token']);
 		$pal_client->setAccessToken($_SESSION['access_token']);
 		if (!$pal_client->isAccessTokenExpired()) {
 			return true;
@@ -87,7 +87,7 @@ function is_authorized($pal_client) {
 
 	// If no access_token in SESSION, check cookies for refresh_token, and refresh
 	if (isset($_COOKIE['refresh_token'])) {
-		error_log("refresh token in SESSION: ".$_SESSION['refresh_token']);
+		debug("refresh token in SESSION: ".$_SESSION['refresh_token']);
 		$pal_client->refreshToken($_COOKIE['refresh_token']);
 		$_SESSION['access_token']  = $pal_client->getAccessToken();
 		$token_dump                = json_decode($_SESSION['access_token']);
@@ -105,7 +105,7 @@ function is_authorized($pal_client) {
 function is_in_palindrome($pal_drive) {
 	// If 'user_id' is set in SESSION and 'user' is a Member, then we're good.
 	if (is_a($_SESSION['user'], 'Member') > 0) {
-		error_log('Found user in SESSION: '.$_SESSION['user']->getFullName());
+		debug('Found user in SESSION: '.$_SESSION['user']->getFullName());
 		return true;
 	}
 
@@ -119,7 +119,7 @@ function is_in_palindrome($pal_drive) {
 		->findOne();
 
 	if ($member) {
-		error_log("Member exists. Google ID: ".$user_google_id);
+		debug("Member exists. Google ID: ".$user_google_id);
 		$_SESSION['user']    = $member;
 		$_SESSION['user_id'] = $member->getID();
 		return true;
@@ -129,7 +129,7 @@ function is_in_palindrome($pal_drive) {
 	$hunt_folder = new Google_DriveFile();
 	try {
 		$hunt_folder = $pal_drive->files->get("0B5NGrtZ8ORMrYzY0MzFjYWEtZDRkZC00ZDNhLTg2N2YtZDljM2FiNmJhMjg5");
-		error_log("userPermission.id: ".$hunt_folder["userPermission"]["id"]);
+		debug("userPermission.id: ".$hunt_folder["userPermission"]["id"]);
 		if ($hunt_folder["userPermission"]["id"] == "me") {
 			// TODO: set up both user and user_id session vars
 			$member = new Member();
@@ -142,7 +142,7 @@ function is_in_palindrome($pal_drive) {
 			return true;
 		}
 	} catch (Exception $e) {
-		error_log($e->getMessage());
+		debug($e->getMessage());
 	}
 
 	// If none of that worked, they're not on the team
