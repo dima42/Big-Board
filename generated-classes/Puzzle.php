@@ -27,6 +27,20 @@ class Puzzle extends BasePuzzle {
 		return $sid;
 	}
 
+
+	// LAST MOD
+
+	public function getLastMod() {
+		$driveService = get_drive_service();
+		$fileID       = $this->parseSpreadsheetID();
+		$file         = $driveService->files->get($fileID);
+		debug('Fetching Google file info for '.$this->title);
+		return [
+			'when' => $file['modifiedDate']??"2017-12-31",
+			'who'  => $file['lastModifyingUserName']??"",
+		];
+	}
+
 	// ADD
 
 	public function addNewMember($member) {

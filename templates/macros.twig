@@ -34,8 +34,9 @@
                 </td>
             {% endif %}
             {% if lastmod %}
-                <td>{{ puzzle.lastMod }}</td>
-                <td>{{ puzzle.lastModBy }}</td>
+                {% set lastMod = puzzle.getLastMod() %}
+                <td>{{ lastMod.when }}</td>
+                <td>{{ lastMod.who }}</td>
             {% endif %}
             <td><a href="/puzzle/{{ puzzle.id }}/edit">✏️</a></td>
             <td>{% if puzzle.url %}<a href="{{ puzzle.url }}"><img src="/img/mit.png" width="20" alt=""></a>{% endif %}</td>

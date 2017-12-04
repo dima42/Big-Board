@@ -555,32 +555,17 @@ function displayNews() {
 }
 
 function displayUnsolvedPuzzles() {
-	$unsolved_puzzles = PuzzleQuery::create()
+	$puzzles = PuzzleQuery::create()
 		->filterByStatus('solved', Criteria::NOT_EQUAL)
 		->find();
 
-	$puzzles      = array();
-	$driveService = get_new_drive_service();
-
-	foreach ($unsolved_puzzles as $row) {
-		$fileID                             = $row->parseSpreadsheetID();
-		$puzzles[$fileID]['id']             = $row->getID();
-		$puzzles[$fileID]['title']          = $row->getTitle();
-		$puzzles[$fileID]['status']         = $row->getStatus();
-		$puzzles[$fileID]['url']            = $row->getURL();
-		$puzzles[$fileID]['spreadsheet_id'] = $row->getSpreadsheetID();
-		$puzzles[$fileID]['slack_channel']  = $row->getSlackChannel();
-
-		$file                          = $driveService->files->get($fileID);
-		$puzzles[$fileID]['lastModBy'] = $file['lastModifyingUserName']??"";
-
-		$how_old  = (time()-strtotime($file['modifiedDate']??"2017-12-31"))/60;
-		$file_age = intval($how_old)." min";
-		if ($how_old > 60*24) {
-			$file_age = intval($how_old/(24*60))." days";
-		} else if ($how_old > 60) {
-			$file_age = intval($how_old/60)." hrs";
-		}
+	// $how_old  = (time()-strtotime($file['modifiedDate']??"2017-12-31"))/60;
+	// $file_age = intval($how_old)." min";
+	// if ($how_old > 60*24) {
+	// 	$file_age = intval($how_old/(24*60))." days";
+	// } else if ($how_old > 60) {
+	// 	$file_age = intval($how_old/60)." hrs";
+	// }
 
 		$puzzles[$fileID]['lastMod'] = $file_age;
 	}
