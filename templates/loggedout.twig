@@ -1,6 +1,9 @@
 {% extends 'base.twig' %}
 
 {% block body %}
-    <p><a class='login' href='{{ auth_url }}'>Connect Me!</a>
-    Only Palindrome members may access this big board.</p>
+<nav class="col-12">
+    <h1><a class='login' href='{{ auth_url }}'>Click to log in!</a></h1>
+    Only Palindrome members may access this big board.
+</nav>
+
 {% endblock %}
