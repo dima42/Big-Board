@@ -15,8 +15,7 @@
         </h1>
     </div>
 
-    {% block content_main %}
-
+    {% block content_forms %}
     <form class="puzzleEdit mb-1" action="/puzzle/{{ puzzle.id }}/solve" method="post">
         <div class="input-group mb-2">
             <span class="input-group-addon">Solution</span>
@@ -39,7 +38,11 @@
             </span>
         </div>
     </form>
+    {% endblock %}
 
+    {% block content_main %}{% endblock %}
+
+    {% block content_notes %}
     {% if notes|length %}
         <div class="row">
             {% for note in notes %}

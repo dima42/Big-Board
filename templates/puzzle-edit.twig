@@ -1,5 +1,8 @@
 {% extends 'puzzle.twig' %}
 
+{% block content_forms %}{% endblock %}
+{% block content_notes %}{% endblock %}
+
 {% block content_main %}
 
 <form action="/puzzle/{{ puzzle.id }}/edit" method="post">
