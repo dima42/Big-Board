@@ -34,13 +34,19 @@ class Puzzle extends BasePuzzle {
 	// SOLVE
 
 	public function solve($solution) {
+		$oldSolution = $this->getSolution();
+		$newSolution = strtoupper(trim($solution));
+
+		if ($newSolution == $oldSolution) {
+			return;
+		}
+
 		// SET SOLUTION
-		$solution = strtoupper(trim($solution));
-		$this->setSolution($solution);
+		$this->setSolution($newSolution);
 		$this->save();
 
 		// SET STATUS AND POST TO SLACK
-		if ($solution != '') {
+		if ($newSolution != '') {
 			$this->setStatus('solved');
 			$alert = $this->getTitle()." is solved! Great work, team! 🎓";
 			postSolve($this);
