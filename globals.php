@@ -1,8 +1,9 @@
 <?php
-session_start();
 require_once 'vendor/autoload.php';
 require_once 'generated-conf/config.php';
 require_once "slack.php";
+
+session_start();
 
 // ALERT
 $_SESSION['alert'] = "";
