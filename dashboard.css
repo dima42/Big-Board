@@ -41,16 +41,34 @@ aside {
   text-transform: uppercase;
   color: #777; }
 
-.table {
+.add-puzzles-to-meta {
+  font-size: 1rem; }
+
+.puzzle-list {
   margin-bottom: 2em; }
-  .table td, .table th {
+  .puzzle-list td, .puzzle-list th {
     padding: .5rem;
     font-family: Inconsolata, monospace;
     /*font-size: .9rem;*/ }
-  .table thead tr {
-    background: #f7f7f7; }
-  .table label {
+  .puzzle-list thead tr {
+    background: #e7e7e7; }
+    .puzzle-list thead tr th {
+      border-bottom: 1px solid #aaa; }
+  .puzzle-list label {
     margin: 0; }
+  .puzzle-list .solved {
+    background: #f7f7f7;
+    opacity: .65; }
+  .puzzle-list .stuck {
+    background: #FFEFE5; }
+  .puzzle-list .priority {
+    background: #FFD1B2; }
+  .puzzle-list .urgent {
+    background: #FF6600; }
+    .puzzle-list .urgent a {
+      color: white; }
+  .puzzle-list a {
+    display: block; }
 
 .solution-field {
   font-family: Inconsolata, monospace; }

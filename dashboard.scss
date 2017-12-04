@@ -74,9 +74,13 @@ aside {
     @extend %card-subhead;
 }
 
-// TABLES
+// PUZZLE LIST
 
-.table {
+.add-puzzles-to-meta {
+    font-size: 1rem;
+}
+
+.puzzle-list {
     margin-bottom: 2em;
 
     td, th {
@@ -86,11 +90,40 @@ aside {
     }
 
     thead tr {
-        background: #f7f7f7;
+        background: #e7e7e7;
+
+        th {
+            border-bottom: 1px solid #aaa;
+        }
     }
 
     label {
         margin: 0;
+    }
+
+    .solved {
+        background:#f7f7f7;
+        opacity: .65;
+    }
+
+    .stuck {
+        background:#FFEFE5;
+    }
+
+    .priority {
+        background:#FFD1B2;
+    }
+
+    .urgent {
+        background:#FF6600;
+
+        a {
+            color: white;
+        }
+    }
+
+    a {
+        display: block;
     }
 }
 
