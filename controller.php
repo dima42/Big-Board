@@ -563,7 +563,7 @@ function displayUnsolvedPuzzles() {
 	$driveService = get_new_drive_service();
 
 	foreach ($unsolved_puzzles as $row) {
-		$fileID                             = substr($row->getSpreadsheetID(), strpos($row->getSpreadsheetID(), "ccc?key=")+8, 44);
+		$fileID                             = $row->parseSpreadsheetID();
 		$puzzles[$fileID]['id']             = $row->getID();
 		$puzzles[$fileID]['title']          = $row->getTitle();
 		$puzzles[$fileID]['status']         = $row->getStatus();
