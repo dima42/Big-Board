@@ -37,9 +37,9 @@
                 <td>{{ lastMod.when }}</td>
                 <td>{{ lastMod.who }}</td>
             {% endif %}
-            <td>{% if puzzle.url %}<a href="{{ puzzle.url }}"><img src="/img/mit.png" width="20" alt=""></a>{% endif %}</td>
-            <td><a href="{{ puzzle.getSpreadsheetURL() }}"><img src="/img/drive.png" width="20" alt=""></a></td>
-            <td><a href="{{ puzzle.getSlackURL() }}"><img src="/img/slack.png" width="20" alt=""></a></td>
+            <td>{% if puzzle.url %}<a href="{{ puzzle.url }}"><img src="/img/mit.png" width="20" alt="" title="Puzzle page"></a>{% endif %}</td>
+            <td><a href="{{ puzzle.getSpreadsheetURL() }}"><img src="/img/drive.png" width="20" alt="" title="Google Spreadsheet"></a></td>
+            <td><a href="{{ puzzle.getSlackURL() }}"><img src="/img/slack.png" width="20" alt=""  title="Slack channel"></a></td>
         </tr>
     {% endfor %}
     </tbody>
