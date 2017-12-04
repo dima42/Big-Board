@@ -15,6 +15,8 @@
         </h1>
     </div>
 
+    {% block content_main %}
+
     <form action="/puzzle/{{ puzzle.id }}/solve" method="post" class="mb-5">
         <div class="input-group">
             <span class="input-group-addon">Solution</span>
@@ -25,38 +27,34 @@
         </div>
     </form>
 
-    {% block content_main %}
-    {% endblock %}
-
-    {% block content_notes %}
-        {% if notes|length %}
-            <div class="row">
-                {% for note in notes %}
-                    <div class="col-sm-3">
-                        {{ note.author.fullName }}<br>
-                        <small class="text-muted">{{ note.createdAt|date("D g:i A") }}</small>
-                    </div>
-                    <div class="col-sm-9"><div class="bg-light border rounded p-3 mb-3">{{ note.body }}</div></div>
-                {% endfor %}
-
-                <div class="col-12">
-                    <hr>
-                </div>
-            </div>
-        {% endif %}
-            <div class="row">
-
+    {% if notes|length %}
+        <div class="row">
+            {% for note in notes %}
                 <div class="col-sm-3">
-                    Add a note
+                    {{ note.author.fullName }}<br>
+                    <small class="text-muted">{{ note.createdAt|date("D g:i A") }}</small>
                 </div>
-                <div class="col-sm-9">
-                    <form action="/puzzle/{{ puzzle.id }}/add-note" method="post">
-                        <textarea type="text" class="form-control" name="body" rows="2"></textarea>
-                        <br>
-                        <button class="btn btn-primary" type="submit">Submit new note</button>
-                    </form>
-                </div>
+                <div class="col-sm-9"><div class="bg-light border rounded p-3 mb-3">{{ note.body }}</div></div>
+            {% endfor %}
+
+            <div class="col-12">
+                <hr>
             </div>
+        </div>
+    {% endif %}
+        <div class="row">
+
+            <div class="col-sm-3">
+                Add a note
+            </div>
+            <div class="col-sm-9">
+                <form action="/puzzle/{{ puzzle.id }}/add-note" method="post">
+                    <textarea type="text" class="form-control" name="body" rows="2"></textarea>
+                    <br>
+                    <button class="btn btn-primary" type="submit">Submit new note</button>
+                </form>
+            </div>
+        </div>
     {% endblock %}
 {% endblock %}
 
