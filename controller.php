@@ -297,21 +297,25 @@ function changePuzzleStatus($puzzle_id, $request) {
 }
 
 function addNote($puzzle_id, $request) {
+	$noteText = strtoupper($request->body);
+
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
 		->findOne();
 
-	$author = $_SESSION['user'];
+	if ($noteText != "") {
+		$author = $_SESSION['user'];
 
-	$note = new Note();
-	$note->setPuzzleId($puzzle_id);
-	$note->setBody($request->body);
-	$note->setAuthor($author);
-	$note->save();
+		$note = new Note();
+		$note->setPuzzleId($puzzle_id);
+		$note->setBody($noteText);
+		$note->setAuthor($author);
+		$note->save();
 
-	$message = "Saved a note to ".$puzzle->getTitle();
+		$alert = "Saved a note to ".$puzzle->getTitle();
+	}
 
-	redirect('/puzzle/'.$puzzle_id, $message);
+	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 
 function joinPuzzle($puzzle_id) {
