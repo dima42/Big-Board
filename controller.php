@@ -220,6 +220,22 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		));
 }
 
+function displayMeta($meta_id) {
+	$meta = PuzzleQuery::create()
+		->filterByID($meta_id)
+		->findOne();
+
+	$puzzles = $meta->getChildren();
+
+	// TODO: if not $meta, redirect to error page
+	// "This does not appear to be a metapuzzle. There are no puzzles that are part of it."
+
+	render('meta.twig', array(
+			'puzzle'  => $meta,
+			'puzzles' => $puzzles,
+		));
+}
+
 function editPuzzle($puzzle_id, $request) {
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
@@ -499,22 +515,6 @@ function displayAllPuzzles() {
 			'statuses'            => $statuses,
 			'total_puzzles'       => $total_puzzles,
 			'all_puzzles_by_meta' => $all_puzzles_by_meta,
-		));
-}
-
-function displayMeta($meta_id) {
-	$meta = PuzzleQuery::create()
-		->filterByID($meta_id)
-		->findOne();
-
-	$puzzles = $meta->getChildren();
-
-	// TODO: if not $meta, redirect to error page
-	// "This does not appear to be a metapuzzle. There are no puzzles that are part of it."
-
-	render('meta.twig', array(
-			'puzzle'  => $meta,
-			'puzzles' => $puzzles,
 		));
 }
 
