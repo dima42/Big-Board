@@ -18,19 +18,11 @@
       <a class="nav-link" href="#">Featured</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/you">You</a>
-    </li>
-    <li class="nav-item">
       <a class="nav-link" href="/roster">Roster</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="/news?filter=Y">News</a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/add">+Add</a>
-    </li>
-  </ul>
-  <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
     <li class="nav-item dropdown">
       <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Links
@@ -42,6 +34,14 @@
         <a class="dropdown-item" href='https://plus.google.com/hangouts/_/ha2iwh7ioc4ctfnehufqfvomzya?authuser=0&hl=en'>Hangout 2</a>
         <a class="dropdown-item" href="https://monsters-et-manus.com/">The Hunt</a>
       </div>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link add-link" href="/add">+Add</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+    <li class="nav-item">
+      <a class="nav-link" href="/you">{{ user.fullName }}</a>
     </li>
   </ul>
 </div>
