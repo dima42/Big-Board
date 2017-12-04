@@ -28,109 +28,115 @@ $klein->with('/api', function () use ($klein) {
 	});
 
 $klein->respond(function ($request, $response) {
-    // SET UP GOOGLE_CLIENT OBJECT
-    $pal_client = new Google_Client();
-    $pal_client->setAccessType("offline");
-    $pal_client->setApplicationName("Palindrome Big Board");
-    $pal_client->setClientId('938479797888.apps.googleusercontent.com');
-    $pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
-    $pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
+		// SET UP GOOGLE_CLIENT OBJECT
+		$pal_client = new Google_Client();
+		$pal_client->setAccessType("offline");
+		$pal_client->setApplicationName("Palindrome Big Board");
+		$pal_client->setClientId('938479797888.apps.googleusercontent.com');
+		// TODO put the following in a environment variable
+		$pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
+		$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
 
-    $pal_drive = new Google_DriveService($pal_client);
+		$pal_drive = new Google_DriveService($pal_client);
 
-	if (!is_authorized($pal_client)) {
-		$authUrl = $pal_client->createAuthUrl();
-		return render('loggedout.twig', array(
-				'auth_url' => $authUrl,
-			));
-	}
+		// If 'code' is set in the request, that's Google trying to authenticate
+		if (isset($_GET['code'])) {
+			error_log("Code: ".$_GET['code']);
+			$pal_client->authenticate($_GET['code']);
+			$_SESSION['access_token'] = $pal_client->getAccessToken();
+			$token_dump = json_decode($_SESSION['access_token']);
+			$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
 
-    if (!is_in_palindrome($pal_drive)) {
-        return render('buggeroff.twig');
-    }
+			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
+			setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
 
-    show_content();
-});
+			header('Location: /');
+			return;
+		}
+
+		if (!is_authorized($pal_client)) {
+			$authUrl = $pal_client->createAuthUrl();
+			return render('loggedout.twig', array(
+					'auth_url' => $authUrl,
+				));
+		}
+
+		if (!is_in_palindrome($pal_drive)) {
+			return render('buggeroff.twig');
+		}
+
+		return show_content();
+	});
 
 $klein->dispatch();
 
 function is_authorized($pal_client) {
-	// If 'code' is set in the request, that's Google trying to authenticate (I think)
-	if (isset($_GET['code'])) {
-		$pal_client->authenticate($_GET['code']);
-		$_SESSION['access_token'] = $pal_client->getAccessToken();
-		setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
-		header('Location: /');
-
-		$token_dump                = json_decode($_SESSION['access_token']);
-		$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
-		setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
-
-		return true;
-	}
-
 	// If no access_token in session, check the cookies
 	if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) {
+		error_log("No access_token IN SESSION, checking cookies");
 		$_SESSION['access_token'] = stripslashes($_COOKIE['PAL_ACCESS_TOKEN']);
 	}
 
-    // Now check for access_token in the SESSION
+	// Now check for access_token in the SESSION
 	if (isset($_SESSION['access_token'])) {
+		error_log("access token in SESSION: ".$_SESSION['access_token']);
 		$pal_client->setAccessToken($_SESSION['access_token']);
 		if (!$pal_client->isAccessTokenExpired()) {
 			return true;
 		}
 	}
 
-    // If no access_token in SESSION, check cookies for refresh_token, and refresh
+	// If no access_token in SESSION, check cookies for refresh_token, and refresh
 	if (isset($_COOKIE['refresh_token'])) {
+		error_log("refresh token in SESSION: ".$_SESSION['refresh_token']);
 		$pal_client->refreshToken($_COOKIE['refresh_token']);
-		$_SESSION['access_token'] = $pal_client->getAccessToken();
-		setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
-
+		$_SESSION['access_token']  = $pal_client->getAccessToken();
 		$token_dump                = json_decode($_SESSION['access_token']);
 		$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
+
+		setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
 		setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
 
 		return true;
 	}
 
-    return false;
+	return false;
 }
 
 function is_in_palindrome($pal_drive) {
-    // If 'user_id' is set in SESSION and 'user' is a Member, then we're good.
-    if ($_SESSION["user_id"] > 0 && is_a($_SESSION['user'], 'Member')) {
-        return true;
-    }
+	// If 'user_id' is set in SESSION and 'user' is a Member, then we're good.
+	if (($_SESSION["user_id"]??0) > 0) {
+		error_log('user_id in SESSION: '.$_SESSION['user_id']);
+		return true;
+	}
 
-    // If root folder ID is in our DB, then we're good
-	$drive_user  = $pal_drive->about->get();
+	// If root folder ID is in our DB, then we're good
+	$drive_user     = $pal_drive->about->get();
 	$user_google_id = $drive_user["rootFolderId"];
-    $user_full_name = $drive_user["user"]["displayName"];
+	$user_full_name = $drive_user["user"]["displayName"];
 
-    $member = MemberQuery::create()
-        ->filterByGoogleID($user_google_id)
-        ->findOne();
+	$member = MemberQuery::create()
+		->filterByGoogleID($user_google_id)
+		->findOne();
 
-    if ($member) {
-        $_SESSION['user']    = $member;
-        $_SESSION['user_id'] = $member->getID();
-        return true;
-    }
+	if ($member) {
+		$_SESSION['user']    = $member;
+		$_SESSION['user_id'] = $member->getID();
+		return true;
+	}
 
 	// If it's a new user, make sure they have access to our drive
 	$hunt_folder = new Google_DriveFile();
 	try {
 		$hunt_folder = $pal_drive->files->get("0B5NGrtZ8ORMrYzY0MzFjYWEtZDRkZC00ZDNhLTg2N2YtZDljM2FiNmJhMjg5");
 		if ($hunt_folder["userPermission"]["id"] == "me") {
-            // TODO: set up both user and user_id session vars
-            $_SESSION["user_id"] = createUserDriveID($user_google_id, $user_full_name);
-        }
-    } catch (Exception $e) {
-        error_log($e->getMessage());
-    }
+			// TODO: set up both user and user_id session vars
+			$_SESSION["user_id"] = createUserDriveID($user_google_id, $user_full_name);
+		}
+	} catch (Exception $e) {
+		error_log($e->getMessage());
+	}
 
-    // If none of that worked, they're not on the team
-    return false;
+	// If none of that worked, they're not on the team
+	return false;
 }
