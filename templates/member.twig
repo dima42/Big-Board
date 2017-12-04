@@ -6,11 +6,20 @@
 
 {% from 'macros.twig' import puzzle_table %}
 {{ puzzle_table(puzzles) }}
-
 {% endblock %}
 
 {% block aside %}
-    {% from 'macros.twig' import member_card %}
-
-    {{ member_card(user) }}
+<div class="card mb-3">
+    <div class="card-body">
+        <small class="solvers">You are logged in as</small>
+        <strong>{{ member.fullName }}</strong><br>
+        {{ member.strengths|default("(No strengths listed) 😿") }}<br>
+        {% if member.slackId %}
+            <img src="/img/slack.png" width="15px" alt=""> {{ member.slackId }}
+        {% endif %}
+    </div>
+    <div class="card-footer">
+        <a href="/member/{{ member.id }}/edit">Edit your profile</a>
+    </div>
+</div>
 {% endblock %}

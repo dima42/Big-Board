@@ -73,8 +73,13 @@ function render($template, $vars = array()) {
 		->findOne();
 
 	Global $twig;
-	$vars['user']       = $_SESSION['user']??null;
-	$vars['user_id']    = $_SESSION['user_id']??0;
+
+	$member = $_SESSION['user'];
+	if ($member) {
+		$vars['user']         = $member;
+		$vars['user_id']      = $_SESSION['user_id'];
+		$vars['user_puzzles'] = $member->getPuzzles();
+	}
 	$vars['alert']      = $_SESSION['alert_message']??null;
 	$vars['time']       = strftime('%c');
 	$vars['latestNews'] = $latestNews;
