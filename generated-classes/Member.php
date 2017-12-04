@@ -30,6 +30,9 @@ class Member extends BaseMember {
 		$memberPuzzles = $this->getPuzzles();
 
 		foreach ($memberPuzzles as $key => $memberPuzzle) {
+			if ($puzzle->getId() == $memberPuzzle->getId()) {
+				continue;
+			}
 			PuzzleMemberQuery::create()
 				->filterByMember($this)
 				->filterByPuzzle($memberPuzzle)

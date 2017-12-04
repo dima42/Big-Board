@@ -101,10 +101,10 @@ class Puzzle extends BasePuzzle {
 		$memberCount = $this->countMembers();
 		$channel     = $this->getSlackChannel();
 		if ($memberCount > 0) {
-			$this->postMembers($member->getFullName().' left *'.$this->getTitle().'*. Current roster:');
+			$this->postMembers($member->getNameForSlack().' left *'.$this->getTitle().'*. Current roster:');
 		} else {
 			$client = getSlackClient(':wave:', 'JoinBot');
-			$client->to($channel)->send($member->getFullName().' left *'.$this->getTitle().'*. No members remain.');
+			$client->to($channel)->send($member->getNameForSlack().' left *'.$this->getTitle().'*. No members remain.');
 		}
 	}
 
