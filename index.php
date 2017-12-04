@@ -49,8 +49,7 @@ $klein->respond(function ($request, $response) {
 			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
 			setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
 
-			header('Location: /');
-			return;
+			return redirect("/");
 		}
 
 		if (!is_authorized($pal_client)) {
