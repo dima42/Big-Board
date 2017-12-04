@@ -94,11 +94,11 @@ abstract class Member implements ActiveRecordInterface
     protected $google_id;
 
     /**
-     * The value for the google_referrer field.
+     * The value for the google_refresh field.
      *
      * @var        string
      */
-    protected $google_referrer;
+    protected $google_refresh;
 
     /**
      * The value for the slack_id field.
@@ -437,13 +437,13 @@ abstract class Member implements ActiveRecordInterface
     }
 
     /**
-     * Get the [google_referrer] column value.
+     * Get the [google_refresh] column value.
      *
      * @return string
      */
-    public function getGoogleReferrer()
+    public function getGoogleRefresh()
     {
-        return $this->google_referrer;
+        return $this->google_refresh;
     }
 
     /**
@@ -537,24 +537,24 @@ abstract class Member implements ActiveRecordInterface
     } // setGoogleId()
 
     /**
-     * Set the value of [google_referrer] column.
+     * Set the value of [google_refresh] column.
      *
      * @param string $v new value
      * @return $this|\Member The current object (for fluent API support)
      */
-    public function setGoogleReferrer($v)
+    public function setGoogleRefresh($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->google_referrer !== $v) {
-            $this->google_referrer = $v;
-            $this->modifiedColumns[MemberTableMap::COL_GOOGLE_REFERRER] = true;
+        if ($this->google_refresh !== $v) {
+            $this->google_refresh = $v;
+            $this->modifiedColumns[MemberTableMap::COL_GOOGLE_REFRESH] = true;
         }
 
         return $this;
-    } // setGoogleReferrer()
+    } // setGoogleRefresh()
 
     /**
      * Set the value of [slack_id] column.
@@ -661,8 +661,8 @@ abstract class Member implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : MemberTableMap::translateFieldName('GoogleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->google_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : MemberTableMap::translateFieldName('GoogleReferrer', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->google_referrer = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : MemberTableMap::translateFieldName('GoogleRefresh', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->google_refresh = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : MemberTableMap::translateFieldName('SlackId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->slack_id = (null !== $col) ? (string) $col : null;
@@ -978,8 +978,8 @@ abstract class Member implements ActiveRecordInterface
         if ($this->isColumnModified(MemberTableMap::COL_GOOGLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'google_id';
         }
-        if ($this->isColumnModified(MemberTableMap::COL_GOOGLE_REFERRER)) {
-            $modifiedColumns[':p' . $index++]  = 'google_referrer';
+        if ($this->isColumnModified(MemberTableMap::COL_GOOGLE_REFRESH)) {
+            $modifiedColumns[':p' . $index++]  = 'google_refresh';
         }
         if ($this->isColumnModified(MemberTableMap::COL_SLACK_ID)) {
             $modifiedColumns[':p' . $index++]  = 'slack_id';
@@ -1010,8 +1010,8 @@ abstract class Member implements ActiveRecordInterface
                     case 'google_id':
                         $stmt->bindValue($identifier, $this->google_id, PDO::PARAM_STR);
                         break;
-                    case 'google_referrer':
-                        $stmt->bindValue($identifier, $this->google_referrer, PDO::PARAM_STR);
+                    case 'google_refresh':
+                        $stmt->bindValue($identifier, $this->google_refresh, PDO::PARAM_STR);
                         break;
                     case 'slack_id':
                         $stmt->bindValue($identifier, $this->slack_id, PDO::PARAM_STR);
@@ -1094,7 +1094,7 @@ abstract class Member implements ActiveRecordInterface
                 return $this->getGoogleId();
                 break;
             case 3:
-                return $this->getGoogleReferrer();
+                return $this->getGoogleRefresh();
                 break;
             case 4:
                 return $this->getSlackId();
@@ -1138,7 +1138,7 @@ abstract class Member implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getFullName(),
             $keys[2] => $this->getGoogleId(),
-            $keys[3] => $this->getGoogleReferrer(),
+            $keys[3] => $this->getGoogleRefresh(),
             $keys[4] => $this->getSlackId(),
             $keys[5] => $this->getSlackHandle(),
             $keys[6] => $this->getStrengths(),
@@ -1238,7 +1238,7 @@ abstract class Member implements ActiveRecordInterface
                 $this->setGoogleId($value);
                 break;
             case 3:
-                $this->setGoogleReferrer($value);
+                $this->setGoogleRefresh($value);
                 break;
             case 4:
                 $this->setSlackId($value);
@@ -1285,7 +1285,7 @@ abstract class Member implements ActiveRecordInterface
             $this->setGoogleId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setGoogleReferrer($arr[$keys[3]]);
+            $this->setGoogleRefresh($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setSlackId($arr[$keys[4]]);
@@ -1346,8 +1346,8 @@ abstract class Member implements ActiveRecordInterface
         if ($this->isColumnModified(MemberTableMap::COL_GOOGLE_ID)) {
             $criteria->add(MemberTableMap::COL_GOOGLE_ID, $this->google_id);
         }
-        if ($this->isColumnModified(MemberTableMap::COL_GOOGLE_REFERRER)) {
-            $criteria->add(MemberTableMap::COL_GOOGLE_REFERRER, $this->google_referrer);
+        if ($this->isColumnModified(MemberTableMap::COL_GOOGLE_REFRESH)) {
+            $criteria->add(MemberTableMap::COL_GOOGLE_REFRESH, $this->google_refresh);
         }
         if ($this->isColumnModified(MemberTableMap::COL_SLACK_ID)) {
             $criteria->add(MemberTableMap::COL_SLACK_ID, $this->slack_id);
@@ -1446,7 +1446,7 @@ abstract class Member implements ActiveRecordInterface
     {
         $copyObj->setFullName($this->getFullName());
         $copyObj->setGoogleId($this->getGoogleId());
-        $copyObj->setGoogleReferrer($this->getGoogleReferrer());
+        $copyObj->setGoogleRefresh($this->getGoogleRefresh());
         $copyObj->setSlackId($this->getSlackId());
         $copyObj->setSlackHandle($this->getSlackHandle());
         $copyObj->setStrengths($this->getStrengths());
@@ -2510,7 +2510,7 @@ abstract class Member implements ActiveRecordInterface
         $this->id = null;
         $this->full_name = null;
         $this->google_id = null;
-        $this->google_referrer = null;
+        $this->google_refresh = null;
         $this->slack_id = null;
         $this->slack_handle = null;
         $this->strengths = null;

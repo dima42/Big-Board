@@ -1,5 +1,4 @@
 <?
-require_once "sql.php";
 use Cocur\Slugify\Slugify;
 
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -130,9 +129,11 @@ function show_content() {
 
 	// LOGOUT
 
-	$klein->respond('GET', '/logout', function ($request, $response) {
-			unset($_SESSION['access_token']);
-			session_destroy();
+	$klein->respond('GET', '/logout', function () {
+			session_unset();
+			setcookie("PAL_ACCESS_TOKEN", "", time()-3600);
+			setcookie("refresh_token", "", time()-3600);
+			return redirect("/");
 		});
 
 	$klein->dispatch();

@@ -2,7 +2,6 @@
 session_start();
 require_once 'vendor/autoload.php';
 require_once 'generated-conf/config.php';
-require_once "sql.php";
 require_once "slack.php";
 
 // ALERT
@@ -73,9 +72,9 @@ function render($template, $vars = array()) {
 		->findOne();
 
 	Global $twig;
-	$vars['user']       = $_SESSION['user'];
-	$vars['user_id']    = $_SESSION['user_id'];
-	$vars['alert']      = $_SESSION['alert_message'];
+	$vars['user']       = $_SESSION['user']??null;
+	$vars['user_id']    = $_SESSION['user_id']??0;
+	$vars['alert']      = $_SESSION['alert_message']??null;
 	$vars['time']       = strftime('%c');
 	$vars['latestNews'] = $latestNews;
 

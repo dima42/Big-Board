@@ -1,7 +1,6 @@
 <?php
 require_once "globals.php";
 require_once "controller.php";
-require_once "sql.php";
 require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
@@ -28,125 +27,124 @@ $klein->with('/api', function () use ($klein) {
 	});
 
 $klein->respond(function ($request, $response) {
-		return everythingElse();
+		// SET UP GOOGLE_CLIENT OBJECT
+		$pal_client = new Google_Client();
+		$pal_client->setAccessType("offline");
+		$pal_client->setApplicationName("Palindrome Big Board");
+		$pal_client->setClientId('938479797888.apps.googleusercontent.com');
+		// TODO put the following in a environment variable
+		$pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
+		$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
+
+		$pal_drive = new Google_DriveService($pal_client);
+
+		// If 'code' is set in the request, that's Google trying to authenticate
+		if (isset($_GET['code'])) {
+			error_log("Code: ".$_GET['code']);
+			$pal_client->authenticate($_GET['code']);
+			$_SESSION['access_token'] = $pal_client->getAccessToken();
+			$token_dump = json_decode($_SESSION['access_token']);
+			$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
+
+			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
+			setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
+
+			header('Location: /');
+			return;
+		}
+
+		if (!is_authorized($pal_client)) {
+			$authUrl = $pal_client->createAuthUrl();
+			return render('loggedout.twig', array(
+					'auth_url' => $authUrl,
+				));
+		}
+
+		if (!is_in_palindrome($pal_drive)) {
+			return render('buggeroff.twig');
+		}
+
+		return show_content();
 	});
 
 $klein->dispatch();
 
-function everythingElse() {
-
-	// SET UP GOOGLE_CLIENT OBJECT
-	$pal_client = new Google_Client();
-	$pal_client->setAccessType("offline");
-	$pal_client->setApplicationName("Palindrome Big Board");
-	$pal_client->setClientId('938479797888.apps.googleusercontent.com');
-	$pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
-	$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
-
-	// SET UP DRIVE SERVICE OBJECT
-	$pal_drive = new Google_DriveService($pal_client);
-
-	// TRACK STATUS
-	$noAccessYet = TRUE;
-
-	// let's get the persons access token for future use. This is where the login takes place.
-	if (isset($_GET['code'])) {
-		$pal_client->authenticate($_GET['code']);
-		$_SESSION['access_token'] = $pal_client->getAccessToken();
-		setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
-		header('Location: /');
-
-		$token_dump                = json_decode($_SESSION['access_token']);
-		$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
-		setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
-
-		$noAccessYet = FALSE;
-	}
-
-	// let's check to see if we have an access token. If we do, then we can get all sorts of fun information
-	// if we do not have a session token, check the cookies
+function is_authorized($pal_client) {
+	// If no access_token in session, check the cookies
 	if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) {
+		error_log("No access_token IN SESSION, checking cookies");
 		$_SESSION['access_token'] = stripslashes($_COOKIE['PAL_ACCESS_TOKEN']);
 	}
 
+	// Now check for access_token in the SESSION
 	if (isset($_SESSION['access_token'])) {
+		error_log("access token in SESSION: ".$_SESSION['access_token']);
 		$pal_client->setAccessToken($_SESSION['access_token']);
 		if (!$pal_client->isAccessTokenExpired()) {
-			$noAccessYet = FALSE;
+			return true;
 		}
 	}
 
-	if ($noAccessYet) {
-		if (isset($_COOKIE['refresh_token'])) {
-			$pal_client->refreshToken($_COOKIE['refresh_token']);
-			$_SESSION['access_token'] = $pal_client->getAccessToken();
-			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
+	// If no access_token in SESSION, check cookies for refresh_token, and refresh
+	if (isset($_COOKIE['refresh_token'])) {
+		error_log("refresh token in SESSION: ".$_SESSION['refresh_token']);
+		$pal_client->refreshToken($_COOKIE['refresh_token']);
+		$_SESSION['access_token']  = $pal_client->getAccessToken();
+		$token_dump                = json_decode($_SESSION['access_token']);
+		$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
 
-			$token_dump                = json_decode($_SESSION['access_token']);
-			$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
-			setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
+		setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
+		setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
 
-			$noAccessYet = FALSE;
-		}
+		return true;
 	}
 
-	// if there is no access token, user has not authorized app. So let's begin by checking that.
-	if ($noAccessYet) {
-		$authUrl = $pal_client->createAuthUrl();
-		render('loggedout.twig', array(
-				'auth_url' => $authUrl,
-			));
-	} else {
-		show_page($pal_drive);
-	}
+	return false;
 }
 
-function show_page($pal_drive) {
-	// first, let's try to get the user from the database based on root folder ID
+function is_in_palindrome($pal_drive) {
+	// If 'user_id' is set in SESSION and 'user' is a Member, then we're good.
+	if (($_SESSION["user_id"]??0) > 0) {
+		error_log('user_id in SESSION: '.$_SESSION['user_id']);
+		return true;
+	}
 
-	// this will get the user ID of someone already established as a palindrome member
-	$aboutg  = $pal_drive->about->get();
-	$my_name = $aboutg["user"]["displayName"];
-	$my_root = $aboutg["rootFolderId"];
+	// If there's a member whose googleID matches the current user's rootFolderId, then we're good.
+	$drive_user     = $pal_drive->about->get();
+	$user_google_id = $drive_user["rootFolderId"];
+	$user_full_name = $drive_user["user"]["displayName"];
 
 	$member = MemberQuery::create()
-		->filterByGoogleID($my_root)
+		->filterByGoogleID($user_google_id)
 		->findOne();
 
 	if ($member) {
+		error_log("Member exists. Google ID: ".$user_google_id);
 		$_SESSION['user']    = $member;
 		$_SESSION['user_id'] = $member->getID();
-	} else {
-		$_SESSION["user_id"] = 0;
+		return true;
 	}
 
-	// we should always check to see if they have access
-	// check to see if they have write access to the palindrome folder
-	//let's check to see if the user has access
-	$isUserInPalindrome = FALSE;
-
-	// Find the current Mystery Hunt folder.
+	// If it's a new user, make sure they have access to our drive
 	$hunt_folder = new Google_DriveFile();
 	try {
 		$hunt_folder = $pal_drive->files->get("0B5NGrtZ8ORMrYzY0MzFjYWEtZDRkZC00ZDNhLTg2N2YtZDljM2FiNmJhMjg5");
+		error_log("userPermission.id: ".$hunt_folder["userPermission"]["id"]);
 		if ($hunt_folder["userPermission"]["id"] == "me") {
-			$isUserInPalindrome = TRUE;
-		} else {
-			$isUserInPalindrome = FALSE;
+			// TODO: set up both user and user_id session vars
+			$member = new Member();
+			$member->setFullName($user_full_name);
+			$member->setGoogleId($user_google_id);
+			$member->setGoogleRefresh($_SESSION['refresh_token']);
+			$member->save();
+			$_SESSION["user"]    = $member;
+			$_SESSION["user_id"] = $member->getId();
+			return true;
 		}
 	} catch (Exception $e) {
-		return displayError($e->getMessage());
+		error_log($e->getMessage());
 	}
 
-	// if they do have access, let's take root and name from before and create a user
-	if ($isUserInPalindrome && $_SESSION["user_id"] == 0) {
-		$_SESSION["user_id"] = createUserDriveID($my_root, $my_name);
-	}
-
-	if ($_SESSION["user_id"] == 0) {
-		// if someone is not a member of palindrome, let's tell them to bugger off
-		return render('buggeroff.twig');
-	}
-
-	show_content();
+	// If none of that worked, they're not on the team
+	return false;
 }

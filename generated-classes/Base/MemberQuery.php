@@ -23,7 +23,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildMemberQuery orderByFullName($order = Criteria::ASC) Order by the full_name column
  * @method     ChildMemberQuery orderByGoogleId($order = Criteria::ASC) Order by the google_id column
- * @method     ChildMemberQuery orderByGoogleReferrer($order = Criteria::ASC) Order by the google_referrer column
+ * @method     ChildMemberQuery orderByGoogleRefresh($order = Criteria::ASC) Order by the google_refresh column
  * @method     ChildMemberQuery orderBySlackId($order = Criteria::ASC) Order by the slack_id column
  * @method     ChildMemberQuery orderBySlackHandle($order = Criteria::ASC) Order by the slack_handle column
  * @method     ChildMemberQuery orderByStrengths($order = Criteria::ASC) Order by the strengths column
@@ -31,7 +31,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery groupById() Group by the id column
  * @method     ChildMemberQuery groupByFullName() Group by the full_name column
  * @method     ChildMemberQuery groupByGoogleId() Group by the google_id column
- * @method     ChildMemberQuery groupByGoogleReferrer() Group by the google_referrer column
+ * @method     ChildMemberQuery groupByGoogleRefresh() Group by the google_refresh column
  * @method     ChildMemberQuery groupBySlackId() Group by the slack_id column
  * @method     ChildMemberQuery groupBySlackHandle() Group by the slack_handle column
  * @method     ChildMemberQuery groupByStrengths() Group by the strengths column
@@ -82,7 +82,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMember findOneById(int $id) Return the first ChildMember filtered by the id column
  * @method     ChildMember findOneByFullName(string $full_name) Return the first ChildMember filtered by the full_name column
  * @method     ChildMember findOneByGoogleId(string $google_id) Return the first ChildMember filtered by the google_id column
- * @method     ChildMember findOneByGoogleReferrer(string $google_referrer) Return the first ChildMember filtered by the google_referrer column
+ * @method     ChildMember findOneByGoogleRefresh(string $google_refresh) Return the first ChildMember filtered by the google_refresh column
  * @method     ChildMember findOneBySlackId(string $slack_id) Return the first ChildMember filtered by the slack_id column
  * @method     ChildMember findOneBySlackHandle(string $slack_handle) Return the first ChildMember filtered by the slack_handle column
  * @method     ChildMember findOneByStrengths(string $strengths) Return the first ChildMember filtered by the strengths column *
@@ -93,7 +93,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMember requireOneById(int $id) Return the first ChildMember filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMember requireOneByFullName(string $full_name) Return the first ChildMember filtered by the full_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMember requireOneByGoogleId(string $google_id) Return the first ChildMember filtered by the google_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMember requireOneByGoogleReferrer(string $google_referrer) Return the first ChildMember filtered by the google_referrer column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMember requireOneByGoogleRefresh(string $google_refresh) Return the first ChildMember filtered by the google_refresh column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMember requireOneBySlackId(string $slack_id) Return the first ChildMember filtered by the slack_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMember requireOneBySlackHandle(string $slack_handle) Return the first ChildMember filtered by the slack_handle column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMember requireOneByStrengths(string $strengths) Return the first ChildMember filtered by the strengths column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -102,7 +102,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMember[]|ObjectCollection findById(int $id) Return ChildMember objects filtered by the id column
  * @method     ChildMember[]|ObjectCollection findByFullName(string $full_name) Return ChildMember objects filtered by the full_name column
  * @method     ChildMember[]|ObjectCollection findByGoogleId(string $google_id) Return ChildMember objects filtered by the google_id column
- * @method     ChildMember[]|ObjectCollection findByGoogleReferrer(string $google_referrer) Return ChildMember objects filtered by the google_referrer column
+ * @method     ChildMember[]|ObjectCollection findByGoogleRefresh(string $google_refresh) Return ChildMember objects filtered by the google_refresh column
  * @method     ChildMember[]|ObjectCollection findBySlackId(string $slack_id) Return ChildMember objects filtered by the slack_id column
  * @method     ChildMember[]|ObjectCollection findBySlackHandle(string $slack_handle) Return ChildMember objects filtered by the slack_handle column
  * @method     ChildMember[]|ObjectCollection findByStrengths(string $strengths) Return ChildMember objects filtered by the strengths column
@@ -204,7 +204,7 @@ abstract class MemberQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, full_name, google_id, google_referrer, slack_id, slack_handle, strengths FROM member WHERE id = :p0';
+        $sql = 'SELECT id, full_name, google_id, google_refresh, slack_id, slack_handle, strengths FROM member WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -386,28 +386,28 @@ abstract class MemberQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the google_referrer column
+     * Filter the query on the google_refresh column
      *
      * Example usage:
      * <code>
-     * $query->filterByGoogleReferrer('fooValue');   // WHERE google_referrer = 'fooValue'
-     * $query->filterByGoogleReferrer('%fooValue%', Criteria::LIKE); // WHERE google_referrer LIKE '%fooValue%'
+     * $query->filterByGoogleRefresh('fooValue');   // WHERE google_refresh = 'fooValue'
+     * $query->filterByGoogleRefresh('%fooValue%', Criteria::LIKE); // WHERE google_refresh LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $googleReferrer The value to use as filter.
+     * @param     string $googleRefresh The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildMemberQuery The current query, for fluid interface
      */
-    public function filterByGoogleReferrer($googleReferrer = null, $comparison = null)
+    public function filterByGoogleRefresh($googleRefresh = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($googleReferrer)) {
+            if (is_array($googleRefresh)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(MemberTableMap::COL_GOOGLE_REFERRER, $googleReferrer, $comparison);
+        return $this->addUsingAlias(MemberTableMap::COL_GOOGLE_REFRESH, $googleRefresh, $comparison);
     }
 
     /**
