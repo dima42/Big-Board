@@ -27,7 +27,7 @@
     <div class="mb-3">
         <h4>{{ total_puzzles }} total</h4>
         <ul class="list-unstyled">
-        {% for status in statuses %}
+        {% for status in statusCounts %}
             <li>{{ status.Status | emojify }} {{ status.StatusCount }}</li>
         {% endfor %}
         </ul>

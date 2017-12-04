@@ -512,7 +512,7 @@ function displayAllPuzzles() {
 	}
 
 	render('all.twig', array(
-			'statuses'            => $statuses,
+			'statusCounts'        => $statuses,
 			'total_puzzles'       => $total_puzzles,
 			'all_puzzles_by_meta' => $all_puzzles_by_meta,
 		));
