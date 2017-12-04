@@ -1,7 +1,6 @@
 <?php
 require_once "globals.php";
 require_once "controller.php";
-require_once "sql.php";
 require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';

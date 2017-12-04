@@ -1,5 +1,4 @@
 <?
-require_once "sql.php";
 use Cocur\Slugify\Slugify;
 
 use Propel\Runtime\ActiveQuery\Criteria;

@@ -2,7 +2,6 @@
 session_start();
 require_once 'vendor/autoload.php';
 require_once 'generated-conf/config.php';
-require_once "sql.php";
 require_once "slack.php";
 
 // ALERT
