@@ -11,9 +11,17 @@ session_start();
 $_SESSION['alert'] = "";
 
 // DEBUG
+Global $DEBUG;
 $DEBUG = false;
 if ($_SERVER['HTTP_HOST'] == "localhost:8888") {
 	$DEBUG = true;
+}
+
+function debug($text) {
+	Global $DEBUG;
+	if ($DEBUG) {
+		error_log($text);
+	}
 }
 
 function preprint($arr) {
