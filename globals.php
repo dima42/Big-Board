@@ -2,6 +2,8 @@
 require_once 'vendor/autoload.php';
 require_once 'generated-conf/config.php';
 require_once "slack.php";
+require_once 'google-api-php-client/src/Google_Client.php';
+require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
 session_start();
 
@@ -98,9 +100,6 @@ function render($template, $vars = array()) {
 }
 
 // GOOGLE
-require_once 'globals.php';
-require_once 'google-api-php-client/src/Google_Client.php';
-require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
 function get_new_drive_service() {
 	$_SESSION['error_string'] = "";
