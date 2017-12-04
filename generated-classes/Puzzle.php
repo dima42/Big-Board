@@ -76,15 +76,6 @@ class Puzzle extends BasePuzzle {
 		];
 	}
 
-	// ADD
-
-	public function addNewMember($member) {
-		$this->addmember($member);
-		$this->save();
-		$message = "You joined ".$this->getTitle().".";
-		$this->postJoin($member);
-	}
-
 	// SLACK STUFF
 
 	public function postInfoToSlack() {
@@ -94,20 +85,30 @@ class Puzzle extends BasePuzzle {
 
 	public function postJoin($member) {
 		$memberCount = $this->countMembers();
-		if ($$memberCount > 0) {
-			$this->postMembers($member->getNameForSlack()." joined *".$this->getTitle()."*! All members:");
+		$channel     = $this->getSlackChannel();
+		if ($memberCount > 0) {
+			$this->postMembers($member->getNameForSlack()." joined *".$this->getTitle()."*. Current roster:");
 		} else {
 			$client = getSlackClient(":wave:", "JoinBot");
-			$client->to($this->getSlackChannel())->attach([
+			$client->to($channel)->attach([
 					'text'  => $member->getNameForSlack(),
 					'color' => 'good',
 				])->send('First member of *'.$this->getTitle().'*!');
 		}
-
-		// TODO: list all members
 	}
 
-	public function postMembers($header_msg = "All members:") {
+	public function postLeave($member) {
+		$memberCount = $this->countMembers();
+		$channel     = $this->getSlackChannel();
+		if ($memberCount > 0) {
+			$this->postMembers($member->getFullName().' left *'.$this->getTitle().'*. Current roster:');
+		} else {
+			$client = getSlackClient(':wave:', 'JoinBot');
+			$client->to($channel)->send($member->getFullName().' left *'.$this->getTitle().'*. No members remain.');
+		}
+	}
+
+	public function postMembers($header_msg = "Current roster:", $channel = "sandbox") {
 		$members = $this->getMembers();
 		$text    = [];
 		foreach ($members as $key => $member) {

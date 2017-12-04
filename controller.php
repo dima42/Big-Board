@@ -40,7 +40,7 @@ function show_content() {
 			$klein->respond('POST', '/add-note/?', function ($request) {
 					return addNote($request->id, $request);
 				});
-			$klein->respond('POST', '/claim/?', function ($request) {
+			$klein->respond('POST', '/join/?', function ($request) {
 					return joinPuzzle($request->id);
 				});
 		});
@@ -307,13 +307,8 @@ function joinPuzzle($puzzle_id) {
 
 	$member = $_SESSION['user'];
 
-	try {
-		$puzzle->addNewMember($member);
-	} catch (Exception $e) {
-		$message = "You already joined this puzzle.";
-	}
-
-	redirect('/puzzle/'.$puzzle_id, $message);
+	$alert = $member->joinPuzzle($puzzle);
+	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 
 // ADDING PUZZLES
@@ -684,9 +679,9 @@ function joinBot($request, $response) {
 http://team-palindrome.herokuapp.com/assign_slack_id/".$slack_user_id,
 		];
 	} else {
-		$puzzle->addNewMember($member);
+		$response         = $member->joinPuzzle($puzzle);
 		$channel_response = [
-			"text" => "Got it. You joined ".$puzzle->getTitle().".",
+			"text" => $response
 		];
 	}
 
