@@ -546,16 +546,6 @@ function displayUnsolvedPuzzles() {
 		->filterByStatus('solved', Criteria::NOT_EQUAL)
 		->find();
 
-	// $how_old  = (time()-strtotime($file['modifiedDate']??"2017-12-31"))/60;
-	// $file_age = intval($how_old)." min";
-	// if ($how_old > 60*24) {
-	// 	$file_age = intval($how_old/(24*60))." days";
-	// } else if ($how_old > 60) {
-	// 	$file_age = intval($how_old/60)." hrs";
-	// }
-
-	// $puzzles[$fileID]['lastMod'] = $file_age;
-
 	render('unsolved.twig', array(
 			'puzzles' => $puzzles,
 		));

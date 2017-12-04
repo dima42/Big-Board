@@ -61,8 +61,17 @@ class Puzzle extends BasePuzzle {
 		$fileID       = $this->parseSpreadsheetID();
 		$file         = $driveService->files->get($fileID);
 		debug('Fetching Google file info for '.$this->title);
+
+		$age_in_minutes = (time()-strtotime($file['modifiedDate']??"2017-12-31"))/60;
+		$last_mod       = intval($age_in_minutes)." min";
+		if ($age_in_minutes > 60*24) {
+			$last_mod = intval($age_in_minutes/(24*60))." days";
+		} else if ($age_in_minutes > 60) {
+			$last_mod = intval($age_in_minutes/60)." hrs";
+		}
+
 		return [
-			'when' => $file['modifiedDate']??"2017-12-31",
+			'when' => $last_mod,
 			'who'  => $file['lastModifyingUserName']??"",
 		];
 	}
