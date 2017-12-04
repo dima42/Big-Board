@@ -17,10 +17,23 @@
 
     {% block content_main %}
 
-    <form action="/puzzle/{{ puzzle.id }}/solve" method="post" class="mb-5">
-        <div class="input-group">
+    <form class="puzzleEdit mb-1" action="/puzzle/{{ puzzle.id }}/solve" method="post">
+        <div class="input-group mb-2">
             <span class="input-group-addon">Solution</span>
             <input type="text" class="solution-field form-control" name="solution" placeholder="Enter solution here" value="{{ puzzle.solution }}">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </span>
+        </div>
+    </form>
+    <form class="puzzleEdit mb-5" action="/puzzle/{{ puzzle.id }}/change-status" method="post">
+        <div class="input-group">
+            <span class="input-group-addon">Status</span>
+            <select id="statusSelect" class="form-control" name="status">
+                {% for status in statuses %}
+                    <option {% if status == puzzle.status %}selected{% endif %} value="{{ status }}">{{ status|emojify }} {{ status|capitalize }}</option>
+                {% endfor %}
+            </select>
             <span class="input-group-btn">
                 <button class="btn btn-primary" type="submit">Submit</button>
             </span>

@@ -34,6 +34,9 @@ function show_content() {
 			$klein->respond('POST', '/solve/?', function ($request) {
 					return solvePuzzle($request->id, $request);
 				});
+			$klein->respond('POST', '/change-status/?', function ($request) {
+					return changePuzzleStatus($request->id, $request);
+				});
 			$klein->respond('POST', '/add-note/?', function ($request) {
 					return addNote($request->id, $request);
 				});
@@ -264,6 +267,18 @@ function solvePuzzle($puzzle_id, $request) {
 
 	$alert = $puzzle->solve($request->solution);
 
+	redirect('/puzzle/'.$puzzle_id, $alert);
+}
+
+function changePuzzleStatus($puzzle_id, $request) {
+	$puzzle = PuzzleQuery::create()
+		->filterByID($puzzle_id)
+		->findOne();
+
+	$puzzle->setStatus($request->status);
+	$puzzle->save();
+
+	$alert = "Changed status.";
 	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 

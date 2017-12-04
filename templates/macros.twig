@@ -38,7 +38,6 @@
                 <td>{{ lastMod.when }}</td>
                 <td>{{ lastMod.who }}</td>
             {% endif %}
-            <td><a href="/puzzle/{{ puzzle.id }}/edit">✏️</a></td>
             <td>{% if puzzle.url %}<a href="{{ puzzle.url }}"><img src="/img/mit.png" width="20" alt=""></a>{% endif %}</td>
             <td><a href="{{ puzzle.getSpreadsheetURL() }}"><img src="/img/drive.png" width="20" alt=""></a></td>
             <td><a href="{{ puzzle.getSlackURL() }}"><img src="/img/slack.png" width="20" alt=""></a></td>
