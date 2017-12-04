@@ -424,6 +424,9 @@ function addPuzzle($request, $response) {
 
 function displayRoster() {
 	$roster = MemberQuery::create()
+		->leftJoinPuzzleMember()
+		->leftJoin('PuzzleMember.Puzzle')
+		->with('Puzzle')
 		->orderByFullName()
 		->find();
 
