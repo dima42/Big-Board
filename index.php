@@ -26,21 +26,21 @@ $klein->with('/api', function () use ($klein) {
 
 	});
 
-$klein->respond(function ($request, $response) {
-		// SET UP GOOGLE_CLIENT OBJECT
-		$pal_client = new Google_Client();
-		$pal_client->setAccessType("offline");
-		$pal_client->setApplicationName("Palindrome Big Board");
-		$pal_client->setClientId('938479797888.apps.googleusercontent.com');
-		// TODO put the following in a environment variable
-		$pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
-		$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']);
+// SET UP GOOGLE_CLIENT OBJECT
+$pal_client = new Google_Client();
+$pal_client->setAccessType("offline");
+$pal_client->setApplicationName("Palindrome Big Board");
+$pal_client->setClientId('938479797888.apps.googleusercontent.com');
+// TODO put the following in a environment variable
+$pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
+$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']."/oauth");
 
-		$pal_drive = new Google_DriveService($pal_client);
+$pal_drive = new Google_DriveService($pal_client);
 
+$klein->respond('GET', '/oauth', function ($request, $response) use ($pal_client) {
 		// If 'code' is set in the request, that's Google trying to authenticate
+		error_log("OAUTH. Code: ".$_GET['code']);
 		if (isset($_GET['code'])) {
-			error_log("Code: ".$_GET['code']);
 			$pal_client->authenticate($_GET['code']);
 			$_SESSION['access_token'] = $pal_client->getAccessToken();
 			$token_dump = json_decode($_SESSION['access_token']);
@@ -48,10 +48,11 @@ $klein->respond(function ($request, $response) {
 
 			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
 			setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
-
-			return redirect("/");
 		}
+		return redirect("/");
+	});
 
+$klein->respond(function () use ($pal_client, $pal_drive) {
 		if (!is_authorized($pal_client)) {
 			$authUrl = $pal_client->createAuthUrl();
 			return render('loggedout.twig', array(
