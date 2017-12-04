@@ -27,6 +27,28 @@ class Puzzle extends BasePuzzle {
 		return $sid;
 	}
 
+	// SOLVE
+
+	public function solve($solution) {
+		// SET SOLUTION
+		$solution = strtoupper(trim($solution));
+		$this->setSolution($solution);
+		$this->save();
+
+		// SET STATUS AND POST TO SLACK
+		if ($solution != '') {
+			$this->setStatus('solved');
+			$alert = $this->getTitle()." is solved! Great work, team! 🎓";
+			postSolve($this);
+			// TODO: post to $this->getSlackChannel());
+		} else {
+			$this->setStatus('open');
+			$alert = $this->getTitle()." is open again.";
+		}
+		$this->save();
+
+		return $alert;
+	}
 
 	// LAST MOD
 
@@ -55,12 +77,6 @@ class Puzzle extends BasePuzzle {
 	public function postInfoToSlack() {
 		postPuzzle($this, $this->getSlackChannel());
 		postPuzzle($this);// big-board channel
-	}
-
-	public function postSolve() {
-		postSolve($this, $this->getSlackChannel());
-		// postSolve($this, 'general');
-		// TODO: uncomment above
 	}
 
 	public function postJoin($member) {

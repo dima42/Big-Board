@@ -225,7 +225,6 @@ function editPuzzle($puzzle_id, $request) {
 		->findOne();
 
 	$puzzle->setTitle($request->title);
-	$puzzle->setSolution(strtoupper($request->solution));
 	$puzzle->setStatus($request->status);
 	$puzzle->setSpreadsheetId($request->spreadsheet_id);
 	$puzzle->setSlackChannel($request->slack_channel);
@@ -252,9 +251,10 @@ function editPuzzle($puzzle_id, $request) {
 
 	$puzzle->save();
 
-	$message = "Saved ".$puzzle->getTitle();
+	$puzzle->solve($request->solution);
 
-	redirect('/puzzle/'.$puzzle_id.'/edit', $message);
+	$alert = "Saved ".$puzzle->getTitle();
+	redirect('/puzzle/'.$puzzle_id.'/edit', $alert);
 }
 
 function solvePuzzle($puzzle_id, $request) {
@@ -262,20 +262,7 @@ function solvePuzzle($puzzle_id, $request) {
 		->filterByID($puzzle_id)
 		->findOne();
 
-	$new_solution = strtoupper(trim($request->solution));
-
-	$puzzle->setSolution($new_solution);
-
-	if ($new_solution != '') {
-		$puzzle->setStatus('solved');
-		$puzzle->postSolve();
-		$alert = $puzzle->getTitle()." is solved! Great work, team! 🎓";
-	} else {
-		$puzzle->setStatus('open');
-		$alert = $puzzle->getTitle()." is open again.";
-	}
-
-	$puzzle->save();
+	$alert = $puzzle->solve($request->solution);
 
 	redirect('/puzzle/'.$puzzle_id, $alert);
 }
@@ -567,8 +554,7 @@ function displayUnsolvedPuzzles() {
 	// 	$file_age = intval($how_old/60)." hrs";
 	// }
 
-		$puzzles[$fileID]['lastMod'] = $file_age;
-	}
+	// $puzzles[$fileID]['lastMod'] = $file_age;
 
 	render('unsolved.twig', array(
 			'puzzles' => $puzzles,
@@ -724,13 +710,11 @@ function solveBot($request, $response) {
 			"text" => "Please include a solution, like so: `/solve LOVE`.",
 		];
 	} else {
-		$puzzle->setSolution($solution);
-		$puzzle->save();
+		$puzzle->solve($solution);
 		$channel_response = [
 			'link_names' => true,
 			"text"       => "Got it. I posted `".$solution."` as a solution to *".$puzzle->getTitle()."*.",
 		];
-		$puzzle->postSolve();
 	}
 
 	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
