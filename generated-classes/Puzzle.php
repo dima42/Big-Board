@@ -45,10 +45,17 @@ class Puzzle extends BasePuzzle {
 		$this->setSolution($newSolution);
 		$this->save();
 
-		// SET STATUS AND POST TO SLACK
-		if ($newSolution != '') {
+        if ($newSolution != '') {
+    		// SET STATUS
 			$this->setStatus('solved');
 			$alert = $this->getTitle()." is solved! Great work, team! 🎓";
+
+            // REMOVE MEMBERS
+			PuzzleMemberQuery::create()
+				->filterByPuzzle($this)
+				->delete();
+
+            // POST TO SLACK
 			postSolve($this);
 			// TODO: post to $this->getSlackChannel());
 		} else {
