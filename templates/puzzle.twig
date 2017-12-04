@@ -91,6 +91,7 @@
         <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
     {% endif %}
 
+    {% if puzzle.status != "solved" %}
     <div class="card mb-3">
         <div class="card-body">
             <small class="solvers">SOLVERS</small>
@@ -106,5 +107,6 @@
             </form>
         </div>
     </div>
+    {% endif %}
 
 {% endblock %}
