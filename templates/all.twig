@@ -39,7 +39,7 @@
             <strong>{{ user.fullName }}</strong><br>
 
             {% if user.slackId %}
-                <img src="/img/slack.png" width="15px" alt=""> {{ user.slackId }}
+                <img src="/img/slack.png" width="15px" alt=""> {{ user.slackId }}<br>
             {% endif %}
             {% for user_puzzle in user_puzzles %}
                 <a href="/puzzle/{{ user_puzzle.id }}">{{ user_puzzle.title }}</a><br>
