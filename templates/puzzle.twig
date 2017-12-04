@@ -1,5 +1,4 @@
 {% extends 'two-col.twig' %}
-{% from 'macros.twig' import slack_url %}
 
 {% block content %}
     <div class="puzzle-header">
@@ -71,7 +70,7 @@
     <div class="puzzle-links list-group mb-3">
         <a class="list-group-item list-group-item-action" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> Puzzle page ➡</a>
         <a class="list-group-item list-group-item-action" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet ➡</a>
-        <a class="list-group-item list-group-item-action" href='{{ slack_url(puzzle.slackChannel) }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
+        <a class="list-group-item list-group-item-action" href='{{ puzzle.getSlackURL() }}'><img src="/img/slack.png" width="15px" alt=""> Slack ➡</a>
     </div>
 
     {% if puzzle.status == "featured" %}

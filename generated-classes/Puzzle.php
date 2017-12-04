@@ -13,9 +13,13 @@ use Base\Puzzle as BasePuzzle;
  */
 
 class Puzzle extends BasePuzzle {
-	// public function postUpdate() {
-	// return true;
-	// }
+	// GET
+
+	public function getSlackURL() {
+		return "http://palindrome2017.slack.com/messages/".$this->getSlackChannel();
+	}
+
+	// ADD
 
 	public function addNewMember($member) {
 		$this->addmember($member);
