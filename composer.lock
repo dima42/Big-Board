@@ -476,16 +476,16 @@
         },
         {
             "name": "duzun/hquery",
-            "version": "1.7.0",
+            "version": "1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/duzun/hQuery.php.git",
-                "reference": "b8cb34cde3bbb713c0bfd336280e573698decc24"
+                "reference": "d43c98c7cc21fbbadd57f5c287e03ab77d319c88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/duzun/hQuery.php/zipball/b8cb34cde3bbb713c0bfd336280e573698decc24",
-                "reference": "b8cb34cde3bbb713c0bfd336280e573698decc24",
+                "url": "https://api.github.com/repos/duzun/hQuery.php/zipball/d43c98c7cc21fbbadd57f5c287e03ab77d319c88",
+                "reference": "d43c98c7cc21fbbadd57f5c287e03ab77d319c88",
                 "shasum": ""
             },
             "require": {
@@ -528,7 +528,7 @@
                 "xhtml",
                 "xml"
             ],
-            "time": "2017-10-20T03:36:20+00:00"
+            "time": "2017-11-27T07:58:16+00:00"
         },
         {
             "name": "fig/link-util",
