@@ -104,8 +104,8 @@ function is_authorized($pal_client) {
 
 function is_in_palindrome($pal_drive) {
 	// If 'user_id' is set in SESSION and 'user' is a Member, then we're good.
-	if (($_SESSION["user_id"]??0) > 0) {
-		error_log('user_id in SESSION: '.$_SESSION['user_id']);
+	if (is_a($_SESSION['user'], 'Member') > 0) {
+		error_log('Found user in SESSION: '.$_SESSION['user']->getFullName());
 		return true;
 	}
 
