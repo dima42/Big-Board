@@ -109,7 +109,7 @@ function is_in_palindrome($pal_drive) {
 		return true;
 	}
 
-	// If root folder ID is in our DB, then we're good
+	// If there's a member whose googleID matches the current user's rootFolderId, then we're good.
 	$drive_user     = $pal_drive->about->get();
 	$user_google_id = $drive_user["rootFolderId"];
 	$user_full_name = $drive_user["user"]["displayName"];
@@ -119,6 +119,7 @@ function is_in_palindrome($pal_drive) {
 		->findOne();
 
 	if ($member) {
+		error_log("Member exists. Google ID: ".$user_google_id);
 		$_SESSION['user']    = $member;
 		$_SESSION['user_id'] = $member->getID();
 		return true;
@@ -128,9 +129,17 @@ function is_in_palindrome($pal_drive) {
 	$hunt_folder = new Google_DriveFile();
 	try {
 		$hunt_folder = $pal_drive->files->get("0B5NGrtZ8ORMrYzY0MzFjYWEtZDRkZC00ZDNhLTg2N2YtZDljM2FiNmJhMjg5");
+		error_log("userPermission.id: ".$hunt_folder["userPermission"]["id"]);
 		if ($hunt_folder["userPermission"]["id"] == "me") {
 			// TODO: set up both user and user_id session vars
-			$_SESSION["user_id"] = createUserDriveID($user_google_id, $user_full_name);
+			$member = new Member();
+			$member->setFullName($user_full_name);
+			$member->setGoogleId($user_google_id);
+			$member->setGoogleRefresh($_SESSION['refresh_token']);
+			$member->save();
+			$_SESSION["user"]    = $member;
+			$_SESSION["user_id"] = $member->getId();
+			return true;
 		}
 	} catch (Exception $e) {
 		error_log($e->getMessage());
