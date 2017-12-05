@@ -221,15 +221,6 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		));
 }
 
-function displayMeta($meta_id) {
-	//   // TODO: if not $meta, redirect to error page
-	//   // "This does not appear to be a metapuzzle. There are no puzzles that are part of it."
-
-	//   render('meta.twig', array(
-	//           'puzzle'  => $meta,
-	// ));
-}
-
 function editPuzzle($puzzle_id, $request) {
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
