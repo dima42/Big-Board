@@ -6,6 +6,8 @@ require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
+use Aptoma\Twig\Extension\MarkdownEngine;
+use Aptoma\Twig\Extension\MarkdownExtension;
 use DebugBar\StandardDebugBar;
 
 session_start();
@@ -35,9 +37,11 @@ function preprint($arr) {
 
 // TWIG
 Global $twig;
+$engine = new MarkdownEngine\MichelfMarkdownEngine();
 $loader = new Twig_Loader_Filesystem('templates');
 $twig   = new Twig_Environment($loader, array(
 	));
+$twig->addExtension(new MarkdownExtension($engine));
 
 // TWIG FILTERS
 function emojify($status) {
