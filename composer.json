@@ -12,7 +12,11 @@
     "maximebf/debugbar": "^1.14"
   },
   "require-dev": {
+    "deployer/deployer": "^6.0",
     "heroku/heroku-buildpack-php": "*"
+  },
+  "config": {
+    "bin-dir": "/usr/local/bin"
   },
   "autoload": {
     "classmap": ["generated-classes/"]
