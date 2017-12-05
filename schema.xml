@@ -25,6 +25,7 @@
             <reference local="member_id" foreign="id"/>
         </foreign-key>
         <behavior name="timestampable" />
+        <behavior name="archivable" />
     </table>
     <table name="member" phpName="Member">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>

@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \Note;
-use \NoteQuery;
+use \NoteArchive;
+use \NoteArchiveQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'note' table.
+ * This class defines the structure of the 'note_archive' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class NoteTableMap extends TableMap
+class NoteArchiveTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class NoteTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.NoteTableMap';
+    const CLASS_NAME = '.Map.NoteArchiveTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class NoteTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'note';
+    const TABLE_NAME = 'note_archive';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Note';
+    const OM_CLASS = '\\NoteArchive';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Note';
+    const CLASS_DEFAULT = 'NoteArchive';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -69,37 +69,42 @@ class NoteTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'note.id';
+    const COL_ID = 'note_archive.id';
 
     /**
      * the column name for the body field
      */
-    const COL_BODY = 'note.body';
+    const COL_BODY = 'note_archive.body';
 
     /**
      * the column name for the puzzle_id field
      */
-    const COL_PUZZLE_ID = 'note.puzzle_id';
+    const COL_PUZZLE_ID = 'note_archive.puzzle_id';
 
     /**
      * the column name for the member_id field
      */
-    const COL_MEMBER_ID = 'note.member_id';
+    const COL_MEMBER_ID = 'note_archive.member_id';
 
     /**
      * the column name for the created_at field
      */
-    const COL_CREATED_AT = 'note.created_at';
+    const COL_CREATED_AT = 'note_archive.created_at';
 
     /**
      * the column name for the updated_at field
      */
-    const COL_UPDATED_AT = 'note.updated_at';
+    const COL_UPDATED_AT = 'note_archive.updated_at';
+
+    /**
+     * the column name for the archived_at field
+     */
+    const COL_ARCHIVED_AT = 'note_archive.archived_at';
 
     /**
      * The default string format for model objects of the related table
@@ -113,11 +118,11 @@ class NoteTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Body', 'PuzzleId', 'MemberId', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'body', 'puzzleId', 'memberId', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(NoteTableMap::COL_ID, NoteTableMap::COL_BODY, NoteTableMap::COL_PUZZLE_ID, NoteTableMap::COL_MEMBER_ID, NoteTableMap::COL_CREATED_AT, NoteTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'body', 'puzzle_id', 'member_id', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id', 'Body', 'PuzzleId', 'MemberId', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'body', 'puzzleId', 'memberId', 'createdAt', 'updatedAt', 'archivedAt', ),
+        self::TYPE_COLNAME       => array(NoteArchiveTableMap::COL_ID, NoteArchiveTableMap::COL_BODY, NoteArchiveTableMap::COL_PUZZLE_ID, NoteArchiveTableMap::COL_MEMBER_ID, NoteArchiveTableMap::COL_CREATED_AT, NoteArchiveTableMap::COL_UPDATED_AT, NoteArchiveTableMap::COL_ARCHIVED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'body', 'puzzle_id', 'member_id', 'created_at', 'updated_at', 'archived_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -127,11 +132,11 @@ class NoteTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Body' => 1, 'PuzzleId' => 2, 'MemberId' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'body' => 1, 'puzzleId' => 2, 'memberId' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
-        self::TYPE_COLNAME       => array(NoteTableMap::COL_ID => 0, NoteTableMap::COL_BODY => 1, NoteTableMap::COL_PUZZLE_ID => 2, NoteTableMap::COL_MEMBER_ID => 3, NoteTableMap::COL_CREATED_AT => 4, NoteTableMap::COL_UPDATED_AT => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'body' => 1, 'puzzle_id' => 2, 'member_id' => 3, 'created_at' => 4, 'updated_at' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Body' => 1, 'PuzzleId' => 2, 'MemberId' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, 'ArchivedAt' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'body' => 1, 'puzzleId' => 2, 'memberId' => 3, 'createdAt' => 4, 'updatedAt' => 5, 'archivedAt' => 6, ),
+        self::TYPE_COLNAME       => array(NoteArchiveTableMap::COL_ID => 0, NoteArchiveTableMap::COL_BODY => 1, NoteArchiveTableMap::COL_PUZZLE_ID => 2, NoteArchiveTableMap::COL_MEMBER_ID => 3, NoteArchiveTableMap::COL_CREATED_AT => 4, NoteArchiveTableMap::COL_UPDATED_AT => 5, NoteArchiveTableMap::COL_ARCHIVED_AT => 6, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'body' => 1, 'puzzle_id' => 2, 'member_id' => 3, 'created_at' => 4, 'updated_at' => 5, 'archived_at' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -144,19 +149,20 @@ class NoteTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('note');
-        $this->setPhpName('Note');
+        $this->setName('note_archive');
+        $this->setPhpName('NoteArchive');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Note');
+        $this->setClassName('\\NoteArchive');
         $this->setPackage('');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('body', 'Body', 'VARCHAR', true, 255, null);
-        $this->addForeignKey('puzzle_id', 'PuzzleId', 'INTEGER', 'puzzle', 'id', true, null, null);
-        $this->addForeignKey('member_id', 'MemberId', 'INTEGER', 'member', 'id', true, null, null);
+        $this->addColumn('puzzle_id', 'PuzzleId', 'INTEGER', true, null, null);
+        $this->addColumn('member_id', 'MemberId', 'INTEGER', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('archived_at', 'ArchivedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -164,35 +170,7 @@ class NoteTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Puzzle', '\\Puzzle', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':puzzle_id',
-    1 => ':id',
-  ),
-), 'CASCADE', null, null, false);
-        $this->addRelation('Author', '\\Member', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':member_id',
-    1 => ':id',
-  ),
-), null, null, null, false);
     } // buildRelations()
-
-    /**
-     *
-     * Gets the list of behaviors registered for this table
-     *
-     * @return array Associative array (name => parameters) of behaviors
-     */
-    public function getBehaviors()
-    {
-        return array(
-            'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
-            'archivable' => array('archive_table' => '', 'archive_phpname' => '', 'archive_class' => '', 'log_archived_at' => 'true', 'archived_at_column' => 'archived_at', 'archive_on_insert' => 'false', 'archive_on_update' => 'false', 'archive_on_delete' => 'true', ),
-        );
-    } // getBehaviors()
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -251,7 +229,7 @@ class NoteTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? NoteTableMap::CLASS_DEFAULT : NoteTableMap::OM_CLASS;
+        return $withPrefix ? NoteArchiveTableMap::CLASS_DEFAULT : NoteArchiveTableMap::OM_CLASS;
     }
 
     /**
@@ -265,22 +243,22 @@ class NoteTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Note object, last column rank)
+     * @return array           (NoteArchive object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = NoteTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = NoteTableMap::getInstanceFromPool($key))) {
+        $key = NoteArchiveTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = NoteArchiveTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + NoteTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + NoteArchiveTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = NoteTableMap::OM_CLASS;
-            /** @var Note $obj */
+            $cls = NoteArchiveTableMap::OM_CLASS;
+            /** @var NoteArchive $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            NoteTableMap::addInstanceToPool($obj, $key);
+            NoteArchiveTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -303,18 +281,18 @@ class NoteTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = NoteTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = NoteTableMap::getInstanceFromPool($key))) {
+            $key = NoteArchiveTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = NoteArchiveTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Note $obj */
+                /** @var NoteArchive $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                NoteTableMap::addInstanceToPool($obj, $key);
+                NoteArchiveTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -335,12 +313,13 @@ class NoteTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(NoteTableMap::COL_ID);
-            $criteria->addSelectColumn(NoteTableMap::COL_BODY);
-            $criteria->addSelectColumn(NoteTableMap::COL_PUZZLE_ID);
-            $criteria->addSelectColumn(NoteTableMap::COL_MEMBER_ID);
-            $criteria->addSelectColumn(NoteTableMap::COL_CREATED_AT);
-            $criteria->addSelectColumn(NoteTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(NoteArchiveTableMap::COL_ID);
+            $criteria->addSelectColumn(NoteArchiveTableMap::COL_BODY);
+            $criteria->addSelectColumn(NoteArchiveTableMap::COL_PUZZLE_ID);
+            $criteria->addSelectColumn(NoteArchiveTableMap::COL_MEMBER_ID);
+            $criteria->addSelectColumn(NoteArchiveTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(NoteArchiveTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(NoteArchiveTableMap::COL_ARCHIVED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.body');
@@ -348,6 +327,7 @@ class NoteTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.member_id');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
+            $criteria->addSelectColumn($alias . '.archived_at');
         }
     }
 
@@ -360,7 +340,7 @@ class NoteTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(NoteTableMap::DATABASE_NAME)->getTable(NoteTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(NoteArchiveTableMap::DATABASE_NAME)->getTable(NoteArchiveTableMap::TABLE_NAME);
     }
 
     /**
@@ -368,16 +348,16 @@ class NoteTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(NoteTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(NoteTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new NoteTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(NoteArchiveTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(NoteArchiveTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new NoteArchiveTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Note or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a NoteArchive or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Note object or primary key or array of primary keys
+     * @param mixed               $values Criteria or NoteArchive object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -388,27 +368,27 @@ class NoteTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(NoteTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(NoteArchiveTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Note) { // it's a model object
+        } elseif ($values instanceof \NoteArchive) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(NoteTableMap::DATABASE_NAME);
-            $criteria->add(NoteTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(NoteArchiveTableMap::DATABASE_NAME);
+            $criteria->add(NoteArchiveTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = NoteQuery::create()->mergeWith($criteria);
+        $query = NoteArchiveQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            NoteTableMap::clearInstancePool();
+            NoteArchiveTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                NoteTableMap::removeInstanceFromPool($singleval);
+                NoteArchiveTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -416,20 +396,20 @@ class NoteTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the note table.
+     * Deletes all rows from the note_archive table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return NoteQuery::create()->doDeleteAll($con);
+        return NoteArchiveQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Note or Criteria object.
+     * Performs an INSERT on the database, given a NoteArchive or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Note object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or NoteArchive object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -438,22 +418,18 @@ class NoteTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(NoteTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(NoteArchiveTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Note object
-        }
-
-        if ($criteria->containsKey(NoteTableMap::COL_ID) && $criteria->keyContainsValue(NoteTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.NoteTableMap::COL_ID.')');
+            $criteria = $criteria->buildCriteria(); // build Criteria from NoteArchive object
         }
 
 
         // Set the correct dbName
-        $query = NoteQuery::create()->mergeWith($criteria);
+        $query = NoteArchiveQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -462,7 +438,7 @@ class NoteTableMap extends TableMap
         });
     }
 
-} // NoteTableMap
+} // NoteArchiveTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-NoteTableMap::buildTableMap();
+NoteArchiveTableMap::buildTableMap();

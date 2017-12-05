@@ -43,7 +43,7 @@ function show_content() {
 					return joinPuzzle($request->id);
 				});
 			$klein->respond('POST', '/delete-note/[:note_id]?', function ($request) {
-					return deleteNote($request->note_id, $request->id);
+					return archiveNote($request->note_id, $request->id);
 				});
 		});
 
@@ -323,7 +323,7 @@ function joinPuzzle($puzzle_id) {
 	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 
-function deleteNote($note_id, $puzzle_id) {
+function archiveNote($note_id, $puzzle_id) {
 	// TODO: soft delete
 	$note = NoteQuery::create()
 		->filterByID($note_id)

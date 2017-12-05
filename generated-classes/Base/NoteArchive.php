@@ -2,18 +2,11 @@
 
 namespace Base;
 
-use \Member as ChildMember;
-use \MemberQuery as ChildMemberQuery;
-use \Note as ChildNote;
-use \NoteArchive as ChildNoteArchive;
 use \NoteArchiveQuery as ChildNoteArchiveQuery;
-use \NoteQuery as ChildNoteQuery;
-use \Puzzle as ChildPuzzle;
-use \PuzzleQuery as ChildPuzzleQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Map\NoteTableMap;
+use Map\NoteArchiveTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -28,18 +21,18 @@ use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'note' table.
+ * Base class that represents a row from the 'note_archive' table.
  *
  *
  *
  * @package    propel.generator..Base
  */
-abstract class Note implements ActiveRecordInterface
+abstract class NoteArchive implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\NoteTableMap';
+    const TABLE_MAP = '\\Map\\NoteArchiveTableMap';
 
 
     /**
@@ -111,14 +104,11 @@ abstract class Note implements ActiveRecordInterface
     protected $updated_at;
 
     /**
-     * @var        ChildPuzzle
+     * The value for the archived_at field.
+     *
+     * @var        DateTime
      */
-    protected $aPuzzle;
-
-    /**
-     * @var        ChildMember
-     */
-    protected $aAuthor;
+    protected $archived_at;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -128,11 +118,8 @@ abstract class Note implements ActiveRecordInterface
      */
     protected $alreadyInSave = false;
 
-    // archivable behavior
-    protected $archiveOnDelete = true;
-
     /**
-     * Initializes internal state of Base\Note object.
+     * Initializes internal state of Base\NoteArchive object.
      */
     public function __construct()
     {
@@ -227,9 +214,9 @@ abstract class Note implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Note</code> instance.  If
-     * <code>obj</code> is an instance of <code>Note</code>, delegates to
-     * <code>equals(Note)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>NoteArchive</code> instance.  If
+     * <code>obj</code> is an instance of <code>NoteArchive</code>, delegates to
+     * <code>equals(NoteArchive)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -295,7 +282,7 @@ abstract class Note implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Note The current object, for fluid interface
+     * @return $this|NoteArchive The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -437,10 +424,30 @@ abstract class Note implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [archived_at] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getArchivedAt($format = NULL)
+    {
+        if ($format === null) {
+            return $this->archived_at;
+        } else {
+            return $this->archived_at instanceof \DateTimeInterface ? $this->archived_at->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return $this|\Note The current object (for fluent API support)
+     * @return $this|\NoteArchive The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -450,7 +457,7 @@ abstract class Note implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[NoteTableMap::COL_ID] = true;
+            $this->modifiedColumns[NoteArchiveTableMap::COL_ID] = true;
         }
 
         return $this;
@@ -460,7 +467,7 @@ abstract class Note implements ActiveRecordInterface
      * Set the value of [body] column.
      *
      * @param string $v new value
-     * @return $this|\Note The current object (for fluent API support)
+     * @return $this|\NoteArchive The current object (for fluent API support)
      */
     public function setBody($v)
     {
@@ -470,7 +477,7 @@ abstract class Note implements ActiveRecordInterface
 
         if ($this->body !== $v) {
             $this->body = $v;
-            $this->modifiedColumns[NoteTableMap::COL_BODY] = true;
+            $this->modifiedColumns[NoteArchiveTableMap::COL_BODY] = true;
         }
 
         return $this;
@@ -480,7 +487,7 @@ abstract class Note implements ActiveRecordInterface
      * Set the value of [puzzle_id] column.
      *
      * @param int $v new value
-     * @return $this|\Note The current object (for fluent API support)
+     * @return $this|\NoteArchive The current object (for fluent API support)
      */
     public function setPuzzleId($v)
     {
@@ -490,11 +497,7 @@ abstract class Note implements ActiveRecordInterface
 
         if ($this->puzzle_id !== $v) {
             $this->puzzle_id = $v;
-            $this->modifiedColumns[NoteTableMap::COL_PUZZLE_ID] = true;
-        }
-
-        if ($this->aPuzzle !== null && $this->aPuzzle->getId() !== $v) {
-            $this->aPuzzle = null;
+            $this->modifiedColumns[NoteArchiveTableMap::COL_PUZZLE_ID] = true;
         }
 
         return $this;
@@ -504,7 +507,7 @@ abstract class Note implements ActiveRecordInterface
      * Set the value of [member_id] column.
      *
      * @param int $v new value
-     * @return $this|\Note The current object (for fluent API support)
+     * @return $this|\NoteArchive The current object (for fluent API support)
      */
     public function setMemberId($v)
     {
@@ -514,11 +517,7 @@ abstract class Note implements ActiveRecordInterface
 
         if ($this->member_id !== $v) {
             $this->member_id = $v;
-            $this->modifiedColumns[NoteTableMap::COL_MEMBER_ID] = true;
-        }
-
-        if ($this->aAuthor !== null && $this->aAuthor->getId() !== $v) {
-            $this->aAuthor = null;
+            $this->modifiedColumns[NoteArchiveTableMap::COL_MEMBER_ID] = true;
         }
 
         return $this;
@@ -529,7 +528,7 @@ abstract class Note implements ActiveRecordInterface
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Note The current object (for fluent API support)
+     * @return $this|\NoteArchive The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -537,7 +536,7 @@ abstract class Note implements ActiveRecordInterface
         if ($this->created_at !== null || $dt !== null) {
             if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
                 $this->created_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[NoteTableMap::COL_CREATED_AT] = true;
+                $this->modifiedColumns[NoteArchiveTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
@@ -549,7 +548,7 @@ abstract class Note implements ActiveRecordInterface
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Note The current object (for fluent API support)
+     * @return $this|\NoteArchive The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
     {
@@ -557,12 +556,32 @@ abstract class Note implements ActiveRecordInterface
         if ($this->updated_at !== null || $dt !== null) {
             if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
                 $this->updated_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[NoteTableMap::COL_UPDATED_AT] = true;
+                $this->modifiedColumns[NoteArchiveTableMap::COL_UPDATED_AT] = true;
             }
         } // if either are not null
 
         return $this;
     } // setUpdatedAt()
+
+    /**
+     * Sets the value of [archived_at] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\NoteArchive The current object (for fluent API support)
+     */
+    public function setArchivedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->archived_at !== null || $dt !== null) {
+            if ($this->archived_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->archived_at->format("Y-m-d H:i:s.u")) {
+                $this->archived_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[NoteArchiveTableMap::COL_ARCHIVED_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setArchivedAt()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -600,29 +619,35 @@ abstract class Note implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : NoteTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : NoteArchiveTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : NoteTableMap::translateFieldName('Body', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : NoteArchiveTableMap::translateFieldName('Body', TableMap::TYPE_PHPNAME, $indexType)];
             $this->body = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : NoteTableMap::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : NoteArchiveTableMap::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->puzzle_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : NoteTableMap::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : NoteArchiveTableMap::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->member_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : NoteTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : NoteArchiveTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : NoteTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : NoteArchiveTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : NoteArchiveTableMap::translateFieldName('ArchivedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->archived_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -631,10 +656,10 @@ abstract class Note implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = NoteTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = NoteArchiveTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Note'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\NoteArchive'), 0, $e);
         }
     }
 
@@ -653,12 +678,6 @@ abstract class Note implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aPuzzle !== null && $this->puzzle_id !== $this->aPuzzle->getId()) {
-            $this->aPuzzle = null;
-        }
-        if ($this->aAuthor !== null && $this->member_id !== $this->aAuthor->getId()) {
-            $this->aAuthor = null;
-        }
     } // ensureConsistency
 
     /**
@@ -682,13 +701,13 @@ abstract class Note implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(NoteTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(NoteArchiveTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildNoteQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildNoteArchiveQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -698,8 +717,6 @@ abstract class Note implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aPuzzle = null;
-            $this->aAuthor = null;
         } // if (deep)
     }
 
@@ -709,8 +726,8 @@ abstract class Note implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Note::setDeleted()
-     * @see Note::isDeleted()
+     * @see NoteArchive::setDeleted()
+     * @see NoteArchive::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -719,23 +736,13 @@ abstract class Note implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(NoteTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(NoteArchiveTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildNoteQuery::create()
+            $deleteQuery = ChildNoteArchiveQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
-            // archivable behavior
-            if ($ret) {
-                if ($this->archiveOnDelete) {
-                    // do nothing yet. The object will be archived later when calling ChildNoteQuery::delete().
-                } else {
-                    $deleteQuery->setArchiveOnDelete(false);
-                    $this->archiveOnDelete = true;
-                }
-            }
-
             if ($ret) {
                 $deleteQuery->delete($con);
                 $this->postDelete($con);
@@ -768,7 +775,7 @@ abstract class Note implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(NoteTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(NoteArchiveTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -776,20 +783,8 @@ abstract class Note implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
-                // timestampable behavior
-
-                if (!$this->isColumnModified(NoteTableMap::COL_CREATED_AT)) {
-                    $this->setCreatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
-                }
-                if (!$this->isColumnModified(NoteTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
-                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
-                // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(NoteTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
-                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -799,7 +794,7 @@ abstract class Note implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                NoteTableMap::addInstanceToPool($this);
+                NoteArchiveTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -824,25 +819,6 @@ abstract class Note implements ActiveRecordInterface
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
-
-            // We call the save method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aPuzzle !== null) {
-                if ($this->aPuzzle->isModified() || $this->aPuzzle->isNew()) {
-                    $affectedRows += $this->aPuzzle->save($con);
-                }
-                $this->setPuzzle($this->aPuzzle);
-            }
-
-            if ($this->aAuthor !== null) {
-                if ($this->aAuthor->isModified() || $this->aAuthor->isNew()) {
-                    $affectedRows += $this->aAuthor->save($con);
-                }
-                $this->setAuthor($this->aAuthor);
-            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -875,33 +851,32 @@ abstract class Note implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[NoteTableMap::COL_ID] = true;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . NoteTableMap::COL_ID . ')');
-        }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(NoteTableMap::COL_ID)) {
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(NoteTableMap::COL_BODY)) {
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_BODY)) {
             $modifiedColumns[':p' . $index++]  = 'body';
         }
-        if ($this->isColumnModified(NoteTableMap::COL_PUZZLE_ID)) {
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_PUZZLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'puzzle_id';
         }
-        if ($this->isColumnModified(NoteTableMap::COL_MEMBER_ID)) {
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_MEMBER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'member_id';
         }
-        if ($this->isColumnModified(NoteTableMap::COL_CREATED_AT)) {
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
         }
-        if ($this->isColumnModified(NoteTableMap::COL_UPDATED_AT)) {
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'updated_at';
+        }
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_ARCHIVED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'archived_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO note (%s) VALUES (%s)',
+            'INSERT INTO note_archive (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -928,6 +903,9 @@ abstract class Note implements ActiveRecordInterface
                     case 'updated_at':
                         $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
+                    case 'archived_at':
+                        $stmt->bindValue($identifier, $this->archived_at ? $this->archived_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
                 }
             }
             $stmt->execute();
@@ -935,13 +913,6 @@ abstract class Note implements ActiveRecordInterface
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), 0, $e);
         }
-
-        try {
-            $pk = $con->lastInsertId();
-        } catch (Exception $e) {
-            throw new PropelException('Unable to get autoincrement id.', 0, $e);
-        }
-        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -974,7 +945,7 @@ abstract class Note implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = NoteTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = NoteArchiveTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1008,6 +979,9 @@ abstract class Note implements ActiveRecordInterface
             case 5:
                 return $this->getUpdatedAt();
                 break;
+            case 6:
+                return $this->getArchivedAt();
+                break;
             default:
                 return null;
                 break;
@@ -1025,18 +999,17 @@ abstract class Note implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
     {
 
-        if (isset($alreadyDumpedObjects['Note'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['NoteArchive'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Note'][$this->hashCode()] = true;
-        $keys = NoteTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['NoteArchive'][$this->hashCode()] = true;
+        $keys = NoteArchiveTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getBody(),
@@ -1044,6 +1017,7 @@ abstract class Note implements ActiveRecordInterface
             $keys[3] => $this->getMemberId(),
             $keys[4] => $this->getCreatedAt(),
             $keys[5] => $this->getUpdatedAt(),
+            $keys[6] => $this->getArchivedAt(),
         );
         if ($result[$keys[4]] instanceof \DateTimeInterface) {
             $result[$keys[4]] = $result[$keys[4]]->format('c');
@@ -1053,43 +1027,15 @@ abstract class Note implements ActiveRecordInterface
             $result[$keys[5]] = $result[$keys[5]]->format('c');
         }
 
+        if ($result[$keys[6]] instanceof \DateTimeInterface) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
-        if ($includeForeignObjects) {
-            if (null !== $this->aPuzzle) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'puzzle';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'puzzle';
-                        break;
-                    default:
-                        $key = 'Puzzle';
-                }
-
-                $result[$key] = $this->aPuzzle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aAuthor) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'member';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'member';
-                        break;
-                    default:
-                        $key = 'Author';
-                }
-
-                $result[$key] = $this->aAuthor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-        }
 
         return $result;
     }
@@ -1103,11 +1049,11 @@ abstract class Note implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Note
+     * @return $this|\NoteArchive
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = NoteTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = NoteArchiveTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1118,7 +1064,7 @@ abstract class Note implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Note
+     * @return $this|\NoteArchive
      */
     public function setByPosition($pos, $value)
     {
@@ -1140,6 +1086,9 @@ abstract class Note implements ActiveRecordInterface
                 break;
             case 5:
                 $this->setUpdatedAt($value);
+                break;
+            case 6:
+                $this->setArchivedAt($value);
                 break;
         } // switch()
 
@@ -1165,7 +1114,7 @@ abstract class Note implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = NoteTableMap::getFieldNames($keyType);
+        $keys = NoteArchiveTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
@@ -1184,6 +1133,9 @@ abstract class Note implements ActiveRecordInterface
         }
         if (array_key_exists($keys[5], $arr)) {
             $this->setUpdatedAt($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setArchivedAt($arr[$keys[6]]);
         }
     }
 
@@ -1204,7 +1156,7 @@ abstract class Note implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Note The current object, for fluid interface
+     * @return $this|\NoteArchive The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1224,25 +1176,28 @@ abstract class Note implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(NoteTableMap::DATABASE_NAME);
+        $criteria = new Criteria(NoteArchiveTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(NoteTableMap::COL_ID)) {
-            $criteria->add(NoteTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_ID)) {
+            $criteria->add(NoteArchiveTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(NoteTableMap::COL_BODY)) {
-            $criteria->add(NoteTableMap::COL_BODY, $this->body);
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_BODY)) {
+            $criteria->add(NoteArchiveTableMap::COL_BODY, $this->body);
         }
-        if ($this->isColumnModified(NoteTableMap::COL_PUZZLE_ID)) {
-            $criteria->add(NoteTableMap::COL_PUZZLE_ID, $this->puzzle_id);
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_PUZZLE_ID)) {
+            $criteria->add(NoteArchiveTableMap::COL_PUZZLE_ID, $this->puzzle_id);
         }
-        if ($this->isColumnModified(NoteTableMap::COL_MEMBER_ID)) {
-            $criteria->add(NoteTableMap::COL_MEMBER_ID, $this->member_id);
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_MEMBER_ID)) {
+            $criteria->add(NoteArchiveTableMap::COL_MEMBER_ID, $this->member_id);
         }
-        if ($this->isColumnModified(NoteTableMap::COL_CREATED_AT)) {
-            $criteria->add(NoteTableMap::COL_CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_CREATED_AT)) {
+            $criteria->add(NoteArchiveTableMap::COL_CREATED_AT, $this->created_at);
         }
-        if ($this->isColumnModified(NoteTableMap::COL_UPDATED_AT)) {
-            $criteria->add(NoteTableMap::COL_UPDATED_AT, $this->updated_at);
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_UPDATED_AT)) {
+            $criteria->add(NoteArchiveTableMap::COL_UPDATED_AT, $this->updated_at);
+        }
+        if ($this->isColumnModified(NoteArchiveTableMap::COL_ARCHIVED_AT)) {
+            $criteria->add(NoteArchiveTableMap::COL_ARCHIVED_AT, $this->archived_at);
         }
 
         return $criteria;
@@ -1260,8 +1215,8 @@ abstract class Note implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildNoteQuery::create();
-        $criteria->add(NoteTableMap::COL_ID, $this->id);
+        $criteria = ChildNoteArchiveQuery::create();
+        $criteria->add(NoteArchiveTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1323,21 +1278,22 @@ abstract class Note implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Note (or compatible) type.
+     * @param      object $copyObj An object of \NoteArchive (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setId($this->getId());
         $copyObj->setBody($this->getBody());
         $copyObj->setPuzzleId($this->getPuzzleId());
         $copyObj->setMemberId($this->getMemberId());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+        $copyObj->setArchivedAt($this->getArchivedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1350,7 +1306,7 @@ abstract class Note implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Note Clone of current object.
+     * @return \NoteArchive Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1364,126 +1320,19 @@ abstract class Note implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildPuzzle object.
-     *
-     * @param  ChildPuzzle $v
-     * @return $this|\Note The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setPuzzle(ChildPuzzle $v = null)
-    {
-        if ($v === null) {
-            $this->setPuzzleId(NULL);
-        } else {
-            $this->setPuzzleId($v->getId());
-        }
-
-        $this->aPuzzle = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildPuzzle object, it will not be re-added.
-        if ($v !== null) {
-            $v->addNote($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildPuzzle object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildPuzzle The associated ChildPuzzle object.
-     * @throws PropelException
-     */
-    public function getPuzzle(ConnectionInterface $con = null)
-    {
-        if ($this->aPuzzle === null && ($this->puzzle_id != 0)) {
-            $this->aPuzzle = ChildPuzzleQuery::create()->findPk($this->puzzle_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aPuzzle->addNotes($this);
-             */
-        }
-
-        return $this->aPuzzle;
-    }
-
-    /**
-     * Declares an association between this object and a ChildMember object.
-     *
-     * @param  ChildMember $v
-     * @return $this|\Note The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setAuthor(ChildMember $v = null)
-    {
-        if ($v === null) {
-            $this->setMemberId(NULL);
-        } else {
-            $this->setMemberId($v->getId());
-        }
-
-        $this->aAuthor = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildMember object, it will not be re-added.
-        if ($v !== null) {
-            $v->addNote($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildMember object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildMember The associated ChildMember object.
-     * @throws PropelException
-     */
-    public function getAuthor(ConnectionInterface $con = null)
-    {
-        if ($this->aAuthor === null && ($this->member_id != 0)) {
-            $this->aAuthor = ChildMemberQuery::create()->findPk($this->member_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aAuthor->addNotes($this);
-             */
-        }
-
-        return $this->aAuthor;
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
      */
     public function clear()
     {
-        if (null !== $this->aPuzzle) {
-            $this->aPuzzle->removeNote($this);
-        }
-        if (null !== $this->aAuthor) {
-            $this->aAuthor->removeNote($this);
-        }
         $this->id = null;
         $this->body = null;
         $this->puzzle_id = null;
         $this->member_id = null;
         $this->created_at = null;
         $this->updated_at = null;
+        $this->archived_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1504,8 +1353,6 @@ abstract class Note implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aPuzzle = null;
-        $this->aAuthor = null;
     }
 
     /**
@@ -1515,128 +1362,7 @@ abstract class Note implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(NoteTableMap::DEFAULT_STRING_FORMAT);
-    }
-
-    // timestampable behavior
-
-    /**
-     * Mark the current object so that the update date doesn't get updated during next save
-     *
-     * @return     $this|ChildNote The current object (for fluent API support)
-     */
-    public function keepUpdateDateUnchanged()
-    {
-        $this->modifiedColumns[NoteTableMap::COL_UPDATED_AT] = true;
-
-        return $this;
-    }
-
-    // archivable behavior
-
-    /**
-     * Get an archived version of the current object.
-     *
-     * @param ConnectionInterface $con Optional connection object
-     *
-     * @return     ChildNoteArchive An archive object, or null if the current object was never archived
-     */
-    public function getArchive(ConnectionInterface $con = null)
-    {
-        if ($this->isNew()) {
-            return null;
-        }
-        $archive = ChildNoteArchiveQuery::create()
-            ->filterByPrimaryKey($this->getPrimaryKey())
-            ->findOne($con);
-
-        return $archive;
-    }
-    /**
-     * Copy the data of the current object into a $archiveTablePhpName archive object.
-     * The archived object is then saved.
-     * If the current object has already been archived, the archived object
-     * is updated and not duplicated.
-     *
-     * @param ConnectionInterface $con Optional connection object
-     *
-     * @throws PropelException If the object is new
-     *
-     * @return     ChildNoteArchive The archive object based on this object
-     */
-    public function archive(ConnectionInterface $con = null)
-    {
-        if ($this->isNew()) {
-            throw new PropelException('New objects cannot be archived. You must save the current object before calling archive().');
-        }
-        $archive = $this->getArchive($con);
-        if (!$archive) {
-            $archive = new ChildNoteArchive();
-            $archive->setPrimaryKey($this->getPrimaryKey());
-        }
-        $this->copyInto($archive, $deepCopy = false, $makeNew = false);
-        $archive->setArchivedAt(time());
-        $archive->save($con);
-
-        return $archive;
-    }
-
-    /**
-     * Revert the the current object to the state it had when it was last archived.
-     * The object must be saved afterwards if the changes must persist.
-     *
-     * @param ConnectionInterface $con Optional connection object
-     *
-     * @throws PropelException If the object has no corresponding archive.
-     *
-     * @return $this|ChildNote The current object (for fluent API support)
-     */
-    public function restoreFromArchive(ConnectionInterface $con = null)
-    {
-        $archive = $this->getArchive($con);
-        if (!$archive) {
-            throw new PropelException('The current object has never been archived and cannot be restored');
-        }
-        $this->populateFromArchive($archive);
-
-        return $this;
-    }
-
-    /**
-     * Populates the the current object based on a $archiveTablePhpName archive object.
-     *
-     * @param      ChildNoteArchive $archive An archived object based on the same class
-      * @param      Boolean $populateAutoIncrementPrimaryKeys
-     *               If true, autoincrement columns are copied from the archive object.
-     *               If false, autoincrement columns are left intact.
-      *
-     * @return     ChildNote The current object (for fluent API support)
-     */
-    public function populateFromArchive($archive, $populateAutoIncrementPrimaryKeys = false) {
-        if ($populateAutoIncrementPrimaryKeys) {
-            $this->setId($archive->getId());
-        }
-        $this->setBody($archive->getBody());
-        $this->setPuzzleId($archive->getPuzzleId());
-        $this->setMemberId($archive->getMemberId());
-        $this->setCreatedAt($archive->getCreatedAt());
-        $this->setUpdatedAt($archive->getUpdatedAt());
-
-        return $this;
-    }
-
-    /**
-     * Removes the object from the database without archiving it.
-     *
-     * @param ConnectionInterface $con Optional connection object
-     *
-     * @return $this|ChildNote The current object (for fluent API support)
-     */
-    public function deleteWithoutArchive(ConnectionInterface $con = null)
-    {
-        $this->archiveOnDelete = false;
-
-        return $this->delete($con);
+        return (string) $this->exportTo(NoteArchiveTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**
