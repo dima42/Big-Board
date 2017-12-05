@@ -296,13 +296,13 @@ function changePuzzleStatus($puzzle_id, $request) {
 }
 
 function addNote($puzzle_id, $request) {
-	$noteText = strtoupper($request->body);
+	$noteText = $request->body;
 
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
 		->findOne();
 
-	if ($noteText != "") {
+	if (strtoupper($noteText) != "") {
 		$author = $_SESSION['user'];
 
 		$note = new Note();
