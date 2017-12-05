@@ -86,7 +86,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery rightJoinWithPuzzleChild() Adds a RIGHT JOIN clause and with to the query using the PuzzleChild relation
  * @method     ChildPuzzleQuery innerJoinWithPuzzleChild() Adds a INNER JOIN clause and with to the query using the PuzzleChild relation
  *
- * @method     \NoteQuery|\PuzzleMemberQuery|\PuzzlePuzzleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildPuzzleQuery leftJoinNews($relationAlias = null) Adds a LEFT JOIN clause to the query using the News relation
+ * @method     ChildPuzzleQuery rightJoinNews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the News relation
+ * @method     ChildPuzzleQuery innerJoinNews($relationAlias = null) Adds a INNER JOIN clause to the query using the News relation
+ *
+ * @method     ChildPuzzleQuery joinWithNews($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the News relation
+ *
+ * @method     ChildPuzzleQuery leftJoinWithNews() Adds a LEFT JOIN clause and with to the query using the News relation
+ * @method     ChildPuzzleQuery rightJoinWithNews() Adds a RIGHT JOIN clause and with to the query using the News relation
+ * @method     ChildPuzzleQuery innerJoinWithNews() Adds a INNER JOIN clause and with to the query using the News relation
+ *
+ * @method     \NoteQuery|\PuzzleMemberQuery|\PuzzlePuzzleQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPuzzle findOne(ConnectionInterface $con = null) Return the first ChildPuzzle matching the query
  * @method     ChildPuzzle findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPuzzle matching the query, or a new ChildPuzzle object populated from the query conditions when no match is found
@@ -815,6 +825,79 @@ abstract class PuzzleQuery extends ModelCriteria
         return $this
             ->joinPuzzleChild($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'PuzzleChild', '\PuzzlePuzzleQuery');
+    }
+
+    /**
+     * Filter the query by a related \News object
+     *
+     * @param \News|ObjectCollection $news the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterByNews($news, $comparison = null)
+    {
+        if ($news instanceof \News) {
+            return $this
+                ->addUsingAlias(PuzzleTableMap::COL_ID, $news->getPuzzleId(), $comparison);
+        } elseif ($news instanceof ObjectCollection) {
+            return $this
+                ->useNewsQuery()
+                ->filterByPrimaryKeys($news->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByNews() only accepts arguments of type \News or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the News relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function joinNews($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('News');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'News');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the News relation News object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \NewsQuery A secondary query class using the current class as primary query
+     */
+    public function useNewsQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinNews($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'News', '\NewsQuery');
     }
 
     /**

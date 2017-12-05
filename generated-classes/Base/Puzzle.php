@@ -4,6 +4,8 @@ namespace Base;
 
 use \Member as ChildMember;
 use \MemberQuery as ChildMemberQuery;
+use \News as ChildNews;
+use \NewsQuery as ChildNewsQuery;
 use \Note as ChildNote;
 use \NoteQuery as ChildNoteQuery;
 use \Puzzle as ChildPuzzle;
@@ -14,6 +16,7 @@ use \PuzzlePuzzleQuery as ChildPuzzlePuzzleQuery;
 use \PuzzleQuery as ChildPuzzleQuery;
 use \Exception;
 use \PDO;
+use Map\NewsTableMap;
 use Map\NoteTableMap;
 use Map\PuzzleMemberTableMap;
 use Map\PuzzlePuzzleTableMap;
@@ -153,6 +156,12 @@ abstract class Puzzle implements ActiveRecordInterface
     protected $collPuzzlechildrenPartial;
 
     /**
+     * @var        ObjectCollection|ChildNews[] Collection to store aggregation of ChildNews objects.
+     */
+    protected $collNews;
+    protected $collNewsPartial;
+
+    /**
      * @var        ObjectCollection|ChildMember[] Cross Collection to store aggregation of ChildMember objects.
      */
     protected $collMembers;
@@ -231,6 +240,12 @@ abstract class Puzzle implements ActiveRecordInterface
      * @var ObjectCollection|ChildPuzzlePuzzle[]
      */
     protected $puzzlechildrenScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildNews[]
+     */
+    protected $newsScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Puzzle object.
@@ -833,6 +848,8 @@ abstract class Puzzle implements ActiveRecordInterface
 
             $this->collPuzzlechildren = null;
 
+            $this->collNews = null;
+
             $this->collMembers = null;
             $this->collParents = null;
             $this->collChildren = null;
@@ -1099,6 +1116,24 @@ abstract class Puzzle implements ActiveRecordInterface
 
             if ($this->collPuzzlechildren !== null) {
                 foreach ($this->collPuzzlechildren as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->newsScheduledForDeletion !== null) {
+                if (!$this->newsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->newsScheduledForDeletion as $news) {
+                        // need to save related object because we set the relation to null
+                        $news->save($con);
+                    }
+                    $this->newsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collNews !== null) {
+                foreach ($this->collNews as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1380,6 +1415,21 @@ abstract class Puzzle implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->collPuzzlechildren->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collNews) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'news';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'news';
+                        break;
+                    default:
+                        $key = 'News';
+                }
+
+                $result[$key] = $this->collNews->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1677,6 +1727,12 @@ abstract class Puzzle implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getNews() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addNews($relObj->copy($deepCopy));
+                }
+            }
+
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -1732,6 +1788,10 @@ abstract class Puzzle implements ActiveRecordInterface
         }
         if ('PuzzleChild' == $relationName) {
             $this->initPuzzlechildren();
+            return;
+        }
+        if ('News' == $relationName) {
+            $this->initNews();
             return;
         }
     }
@@ -2696,6 +2756,256 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collNews collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addNews()
+     */
+    public function clearNews()
+    {
+        $this->collNews = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collNews collection loaded partially.
+     */
+    public function resetPartialNews($v = true)
+    {
+        $this->collNewsPartial = $v;
+    }
+
+    /**
+     * Initializes the collNews collection.
+     *
+     * By default this just sets the collNews collection to an empty array (like clearcollNews());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initNews($overrideExisting = true)
+    {
+        if (null !== $this->collNews && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = NewsTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collNews = new $collectionClassName;
+        $this->collNews->setModel('\News');
+    }
+
+    /**
+     * Gets an array of ChildNews objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPuzzle is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildNews[] List of ChildNews objects
+     * @throws PropelException
+     */
+    public function getNews(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collNewsPartial && !$this->isNew();
+        if (null === $this->collNews || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collNews) {
+                // return empty collection
+                $this->initNews();
+            } else {
+                $collNews = ChildNewsQuery::create(null, $criteria)
+                    ->filterByPuzzle($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collNewsPartial && count($collNews)) {
+                        $this->initNews(false);
+
+                        foreach ($collNews as $obj) {
+                            if (false == $this->collNews->contains($obj)) {
+                                $this->collNews->append($obj);
+                            }
+                        }
+
+                        $this->collNewsPartial = true;
+                    }
+
+                    return $collNews;
+                }
+
+                if ($partial && $this->collNews) {
+                    foreach ($this->collNews as $obj) {
+                        if ($obj->isNew()) {
+                            $collNews[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collNews = $collNews;
+                $this->collNewsPartial = false;
+            }
+        }
+
+        return $this->collNews;
+    }
+
+    /**
+     * Sets a collection of ChildNews objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $news A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPuzzle The current object (for fluent API support)
+     */
+    public function setNews(Collection $news, ConnectionInterface $con = null)
+    {
+        /** @var ChildNews[] $newsToDelete */
+        $newsToDelete = $this->getNews(new Criteria(), $con)->diff($news);
+
+
+        $this->newsScheduledForDeletion = $newsToDelete;
+
+        foreach ($newsToDelete as $newsRemoved) {
+            $newsRemoved->setPuzzle(null);
+        }
+
+        $this->collNews = null;
+        foreach ($news as $news) {
+            $this->addNews($news);
+        }
+
+        $this->collNews = $news;
+        $this->collNewsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related News objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related News objects.
+     * @throws PropelException
+     */
+    public function countNews(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collNewsPartial && !$this->isNew();
+        if (null === $this->collNews || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collNews) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getNews());
+            }
+
+            $query = ChildNewsQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPuzzle($this)
+                ->count($con);
+        }
+
+        return count($this->collNews);
+    }
+
+    /**
+     * Method called to associate a ChildNews object to this object
+     * through the ChildNews foreign key attribute.
+     *
+     * @param  ChildNews $l ChildNews
+     * @return $this|\Puzzle The current object (for fluent API support)
+     */
+    public function addNews(ChildNews $l)
+    {
+        if ($this->collNews === null) {
+            $this->initNews();
+            $this->collNewsPartial = true;
+        }
+
+        if (!$this->collNews->contains($l)) {
+            $this->doAddNews($l);
+
+            if ($this->newsScheduledForDeletion and $this->newsScheduledForDeletion->contains($l)) {
+                $this->newsScheduledForDeletion->remove($this->newsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildNews $news The ChildNews object to add.
+     */
+    protected function doAddNews(ChildNews $news)
+    {
+        $this->collNews[]= $news;
+        $news->setPuzzle($this);
+    }
+
+    /**
+     * @param  ChildNews $news The ChildNews object to remove.
+     * @return $this|ChildPuzzle The current object (for fluent API support)
+     */
+    public function removeNews(ChildNews $news)
+    {
+        if ($this->getNews()->contains($news)) {
+            $pos = $this->collNews->search($news);
+            $this->collNews->remove($pos);
+            if (null === $this->newsScheduledForDeletion) {
+                $this->newsScheduledForDeletion = clone $this->collNews;
+                $this->newsScheduledForDeletion->clear();
+            }
+            $this->newsScheduledForDeletion[]= $news;
+            $news->setPuzzle(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Puzzle is new, it will return
+     * an empty collection; or if this Puzzle has previously
+     * been saved, it will retrieve related News from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Puzzle.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildNews[] List of ChildNews objects
+     */
+    public function getNewsJoinMember(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildNewsQuery::create(null, $criteria);
+        $query->joinWith('Member', $joinBehavior);
+
+        return $this->getNews($query, $con);
+    }
+
+    /**
      * Clears out the collMembers collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -3477,6 +3787,11 @@ abstract class Puzzle implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collNews) {
+                foreach ($this->collNews as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collMembers) {
                 foreach ($this->collMembers as $o) {
                     $o->clearAllReferences($deep);
@@ -3498,6 +3813,7 @@ abstract class Puzzle implements ActiveRecordInterface
         $this->collPuzzleMembers = null;
         $this->collPuzzleParents = null;
         $this->collPuzzlechildren = null;
+        $this->collNews = null;
         $this->collMembers = null;
         $this->collParents = null;
         $this->collChildren = null;

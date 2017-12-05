@@ -69,8 +69,12 @@
         <column name="news_type" type="varchar" size="16" required="false" />
         <column name="content" type="varchar" size="255" required="true" />
         <column name="member_id" type="integer" required="false"/>
+        <column name="puzzle_id" type="integer" required="false"/>
         <foreign-key foreignTable="member" phpName="Member" refPhpName="News">
             <reference local="member_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="News">
+            <reference local="puzzle_id" foreign="id"/>
         </foreign-key>
         <behavior name="timestampable" />
         <behavior name="archivable" />

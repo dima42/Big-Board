@@ -25,6 +25,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNewsQuery orderByNewsType($order = Criteria::ASC) Order by the news_type column
  * @method     ChildNewsQuery orderByContent($order = Criteria::ASC) Order by the content column
  * @method     ChildNewsQuery orderByMemberId($order = Criteria::ASC) Order by the member_id column
+ * @method     ChildNewsQuery orderByPuzzleId($order = Criteria::ASC) Order by the puzzle_id column
  * @method     ChildNewsQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildNewsQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -32,6 +33,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNewsQuery groupByNewsType() Group by the news_type column
  * @method     ChildNewsQuery groupByContent() Group by the content column
  * @method     ChildNewsQuery groupByMemberId() Group by the member_id column
+ * @method     ChildNewsQuery groupByPuzzleId() Group by the puzzle_id column
  * @method     ChildNewsQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildNewsQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -53,7 +55,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNewsQuery rightJoinWithMember() Adds a RIGHT JOIN clause and with to the query using the Member relation
  * @method     ChildNewsQuery innerJoinWithMember() Adds a INNER JOIN clause and with to the query using the Member relation
  *
- * @method     \MemberQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildNewsQuery leftJoinPuzzle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Puzzle relation
+ * @method     ChildNewsQuery rightJoinPuzzle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Puzzle relation
+ * @method     ChildNewsQuery innerJoinPuzzle($relationAlias = null) Adds a INNER JOIN clause to the query using the Puzzle relation
+ *
+ * @method     ChildNewsQuery joinWithPuzzle($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Puzzle relation
+ *
+ * @method     ChildNewsQuery leftJoinWithPuzzle() Adds a LEFT JOIN clause and with to the query using the Puzzle relation
+ * @method     ChildNewsQuery rightJoinWithPuzzle() Adds a RIGHT JOIN clause and with to the query using the Puzzle relation
+ * @method     ChildNewsQuery innerJoinWithPuzzle() Adds a INNER JOIN clause and with to the query using the Puzzle relation
+ *
+ * @method     \MemberQuery|\PuzzleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildNews findOne(ConnectionInterface $con = null) Return the first ChildNews matching the query
  * @method     ChildNews findOneOrCreate(ConnectionInterface $con = null) Return the first ChildNews matching the query, or a new ChildNews object populated from the query conditions when no match is found
@@ -62,6 +74,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNews findOneByNewsType(string $news_type) Return the first ChildNews filtered by the news_type column
  * @method     ChildNews findOneByContent(string $content) Return the first ChildNews filtered by the content column
  * @method     ChildNews findOneByMemberId(int $member_id) Return the first ChildNews filtered by the member_id column
+ * @method     ChildNews findOneByPuzzleId(int $puzzle_id) Return the first ChildNews filtered by the puzzle_id column
  * @method     ChildNews findOneByCreatedAt(string $created_at) Return the first ChildNews filtered by the created_at column
  * @method     ChildNews findOneByUpdatedAt(string $updated_at) Return the first ChildNews filtered by the updated_at column *
 
@@ -72,6 +85,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNews requireOneByNewsType(string $news_type) Return the first ChildNews filtered by the news_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNews requireOneByContent(string $content) Return the first ChildNews filtered by the content column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNews requireOneByMemberId(int $member_id) Return the first ChildNews filtered by the member_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildNews requireOneByPuzzleId(int $puzzle_id) Return the first ChildNews filtered by the puzzle_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNews requireOneByCreatedAt(string $created_at) Return the first ChildNews filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNews requireOneByUpdatedAt(string $updated_at) Return the first ChildNews filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -80,6 +94,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNews[]|ObjectCollection findByNewsType(string $news_type) Return ChildNews objects filtered by the news_type column
  * @method     ChildNews[]|ObjectCollection findByContent(string $content) Return ChildNews objects filtered by the content column
  * @method     ChildNews[]|ObjectCollection findByMemberId(int $member_id) Return ChildNews objects filtered by the member_id column
+ * @method     ChildNews[]|ObjectCollection findByPuzzleId(int $puzzle_id) Return ChildNews objects filtered by the puzzle_id column
  * @method     ChildNews[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildNews objects filtered by the created_at column
  * @method     ChildNews[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildNews objects filtered by the updated_at column
  * @method     ChildNews[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -183,7 +198,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, news_type, content, member_id, created_at, updated_at FROM news WHERE id = :p0';
+        $sql = 'SELECT id, news_type, content, member_id, puzzle_id, created_at, updated_at FROM news WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -408,6 +423,49 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     }
 
     /**
+     * Filter the query on the puzzle_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPuzzleId(1234); // WHERE puzzle_id = 1234
+     * $query->filterByPuzzleId(array(12, 34)); // WHERE puzzle_id IN (12, 34)
+     * $query->filterByPuzzleId(array('min' => 12)); // WHERE puzzle_id > 12
+     * </code>
+     *
+     * @see       filterByPuzzle()
+     *
+     * @param     mixed $puzzleId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildNewsQuery The current query, for fluid interface
+     */
+    public function filterByPuzzleId($puzzleId = null, $comparison = null)
+    {
+        if (is_array($puzzleId)) {
+            $useMinMax = false;
+            if (isset($puzzleId['min'])) {
+                $this->addUsingAlias(NewsTableMap::COL_PUZZLE_ID, $puzzleId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($puzzleId['max'])) {
+                $this->addUsingAlias(NewsTableMap::COL_PUZZLE_ID, $puzzleId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NewsTableMap::COL_PUZZLE_ID, $puzzleId, $comparison);
+    }
+
+    /**
      * Filter the query on the created_at column
      *
      * Example usage:
@@ -568,6 +626,83 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         return $this
             ->joinMember($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Member', '\MemberQuery');
+    }
+
+    /**
+     * Filter the query by a related \Puzzle object
+     *
+     * @param \Puzzle|ObjectCollection $puzzle The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildNewsQuery The current query, for fluid interface
+     */
+    public function filterByPuzzle($puzzle, $comparison = null)
+    {
+        if ($puzzle instanceof \Puzzle) {
+            return $this
+                ->addUsingAlias(NewsTableMap::COL_PUZZLE_ID, $puzzle->getId(), $comparison);
+        } elseif ($puzzle instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(NewsTableMap::COL_PUZZLE_ID, $puzzle->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByPuzzle() only accepts arguments of type \Puzzle or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Puzzle relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildNewsQuery The current query, for fluid interface
+     */
+    public function joinPuzzle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Puzzle');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Puzzle');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Puzzle relation Puzzle object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \PuzzleQuery A secondary query class using the current class as primary query
+     */
+    public function usePuzzleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinPuzzle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Puzzle', '\PuzzleQuery');
     }
 
     /**

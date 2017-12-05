@@ -204,6 +204,13 @@ class PuzzleTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'Puzzlechildren', false);
+        $this->addRelation('News', '\\News', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':puzzle_id',
+    1 => ':id',
+  ),
+), null, null, 'News', false);
         $this->addRelation('Member', '\\Member', RelationMap::MANY_TO_MANY, array(), null, null, 'Members');
         $this->addRelation('Parent', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), null, null, 'Parents');
         $this->addRelation('Child', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), null, null, 'Children');

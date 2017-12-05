@@ -23,6 +23,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNewsArchiveQuery orderByNewsType($order = Criteria::ASC) Order by the news_type column
  * @method     ChildNewsArchiveQuery orderByContent($order = Criteria::ASC) Order by the content column
  * @method     ChildNewsArchiveQuery orderByMemberId($order = Criteria::ASC) Order by the member_id column
+ * @method     ChildNewsArchiveQuery orderByPuzzleId($order = Criteria::ASC) Order by the puzzle_id column
  * @method     ChildNewsArchiveQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildNewsArchiveQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method     ChildNewsArchiveQuery orderByArchivedAt($order = Criteria::ASC) Order by the archived_at column
@@ -31,6 +32,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNewsArchiveQuery groupByNewsType() Group by the news_type column
  * @method     ChildNewsArchiveQuery groupByContent() Group by the content column
  * @method     ChildNewsArchiveQuery groupByMemberId() Group by the member_id column
+ * @method     ChildNewsArchiveQuery groupByPuzzleId() Group by the puzzle_id column
  * @method     ChildNewsArchiveQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildNewsArchiveQuery groupByUpdatedAt() Group by the updated_at column
  * @method     ChildNewsArchiveQuery groupByArchivedAt() Group by the archived_at column
@@ -50,6 +52,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNewsArchive findOneByNewsType(string $news_type) Return the first ChildNewsArchive filtered by the news_type column
  * @method     ChildNewsArchive findOneByContent(string $content) Return the first ChildNewsArchive filtered by the content column
  * @method     ChildNewsArchive findOneByMemberId(int $member_id) Return the first ChildNewsArchive filtered by the member_id column
+ * @method     ChildNewsArchive findOneByPuzzleId(int $puzzle_id) Return the first ChildNewsArchive filtered by the puzzle_id column
  * @method     ChildNewsArchive findOneByCreatedAt(string $created_at) Return the first ChildNewsArchive filtered by the created_at column
  * @method     ChildNewsArchive findOneByUpdatedAt(string $updated_at) Return the first ChildNewsArchive filtered by the updated_at column
  * @method     ChildNewsArchive findOneByArchivedAt(string $archived_at) Return the first ChildNewsArchive filtered by the archived_at column *
@@ -61,6 +64,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNewsArchive requireOneByNewsType(string $news_type) Return the first ChildNewsArchive filtered by the news_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNewsArchive requireOneByContent(string $content) Return the first ChildNewsArchive filtered by the content column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNewsArchive requireOneByMemberId(int $member_id) Return the first ChildNewsArchive filtered by the member_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildNewsArchive requireOneByPuzzleId(int $puzzle_id) Return the first ChildNewsArchive filtered by the puzzle_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNewsArchive requireOneByCreatedAt(string $created_at) Return the first ChildNewsArchive filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNewsArchive requireOneByUpdatedAt(string $updated_at) Return the first ChildNewsArchive filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNewsArchive requireOneByArchivedAt(string $archived_at) Return the first ChildNewsArchive filtered by the archived_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -70,6 +74,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNewsArchive[]|ObjectCollection findByNewsType(string $news_type) Return ChildNewsArchive objects filtered by the news_type column
  * @method     ChildNewsArchive[]|ObjectCollection findByContent(string $content) Return ChildNewsArchive objects filtered by the content column
  * @method     ChildNewsArchive[]|ObjectCollection findByMemberId(int $member_id) Return ChildNewsArchive objects filtered by the member_id column
+ * @method     ChildNewsArchive[]|ObjectCollection findByPuzzleId(int $puzzle_id) Return ChildNewsArchive objects filtered by the puzzle_id column
  * @method     ChildNewsArchive[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildNewsArchive objects filtered by the created_at column
  * @method     ChildNewsArchive[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildNewsArchive objects filtered by the updated_at column
  * @method     ChildNewsArchive[]|ObjectCollection findByArchivedAt(string $archived_at) Return ChildNewsArchive objects filtered by the archived_at column
@@ -171,7 +176,7 @@ abstract class NewsArchiveQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, news_type, content, member_id, created_at, updated_at, archived_at FROM news_archive WHERE id = :p0';
+        $sql = 'SELECT id, news_type, content, member_id, puzzle_id, created_at, updated_at, archived_at FROM news_archive WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -391,6 +396,47 @@ abstract class NewsArchiveQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(NewsArchiveTableMap::COL_MEMBER_ID, $memberId, $comparison);
+    }
+
+    /**
+     * Filter the query on the puzzle_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPuzzleId(1234); // WHERE puzzle_id = 1234
+     * $query->filterByPuzzleId(array(12, 34)); // WHERE puzzle_id IN (12, 34)
+     * $query->filterByPuzzleId(array('min' => 12)); // WHERE puzzle_id > 12
+     * </code>
+     *
+     * @param     mixed $puzzleId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildNewsArchiveQuery The current query, for fluid interface
+     */
+    public function filterByPuzzleId($puzzleId = null, $comparison = null)
+    {
+        if (is_array($puzzleId)) {
+            $useMinMax = false;
+            if (isset($puzzleId['min'])) {
+                $this->addUsingAlias(NewsArchiveTableMap::COL_PUZZLE_ID, $puzzleId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($puzzleId['max'])) {
+                $this->addUsingAlias(NewsArchiveTableMap::COL_PUZZLE_ID, $puzzleId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NewsArchiveTableMap::COL_PUZZLE_ID, $puzzleId, $comparison);
     }
 
     /**

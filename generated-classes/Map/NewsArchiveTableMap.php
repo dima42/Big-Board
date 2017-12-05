@@ -59,7 +59,7 @@ class NewsArchiveTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class NewsArchiveTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the id field
@@ -90,6 +90,11 @@ class NewsArchiveTableMap extends TableMap
      * the column name for the member_id field
      */
     const COL_MEMBER_ID = 'news_archive.member_id';
+
+    /**
+     * the column name for the puzzle_id field
+     */
+    const COL_PUZZLE_ID = 'news_archive.puzzle_id';
 
     /**
      * the column name for the created_at field
@@ -118,11 +123,11 @@ class NewsArchiveTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'NewsType', 'Content', 'MemberId', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'newsType', 'content', 'memberId', 'createdAt', 'updatedAt', 'archivedAt', ),
-        self::TYPE_COLNAME       => array(NewsArchiveTableMap::COL_ID, NewsArchiveTableMap::COL_NEWS_TYPE, NewsArchiveTableMap::COL_CONTENT, NewsArchiveTableMap::COL_MEMBER_ID, NewsArchiveTableMap::COL_CREATED_AT, NewsArchiveTableMap::COL_UPDATED_AT, NewsArchiveTableMap::COL_ARCHIVED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'news_type', 'content', 'member_id', 'created_at', 'updated_at', 'archived_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'NewsType', 'Content', 'MemberId', 'PuzzleId', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'newsType', 'content', 'memberId', 'puzzleId', 'createdAt', 'updatedAt', 'archivedAt', ),
+        self::TYPE_COLNAME       => array(NewsArchiveTableMap::COL_ID, NewsArchiveTableMap::COL_NEWS_TYPE, NewsArchiveTableMap::COL_CONTENT, NewsArchiveTableMap::COL_MEMBER_ID, NewsArchiveTableMap::COL_PUZZLE_ID, NewsArchiveTableMap::COL_CREATED_AT, NewsArchiveTableMap::COL_UPDATED_AT, NewsArchiveTableMap::COL_ARCHIVED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'news_type', 'content', 'member_id', 'puzzle_id', 'created_at', 'updated_at', 'archived_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -132,11 +137,11 @@ class NewsArchiveTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'NewsType' => 1, 'Content' => 2, 'MemberId' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, 'ArchivedAt' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'newsType' => 1, 'content' => 2, 'memberId' => 3, 'createdAt' => 4, 'updatedAt' => 5, 'archivedAt' => 6, ),
-        self::TYPE_COLNAME       => array(NewsArchiveTableMap::COL_ID => 0, NewsArchiveTableMap::COL_NEWS_TYPE => 1, NewsArchiveTableMap::COL_CONTENT => 2, NewsArchiveTableMap::COL_MEMBER_ID => 3, NewsArchiveTableMap::COL_CREATED_AT => 4, NewsArchiveTableMap::COL_UPDATED_AT => 5, NewsArchiveTableMap::COL_ARCHIVED_AT => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'news_type' => 1, 'content' => 2, 'member_id' => 3, 'created_at' => 4, 'updated_at' => 5, 'archived_at' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'NewsType' => 1, 'Content' => 2, 'MemberId' => 3, 'PuzzleId' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'ArchivedAt' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'newsType' => 1, 'content' => 2, 'memberId' => 3, 'puzzleId' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'archivedAt' => 7, ),
+        self::TYPE_COLNAME       => array(NewsArchiveTableMap::COL_ID => 0, NewsArchiveTableMap::COL_NEWS_TYPE => 1, NewsArchiveTableMap::COL_CONTENT => 2, NewsArchiveTableMap::COL_MEMBER_ID => 3, NewsArchiveTableMap::COL_PUZZLE_ID => 4, NewsArchiveTableMap::COL_CREATED_AT => 5, NewsArchiveTableMap::COL_UPDATED_AT => 6, NewsArchiveTableMap::COL_ARCHIVED_AT => 7, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'news_type' => 1, 'content' => 2, 'member_id' => 3, 'puzzle_id' => 4, 'created_at' => 5, 'updated_at' => 6, 'archived_at' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -160,6 +165,7 @@ class NewsArchiveTableMap extends TableMap
         $this->addColumn('news_type', 'NewsType', 'VARCHAR', false, 16, null);
         $this->addColumn('content', 'Content', 'VARCHAR', true, 255, null);
         $this->addColumn('member_id', 'MemberId', 'INTEGER', false, null, null);
+        $this->addColumn('puzzle_id', 'PuzzleId', 'INTEGER', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('archived_at', 'ArchivedAt', 'TIMESTAMP', false, null, null);
@@ -317,6 +323,7 @@ class NewsArchiveTableMap extends TableMap
             $criteria->addSelectColumn(NewsArchiveTableMap::COL_NEWS_TYPE);
             $criteria->addSelectColumn(NewsArchiveTableMap::COL_CONTENT);
             $criteria->addSelectColumn(NewsArchiveTableMap::COL_MEMBER_ID);
+            $criteria->addSelectColumn(NewsArchiveTableMap::COL_PUZZLE_ID);
             $criteria->addSelectColumn(NewsArchiveTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(NewsArchiveTableMap::COL_UPDATED_AT);
             $criteria->addSelectColumn(NewsArchiveTableMap::COL_ARCHIVED_AT);
@@ -325,6 +332,7 @@ class NewsArchiveTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.news_type');
             $criteria->addSelectColumn($alias . '.content');
             $criteria->addSelectColumn($alias . '.member_id');
+            $criteria->addSelectColumn($alias . '.puzzle_id');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.archived_at');

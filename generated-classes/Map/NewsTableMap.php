@@ -59,7 +59,7 @@ class NewsTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class NewsTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the id field
@@ -90,6 +90,11 @@ class NewsTableMap extends TableMap
      * the column name for the member_id field
      */
     const COL_MEMBER_ID = 'news.member_id';
+
+    /**
+     * the column name for the puzzle_id field
+     */
+    const COL_PUZZLE_ID = 'news.puzzle_id';
 
     /**
      * the column name for the created_at field
@@ -113,11 +118,11 @@ class NewsTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'NewsType', 'Content', 'MemberId', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'newsType', 'content', 'memberId', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(NewsTableMap::COL_ID, NewsTableMap::COL_NEWS_TYPE, NewsTableMap::COL_CONTENT, NewsTableMap::COL_MEMBER_ID, NewsTableMap::COL_CREATED_AT, NewsTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'news_type', 'content', 'member_id', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id', 'NewsType', 'Content', 'MemberId', 'PuzzleId', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'newsType', 'content', 'memberId', 'puzzleId', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(NewsTableMap::COL_ID, NewsTableMap::COL_NEWS_TYPE, NewsTableMap::COL_CONTENT, NewsTableMap::COL_MEMBER_ID, NewsTableMap::COL_PUZZLE_ID, NewsTableMap::COL_CREATED_AT, NewsTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'news_type', 'content', 'member_id', 'puzzle_id', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -127,11 +132,11 @@ class NewsTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'NewsType' => 1, 'Content' => 2, 'MemberId' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'newsType' => 1, 'content' => 2, 'memberId' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
-        self::TYPE_COLNAME       => array(NewsTableMap::COL_ID => 0, NewsTableMap::COL_NEWS_TYPE => 1, NewsTableMap::COL_CONTENT => 2, NewsTableMap::COL_MEMBER_ID => 3, NewsTableMap::COL_CREATED_AT => 4, NewsTableMap::COL_UPDATED_AT => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'news_type' => 1, 'content' => 2, 'member_id' => 3, 'created_at' => 4, 'updated_at' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'NewsType' => 1, 'Content' => 2, 'MemberId' => 3, 'PuzzleId' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'newsType' => 1, 'content' => 2, 'memberId' => 3, 'puzzleId' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
+        self::TYPE_COLNAME       => array(NewsTableMap::COL_ID => 0, NewsTableMap::COL_NEWS_TYPE => 1, NewsTableMap::COL_CONTENT => 2, NewsTableMap::COL_MEMBER_ID => 3, NewsTableMap::COL_PUZZLE_ID => 4, NewsTableMap::COL_CREATED_AT => 5, NewsTableMap::COL_UPDATED_AT => 6, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'news_type' => 1, 'content' => 2, 'member_id' => 3, 'puzzle_id' => 4, 'created_at' => 5, 'updated_at' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -155,6 +160,7 @@ class NewsTableMap extends TableMap
         $this->addColumn('news_type', 'NewsType', 'VARCHAR', false, 16, null);
         $this->addColumn('content', 'Content', 'VARCHAR', true, 255, null);
         $this->addForeignKey('member_id', 'MemberId', 'INTEGER', 'member', 'id', false, null, null);
+        $this->addForeignKey('puzzle_id', 'PuzzleId', 'INTEGER', 'puzzle', 'id', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
@@ -168,6 +174,13 @@ class NewsTableMap extends TableMap
   0 =>
   array (
     0 => ':member_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Puzzle', '\\Puzzle', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':puzzle_id',
     1 => ':id',
   ),
 ), null, null, null, false);
@@ -332,6 +345,7 @@ class NewsTableMap extends TableMap
             $criteria->addSelectColumn(NewsTableMap::COL_NEWS_TYPE);
             $criteria->addSelectColumn(NewsTableMap::COL_CONTENT);
             $criteria->addSelectColumn(NewsTableMap::COL_MEMBER_ID);
+            $criteria->addSelectColumn(NewsTableMap::COL_PUZZLE_ID);
             $criteria->addSelectColumn(NewsTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(NewsTableMap::COL_UPDATED_AT);
         } else {
@@ -339,6 +353,7 @@ class NewsTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.news_type');
             $criteria->addSelectColumn($alias . '.content');
             $criteria->addSelectColumn($alias . '.member_id');
+            $criteria->addSelectColumn($alias . '.puzzle_id');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }

@@ -8,6 +8,8 @@ use \News as ChildNews;
 use \NewsArchive as ChildNewsArchive;
 use \NewsArchiveQuery as ChildNewsArchiveQuery;
 use \NewsQuery as ChildNewsQuery;
+use \Puzzle as ChildPuzzle;
+use \PuzzleQuery as ChildPuzzleQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
@@ -95,6 +97,13 @@ abstract class News implements ActiveRecordInterface
     protected $member_id;
 
     /**
+     * The value for the puzzle_id field.
+     *
+     * @var        int
+     */
+    protected $puzzle_id;
+
+    /**
      * The value for the created_at field.
      *
      * @var        DateTime
@@ -112,6 +121,11 @@ abstract class News implements ActiveRecordInterface
      * @var        ChildMember
      */
     protected $aMember;
+
+    /**
+     * @var        ChildPuzzle
+     */
+    protected $aPuzzle;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -390,6 +404,16 @@ abstract class News implements ActiveRecordInterface
     }
 
     /**
+     * Get the [puzzle_id] column value.
+     *
+     * @return int
+     */
+    public function getPuzzleId()
+    {
+        return $this->puzzle_id;
+    }
+
+    /**
      * Get the [optionally formatted] temporal [created_at] column value.
      *
      *
@@ -514,6 +538,30 @@ abstract class News implements ActiveRecordInterface
     } // setMemberId()
 
     /**
+     * Set the value of [puzzle_id] column.
+     *
+     * @param int $v new value
+     * @return $this|\News The current object (for fluent API support)
+     */
+    public function setPuzzleId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->puzzle_id !== $v) {
+            $this->puzzle_id = $v;
+            $this->modifiedColumns[NewsTableMap::COL_PUZZLE_ID] = true;
+        }
+
+        if ($this->aPuzzle !== null && $this->aPuzzle->getId() !== $v) {
+            $this->aPuzzle = null;
+        }
+
+        return $this;
+    } // setPuzzleId()
+
+    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
@@ -601,13 +649,16 @@ abstract class News implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : NewsTableMap::translateFieldName('MemberId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->member_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : NewsTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : NewsTableMap::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->puzzle_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : NewsTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : NewsTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : NewsTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -620,7 +671,7 @@ abstract class News implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = NewsTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = NewsTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\News'), 0, $e);
@@ -644,6 +695,9 @@ abstract class News implements ActiveRecordInterface
     {
         if ($this->aMember !== null && $this->member_id !== $this->aMember->getId()) {
             $this->aMember = null;
+        }
+        if ($this->aPuzzle !== null && $this->puzzle_id !== $this->aPuzzle->getId()) {
+            $this->aPuzzle = null;
         }
     } // ensureConsistency
 
@@ -685,6 +739,7 @@ abstract class News implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aMember = null;
+            $this->aPuzzle = null;
         } // if (deep)
     }
 
@@ -822,6 +877,13 @@ abstract class News implements ActiveRecordInterface
                 $this->setMember($this->aMember);
             }
 
+            if ($this->aPuzzle !== null) {
+                if ($this->aPuzzle->isModified() || $this->aPuzzle->isNew()) {
+                    $affectedRows += $this->aPuzzle->save($con);
+                }
+                $this->setPuzzle($this->aPuzzle);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -871,6 +933,9 @@ abstract class News implements ActiveRecordInterface
         if ($this->isColumnModified(NewsTableMap::COL_MEMBER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'member_id';
         }
+        if ($this->isColumnModified(NewsTableMap::COL_PUZZLE_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'puzzle_id';
+        }
         if ($this->isColumnModified(NewsTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
         }
@@ -899,6 +964,9 @@ abstract class News implements ActiveRecordInterface
                         break;
                     case 'member_id':
                         $stmt->bindValue($identifier, $this->member_id, PDO::PARAM_INT);
+                        break;
+                    case 'puzzle_id':
+                        $stmt->bindValue($identifier, $this->puzzle_id, PDO::PARAM_INT);
                         break;
                     case 'created_at':
                         $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -981,9 +1049,12 @@ abstract class News implements ActiveRecordInterface
                 return $this->getMemberId();
                 break;
             case 4:
-                return $this->getCreatedAt();
+                return $this->getPuzzleId();
                 break;
             case 5:
+                return $this->getCreatedAt();
+                break;
+            case 6:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1020,15 +1091,16 @@ abstract class News implements ActiveRecordInterface
             $keys[1] => $this->getNewsType(),
             $keys[2] => $this->getContent(),
             $keys[3] => $this->getMemberId(),
-            $keys[4] => $this->getCreatedAt(),
-            $keys[5] => $this->getUpdatedAt(),
+            $keys[4] => $this->getPuzzleId(),
+            $keys[5] => $this->getCreatedAt(),
+            $keys[6] => $this->getUpdatedAt(),
         );
-        if ($result[$keys[4]] instanceof \DateTimeInterface) {
-            $result[$keys[4]] = $result[$keys[4]]->format('c');
-        }
-
         if ($result[$keys[5]] instanceof \DateTimeInterface) {
             $result[$keys[5]] = $result[$keys[5]]->format('c');
+        }
+
+        if ($result[$keys[6]] instanceof \DateTimeInterface) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1051,6 +1123,21 @@ abstract class News implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aMember->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aPuzzle) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'puzzle';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'puzzle';
+                        break;
+                    default:
+                        $key = 'Puzzle';
+                }
+
+                $result[$key] = $this->aPuzzle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1099,9 +1186,12 @@ abstract class News implements ActiveRecordInterface
                 $this->setMemberId($value);
                 break;
             case 4:
-                $this->setCreatedAt($value);
+                $this->setPuzzleId($value);
                 break;
             case 5:
+                $this->setCreatedAt($value);
+                break;
+            case 6:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1143,10 +1233,13 @@ abstract class News implements ActiveRecordInterface
             $this->setMemberId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setCreatedAt($arr[$keys[4]]);
+            $this->setPuzzleId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUpdatedAt($arr[$keys[5]]);
+            $this->setCreatedAt($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setUpdatedAt($arr[$keys[6]]);
         }
     }
 
@@ -1200,6 +1293,9 @@ abstract class News implements ActiveRecordInterface
         }
         if ($this->isColumnModified(NewsTableMap::COL_MEMBER_ID)) {
             $criteria->add(NewsTableMap::COL_MEMBER_ID, $this->member_id);
+        }
+        if ($this->isColumnModified(NewsTableMap::COL_PUZZLE_ID)) {
+            $criteria->add(NewsTableMap::COL_PUZZLE_ID, $this->puzzle_id);
         }
         if ($this->isColumnModified(NewsTableMap::COL_CREATED_AT)) {
             $criteria->add(NewsTableMap::COL_CREATED_AT, $this->created_at);
@@ -1296,6 +1392,7 @@ abstract class News implements ActiveRecordInterface
         $copyObj->setNewsType($this->getNewsType());
         $copyObj->setContent($this->getContent());
         $copyObj->setMemberId($this->getMemberId());
+        $copyObj->setPuzzleId($this->getPuzzleId());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
@@ -1378,6 +1475,57 @@ abstract class News implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildPuzzle object.
+     *
+     * @param  ChildPuzzle $v
+     * @return $this|\News The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setPuzzle(ChildPuzzle $v = null)
+    {
+        if ($v === null) {
+            $this->setPuzzleId(NULL);
+        } else {
+            $this->setPuzzleId($v->getId());
+        }
+
+        $this->aPuzzle = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildPuzzle object, it will not be re-added.
+        if ($v !== null) {
+            $v->addNews($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildPuzzle object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildPuzzle The associated ChildPuzzle object.
+     * @throws PropelException
+     */
+    public function getPuzzle(ConnectionInterface $con = null)
+    {
+        if ($this->aPuzzle === null && ($this->puzzle_id != 0)) {
+            $this->aPuzzle = ChildPuzzleQuery::create()->findPk($this->puzzle_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aPuzzle->addNews($this);
+             */
+        }
+
+        return $this->aPuzzle;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1387,10 +1535,14 @@ abstract class News implements ActiveRecordInterface
         if (null !== $this->aMember) {
             $this->aMember->removeNews($this);
         }
+        if (null !== $this->aPuzzle) {
+            $this->aPuzzle->removeNews($this);
+        }
         $this->id = null;
         $this->news_type = null;
         $this->content = null;
         $this->member_id = null;
+        $this->puzzle_id = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;
@@ -1414,6 +1566,7 @@ abstract class News implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aMember = null;
+        $this->aPuzzle = null;
     }
 
     /**
@@ -1527,6 +1680,7 @@ abstract class News implements ActiveRecordInterface
         $this->setNewsType($archive->getNewsType());
         $this->setContent($archive->getContent());
         $this->setMemberId($archive->getMemberId());
+        $this->setPuzzleId($archive->getPuzzleId());
         $this->setCreatedAt($archive->getCreatedAt());
         $this->setUpdatedAt($archive->getUpdatedAt());
 
