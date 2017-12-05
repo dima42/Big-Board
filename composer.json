@@ -15,7 +15,7 @@
     "deployer/deployer": "^6.0",
     "heroku/heroku-buildpack-php": "*"
   },
-  "config": {
+  "config-dev": {
     "bin-dir": "/usr/local/bin"
   },
   "autoload": {
