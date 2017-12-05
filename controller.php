@@ -1,6 +1,5 @@
 <?
 use Cocur\Slugify\Slugify;
-
 use Propel\Runtime\ActiveQuery\Criteria;
 
 function show_content() {
@@ -505,8 +504,8 @@ function displayAllPuzzles() {
 		$total_puzzles += $status['StatusCount'];
 	}
 
-	// TODO: fix this query to start with puzzles and use .getPuzzleChildren
 	$all_puzzles = PuzzlePuzzleQuery::create()
+		->joinWith('Child')
 		->orderByParentId()
 		->find();
 
