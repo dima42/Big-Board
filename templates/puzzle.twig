@@ -3,7 +3,13 @@
 {% block content %}
     <div class="puzzle-header">
         <div class="puzzle-metas">
+            {% if i_am_meta %}
+                <span class="badge badge-pill badge-secondary">META</span>
+            {% endif %}
             {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
+                {% if loop.first %}
+                <small>Part of</small>
+                {% endif %}
                 <a class="badge badge-pill badge-primary" href='/puzzle/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
             {% endfor %}
         </div>
@@ -11,9 +17,6 @@
         <h1>
             <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
             {{ puzzle.status | emojify }}
-            {% if i_am_meta %}
-                <small class="text-muted">meta</small>
-            {% endif %}
         </h1>
     </div>
 
