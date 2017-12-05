@@ -311,6 +311,8 @@ function addNote($puzzle_id, $request) {
 		$note->setAuthor($author);
 		$note->save();
 
+		$puzzle->postNoteToSlack($note);
+
 		$alert = "Saved a note to ".$puzzle->getTitle();
 	}
 

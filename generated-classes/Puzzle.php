@@ -130,7 +130,7 @@ class Puzzle extends BasePuzzle {
 
 	public function postInfoToSlack() {
 		postPuzzle($this, $this->getSlackChannel());
-		postPuzzle($this);// big-board channel
+		postPuzzle($this);// TODO: make this the big-board channel
 	}
 
 	public function postJoin($member) {
@@ -174,4 +174,13 @@ class Puzzle extends BasePuzzle {
 				'color' => 'good',
 			])->send($header_msg);
 	}
+
+	public function postNoteToSlack($note) {
+		$client = getSlackClient(":scroll:", "NoteBot");
+		$client->to($channel)->attach([
+				'text'  => $note->getBody(),
+				'color' => 'good',
+			])->send('*'.$note->getAuthor()->getFullName().'* wrote a note:');
+	}
+
 }
