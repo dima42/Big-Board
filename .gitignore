@@ -7,5 +7,6 @@ error_log*
 /vendor/*
 propel
 propel.log
+propel_palindrome.log
 
 generated-conf/config.php
