@@ -45,17 +45,17 @@ class Puzzle extends BasePuzzle {
 		$this->setSolution($newSolution);
 		$this->save();
 
-        if ($newSolution != '') {
-    		// SET STATUS
+		if ($newSolution != '') {
+			// SET STATUS
 			$this->setStatus('solved');
 			$alert = $this->getTitle()." is solved! Great work, team! 🎓";
 
-            // REMOVE MEMBERS
+			// REMOVE MEMBERS
 			PuzzleMemberQuery::create()
 				->filterByPuzzle($this)
 				->delete();
 
-            // POST TO SLACK
+			// POST TO SLACK
 			postSolve($this);
 			// TODO: post to $this->getSlackChannel());
 		} else {
@@ -91,6 +91,27 @@ class Puzzle extends BasePuzzle {
 
 	// SLACK STUFF
 
+	public function getAttachmentsForSlack() {
+		$puzzle_info = [
+			':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$this ->getId().'|Big Board>',
+			':mit: <'.$this                                              ->getUrl().'|Puzzle page>',
+			':drive: <https://docs.google.com/spreadsheet/ccc?key='.$this->getSpreadsheetId().'|Google Spreadsheet>',
+			':slack: <#'.$this                                           ->getSlackChannelId().'|'.$this->getSlackChannel().'>',
+		];
+
+		$notes = $this->getMembers();
+
+		return [[
+				"text"  => join("\n", $puzzle_info),
+				"color" => "good",
+			], [
+				"pretext"   => "*Roster:*",
+				"mrkdwn_in" => ["pretext"],
+				"text"      => $this->getMembersForSlack(),
+				"color"     => "good",
+			]];
+	}
+
 	public function postInfoToSlack() {
 		postPuzzle($this, $this->getSlackChannel());
 		postPuzzle($this);// big-board channel
@@ -121,16 +142,20 @@ class Puzzle extends BasePuzzle {
 		}
 	}
 
-	public function postMembers($header_msg = "Current roster:", $channel = "sandbox") {
+	public function getMembersForSlack() {
 		$members = $this->getMembers();
 		$text    = [];
 		foreach ($members as $key => $member) {
 			$text[] = $member->getNameForSlack();
 		}
+		return join("\n", $text);
+	}
+
+	public function postMembers($header_msg = "Current roster:", $channel = "sandbox") {
 
 		$client = getSlackClient(":wave:", "JoinBot");
 		$client->to($channel)->attach([
-				'text'  => join("\n", $text),
+				'text'  => $this->getMembersForSlack(),
 				'color' => 'good',
 			])->send($header_msg);
 	}

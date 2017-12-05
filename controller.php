@@ -644,7 +644,7 @@ function infoBot($request, $response) {
 			'link_names'    => true,
 			"response_type" => "in_channel",
 			"text"          => "*".$puzzle->getTitle()."*",
-			"attachments"   => getPuzzleAttachments($puzzle),
+			"attachments"   => $puzzle->getAttachmentsForSlack(),
 		];
 	}
 

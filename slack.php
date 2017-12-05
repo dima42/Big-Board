@@ -29,28 +29,12 @@ function postToChannel($message, $channel = "sandbox") {
 	$client->to('#'.$channel)->send($message);
 }
 
-function getPuzzleAttachments($puzzle) {
-	$puzzle_info = [
-		':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle ->getId().'|Big Board>',
-		':page_facing_up: <'.$puzzle                                   ->getUrl().'|MIT puzzle page>',
-		':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Google Spreadsheet>',
-		':slack: <#'.$puzzle                                           ->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>'
-	];
-
-	return array_map(function ($msg) {
-			return [
-				'text'  => $msg,
-				'color' => 'good',
-			];
-		}, $puzzle_info);
-}
-
 function postPuzzle($puzzle, $channel = "sandbox") {
 	$client = getSlackClient();
 
 	$message = $client->createMessage();
 	$message->setText('*'.$puzzle->getTitle().'*');
-	$message->setAttachments(getPuzzleAttachments($puzzle));
+	$message->setAttachments($puzzle->getAttachmentsForSlack());
 	$message->setChannel('#'.$channel);
 	$message->send();
 }
