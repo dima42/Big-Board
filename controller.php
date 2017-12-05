@@ -120,7 +120,7 @@ function show_content() {
 					return displayNews();
 				});
 			$klein->respond('POST', '/add/?', function ($request) {
-					return addNews($request);
+					return addNews($request->body);
 				});
 			$klein->respond('POST', '/[:update_id]/delete/?', function ($request) {
 					return archiveNews($request->update_id);
@@ -554,8 +554,7 @@ function displayNews() {
 		));
 }
 
-function addNews($request) {
-	$text   = $request->body;
+function addNews($text, $type = "important", $puzzle = null) {
 	$member = $_SESSION['user'];
 
 	$update = new News();
