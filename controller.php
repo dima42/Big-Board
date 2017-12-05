@@ -47,12 +47,6 @@ function show_content() {
 				});
 		});
 
-	// META
-
-	$klein->respond('GET', '/meta/[:id]', function ($request) {
-			return displayMeta($request->id);
-		});
-
 	// MEMBER
 
 	$klein->respond('GET', '/me', function () {
@@ -205,6 +199,10 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		->filterByChild($puzzle)
 		->count();
 
+	if ($me_as_meta > 0) {
+		$puzzles = $puzzle->getChildren();
+	}
+
 	$template = 'puzzle.twig';
 
 	if ($method == "edit") {
@@ -219,23 +217,17 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'all_metas' => $metas_to_show,
 			'statuses'  => $statuses,
 			'i_am_meta' => $me_as_meta > 0,
+			'puzzles'   => $puzzles,
 		));
 }
 
 function displayMeta($meta_id) {
-	$meta = PuzzleQuery::create()
-		->filterByID($meta_id)
-		->findOne();
+	//   // TODO: if not $meta, redirect to error page
+	//   // "This does not appear to be a metapuzzle. There are no puzzles that are part of it."
 
-	$puzzles = $meta->getChildren();
-
-	// TODO: if not $meta, redirect to error page
-	// "This does not appear to be a metapuzzle. There are no puzzles that are part of it."
-
-	render('meta.twig', array(
-			'puzzle'  => $meta,
-			'puzzles' => $puzzles,
-		));
+	//   render('meta.twig', array(
+	//           'puzzle'  => $meta,
+	// ));
 }
 
 function editPuzzle($puzzle_id, $request) {

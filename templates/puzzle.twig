@@ -4,18 +4,20 @@
     <div class="puzzle-header">
         <div class="puzzle-metas">
             {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
-                <a class="badge badge-pill badge-primary" href='/meta/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
+                <a class="badge badge-pill badge-primary" href='/puzzle/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
             {% endfor %}
         </div>
 
         <h1>
             <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
             {{ puzzle.status | emojify }}
-            {% block h1_small %}{% endblock %}
+            {% if i_am_meta %}
+                <small class="text-muted">meta</small>
+            {% endif %}
         </h1>
     </div>
 
-    {% block content_forms %}
+    {% block content_main %}
     <form class="puzzleEdit mb-1" action="/puzzle/{{ puzzle.id }}/solve" method="post">
         <div class="input-group mb-2">
             <span class="input-group-addon">Solution</span>
@@ -38,11 +40,11 @@
             </span>
         </div>
     </form>
-    {% endblock %}
 
-    {% block content_main %}{% endblock %}
-
-    {% block content_notes %}
+    {% from 'macros.twig' import puzzle_table %}
+    {% if puzzles %}
+        {{ puzzle_table(puzzles) }}
+    {% endif %}
 
     {% if notes|length %}
         {% for note in notes %}

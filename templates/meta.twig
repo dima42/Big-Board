@@ -1,8 +1,0 @@
-{% extends 'puzzle.twig' %}
-
-{% block h1_small %}<small class="text-muted">meta</small></h1>{% endblock %}
-
-{% block content_main %}
-    {% from 'macros.twig' import puzzle_table %}
-    {{ puzzle_table(puzzles) }}
-{% endblock %}
