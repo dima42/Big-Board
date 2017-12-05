@@ -87,7 +87,7 @@ function render($template, $vars = array()) {
 
 	Global $twig;
 
-	$member = $_SESSION['user'];
+	$member = $_SESSION['user']??null;
 	if ($member) {
 		$vars['user']         = $member;
 		$vars['user_id']      = $_SESSION['user_id'];

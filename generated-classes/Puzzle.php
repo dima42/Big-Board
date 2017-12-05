@@ -42,6 +42,19 @@ class Puzzle extends BasePuzzle {
 		return $sid;
 	}
 
+	// ADD NOTE
+	public function note($noteText, $author) {
+		$note = new Note();
+		$note->setPuzzle($this);
+		$note->setBody($noteText);
+		$note->setAuthor($author);
+		$note->save();
+
+		$this->postNoteToSlack($note);
+
+		return "Saved a note to ".$this->getTitle();
+	}
+
 	// SOLVE
 
 	public function solve($solution) {
@@ -180,7 +193,6 @@ class Puzzle extends BasePuzzle {
 		$client->to($channel)->attach([
 				'text'  => $note->getBody(),
 				'color' => 'good',
-			])->send('*'.$note->getAuthor()->getFullName().'* wrote a note:');
+			])->send('*'.$note->getAuthor()->getFullName().'* posted a note:');
 	}
-
 }

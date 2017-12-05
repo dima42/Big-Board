@@ -296,24 +296,14 @@ function changePuzzleStatus($puzzle_id, $request) {
 }
 
 function addNote($puzzle_id, $request) {
-	$noteText = $request->body;
-
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
 		->findOne();
 
-	if (strtoupper($noteText) != "") {
-		$author = $_SESSION['user'];
+	$noteText = $request->body;
 
-		$note = new Note();
-		$note->setPuzzleId($puzzle_id);
-		$note->setBody($noteText);
-		$note->setAuthor($author);
-		$note->save();
-
-		$puzzle->postNoteToSlack($note);
-
-		$alert = "Saved a note to ".$puzzle->getTitle();
+	if (trim($noteText) != "") {
+		$alert = $puzzle->note($noteText, $_SESSION['user']);
 	}
 
 	redirect('/puzzle/'.$puzzle_id, $alert);
@@ -639,7 +629,7 @@ function infoBot($request, $response) {
 
 	if (!$puzzle) {
 		$channel_response = [
-			"text" => "`/info` can only be used inside a puzzle channel.",
+			"text" => "`".$request->command."` can only be used inside a puzzle channel.",
 		];
 	} else {
 		$channel_response = [
@@ -709,7 +699,7 @@ function solveBot($request, $response) {
 
 	if (!$puzzle) {
 		$channel_response = [
-			"text" => "`/solve` can only be used inside a puzzle channel.",
+			"text" => "`".$request->command."` can only be used inside a puzzle channel.",
 		];
 	} elseif (!$solution) {
 		$channel_response = [
@@ -726,6 +716,67 @@ function solveBot($request, $response) {
 	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
 	// possible to blast this to everyone?
 	// $human_response = [];
+
+	return $response->json($channel_response);
+}
+
+function noteBot($request, $response) {
+	if ($request->token != getenv('PALINDROME_SLACKBOT_TOKEN')) {
+		return $response->json(['text' => 'Nothing here. Go away.']);
+	}
+
+	$channel_response = ['text' => 'System Error.'];
+	$channel_id       = $request->channel_id;
+	$body             = trim($request->text);
+	$slack_user_id    = $request->user_id;
+
+	debug("Body: ".$body);
+
+	$puzzle = PuzzleQuery::create()
+		->filterBySlackChannelId($channel_id)
+		->findOne();
+
+	$member = MemberQuery::create()
+		->filterBySlackId($slack_user_id)
+		->findOne();
+
+	// If there's no body, send back all notes.
+	if (!$body) {
+		$note_count = $puzzle->countNotes();
+
+		if ($note_count == 0) {
+			$channel_response = [
+				"text" => "There are no notes attached to *".$puzzle->getTitle()."*.",
+			];
+		}
+
+		$all_notes = array_map(function ($note) {
+				return [
+					"pretext" => $note->getAuthor()->getNameForSlack()." wrote:",
+					"text"    => $note->getBody(),
+				];
+			}, iterator_to_array($puzzle->getNotes()));
+
+		$channel_response = [
+			'link_names'    => true,
+			"response_type" => "in_channel",
+			"attachments"   => $all_notes,
+		];
+	} elseif (!$puzzle) {
+		$channel_response = [
+			"text" => "`".$request->command."` can only be used inside a puzzle channel.",
+		];
+	} elseif (!$member) {
+		$channel_response = [
+			"text" => "Hi there! Before you can use the `".$request->command."` command, I need to know who you are. Click this link then try the command again.
+http://team-palindrome.herokuapp.com/assign_slack_id/".$slack_user_id,
+		];
+	} else {
+		$puzzle->note($body, $member);
+		$channel_response = [
+			"text" => "Got it. I posted your note to *".$puzzle->getTitle()."*.",
+		];
+	}
 
 	return $response->json($channel_response);
 }

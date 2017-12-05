@@ -21,6 +21,10 @@ $klein->with('/api', function () use ($klein) {
 				return joinBot($request, $response);
 			});
 
+		$klein->respond('POST', '/note', function ($request, $response) {
+				return noteBot($request, $response);
+			});
+
 	});
 
 $klein->respond('GET', '/oauth', function ($request, $response) use ($pal_client) {
