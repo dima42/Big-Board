@@ -18,6 +18,11 @@
     </div>
     <div class="col-sm-9 entry-body">
         {{ update.content }}
+        <form action="/news/{{ update.id }}/delete" class="delete-entry" method="post">
+            <button type="submit" class="close">
+                <span>&times;</span>
+            </button>
+        </form>
     </div>
 </div>
 {% endfor %}

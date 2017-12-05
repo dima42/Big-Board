@@ -44,6 +44,12 @@ task('migrate', function () {
 		writeln($result);
 	});
 
+desc('Migrate on heroku');
+task('heroku-migrate', function () {
+		$result = run('heroku run propel migrate');
+		writeln($result);
+	});
+
 // desc('Deploy your project');
 // task('deploy', [
 // 		'deploy:info',

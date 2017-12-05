@@ -122,6 +122,9 @@ function show_content() {
 			$klein->respond('POST', '/add/?', function ($request) {
 					return addNews($request);
 				});
+			$klein->respond('POST', '/[:update_id]/delete/?', function ($request) {
+					return archiveNews($request->update_id);
+				});
 		});
 
 	// SLACK BOT
@@ -314,7 +317,6 @@ function joinPuzzle($puzzle_id) {
 }
 
 function archiveNote($note_id, $puzzle_id) {
-	// TODO: soft delete
 	$note = NoteQuery::create()
 		->filterByID($note_id)
 		->delete();
@@ -563,6 +565,15 @@ function addNews($request) {
 
 	$message = "Update posted.";
 	redirect('/news', $message);
+}
+
+function archiveNews($update_id) {
+	$note = NewsQuery::create()
+		->filterByID($update_id)
+		->delete();
+
+	$alert = "Update deleted.";
+	redirect('/news/', $alert);
 }
 
 function displayUnsolvedPuzzles() {
