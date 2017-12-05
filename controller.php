@@ -13,10 +13,6 @@ function show_content() {
 			return displayTest();
 		});
 
-	$klein->respond('GET', '/news', function () {
-			return displayNews();
-		});
-
 	// PUZZLES
 
 	$klein->with('/puzzle/[:id]', function () use ($klein) {
@@ -115,6 +111,17 @@ function show_content() {
 
 	$klein->respond('GET', '/puzzle_scrape', function ($request, $response) {
 			return puzzleScrape($request, $response);
+		});
+
+	// NEWS
+
+	$klein->with('/news', function () use ($klein) {
+			$klein->respond('GET', '/?', function () {
+					return displayNews();
+				});
+			$klein->respond('POST', '/add/?', function ($request) {
+					return addNews($request);
+				});
 		});
 
 	// SLACK BOT
@@ -542,6 +549,20 @@ function displayNews() {
 			'filter'  => $filter,
 			'updates' => $news,
 		));
+}
+
+function addNews($request) {
+	$text   = $request->body;
+	$member = $_SESSION['user'];
+
+	$update = new News();
+	$update->setContent($text);
+	$update->setNewsType('important');
+	$update->setMember($member);
+	$update->save();
+
+	$message = "Update posted.";
+	redirect('/news', $message);
 }
 
 function displayUnsolvedPuzzles() {

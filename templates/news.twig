@@ -1,4 +1,4 @@
-{% extends 'loggedin.twig' %}
+{% extends 'two-col.twig' %}
 
 {% block content %}
 <h1>Latest news</h1>
@@ -21,20 +21,15 @@
     </div>
 </div>
 {% endfor %}
-
-
-<table class="table">
-    {% for update in updates if filter != "Y" or update.TYP != "PUZ" %}
-    <tr>
-        <td>{{ update.createdat|date("g:ia") }}</td>
-        <td>{{ update.content }}</td>
-        <td>{{ update.member.fullName }}</td>
-    </tr>
-    {% endfor %}
-</table>
 {% endblock %}
 
 {% block aside %}
+<h4>Add an update</h4>
+<form class="new-update-form mb-5" action="/news/add" method="post">
+    <textarea type="text" class="form-control mb-2" name="body" rows="4"></textarea>
+    <button class="btn btn-primary" type="submit">Submit news update</button>
+</form>
+
 <h4>Show</h4>
 <p>
     {% if filter == "Y" %}
@@ -44,3 +39,5 @@
     {% endif %}
 </p>
 {% endblock %}
+
+{% block latest_news %}{% endblock %}
