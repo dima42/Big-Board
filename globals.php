@@ -95,7 +95,7 @@ function render($template, $vars = array()) {
 	}
 	$vars['alert']      = $_SESSION['alert_message']??null;
 	$vars['statuses']   = ['open', 'stuck', 'priority', 'urgent', 'solved'];
-	$vars['time']       = strftime('%c');
+	$vars['now']        = strftime('%c');
 	$vars['latestNews'] = $latestNews;
 
 	Global $DEBUG;

@@ -49,7 +49,14 @@
             <div class="row note-row">
                 <div class="col-sm-3">
                     <small class="note-by">{{ note.author.fullName }}</small>
-                    <small class="note-when">{{ note.createdAt|date("D g:i A") }}</small>
+                    <small class="note-when">
+                        {% set difference = date(now).diff(date(note.createdAt)) %}
+                        {% if difference.days >= 2 %}
+                            {{ difference.days }} days
+                        {% else %}
+                            {{ difference.format('%H:%I') }} ago
+                        {% endif %}
+                    </small>
                 </div>
                 <div class="col-sm-9 note-body">
                     {{ note.body }}
