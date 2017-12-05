@@ -88,6 +88,8 @@ class Puzzle extends BasePuzzle {
 		}
 		$this->save();
 
+		addPuzzleNews($this, 'solved');
+
 		return $alert;
 	}
 
@@ -122,12 +124,12 @@ class Puzzle extends BasePuzzle {
 			':drive: <https://docs.google.com/spreadsheet/ccc?key='.$this->getSpreadsheetId().'|Google Spreadsheet>',
 		];
 
-        $response = array_map(function($info) {
-            return [
-                "text"  => $info,
-                "color" => $this->getStatusColor(),
-            ];
-        }, $puzzle_info);
+		$response = array_map(function ($info) {
+				return [
+					"text"  => $info,
+					"color" => $this->getStatusColor(),
+				];
+			}, $puzzle_info);
 
 		if ($this->countMembers() > 0) {
 			$response[] = [

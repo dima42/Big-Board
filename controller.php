@@ -559,12 +559,18 @@ function addNews($text, $type = "important", $puzzle = null) {
 
 	$update = new News();
 	$update->setContent($text);
-	$update->setNewsType('important');
+	$update->setNewsType($type);
 	$update->setMember($member);
+	$update->setPuzzle($puzzle);
 	$update->save();
 
 	$message = "Update posted.";
 	redirect('/news', $message);
+}
+
+function addPuzzleNews($puzzle, $type) {
+	$text = "`".$puzzle->getSolution()."`";
+	addNews($text, $type, $puzzle);
 }
 
 function archiveNews($update_id) {

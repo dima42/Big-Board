@@ -56,6 +56,8 @@ function emojify($status) {
 			return "🚨";
 		case "solved":
 			return "🏁";
+		case "important":
+			return "📣";
 	}
 
 	return "⚪️";
@@ -86,6 +88,7 @@ $twig->addFilter($yesno);
 function render($template, $vars = array()) {
 	$latestNews = NewsQuery::create()
 		->orderByCreatedAt('desc')
+		->filterByNewsType('important')
 		->limit(1)
 		->findOne();
 

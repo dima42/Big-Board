@@ -16,8 +16,14 @@
             {% endif %}
         </small>
     </div>
-    <div class="col-sm-9 entry-body">
-        {{ update.content }}
+    <div class="col-sm-1">
+        {{ update.newsType|emojify }}
+    </div>
+    <div class="col-sm-8 entry-body">
+        {% if update.puzzle %}
+            <a href="/puzzle/{{ update.puzzle.id }}">{{ update.puzzle.title }}</a><br>
+        {% endif %}
+        {{ update.content|markdown }}
         <form action="/news/{{ update.id }}/delete" class="delete-entry" method="post">
             <button type="submit" class="close">
                 <span>&times;</span>
