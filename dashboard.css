@@ -93,29 +93,26 @@ aside {
   width: 100%;
   text-align: left; }
 
-.note-row {
+.note-row, .news-row {
   padding: .8em 0;
   border-bottom: 1px solid #eee; }
-
-.note-by {
-  color: #666;
-  font-size: .9rem;
-  display: block; }
-
-.note-when {
-  color: #888;
-  font-size: .75rem;
-  display: block; }
-
-.note-body {
-  position: relative; }
-  .note-body .close {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 0; }
-  .note-body:hover .close {
+  .note-row .entry-by, .news-row .entry-by {
+    color: #666;
+    font-size: .9rem;
     display: block; }
+  .note-row .entry-when, .news-row .entry-when {
+    color: #888;
+    font-size: .75rem;
+    display: block; }
+  .note-row .entry-body, .news-row .entry-body {
+    position: relative; }
+    .note-row .entry-body .close, .news-row .entry-body .close {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 0; }
+    .note-row .entry-body:hover .close, .news-row .entry-body:hover .close {
+      display: block; }
 
 .new-note-form {
   padding-top: 1em; }

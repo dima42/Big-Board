@@ -3,6 +3,26 @@
 {% block content %}
 <h1>Latest news</h1>
 
+{% for update in updates %}
+<div class="row news-row">
+    <div class="col-sm-3">
+        <small class="entry-by">{{ update.member.fullName }}</small>
+        <small class="entry-when">
+            {% set difference = date(now).diff(date(update.createdAt)) %}
+            {% if difference.days >= 2 %}
+                {{ difference.days }} days
+            {% else %}
+                {{ difference.format('%H:%I') }} ago
+            {% endif %}
+        </small>
+    </div>
+    <div class="col-sm-9 entry-body">
+        {{ update.content }}
+    </div>
+</div>
+{% endfor %}
+
+
 <table class="table">
     {% for update in updates if filter != "Y" or update.TYP != "PUZ" %}
     <tr>

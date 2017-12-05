@@ -169,38 +169,42 @@ aside {
     text-align: left;
 }
 
-.note-row {
+%entry-row {
     padding: .8em 0;
     border-bottom: 1px solid #eee;
-}
 
-.note-by {
-    color: #666;
-    font-size: .9rem;
-    display: block;
-}
-
-.note-when {
-    color: #888;
-    font-size: .75rem;
-    display: block;
-}
-
-.note-body {
-    position: relative;
-
-    .close {
-        display: none;
-        position: absolute;
-        right: 0;
-        top: 0;
+    .entry-by {
+        color: #666;
+        font-size: .9rem;
+        display: block;
     }
 
-    &:hover {
+    .entry-when {
+        color: #888;
+        font-size: .75rem;
+        display: block;
+    }
+
+    .entry-body {
+        position: relative;
+
         .close {
-            display: block;
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        &:hover {
+            .close {
+                display: block;
+            }
         }
     }
+}
+
+.note-row {
+    @extend %entry-row;
 }
 
 .new-note-form {
@@ -255,4 +259,10 @@ aside {
         background:transparent url('https://media.giphy.com/media/l378z9JqBTfYDrXUI/source.gif') no-repeat;
         background-size: cover;
     }
+}
+
+// NEWS
+
+.news-row {
+    @extend %entry-row;
 }

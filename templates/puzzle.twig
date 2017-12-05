@@ -53,8 +53,8 @@
         {% for note in notes %}
             <div class="row note-row">
                 <div class="col-sm-3">
-                    <small class="note-by">{{ note.author.fullName }}</small>
-                    <small class="note-when">
+                    <small class="entry-by">{{ note.author.fullName }}</small>
+                    <small class="entry-when">
                         {% set difference = date(now).diff(date(note.createdAt)) %}
                         {% if difference.days >= 2 %}
                             {{ difference.days }} days
@@ -63,7 +63,7 @@
                         {% endif %}
                     </small>
                 </div>
-                <div class="col-sm-9 note-body">
+                <div class="col-sm-9 entry-body">
                     {{ note.body }}
                     <form action="/puzzle/{{ puzzle.id }}/delete-note/{{ note.id }}" class="delete-note" method="post">
                         <button type="submit" class="close">
@@ -75,7 +75,7 @@
         {% endfor %}
     {% endif %}
         <form class="new-note-form" action="/puzzle/{{ puzzle.id }}/add-note" method="post">
-        <div class="row">
+        <div class="row note-row">
             <div class="col-sm-3">
                 <small class="note-by">{{ user.fullName }}</small>
             </div>
