@@ -63,7 +63,7 @@
 </nav>
 
 {% if alert.message %}
-<div class="col-12 offset-md-2 col-md-10 banner rounded-0 alert alert-{{ alert.type }}">{{ alert.message }}</div>
+<div class="alert-banner col-12 offset-md-2 col-md-10 banner rounded-0 alert alert-{{ alert.type }}">{{ alert.message }}</div>
 {% endif %}
 
 <main role="main" class="col-12 {% block main_classes %}col-md-10{% endblock %} pt-3 ml-sm-auto">
