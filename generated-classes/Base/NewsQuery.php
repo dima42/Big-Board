@@ -3,6 +3,7 @@
 namespace Base;
 
 use \News as ChildNews;
+use \NewsArchive as ChildNewsArchive;
 use \NewsQuery as ChildNewsQuery;
 use \Exception;
 use \PDO;
@@ -86,7 +87,10 @@ use Propel\Runtime\Exception\PropelException;
  */
 abstract class NewsQuery extends ModelCriteria
 {
-    protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
+
+    // archivable behavior
+    protected $archiveOnDelete = true;
+protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
      * Initializes internal state of \Base\NewsQuery object.
@@ -583,6 +587,25 @@ abstract class NewsQuery extends ModelCriteria
     }
 
     /**
+     * Code to execute before every DELETE statement
+     *
+     * @param     ConnectionInterface $con The connection object used by the query
+     */
+    protected function basePreDelete(ConnectionInterface $con)
+    {
+        // archivable behavior
+
+        if ($this->archiveOnDelete) {
+            $this->archive($con);
+        } else {
+            $this->archiveOnDelete = true;
+        }
+
+
+        return $this->preDelete($con);
+    }
+
+    /**
      * Deletes all rows from the news table.
      *
      * @param ConnectionInterface $con the connection to use
@@ -707,6 +730,85 @@ abstract class NewsQuery extends ModelCriteria
     public function firstCreatedFirst()
     {
         return $this->addAscendingOrderByColumn(NewsTableMap::COL_CREATED_AT);
+    }
+
+    // archivable behavior
+
+    /**
+     * Copy the data of the objects satisfying the query into ChildNewsArchive archive objects.
+     * The archived objects are then saved.
+     * If any of the objects has already been archived, the archived object
+     * is updated and not duplicated.
+     * Warning: This termination methods issues 2n+1 queries.
+     *
+     * @param      ConnectionInterface $con    Connection to use.
+     * @param      Boolean $useLittleMemory    Whether or not to use OnDemandFormatter to retrieve objects.
+     *               Set to false if the identity map matters.
+     *               Set to true (default) to use less memory.
+     *
+     * @return     int the number of archived objects
+     */
+    public function archive($con = null, $useLittleMemory = true)
+    {
+        $criteria = clone $this;
+        // prepare the query
+        $criteria->setWith(array());
+        if ($useLittleMemory) {
+            $criteria->setFormatter(ModelCriteria::FORMAT_ON_DEMAND);
+        }
+        if ($con === null) {
+            $con = Propel::getServiceContainer()->getWriteConnection(NewsTableMap::DATABASE_NAME);
+        }
+
+        return $con->transaction(function () use ($con, $criteria) {
+            $totalArchivedObjects = 0;
+
+            // archive all results one by one
+            foreach ($criteria->find($con) as $object) {
+                $object->archive($con);
+                $totalArchivedObjects++;
+            }
+
+            return $totalArchivedObjects;
+        });
+    }
+
+    /**
+     * Enable/disable auto-archiving on delete for the next query.
+     *
+     * @param boolean True if the query must archive deleted objects, false otherwise.
+     */
+    public function setArchiveOnDelete($archiveOnDelete)
+    {
+        $this->archiveOnDelete = $archiveOnDelete;
+    }
+
+    /**
+     * Delete records matching the current query without archiving them.
+     *
+     * @param      ConnectionInterface $con    Connection to use.
+     *
+     * @return integer the number of deleted rows
+     */
+    public function deleteWithoutArchive($con = null)
+    {
+        $this->archiveOnDelete = false;
+
+        return $this->delete($con);
+    }
+
+    /**
+     * Delete all records without archiving them.
+     *
+     * @param      ConnectionInterface $con    Connection to use.
+     *
+     * @return integer the number of deleted rows
+     */
+    public function deleteAllWithoutArchive($con = null)
+    {
+        $this->archiveOnDelete = false;
+
+        return $this->deleteAll($con);
     }
 
 } // NewsQuery

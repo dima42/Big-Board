@@ -73,5 +73,6 @@
             <reference local="member_id" foreign="id"/>
         </foreign-key>
         <behavior name="timestampable" />
+        <behavior name="archivable" />
     </table>
 </database>
