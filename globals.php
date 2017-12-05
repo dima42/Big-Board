@@ -5,6 +5,8 @@ require_once "slack.php";
 require_once 'google-api-php-client/src/Google_Client.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
+use DebugBar\StandardDebugBar;
+
 session_start();
 
 // ALERT
@@ -94,6 +96,17 @@ function render($template, $vars = array()) {
 	$vars['statuses']   = ['open', 'stuck', 'priority', 'urgent', 'solved'];
 	$vars['time']       = strftime('%c');
 	$vars['latestNews'] = $latestNews;
+
+	Global $DEBUG;
+	if ($DEBUG) {
+		$debugbar         = new StandardDebugBar();
+		$debugbarRenderer = $debugbar->getJavascriptRenderer();
+
+		$debugbar["messages"]->addMessage("hello world!");
+
+		$vars['debugHead'] = $debugbarRenderer->renderHead();
+		$vars['debugBar']  = $debugbarRenderer->render();
+	}
 
 	$vars['metas'] = PuzzlePuzzleQuery::create()
 		->joinWith('PuzzlePuzzle.Parent')
