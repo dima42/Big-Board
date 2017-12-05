@@ -3,6 +3,7 @@ require_once 'vendor/autoload.php';
 require_once 'generated-conf/config.php';
 require_once "slack.php";
 require_once 'google-api-php-client/src/Google_Client.php';
+require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
 require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
 use DebugBar\StandardDebugBar;
