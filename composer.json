@@ -9,7 +9,9 @@
     "klein/klein": "^2.1",
     "duzun/hquery": "^1.7",
     "maknz/slack": "^1.7",
-    "maximebf/debugbar": "^1.14"
+    "maximebf/debugbar": "^1.14",
+    "aptoma/twig-markdown": "^3.0",
+    "michelf/php-markdown": "^1.7"
   },
   "require-dev": {
     "deployer/deployer": "^6.0",

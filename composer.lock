@@ -4,8 +4,65 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "73f3791d7a99e326a87d929ef0e73c99",
+    "content-hash": "99b6afcfcc7fc32d1e98f5ea770639ff",
     "packages": [
+        {
+            "name": "aptoma/twig-markdown",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aptoma/twig-markdown.git",
+                "reference": "624ccf53002e6786a17789a98d08e3d5e662517d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aptoma/twig-markdown/zipball/624ccf53002e6786a17789a98d08e3d5e662517d",
+                "reference": "624ccf53002e6786a17789a98d08e3d5e662517d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0",
+                "twig/twig": "^2.0"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "erusev/parsedown": "^1.6",
+                "knplabs/github-api": "~1.4",
+                "league/commonmark": "~0.5",
+                "michelf/php-markdown": "~1",
+                "phpunit/phpunit": "~6.0||~5.0"
+            },
+            "suggest": {
+                "knplabs/github-api": "Needed for using GitHub's Markdown engine provided through their API.",
+                "michelf/php-markdown": "Original Markdown engine with MarkdownExtra."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Aptoma": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joris Berthelot",
+                    "email": "joris@berthelot.tel"
+                },
+                {
+                    "name": "Gunnar Lium",
+                    "email": "gunnar@aptoma.com"
+                }
+            ],
+            "description": "Twig extension to work with Markdown content",
+            "keywords": [
+                "markdown",
+                "twig"
+            ],
+            "time": "2017-06-23T14:35:41+00:00"
+        },
         {
             "name": "cocur/slugify",
             "version": "v3.0.1",
@@ -930,6 +987,57 @@
                 "debugbar"
             ],
             "time": "2017-09-13T12:19:36+00:00"
+        },
+        {
+            "name": "michelf/php-markdown",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michelf/php-markdown.git",
+                "reference": "1f51cc520948f66cd2af8cbc45a5ee175e774220"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/1f51cc520948f66cd2af8cbc45a5ee175e774220",
+                "reference": "1f51cc520948f66cd2af8cbc45a5ee175e774220",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-lib": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Michelf": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Michel Fortin",
+                    "email": "michel.fortin@michelf.ca",
+                    "homepage": "https://michelf.ca/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "John Gruber",
+                    "homepage": "https://daringfireball.net/"
+                }
+            ],
+            "description": "PHP Markdown",
+            "homepage": "https://michelf.ca/projects/php-markdown/",
+            "keywords": [
+                "markdown"
+            ],
+            "time": "2016-10-29T18:58:20+00:00"
         },
         {
             "name": "monolog/monolog",
