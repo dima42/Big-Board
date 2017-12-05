@@ -42,6 +42,9 @@ function show_content() {
 			$klein->respond('POST', '/join/?', function ($request) {
 					return joinPuzzle($request->id);
 				});
+			$klein->respond('POST', '/delete-note/[:note_id]?', function ($request) {
+					return deleteNote($request->note_id, $request->id);
+				});
 		});
 
 	// META
@@ -317,6 +320,16 @@ function joinPuzzle($puzzle_id) {
 	$member = $_SESSION['user'];
 
 	$alert = $member->joinPuzzle($puzzle);
+	redirect('/puzzle/'.$puzzle_id, $alert);
+}
+
+function deleteNote($note_id, $puzzle_id) {
+	// TODO: soft delete
+	$note = NoteQuery::create()
+		->filterByID($note_id)
+		->delete();
+
+	$alert = "Note deleted.";
 	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 

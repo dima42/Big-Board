@@ -186,6 +186,23 @@ aside {
     display: block;
 }
 
+.note-body {
+    position: relative;
+
+    .close {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    &:hover {
+        .close {
+            display: block;
+        }
+    }
+}
+
 .new-note-form {
     padding-top: 1em
 }

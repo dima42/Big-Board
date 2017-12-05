@@ -45,15 +45,22 @@
     {% block content_notes %}
 
     {% if notes|length %}
-            {% for note in notes %}
-        <div class="row note-row">
+        {% for note in notes %}
+            <div class="row note-row">
                 <div class="col-sm-3">
                     <small class="note-by">{{ note.author.fullName }}</small>
                     <small class="note-when">{{ note.createdAt|date("D g:i A") }}</small>
                 </div>
-                <div class="col-sm-9">{{ note.body }}</div>
-        </div>
-            {% endfor %}
+                <div class="col-sm-9 note-body">
+                    {{ note.body }}
+                    <form action="/puzzle/{{ puzzle.id }}/delete-note/{{ note.id }}" class="delete-note" method="post">
+                        <button type="submit" class="close">
+                            <span>&times;</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
     {% endif %}
         <form class="new-note-form" action="/puzzle/{{ puzzle.id }}/add-note" method="post">
         <div class="row">
@@ -61,9 +68,9 @@
                 <small class="note-by">{{ user.fullName }}</small>
             </div>
             <div class="col-sm-9">
-                    <textarea type="text" class="form-control" name="body" rows="2"></textarea>
-                    <br>
-                    <button class="btn btn-primary" type="submit">Submit new note</button>
+                <textarea type="text" class="form-control" name="body" rows="2"></textarea>
+                <br>
+                <button class="btn btn-primary" type="submit">Submit new note</button>
             </div>
         </div>
         </form>
@@ -105,4 +112,15 @@
     </div>
     {% endif %}
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('.delete-note').submit(function(e) {
+        // e.preventDefault();
+        // TODO: put up warning
+    });
+});
+</script>
 {% endblock %}

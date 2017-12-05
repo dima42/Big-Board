@@ -107,6 +107,16 @@ aside {
   font-size: .75rem;
   display: block; }
 
+.note-body {
+  position: relative; }
+  .note-body .close {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0; }
+  .note-body:hover .close {
+    display: block; }
+
 .new-note-form {
   padding-top: 1em; }
 
