@@ -572,7 +572,7 @@ function archiveNews($update_id) {
 		->filterByID($update_id)
 		->delete();
 
-	$alert = "Update deleted.";
+	$alert = "Update archived.";
 	redirect('/news/', $alert);
 }
 
