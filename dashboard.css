@@ -93,6 +93,23 @@ aside {
   width: 100%;
   text-align: left; }
 
+.note-row {
+  padding: .8em 0;
+  border-bottom: 1px solid #eee; }
+
+.note-by {
+  color: #666;
+  font-size: .9rem;
+  display: block; }
+
+.note-when {
+  color: #888;
+  font-size: .75rem;
+  display: block; }
+
+.new-note-form {
+  padding-top: 1em; }
+
 .puzzleInputGroup {
   margin-bottom: 2.5em; }
   .puzzleInputGroup .input-group-addon {

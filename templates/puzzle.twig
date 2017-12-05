@@ -25,7 +25,7 @@
             </span>
         </div>
     </form>
-    <form class="puzzleEdit mb-5" action="/puzzle/{{ puzzle.id }}/change-status" method="post">
+    <form class="puzzleEdit mb-4" action="/puzzle/{{ puzzle.id }}/change-status" method="post">
         <div class="input-group">
             <span class="input-group-addon">Status</span>
             <select id="statusSelect" class="form-control" name="status">
@@ -43,34 +43,30 @@
     {% block content_main %}{% endblock %}
 
     {% block content_notes %}
+
     {% if notes|length %}
-        <div class="row">
             {% for note in notes %}
+        <div class="row note-row">
                 <div class="col-sm-3">
-                    {{ note.author.fullName }}<br>
-                    <small class="text-muted">{{ note.createdAt|date("D g:i A") }}</small>
+                    <small class="note-by">{{ note.author.fullName }}</small>
+                    <small class="note-when">{{ note.createdAt|date("D g:i A") }}</small>
                 </div>
-                <div class="col-sm-9"><div class="bg-light border rounded p-3 mb-3">{{ note.body }}</div></div>
-            {% endfor %}
-
-            <div class="col-12">
-                <hr>
-            </div>
+                <div class="col-sm-9">{{ note.body }}</div>
         </div>
+            {% endfor %}
     {% endif %}
+        <form class="new-note-form" action="/puzzle/{{ puzzle.id }}/add-note" method="post">
         <div class="row">
-
             <div class="col-sm-3">
-                Add a note
+                <small class="note-by">{{ user.fullName }}</small>
             </div>
             <div class="col-sm-9">
-                <form action="/puzzle/{{ puzzle.id }}/add-note" method="post">
                     <textarea type="text" class="form-control" name="body" rows="2"></textarea>
                     <br>
                     <button class="btn btn-primary" type="submit">Submit new note</button>
-                </form>
             </div>
         </div>
+        </form>
     {% endblock %}
 {% endblock %}
 
