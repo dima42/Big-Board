@@ -643,7 +643,7 @@ function infoBot($request, $response) {
 		$channel_response = [
 			'link_names'    => true,
 			"response_type" => "in_channel",
-			"text"          => "*".$puzzle->getTitle()."*",
+			"text"          => "*".$puzzle->getTitle()."* is ".emojify($puzzle->getStatus())." ".strtoupper($puzzle->getStatus()),
 			"attachments"   => $puzzle->getAttachmentsForSlack(),
 		];
 	}

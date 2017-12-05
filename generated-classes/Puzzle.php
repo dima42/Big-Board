@@ -15,6 +15,17 @@ use Base\Puzzle as BasePuzzle;
 class Puzzle extends BasePuzzle {
 	// GET
 
+	public function getStatusColor() {
+		$colors = [
+			'open'     => 'green',
+			'solved'   => "#000",
+			'stuck'    => "#FFEFE5",
+			'priority' => "#FFD1B2",
+			'urgent'   => "#FF6600",
+		];
+		return $colors[$this->getStatus()]??'green';
+	}
+
 	public function getSlackURL() {
 		return "http://palindrome2017.slack.com/messages/".$this->getSlackChannel();
 	}
@@ -96,20 +107,25 @@ class Puzzle extends BasePuzzle {
 			':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$this ->getId().'|Big Board>',
 			':mit: <'.$this                                              ->getUrl().'|Puzzle page>',
 			':drive: <https://docs.google.com/spreadsheet/ccc?key='.$this->getSpreadsheetId().'|Google Spreadsheet>',
-			':slack: <#'.$this                                           ->getSlackChannelId().'|'.$this->getSlackChannel().'>',
 		];
 
 		$notes = $this->getMembers();
 
-		return [[
+		$response = [[
 				"text"  => join("\n", $puzzle_info),
-				"color" => "good",
-			], [
+				"color" => $this->getStatusColor(),
+			]];
+
+		if ($this->countMembers() > 0) {
+			$response[] = [
 				"pretext"   => "*Roster:*",
 				"mrkdwn_in" => ["pretext"],
 				"text"      => $this->getMembersForSlack(),
-				"color"     => "good",
-			]];
+				"color"     => "grey",
+			];
+		}
+
+		return $response;
 	}
 
 	public function postInfoToSlack() {
@@ -152,7 +168,6 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function postMembers($header_msg = "Current roster:", $channel = "sandbox") {
-
 		$client = getSlackClient(":wave:", "JoinBot");
 		$client->to($channel)->attach([
 				'text'  => $this->getMembersForSlack(),
