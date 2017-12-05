@@ -534,6 +534,7 @@ function displayNews() {
 	$filter = $_GET['filter'];
 
 	$news = NewsQuery::create()
+		->joinWith('News.Member')
 		->orderByCreatedAt('desc')
 		->find();
 
