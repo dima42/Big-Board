@@ -426,7 +426,7 @@ function addPuzzle($request, $response) {
 			$news_text = "was added.";
 			addNews($news_text, 'open', $newPuzzle);
 
-            // POST TO SLACK CHANNEL
+			// POST TO SLACK CHANNEL
 			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getAttachmentsForSlack(), $channel);
 			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getAttachmentsForSlack());
 		}
@@ -580,10 +580,15 @@ function postNews($text) {
 		redirect('/news/');
 	}
 
-	addNews($text, "important", null, $_SESSION['user']);
-	$message = "Update posted.";
+	$member = $_SESSION['user'];
+	addNews($text, "important", null, $member);
+	postToChannel('*IMPORTANT NEWS* from '.$member->getFullName(), [
+			"text"  => $text,
+			"color" => "#ff0000",
+		], null, ":mega:", "NewsBot");
 
-	redirect('/news', $message);
+	$alert = "Update posted.";
+	redirect('/news', $alert);
 }
 
 function archiveNews($update_id) {
