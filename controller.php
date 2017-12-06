@@ -288,7 +288,7 @@ function changePuzzleStatus($puzzle_id, $request) {
 	if (in_array($newStatus, ['priority', 'urgent'])) {
 		$news_text = "status set to `".$newStatus."`.";
 		addNews($news_text, $newStatus, $puzzle);
-		postToChannel(emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle()!'*.', $puzzle->getSlackAttachmentMedium(), null, ":bell:", "StatusBot");
+		postToChannel(emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!', $puzzle->getSlackAttachmentMedium(), null, ":bell:", "StatusBot");
 		// TODO: change channel to #general
 	}
 
@@ -625,7 +625,7 @@ function bigBoardBot($request, $response) {
 	if ($parameter == "") {
 		$puzzleQuery->filterByStatus('solved', Criteria::NOT_EQUAL);
 		$count   = $puzzleQuery->count();
-		$pretext = $count." unsolved puzzles:";
+		$pretext = $count." puzzles are unsolved:";
 	} elseif (in_array($parameter, ['open', 'priority', 'urgent', 'solved'])) {
 		$puzzleQuery->filterByStatus($parameter);
 		$count   = $puzzleQuery->count();

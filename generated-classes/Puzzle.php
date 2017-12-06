@@ -26,6 +26,10 @@ class Puzzle extends BasePuzzle {
 		return $colors[$this->getStatus()]??'green';
 	}
 
+	public function getBigBoardURL() {
+		return "http://team-palindrome.herokuapp.com/puzzle/".$this->getId();
+	}
+
 	public function getSlackURL() {
 		return "http://palindrome2017.slack.com/messages/".$this->getSlackChannel();
 	}
@@ -123,11 +127,12 @@ class Puzzle extends BasePuzzle {
 
 	public function getSlackAttachmentSmall() {
 		$content = [
-			emojify($this                                        ->getStatus()),
-			'<http://team-palindrome.herokuapp.com/puzzle/'.$this->getId().'|:boar:> ',
-			'<https://docs.google.com/spreadsheet/ccc?key='.$this->getSpreadsheetId().'|:drive:> ',
-			'*'.$this                                            ->getTitle().'*',
-			'<#'.$this                                           ->getSlackChannelId().'>',
+			emojify($this->getStatus()),
+			'<'.$this    ->getBigBoardURL().'|:boar:> ',
+			'<'.$this    ->getUrl().'|:mit:>',
+			'<'.$this    ->getSpreadsheetURL().'|:drive:> ',
+			'*'.$this    ->getTitle().'*',
+			'<#'.$this   ->getSlackChannelId().'>',
 		];
 
 		return [
@@ -139,9 +144,10 @@ class Puzzle extends BasePuzzle {
 
 	public function getSlackAttachmentMedium() {
 		$content = [
-			':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$this ->getId().'|Big Board> ',
-			':drive: <https://docs.google.com/spreadsheet/ccc?key='.$this->getSpreadsheetId().'|Spreadsheet> ',
-			':slack: <#'.$this                                           ->getSlackChannelId().'|'.$this->getSlackChannel().'>'
+			':boar: <'.$this  ->getBigBoardURL().'|Big Board> ',
+			':mit: <'.$this   ->getUrl().'|Puzzle page>',
+			':drive: <'.$this ->getSpreadsheetURL().'|Spreadsheet> ',
+			':slack: <#'.$this->getSlackChannelId().'|'.$this->getSlackChannel().'>'
 		];
 
 		return [
@@ -151,10 +157,11 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function getSlackAttachmentLarge() {
+		// No need for Slack channel b/c this info can only be returned to the puzzle's Slack channel.
 		$puzzle_info = [
-			':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$this ->getId().'|Big Board>',
-			':mit: <'.$this                                              ->getUrl().'|Puzzle page>',
-			':drive: <https://docs.google.com/spreadsheet/ccc?key='.$this->getSpreadsheetId().'|Google Spreadsheet>',
+			':boar: <'.$this ->getBigBoardURL().'|Big Board>',
+			':mit: <'.$this  ->getUrl().'|Puzzle page>',
+			':drive: <'.$this->getSpreadsheetURL().'|Google Spreadsheet>',
 		];
 
 		$response = array_map(function ($info) {
