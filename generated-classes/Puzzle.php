@@ -86,8 +86,7 @@ class Puzzle extends BasePuzzle {
 			addNews($news_text, $newStatus, $this);
 
 			// POST TO SLACK
-			$attachments = $this->getSlackAttachmentMedium();
-			postToChannel('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $attachments, $channel, ":checkered_flag:", "SolveBot");
+			postToChannel('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), $channel, ":checkered_flag:", "SolveBot");
 			// TODO: post to $this->getSlackChannel());
 		} else {
 			$this->setStatus('open');

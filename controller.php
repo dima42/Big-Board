@@ -288,7 +288,8 @@ function changePuzzleStatus($puzzle_id, $request) {
 	if (in_array($newStatus, ['priority', 'urgent'])) {
 		$news_text = "status set to `".$newStatus."`.";
 		addNews($news_text, $newStatus, $puzzle);
-		// TODO: post to slack?
+		postToChannel(emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle()!'*.', $puzzle->getSlackAttachmentMedium(), null, ":bell:", "StatusBot");
+		// TODO: change channel to #general
 	}
 
 	$alert = "Changed status.";
