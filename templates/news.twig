@@ -50,19 +50,10 @@
 
 {% block aside %}
 <h4>Add an update</h4>
-<form class="new-update-form mb-5" action="/news/add" method="post">
+<form class="new-update-form mb-4" action="/news/add" method="post">
     <textarea type="text" class="form-control mb-2" name="body" rows="4"></textarea>
     <button class="btn btn-primary" type="submit">Post important update</button>
 </form>
-
-<h4>Show</h4>
-<p>
-    {% if filter == "Y" %}
-        <a href='/news'>all updates</a>
-    {% else %}
-        <a href='/news?filter=Y'>just important updates</a>
-    {% endif %}
-</p>
 {% endblock %}
 
 {% block latest_news %}{% endblock %}
