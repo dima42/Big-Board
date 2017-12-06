@@ -181,6 +181,10 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		->filterByID($puzzle_id)
 		->findOne();
 
+        if(!$puzzle) {
+            redirect('/', "Puzzle $puzzle_id does not exist.");
+        }
+
 	$notes = NoteQuery::create()
 		->filterByPuzzle($puzzle)
 		->orderByCreatedAt('desc')
