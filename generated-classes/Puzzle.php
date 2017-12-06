@@ -86,7 +86,8 @@ class Puzzle extends BasePuzzle {
 			addNews($news_text, $newStatus, $this);
 
 			// POST TO SLACK
-			postSolve($this);
+			$attachments = $this->getSlackAttachmentMedium();
+			postToChannel('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $attachments, $channel, ":checkered_flag:", "SolveBot");
 			// TODO: post to $this->getSlackChannel());
 		} else {
 			$this->setStatus('open');
@@ -121,7 +122,36 @@ class Puzzle extends BasePuzzle {
 
 	// SLACK STUFF
 
-	public function getAttachmentsForSlack() {
+	public function getSlackAttachmentSmall() {
+		$content = [
+			emojify($this                                        ->getStatus()),
+			'<http://team-palindrome.herokuapp.com/puzzle/'.$this->getId().'|:boar:> ',
+			'<https://docs.google.com/spreadsheet/ccc?key='.$this->getSpreadsheetId().'|:drive:> ',
+			'*'.$this                                            ->getTitle().'*',
+			'<#'.$this                                           ->getSlackChannelId().'>',
+		];
+
+		return [
+			"text"      => join(" ", $content),
+			'color'     => $this->getStatusColor(),
+			"mrkdwn_in" => ['text'],
+		];
+	}
+
+	public function getSlackAttachmentMedium() {
+		$content = [
+			':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$this ->getId().'|Big Board> ',
+			':drive: <https://docs.google.com/spreadsheet/ccc?key='.$this->getSpreadsheetId().'|Spreadsheet> ',
+			':slack: <#'.$this                                           ->getSlackChannelId().'|'.$this->getSlackChannel().'>'
+		];
+
+		return [
+			'text'  => join(" ", $content),
+			'color' => '#000000',
+		];
+	}
+
+	public function getSlackAttachmentLarge() {
 		$puzzle_info = [
 			':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$this ->getId().'|Big Board>',
 			':mit: <'.$this                                              ->getUrl().'|Puzzle page>',

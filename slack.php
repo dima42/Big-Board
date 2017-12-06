@@ -29,17 +29,3 @@ function postToChannel($message, $attachments, $channel = "sandbox", $icon = ":b
 	$client = getSlackClient($icon, $bot_name);
 	$client->to($channel)->attach($attachments)->send($message);
 }
-
-// TODO: change default channel big-board
-function postSolve($puzzle, $channel = "sandbox") {
-	$content = ':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board> '.
-	':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Spreadsheet> '.
-	':slack: <#'.$puzzle->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>';
-
-	$attachments = [
-		'text'  => $content,
-		'color' => '#000000',
-	];
-
-	postToChannel('*'.$puzzle->getTitle().'* is solved: `'.$puzzle->getSolution().'`', $attachments, $channel, ":checkered_flag:", "SolveBot");
-}

@@ -427,8 +427,8 @@ function addPuzzle($request, $response) {
 			addNews($news_text, 'open', $newPuzzle);
 
 			// POST TO SLACK CHANNEL
-			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getAttachmentsForSlack(), $channel);
-			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getAttachmentsForSlack());
+			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge(), $channel);
+			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge());
 		}
 	}
 
@@ -636,22 +636,9 @@ function bigBoardBot($request, $response) {
 	}
 
 	$puzzles     = $puzzleQuery->find();
-	$attachments = [];
-	foreach ($puzzles as $puzzle) {
-		$puzzleInfo = [
-			emojify($puzzle                                        ->getStatus()),
-			'<http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|:boar:> ',
-			'<https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|:drive:> ',
-			'*'.$puzzle                                            ->getTitle().'*',
-			'<#'.$puzzle                                           ->getSlackChannelId().'>',
-		];
-
-		$attachments[] = [
-			"text"      => join(" ", $puzzleInfo),
-			'color'     => 'good',
-			"mrkdwn_in" => ['text'],
-		];
-	}
+	$attachments = array_map(function ($puzzle) {
+			return $puzzle->getSlackAttachmentSmall();
+		}, iterator_to_array($puzzles));
 
 	$channel_response = [
 		'link_names'    => true,
@@ -694,7 +681,7 @@ function infoBot($request, $response) {
 			'link_names'    => true,
 			"response_type" => "in_channel",
 			"text"          => $text,
-			"attachments"   => $puzzle->getAttachmentsForSlack(),
+			"attachments"   => $puzzle->getSlackAttachmentLarge(),
 		];
 	}
 
