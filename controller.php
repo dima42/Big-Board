@@ -123,7 +123,7 @@ function show_content() {
 					return displayNews($request->filter);
 				});
 			$klein->respond('POST', '/add/?', function ($request) {
-					return addNews($request->body);
+					return postNews($request->body);
 				});
 			$klein->respond('POST', '/[:update_id]/delete/?', function ($request) {
 					return archiveNews($request->update_id);
@@ -573,21 +573,23 @@ function displayNews($filter = "all") {
 		));
 }
 
-function addNews($text, $type = "important", $puzzle = null) {
-	if (trim($text) == "") {
-		redirect('/news/');
-	}
-
-	$member = $_SESSION['user'];
-
+function addNews($text, $type = "important", $puzzle = null, $member = null) {
 	$update = new News();
 	$update->setContent($text);
 	$update->setNewsType($type);
 	$update->setMember($member);
 	$update->setPuzzle($puzzle);
 	$update->save();
+}
 
+function postNews($text) {
+	if (trim($text) == "") {
+		redirect('/news/');
+	}
+
+	addNews($text, "important", null, $_SESSION['user']);
 	$message = "Update posted.";
+
 	redirect('/news', $message);
 }
 

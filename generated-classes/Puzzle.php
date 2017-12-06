@@ -82,8 +82,8 @@ class Puzzle extends BasePuzzle {
 				->delete();
 
 			// POST UPDATE
-			$news_text = "`".$puzzle->getSolution()."`";
-			addNews($news_text, $newStatus, $puzzle);
+			$news_text = "`".$this->getSolution()."`";
+			addNews($news_text, $newStatus, $this);
 
 			// POST TO SLACK
 			postSolve($this);
