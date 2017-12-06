@@ -450,15 +450,14 @@ function addPuzzle($request, $response) {
 // MEMBERS
 
 function displayRoster() {
-	$roster = MemberQuery::create()
-		->leftJoinPuzzleMember()
-		->leftJoin('PuzzleMember.Puzzle')
-		->with('Puzzle')
+	$members = MemberQuery::create()
+		->leftJoinWith('PuzzleMember')
+		->leftJoinWith('PuzzleMember.Puzzle')
 		->orderByFullName()
 		->find();
 
 	render('roster.twig', array(
-			'roster' => $roster,
+			'roster' => $members,
 		));
 }
 
@@ -576,7 +575,7 @@ function displayNews($filter = "all") {
 
 function addNews($text, $type = "important", $puzzle = null) {
 	if (trim($text) == "") {
-        redirect('/news/');
+		redirect('/news/');
 	}
 
 	$member = $_SESSION['user'];

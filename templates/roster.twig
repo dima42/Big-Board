@@ -19,8 +19,8 @@
         <th>{% if person.slackID %}<a href="http://palindrome2018.slack.com/team/{{ person.slackId }}"><img src="/img/slack.png" width="15px" alt=""></a>{% endif %}</th>
         <td>{{ person.strengths }}</td>
         <td>
-            {% for puzzle in person.puzzles %}
-                <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a><br>
+            {% for pm in person.puzzleMembers %}
+                <a href="/puzzle/{{ pm.puzzle.id }}">{{ pm.puzzle.title }}</a><br>
             {% endfor %}
         </td>
     </tr>
