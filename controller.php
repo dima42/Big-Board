@@ -575,6 +575,10 @@ function displayNews($filter = "all") {
 }
 
 function addNews($text, $type = "important", $puzzle = null) {
+	if (trim($text) == "") {
+        redirect('/news/');
+	}
+
 	$member = $_SESSION['user'];
 
 	$update = new News();
