@@ -169,12 +169,6 @@ function displayTest() {
 		->filterByID(184)
 		->findOne();
 
-	$puzzle->postInfoToSlack();
-
-	// postPuzzle($puzzle, $puzzle->getSlackChannel());
-	// postSolve($puzzle, $puzzle->getSlackChannel());
-	// postSolve($puzzle);
-
 	return "";
 
 	render('test.twig', array(

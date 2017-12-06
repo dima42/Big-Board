@@ -24,29 +24,22 @@ function getSlackClient($icon = ":boar:", $username = "Big Board Bot") {
 	return $client;
 }
 
-function postToChannel($message, $channel = "sandbox") {
-	$client = getSlackClient();
-	$client->to('#'.$channel)->send($message);
+// TODO: change default channel big-board
+function postToChannel($message, $attachments, $channel = "sandbox", $icon = ":boar:", $bot_name = "Big Board Bot") {
+	$client = getSlackClient($icon, $bot_name);
+	$client->to($channel)->attach($attachments)->send($message);
 }
 
-function postPuzzle($puzzle, $channel = "sandbox") {
-	$client = getSlackClient();
-
-	$message = $client->createMessage();
-	$message->setText('*'.$puzzle->getTitle().'*');
-	$message->setAttachments($puzzle->getAttachmentsForSlack());
-	$message->setChannel('#'.$channel);
-	$message->send();
-}
-
+// TODO: change default channel big-board
 function postSolve($puzzle, $channel = "sandbox") {
 	$content = ':boar: <http://team-palindrome.herokuapp.com/puzzle/'.$puzzle->getId().'|Big Board> '.
 	':drive: <https://docs.google.com/spreadsheet/ccc?key='.$puzzle->getSpreadsheetId().'|Spreadsheet> '.
 	':slack: <#'.$puzzle->getSlackChannelId().'|'.$puzzle->getSlackChannel().'>';
 
-	$client = getSlackClient(":checkered_flag:", "SolveBot");
-	$client->to($channel)->attach([
-			'text'  => $content,
-			'color' => '#000000',
-		])->send('*'.$puzzle->getTitle().'* is solved: `'.$puzzle->getSolution().'`');
+	$attachments = [
+		'text'  => $content,
+		'color' => '#000000',
+	];
+
+	postToChannel('*'.$puzzle->getTitle().'* is solved: `'.$puzzle->getSolution().'`', $attachments, $channel, ":checkered_flag:", "SolveBot");
 }

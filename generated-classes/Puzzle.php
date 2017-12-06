@@ -147,11 +147,6 @@ class Puzzle extends BasePuzzle {
 		return $response;
 	}
 
-	public function postInfoToSlack() {
-		postPuzzle($this, $this->getSlackChannel());
-		postPuzzle($this);// TODO: make this the big-board channel
-	}
-
 	public function postJoin($member) {
 		$memberCount = $this->countMembers();
 		$channel     = $this->getSlackChannel();
