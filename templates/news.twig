@@ -19,7 +19,7 @@
 {% for update in updates %}
 <div class="row news-row {{ update.newsType }}">
     <div class="col-sm-3">
-        <small class="entry-by">{{ update.member.fullName }}</small>
+        <small class="entry-by">{{ update.member.fullName|default("Big Board Bot") }}</small>
         <small class="entry-when">
             {% set difference = date(now).diff(date(update.createdAt)) %}
             {% if difference.days >= 2 %}
