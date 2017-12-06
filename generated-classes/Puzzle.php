@@ -70,14 +70,20 @@ class Puzzle extends BasePuzzle {
 		$this->save();
 
 		if ($newSolution != '') {
+			$newStatus = 'solved';
+
 			// SET STATUS
-			$this->setStatus('solved');
+			$this->setStatus($newStatus);
 			$alert = $this->getTitle()." is solved! Great work, team! 🎓";
 
 			// REMOVE MEMBERS
 			PuzzleMemberQuery::create()
 				->filterByPuzzle($this)
 				->delete();
+
+			// POST UPDATE
+			$news_text = "`".$puzzle->getSolution()."`";
+			addNews($news_text, $newStatus, $puzzle);
 
 			// POST TO SLACK
 			postSolve($this);
@@ -87,8 +93,6 @@ class Puzzle extends BasePuzzle {
 			$alert = $this->getTitle()." is open again.";
 		}
 		$this->save();
-
-		addPuzzleNews($this, 'solved');
 
 		return $alert;
 	}

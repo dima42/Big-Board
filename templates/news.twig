@@ -3,8 +3,21 @@
 {% block content %}
 <h1>Latest news</h1>
 
+<ul class="nav nav-tabs news-nav">
+  <li class="nav-item">
+    <a class="nav-link all {% if filter == "all" %}active{% endif %}" href="/news">All</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link important {% if filter == "important" %}active{% endif %}" href="/news/important">Important</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link puzzles {% if filter == "puzzles" %}active{% endif %}" href="/news/puzzles">Puzzles</a>
+  </li>
+</ul>
+
+<div class="news-list">
 {% for update in updates %}
-<div class="row news-row">
+<div class="row news-row {{ update.newsType }}">
     <div class="col-sm-3">
         <small class="entry-by">{{ update.member.fullName }}</small>
         <small class="entry-when">
@@ -32,13 +45,14 @@
     </div>
 </div>
 {% endfor %}
+</div>
 {% endblock %}
 
 {% block aside %}
 <h4>Add an update</h4>
 <form class="new-update-form mb-5" action="/news/add" method="post">
     <textarea type="text" class="form-control mb-2" name="body" rows="4"></textarea>
-    <button class="btn btn-primary" type="submit">Submit news update</button>
+    <button class="btn btn-primary" type="submit">Post important update</button>
 </form>
 
 <h4>Show</h4>

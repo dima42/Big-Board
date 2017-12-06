@@ -38,8 +38,8 @@ function show_content() {
 			$klein->respond('POST', '/join/?', function ($request) {
 					return joinPuzzle($request->id);
 				});
-			$klein->respond('POST', '/delete-note/[:note_id]?', function ($request) {
-					return archiveNote($request->note_id, $request->id);
+			$klein->respond('POST', '/delete-note/[:note_id]/?', function ($request) {
+					return archivePuzzleNote($request->note_id, $request->id);
 				});
 		});
 
@@ -116,8 +116,11 @@ function show_content() {
 	// NEWS
 
 	$klein->with('/news', function () use ($klein) {
-			$klein->respond('GET', '/?', function () {
-					return displayNews();
+			$klein->respond('GET', '/?', function ($request) {
+					return displayNews("all");
+				});
+			$klein->respond('GET', '/[:filter]?/?', function ($request) {
+					return displayNews($request->filter);
 				});
 			$klein->respond('POST', '/add/?', function ($request) {
 					return addNews($request->body);
@@ -284,8 +287,15 @@ function changePuzzleStatus($puzzle_id, $request) {
 		->filterByID($puzzle_id)
 		->findOne();
 
-	$puzzle->setStatus($request->status);
+	$newStatus = $request->status;
+	$puzzle->setStatus($newStatus);
 	$puzzle->save();
+
+	if (in_array($newStatus, ['priority', 'urgent'])) {
+		$news_text = "status set to `".$newStatus."`.";
+		addNews($news_text, $newStatus, $puzzle);
+		// TODO: post to slack?
+	}
 
 	$alert = "Changed status.";
 	redirect('/puzzle/'.$puzzle_id, $alert);
@@ -316,12 +326,12 @@ function joinPuzzle($puzzle_id) {
 	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 
-function archiveNote($note_id, $puzzle_id) {
+function archivePuzzleNote($note_id, $puzzle_id) {
 	$note = NoteQuery::create()
 		->filterByID($note_id)
 		->delete();
 
-	$alert = "Note deleted.";
+	$alert = "Note archived.";
 	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 
@@ -418,6 +428,9 @@ function addPuzzle($request, $response) {
 				'title'    => $puzzleContent['title'],
 				'pkID'     => $newPuzzle->getID(),
 			);
+
+			$news_text = "was added.";
+			addNews($news_text, 'open', $newPuzzle);
 
 			$puzzle->postInfoToSlack();
 		}
@@ -539,14 +552,21 @@ function displayLoosePuzzles() {
 function displayFeature($puzzle_id) {
 }
 
-function displayNews() {
-	$filter = $_GET['filter'];
-
+function displayNews($filter = "all") {
 	$news = NewsQuery::create()
 		->leftJoinWith('News.Member')
 		->leftJoinWith('News.Puzzle')
-		->orderByCreatedAt('desc')
-		->find();
+		->orderByCreatedAt('desc');
+
+	if ($filter == "important") {
+		$news->filterByNewsType('important')
+		     ->find();
+	} elseif ($filter == "puzzles") {
+		$news->where('puzzle_id is not null')
+		     ->find();
+	} else {
+		$news->find();
+	}
 
 	render('news.twig', array(
 			'filter'  => $filter,
@@ -566,11 +586,6 @@ function addNews($text, $type = "important", $puzzle = null) {
 
 	$message = "Update posted.";
 	redirect('/news', $message);
-}
-
-function addPuzzleNews($puzzle, $type) {
-	$text = "`".$puzzle->getSolution()."`";
-	addNews($text, $type, $puzzle);
 }
 
 function archiveNews($update_id) {

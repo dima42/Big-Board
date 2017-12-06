@@ -106,6 +106,8 @@ aside {
     display: block; }
   .note-row .entry-body, .news-row .entry-body {
     position: relative; }
+    .note-row .entry-body p, .news-row .entry-body p {
+      margin: 0; }
     .note-row .entry-body .close, .news-row .entry-body .close {
       display: none;
       position: absolute;

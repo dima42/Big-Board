@@ -188,6 +188,10 @@ aside {
     .entry-body {
         position: relative;
 
+        p {
+            margin: 0;
+        }
+
         .close {
             display: none;
             position: absolute;
