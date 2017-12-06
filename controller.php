@@ -426,7 +426,9 @@ function addPuzzle($request, $response) {
 			$news_text = "was added.";
 			addNews($news_text, 'open', $newPuzzle);
 
-			$puzzle->postInfoToSlack();
+            // POST TO SLACK CHANNEL
+			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getAttachmentsForSlack(), $channel);
+			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getAttachmentsForSlack());
 		}
 	}
 
