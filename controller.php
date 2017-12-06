@@ -681,10 +681,15 @@ function infoBot($request, $response) {
 			"text" => "`".$request->command."` can only be used inside a puzzle channel.",
 		];
 	} else {
+		$status = $puzzle->getStatus();
+		$text   = "*".$puzzle->getTitle()."* is ".emojify($puzzle->getStatus())." ".strtoupper($status);
+		if ($status == "solved") {
+			$text .= ": `".$puzzle->getSolution()."`";
+		}
 		$channel_response = [
 			'link_names'    => true,
 			"response_type" => "in_channel",
-			"text"          => "*".$puzzle->getTitle()."* is ".emojify($puzzle->getStatus())." ".strtoupper($puzzle->getStatus()),
+			"text"          => $text,
 			"attachments"   => $puzzle->getAttachmentsForSlack(),
 		];
 	}
