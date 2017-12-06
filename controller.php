@@ -192,9 +192,6 @@ function displayPuzzle($puzzle_id, $method = "get") {
 
 	$members = $puzzle->getMembers();
 
-	// TODO: if not $puzzle, redirect to error template
-	// "This puzzle does not exist. It is a ghost puzzle.";
-
 	// TODO: Can we use $puzzle->getParents() for this?
 	$metas_to_show = PuzzlePuzzleQuery::create()
 		->joinWith('PuzzlePuzzle.Parent')
@@ -652,10 +649,6 @@ function bigBoardBot($request, $response) {
 		"attachments"   => $attachments,
 	];
 
-	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
-	// possible to blast this to everyone?
-	// $human_response = [];
-
 	return $response->json($channel_response);
 }
 
@@ -689,10 +682,6 @@ function infoBot($request, $response) {
 			"attachments"   => $puzzle->getSlackAttachmentLarge(),
 		];
 	}
-
-	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
-	// possible to blast this to everyone?
-	// $human_response = [];
 
 	return $response->json($channel_response);
 }
@@ -762,10 +751,6 @@ function solveBot($request, $response) {
 			"text"       => "Got it. I posted `".$solution."` as a solution to *".$puzzle->getTitle()."*.",
 		];
 	}
-
-	// TODO: if the user who sent this isn't in our system yet, ask him/her to click a link that only they see
-	// possible to blast this to everyone?
-	// $human_response = [];
 
 	return $response->json($channel_response);
 }

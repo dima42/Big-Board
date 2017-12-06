@@ -140,7 +140,7 @@ if (!$pal_client) {
 	$pal_client->setAccessType("offline");
 	$pal_client->setApplicationName("Palindrome Big Board");
 	$pal_client->setClientId('938479797888.apps.googleusercontent.com');
-	// TODO put the following in a environment variable
+	// TODO: put the following in a environment variable
 	$pal_client->setClientSecret('TOi6cB4Ao_N0iLnIbYj-Aeij');
 	$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']."/oauth");
 
