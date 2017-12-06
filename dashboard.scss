@@ -269,4 +269,8 @@ aside {
 
 .news-row {
     @extend %entry-row;
+
+    &.important {
+        background:lighten(yellow, 30%);
+    }
 }

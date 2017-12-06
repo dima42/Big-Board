@@ -145,3 +145,6 @@ aside {
 .addPuzzle.trippy {
   background: transparent url("https://media.giphy.com/media/l378z9JqBTfYDrXUI/source.gif") no-repeat;
   background-size: cover; }
+
+.news-row.important {
+  background: #ffff99; }
