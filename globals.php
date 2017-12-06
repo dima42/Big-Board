@@ -47,9 +47,9 @@ $twig->addExtension(new MarkdownExtension($engine));
 function emojify($status) {
 	switch ($status) {
 		case "open":
-			return "🤔";
+			return "⚪";
 		case "stuck":
-			return "🤷🏻‍♀️";
+			return "❓";
 		case "priority":
 			return "❗️";
 		case "urgent":
@@ -60,7 +60,7 @@ function emojify($status) {
 			return "📣";
 	}
 
-	return "⚪️";
+	return "😐";
 }
 
 $emojify = new Twig_Filter('emojify', 'emojify');
