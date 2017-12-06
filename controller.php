@@ -542,9 +542,6 @@ function displayLoosePuzzles() {
 		));
 }
 
-function displayFeature($puzzle_id) {
-}
-
 function displayNews($filter = "all") {
 	$news = NewsQuery::create()
 		->leftJoinWith('News.Member')
