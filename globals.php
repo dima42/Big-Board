@@ -116,11 +116,6 @@ function render($template, $vars = array()) {
 		$vars['debugBar']  = $debugbarRenderer->render();
 	}
 
-	$vars['metas'] = PuzzlePuzzleQuery::create()
-		->joinWith('PuzzlePuzzle.Parent')
-		->where('puzzle_id = parent_id')
-		->find();
-
 	if (in_array("error_string", $_SESSION)) {
 		$vars['error'] = $_SESSION['error_string'];
 	}
