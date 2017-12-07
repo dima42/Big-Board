@@ -5,17 +5,17 @@ use Propel\Runtime\ActiveQuery\Criteria;
 function show_content() {
 	$klein = new \Klein\Klein();
 
-	$klein->respond('GET', '/', function () {
-			return displayAllByMeta();
-		});
-
 	$klein->respond('GET', '/test', function () {
 			return displayTest();
 		});
 
 	// PUZZLE LISTS
 
-	$klein->respond('GET', '/all', function () {
+	$klein->respond('GET', '/', function () {
+			return displayHome();
+		});
+
+	$klein->respond('GET', '/bymeta', function () {
 			return displayAllByMeta();
 		});
 
@@ -125,7 +125,7 @@ function show_content() {
 			$klein->respond('GET', '/?', function ($request) {
 					return displayNews("all");
 				});
-			$klein->respond('GET', '/[:filter]?/?', function ($request) {
+			$klein->respond('GET', '/[:filter]/?', function ($request) {
 					return displayNews($request->filter);
 				});
 			$klein->respond('POST', '/add/?', function ($request) {
@@ -184,50 +184,76 @@ function displayTest() {
 
 // PUZZLE LISTS
 
+function displayHome() {
+	$statuses = PuzzleQuery::create()
+		->filterByStatus('solved', Criteria::NOT_EQUAL)
+		->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
+		->groupBy('Puzzle.Status')
+		->select(array('Status', 'StatusCount'))
+		->find();
+
+	$total_puzzle_count = PuzzleQuery::create()
+		->count();
+
+	render('home.twig', array(
+			'statusCounts'       => $statuses,
+			'total_puzzle_count' => $total_puzzle_count,
+			'puzzles'            => $puzzles,
+		));
+}
+
 function displayAllByMeta() {
-    $statuses = PuzzleQuery::create()
-        ->filterByStatus('solved', Criteria::NOT_EQUAL)
-        ->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
-        ->groupBy('Puzzle.Status')
-        ->select(array('Status', 'StatusCount'))
-        ->find();
+	$statuses = PuzzleQuery::create()
+		->filterByStatus('solved', Criteria::NOT_EQUAL)
+		->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
+		->groupBy('Puzzle.Status')
+		->select(array('Status', 'StatusCount'))
+		->find();
 
-    $total_puzzle_count = PuzzleQuery::create()
-        ->count();
+	$total_puzzle_count = PuzzleQuery::create()
+		->count();
 
-    $all_puzzles = PuzzlePuzzleQuery::create()
-        ->joinWith('Child')
-        ->orderByParentId()
-        ->find();
+	$all_puzzles = PuzzlePuzzleQuery::create()
+		->joinWith('Child')
+		->orderByParentId()
+		->find();
 
-    $all_puzzles_by_meta = array();
-    foreach ($all_puzzles as $puzzle) {
-        $all_puzzles_by_meta[$puzzle->getParent()->getTitle()][] = $puzzle->getChild();
-    }
+	$metas = PuzzlePuzzleQuery::create()
+		->joinWith('PuzzlePuzzle.Parent')
+		->where('puzzle_id = parent_id')
+		->orderBy('Parent.title')
+		->find();
 
-    render('all.twig', array(
-            'statusCounts'        => $statuses,
-            'total_puzzle_count'  => $total_puzzle_count,
-            'all_puzzles_by_meta' => $all_puzzles_by_meta,
-        ));
+	$all_puzzles_by_meta = array();
+	foreach ($all_puzzles as $puzzle) {
+		$all_puzzles_by_meta[$puzzle->getParent()->getTitle()][] = $puzzle->getChild();
+	}
+	ksort($all_puzzles_by_meta);
+
+	render('bymeta.twig', array(
+			'statusCounts'        => $statuses,
+			'total_puzzle_count'  => $total_puzzle_count,
+			'all_puzzles_by_meta' => $all_puzzles_by_meta,
+			'metas'               => $metas,
+		));
 }
 
 function displayLoosePuzzles() {
-    // TODO: refactor this to use COUNT() mechanism
-    $all_puzzles = PuzzleQuery::create()
-        ->leftJoinWith('Puzzle.PuzzleParent')
-        ->find();
+	// TODO: refactor this to use COUNT() mechanism
+	$all_puzzles = PuzzleQuery::create()
+		->leftJoinWith('Puzzle.PuzzleParent')
+		->find();
 
-    $puzzles = array();
-    foreach ($all_puzzles as $puzzle) {
-        if ($puzzle->countPuzzleParents() == 0) {
-            $puzzles[] = $puzzle;
-        }
-    }
+	$puzzles = array();
+	foreach ($all_puzzles as $puzzle) {
+		if ($puzzle->countPuzzleParents() == 0) {
+			$puzzles[] = $puzzle;
+		}
+	}
 
-    render('loose.twig', array(
-            'puzzles' => $puzzles,
-        ));
+	render('loose.twig', array(
+			'puzzles' => $puzzles,
+		));
 }
 
 // PUZZLE
@@ -552,7 +578,6 @@ function assignSlackId($slack_id) {
 	$message = "Thanks! Saved your Slack ID.";
 	redirect('/member/'.$member->getId(), $message);
 }
-
 
 function displayNews($filter = "all") {
 	$news = NewsQuery::create()
