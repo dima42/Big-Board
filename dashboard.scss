@@ -167,6 +167,19 @@ aside {
     }
 }
 
+// BY META
+
+.by-meta {
+    .anchor-target {
+      display: block;
+      content: " ";
+      margin-top: -80px;
+      height: 80px;
+      visibility: hidden;
+      pointer-events: none;
+    }
+}
+
 // PUZZLE PAGE
 
 .solution-field {
