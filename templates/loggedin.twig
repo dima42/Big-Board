@@ -47,16 +47,7 @@
 {% block body %}
 
 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-    <ul class="nav nav-pills flex-column">
-        {% for meta in metas %}
-        <li class="nav-item">
-          <a class="nav-link" href="/puzzle/{{ meta.parent.id }}">{{ meta.parent.title }}</a>
-        </li>
-        {% endfor %}
-        <li class="nav-item">
-          <a class="nav-link" href="/">All metas</a>
-        </li>
-    </ul>
+{% block filters %}{% endblock %}
 </nav>
 
 {% if alert.message %}
