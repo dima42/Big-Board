@@ -1,5 +1,22 @@
 {% extends 'loggedin.twig' %}
 
+{% block filters %}
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <h4 class="nav-link">Filter by:</h4>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="all" class="nav-link" id="all-tab" href="#">All</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="active" class="nav-link" id="active-tab" href="#">Active</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="inactive" class="nav-link" id="inactve-tab" href="#">Inactive</a>
+    </li>
+</ul>
+{% endblock %}
+
 {% block content %}
 <h1>Team Palindrome</h1>
 
@@ -14,7 +31,7 @@
     </thead>
     <tbody>
     {% for person in roster %}
-    <tr>
+    <tr data-filter="{{ person.puzzleMembers|length|yesno('active', 'inactive') }}">
         <td>{{ person.fullName }}</td>
         <th>{% if person.slackID %}<a href="http://palindrome2018.slack.com/team/{{ person.slackId }}"><img src="/img/slack.png" width="15px" alt=""></a>{% endif %}</th>
         <td>{{ person.strengths }}</td>
@@ -29,5 +46,10 @@
 </table>
 {% endblock %}
 
-{% block aside %}
+{% block scripts %}
+<script>
+$(function() {
+    $('.nav a').first().click();
+});
+</script>
 {% endblock %}

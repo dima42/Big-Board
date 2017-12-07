@@ -12,7 +12,13 @@ use Base\News as BaseNews;
  * long as it does not already exist in the output directory.
  *
  */
-class News extends BaseNews
-{
 
+class News extends BaseNews {
+	public function getNewsFilter() {
+		$status = $this->getNewsType();
+		if ($status != "important") {
+			return "puzzle";
+		}
+		return $status;
+	}
 }

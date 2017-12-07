@@ -1,23 +1,28 @@
-{% extends 'two-col.twig' %}
+{% extends 'loggedin.twig' %}
+
+{% block filters %}
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <h4 class="nav-link">Filter by:</h4>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="all" class="nav-link" id="all-tab" href="/news">All</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="important" class="nav-link" id="important-tab" href="/news/important">Important</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="puzzle" class="nav-link" id="puzzles-tab" href="/news/puzzles">Puzzles</a>
+    </li>
+</ul>
+{% endblock %}
 
 {% block content %}
 <h1>Latest news</h1>
 
-<ul class="nav nav-tabs news-nav">
-  <li class="nav-item">
-    <a class="nav-link all {% if filter == "all" %}active{% endif %}" href="/news">All</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link important {% if filter == "important" %}active{% endif %}" href="/news/important">Important</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link puzzles {% if filter == "puzzles" %}active{% endif %}" href="/news/puzzles">Puzzles</a>
-  </li>
-</ul>
-
 <div class="news-list">
 {% for update in updates %}
-<div class="row news-row {{ update.newsType }}">
+<div class="row news-row" data-filter="{{ update.getNewsFilter() }}">
     <div class="col-sm-3">
         <small class="entry-by">{{ update.member.fullName|default("Big Board Bot") }}</small>
         <small class="entry-when">
@@ -57,3 +62,11 @@
 {% endblock %}
 
 {% block latest_news %}{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('.nav a').first().click();
+});
+</script>
+{% endblock %}

@@ -299,7 +299,7 @@ aside {
 .news-row {
     @extend %entry-row;
 
-    &.important {
+    &[data-filter=important] {
         background:lighten(yellow, 30%);
     }
 }
