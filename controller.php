@@ -196,6 +196,7 @@ function displayAll() {
 		->count();
 
 	$puzzles = PuzzleQuery::create()
+		->orderByTitle()
 		->find();
 
 	render('all.twig', array(

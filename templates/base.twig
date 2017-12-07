@@ -54,7 +54,7 @@ window.setTimeout(function() {
   });
 }, 5000);
 
-$('.nav a').click(function() {
+$('[data-filter-list] a').click(function() {
     $(this).tab('show');
     var filter = $(this).data('filter-by');
     var filterNot = $(this).data('filter-by-not');

@@ -18,9 +18,9 @@
     </thead>
     <tbody>
     {% for puzzle in puzzles %}
-        <tr id="puzzle{{ puzzle.id }}" data-filter="{{ puzzle.status }}" class="puzzle {% if puzzle.meta == 1 %}meta{% endif %}">
+        <tr id="puzzle{{ puzzle.id }}" data-filter="{{ puzzle.status }}" data-created="{{ puzzle.createdAt|date('YmdHi') }}" data-updated="{{ puzzle.updatedAt|date('YmdHi') }}" class="puzzle {% if puzzle.meta == 1 %}meta{% endif %}">
             <td>{{ puzzle.status | emojify }}</td>
-            <td><a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a></td>
+            <td class="title"><a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a></td>
             {% if sol %}
                 <td class="solution">
                     {{ puzzle.solution }}
