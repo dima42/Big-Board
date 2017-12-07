@@ -191,6 +191,7 @@ class NoteTableMap extends TableMap
         return array(
             'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
             'archivable' => array('archive_table' => '', 'archive_phpname' => '', 'archive_class' => '', 'log_archived_at' => 'true', 'archived_at_column' => 'archived_at', 'archive_on_insert' => 'false', 'archive_on_update' => 'false', 'archive_on_delete' => 'true', ),
+            'aggregate_column_relation_aggregate_column' => array('foreign_table' => 'puzzle', 'update_method' => 'updatePostCount', 'aggregate_name' => 'PostCount', ),
         );
     } // getBehaviors()
 

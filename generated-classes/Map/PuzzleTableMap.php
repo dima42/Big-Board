@@ -59,7 +59,7 @@ class PuzzleTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 11;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class PuzzleTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /**
      * the column name for the id field
@@ -112,6 +112,21 @@ class PuzzleTableMap extends TableMap
     const COL_SLACK_CHANNEL_ID = 'puzzle.slack_channel_id';
 
     /**
+     * the column name for the post_count field
+     */
+    const COL_POST_COUNT = 'puzzle.post_count';
+
+    /**
+     * the column name for the created_at field
+     */
+    const COL_CREATED_AT = 'puzzle.created_at';
+
+    /**
+     * the column name for the updated_at field
+     */
+    const COL_UPDATED_AT = 'puzzle.updated_at';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -123,11 +138,11 @@ class PuzzleTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Title', 'Url', 'SpreadsheetId', 'Solution', 'Status', 'SlackChannel', 'SlackChannelId', ),
-        self::TYPE_CAMELNAME     => array('id', 'title', 'url', 'spreadsheetId', 'solution', 'status', 'slackChannel', 'slackChannelId', ),
-        self::TYPE_COLNAME       => array(PuzzleTableMap::COL_ID, PuzzleTableMap::COL_TITLE, PuzzleTableMap::COL_URL, PuzzleTableMap::COL_SPREADSHEET_ID, PuzzleTableMap::COL_SOLUTION, PuzzleTableMap::COL_STATUS, PuzzleTableMap::COL_SLACK_CHANNEL, PuzzleTableMap::COL_SLACK_CHANNEL_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'title', 'url', 'spreadsheet_id', 'solution', 'status', 'slack_channel', 'slack_channel_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id', 'Title', 'Url', 'SpreadsheetId', 'Solution', 'Status', 'SlackChannel', 'SlackChannelId', 'PostCount', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'title', 'url', 'spreadsheetId', 'solution', 'status', 'slackChannel', 'slackChannelId', 'postCount', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(PuzzleTableMap::COL_ID, PuzzleTableMap::COL_TITLE, PuzzleTableMap::COL_URL, PuzzleTableMap::COL_SPREADSHEET_ID, PuzzleTableMap::COL_SOLUTION, PuzzleTableMap::COL_STATUS, PuzzleTableMap::COL_SLACK_CHANNEL, PuzzleTableMap::COL_SLACK_CHANNEL_ID, PuzzleTableMap::COL_POST_COUNT, PuzzleTableMap::COL_CREATED_AT, PuzzleTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'title', 'url', 'spreadsheet_id', 'solution', 'status', 'slack_channel', 'slack_channel_id', 'post_count', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -137,11 +152,11 @@ class PuzzleTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Url' => 2, 'SpreadsheetId' => 3, 'Solution' => 4, 'Status' => 5, 'SlackChannel' => 6, 'SlackChannelId' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheetId' => 3, 'solution' => 4, 'status' => 5, 'slackChannel' => 6, 'slackChannelId' => 7, ),
-        self::TYPE_COLNAME       => array(PuzzleTableMap::COL_ID => 0, PuzzleTableMap::COL_TITLE => 1, PuzzleTableMap::COL_URL => 2, PuzzleTableMap::COL_SPREADSHEET_ID => 3, PuzzleTableMap::COL_SOLUTION => 4, PuzzleTableMap::COL_STATUS => 5, PuzzleTableMap::COL_SLACK_CHANNEL => 6, PuzzleTableMap::COL_SLACK_CHANNEL_ID => 7, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheet_id' => 3, 'solution' => 4, 'status' => 5, 'slack_channel' => 6, 'slack_channel_id' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Url' => 2, 'SpreadsheetId' => 3, 'Solution' => 4, 'Status' => 5, 'SlackChannel' => 6, 'SlackChannelId' => 7, 'PostCount' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheetId' => 3, 'solution' => 4, 'status' => 5, 'slackChannel' => 6, 'slackChannelId' => 7, 'postCount' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
+        self::TYPE_COLNAME       => array(PuzzleTableMap::COL_ID => 0, PuzzleTableMap::COL_TITLE => 1, PuzzleTableMap::COL_URL => 2, PuzzleTableMap::COL_SPREADSHEET_ID => 3, PuzzleTableMap::COL_SOLUTION => 4, PuzzleTableMap::COL_STATUS => 5, PuzzleTableMap::COL_SLACK_CHANNEL => 6, PuzzleTableMap::COL_SLACK_CHANNEL_ID => 7, PuzzleTableMap::COL_POST_COUNT => 8, PuzzleTableMap::COL_CREATED_AT => 9, PuzzleTableMap::COL_UPDATED_AT => 10, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheet_id' => 3, 'solution' => 4, 'status' => 5, 'slack_channel' => 6, 'slack_channel_id' => 7, 'post_count' => 8, 'created_at' => 9, 'updated_at' => 10, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -169,6 +184,9 @@ class PuzzleTableMap extends TableMap
         $this->addColumn('status', 'Status', 'VARCHAR', false, 24, null);
         $this->addColumn('slack_channel', 'SlackChannel', 'VARCHAR', false, 48, null);
         $this->addColumn('slack_channel_id', 'SlackChannelId', 'VARCHAR', false, 24, null);
+        $this->addColumn('post_count', 'PostCount', 'INTEGER', false, null, null);
+        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -215,6 +233,20 @@ class PuzzleTableMap extends TableMap
         $this->addRelation('Parent', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), null, null, 'Parents');
         $this->addRelation('Child', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), null, null, 'Children');
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'aggregate_column' => array('name' => 'post_count', 'expression' => 'COUNT(id)', 'condition' => '', 'foreign_table' => 'note', 'foreign_schema' => '', ),
+            'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+        );
+    } // getBehaviors()
     /**
      * Method to invalidate the instance pool of all tables related to puzzle     * by a foreign key with ON DELETE CASCADE
      */
@@ -374,6 +406,9 @@ class PuzzleTableMap extends TableMap
             $criteria->addSelectColumn(PuzzleTableMap::COL_STATUS);
             $criteria->addSelectColumn(PuzzleTableMap::COL_SLACK_CHANNEL);
             $criteria->addSelectColumn(PuzzleTableMap::COL_SLACK_CHANNEL_ID);
+            $criteria->addSelectColumn(PuzzleTableMap::COL_POST_COUNT);
+            $criteria->addSelectColumn(PuzzleTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(PuzzleTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.title');
@@ -383,6 +418,9 @@ class PuzzleTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.status');
             $criteria->addSelectColumn($alias . '.slack_channel');
             $criteria->addSelectColumn($alias . '.slack_channel_id');
+            $criteria->addSelectColumn($alias . '.post_count');
+            $criteria->addSelectColumn($alias . '.created_at');
+            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 

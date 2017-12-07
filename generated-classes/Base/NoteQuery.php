@@ -706,8 +706,53 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             $this->archiveOnDelete = true;
         }
 
+        // aggregate_column_relation_aggregate_column behavior
+        $this->findRelatedPuzzlePostCounts($con);
 
         return $this->preDelete($con);
+    }
+
+    /**
+     * Code to execute after every DELETE statement
+     *
+     * @param     int $affectedRows the number of deleted rows
+     * @param     ConnectionInterface $con The connection object used by the query
+     */
+    protected function basePostDelete($affectedRows, ConnectionInterface $con)
+    {
+        // aggregate_column_relation_aggregate_column behavior
+        $this->updateRelatedPuzzlePostCounts($con);
+
+        return $this->postDelete($affectedRows, $con);
+    }
+
+    /**
+     * Code to execute before every UPDATE statement
+     *
+     * @param     array $values The associative array of columns and values for the update
+     * @param     ConnectionInterface $con The connection object used by the query
+     * @param     boolean $forceIndividualSaves If false (default), the resulting call is a Criteria::doUpdate(), otherwise it is a series of save() calls on all the found objects
+     */
+    protected function basePreUpdate(&$values, ConnectionInterface $con, $forceIndividualSaves = false)
+    {
+        // aggregate_column_relation_aggregate_column behavior
+        $this->findRelatedPuzzlePostCounts($con);
+
+        return $this->preUpdate($values, $con, $forceIndividualSaves);
+    }
+
+    /**
+     * Code to execute after every UPDATE statement
+     *
+     * @param     int $affectedRows the number of updated rows
+     * @param     ConnectionInterface $con The connection object used by the query
+     */
+    protected function basePostUpdate($affectedRows, ConnectionInterface $con)
+    {
+        // aggregate_column_relation_aggregate_column behavior
+        $this->updateRelatedPuzzlePostCounts($con);
+
+        return $this->postUpdate($affectedRows, $con);
     }
 
     /**
@@ -914,6 +959,36 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         $this->archiveOnDelete = false;
 
         return $this->deleteAll($con);
+    }
+
+    // aggregate_column_relation_aggregate_column behavior
+
+    /**
+     * Finds the related Puzzle objects and keep them for later
+     *
+     * @param ConnectionInterface $con A connection object
+     */
+    protected function findRelatedPuzzlePostCounts($con)
+    {
+        $criteria = clone $this;
+        if ($this->useAliasInSQL) {
+            $alias = $this->getModelAlias();
+            $criteria->removeAlias($alias);
+        } else {
+            $alias = '';
+        }
+        $this->puzzlePostCounts = \PuzzleQuery::create()
+            ->joinNote($alias)
+            ->mergeWith($criteria)
+            ->find($con);
+    }
+
+    protected function updateRelatedPuzzlePostCounts($con)
+    {
+        foreach ($this->puzzlePostCounts as $puzzlePostCount) {
+            $puzzlePostCount->updatePostCount($con);
+        }
+        $this->puzzlePostCounts = array();
     }
 
 } // NoteQuery

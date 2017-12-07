@@ -9,9 +9,15 @@
         <column name="status" type="varchar" size="24" required="false" />
         <column name="slack_channel" type="varchar" size="48" required="false" />
         <column name="slack_channel_id" type="varchar" size="24" required="false" />
+        <behavior name="aggregate_column">
+            <parameter name="name" value="post_count" />
+            <parameter name="foreign_table" value="note" />
+            <parameter name="expression" value="COUNT(id)" />
+        </behavior>
         <unique>
             <unique-column name="title" />
         </unique>
+        <behavior name="timestampable" />
     </table>
     <table name="note" phpName="Note">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>

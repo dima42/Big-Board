@@ -131,6 +131,12 @@ abstract class Note implements ActiveRecordInterface
     // archivable behavior
     protected $archiveOnDelete = true;
 
+    // aggregate_column_relation_aggregate_column behavior
+    /**
+     * @var ChildPuzzle
+     */
+    protected $oldPuzzlePostCount;
+
     /**
      * Initializes internal state of Base\Note object.
      */
@@ -799,6 +805,8 @@ abstract class Note implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
+                // aggregate_column_relation_aggregate_column behavior
+                $this->updateRelatedPuzzlePostCount($con);
                 NoteTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
@@ -1372,6 +1380,10 @@ abstract class Note implements ActiveRecordInterface
      */
     public function setPuzzle(ChildPuzzle $v = null)
     {
+        // aggregate_column_relation behavior
+        if (null !== $this->aPuzzle && $v !== $this->aPuzzle) {
+            $this->oldPuzzlePostCount = $this->aPuzzle;
+        }
         if ($v === null) {
             $this->setPuzzleId(NULL);
         } else {
@@ -1637,6 +1649,24 @@ abstract class Note implements ActiveRecordInterface
         $this->archiveOnDelete = false;
 
         return $this->delete($con);
+    }
+
+    // aggregate_column_relation_aggregate_column behavior
+
+    /**
+     * Update the aggregate column in the related Puzzle object
+     *
+     * @param ConnectionInterface $con A connection object
+     */
+    protected function updateRelatedPuzzlePostCount(ConnectionInterface $con)
+    {
+        if ($puzzle = $this->getPuzzle()) {
+            $puzzle->updatePostCount($con);
+        }
+        if ($this->oldPuzzlePostCount) {
+            $this->oldPuzzlePostCount->updatePostCount($con);
+            $this->oldPuzzlePostCount = null;
+        }
     }
 
     /**
