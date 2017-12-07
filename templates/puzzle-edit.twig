@@ -2,7 +2,7 @@
 
 {% block content_main %}
 
-<form action="/puzzle/{{ puzzle.id }}/edit" method="post">
+<form data-behavior="confirm" action="/puzzle/{{ puzzle.id }}/edit" method="post">
     <div class="form-group row">
         <label class="col-sm-3 col-form-label" for="title">Title</label>
         <div class="col-sm-9">

@@ -21,7 +21,7 @@
     </div>
 
     {% block content_main %}
-    <form class="puzzleEdit mb-1" action="/puzzle/{{ puzzle.id }}/solve" method="post">
+    <form class="puzzleEdit mb-1" data-behavior="confirm" action="/puzzle/{{ puzzle.id }}/solve" method="post">
         <div class="input-group mb-2">
             <span class="input-group-addon">Solution</span>
             <input type="text" class="solution-field form-control" name="solution" placeholder="Enter solution here" value="{{ puzzle.solution }}">
@@ -124,4 +124,21 @@
     </div>
     {% endif %}
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('[data-behavior=confirm]').submit(function(e) {
+        var previousSolution = "{{ puzzle.solution }}";
+        var newSolution = $('.solution-field').val();
+        if (previousSolution != newSolution) {
+            if(!confirm('You sure you want to change this solution from ' + previousSolution + ' to ' + newSolution + '?')) {
+                e.preventDefault();
+            }
+        }
+        return true;
+    });
+});
+</script>
 {% endblock %}
