@@ -53,6 +53,17 @@ window.setTimeout(function() {
       $(this).remove();
   });
 }, 5000);
+
+$('.nav a').click(function() {
+    $(this).tab('show');
+    var filter = $(this).data('filter-by');
+    if (filter == "all") {
+        $('[data-filter]').show();
+    } else {
+        $('[data-filter]').hide();
+        $('[data-filter=' + filter + ']').show();
+    }
+});
 </script>
 
 {% block scripts %}{% endblock %}
