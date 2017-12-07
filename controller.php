@@ -192,15 +192,26 @@ function displayAll() {
 		->select(array('Status', 'StatusCount'))
 		->find();
 
-	$total_puzzle_count = PuzzleQuery::create()
-		->count();
+    $total_puzzle_count = PuzzleQuery::create()
+        ->count();
+
+    $statusCounts = [];
+    $unsolved_count = 0;
+    foreach ($statuses as $status) {
+        $unsolved_count = $unsolved_count + $status['StatusCount'];
+        $statusCounts[$status['Status']] = [
+            "count" => $status['StatusCount'],
+            "percentage" => 100 * $status['StatusCount'] / $total_puzzle_count,
+        ];
+    }
 
 	$puzzles = PuzzleQuery::create()
 		->orderByTitle()
 		->find();
 
 	render('all.twig', array(
-			'statusCounts'       => $statuses,
+			'statusCounts'       => $statusCounts,
+            'unsolved_count' => $unsolved_count,
 			'total_puzzle_count' => $total_puzzle_count,
 			'puzzles'            => $puzzles,
 		));
