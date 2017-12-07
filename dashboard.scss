@@ -1,6 +1,6 @@
 $monospace: Inconsolata, monospace;
 
-$open: #006AD8;
+$open: #dadada;
 $solved: #f7f7f7;
 $stuck: #FFEFE5;
 $priority: #FFD1B2;
@@ -122,6 +122,7 @@ aside {
 
 .progress {
     height: 1.2rem;
+    background:#006AD8;
 }
 
 .add-puzzles-to-meta {
