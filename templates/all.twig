@@ -13,10 +13,10 @@
         <a data-toggle="tab" data-filter-by="stuck" class="nav-link" id="stuck-tab" href="#">Stuck ({{ statusCounts.stuck.count|default(0) }}) ❓</a>
     </li>
     <li class="nav-item">
-        <a data-toggle="tab" data-filter-by="urgent" class="nav-link" id="urgent-tab" href="#">Urgent ({{ statusCounts.urgent.count|default(0) }}) 🚨</a>
+        <a data-toggle="tab" data-filter-by="priority" class="nav-link" id="priority-tab" href="#">Priority ({{ statusCounts.priority.count|default(0) }}) ❗</a>
     </li>
     <li class="nav-item">
-        <a data-toggle="tab" data-filter-by="priority" class="nav-link" id="priority-tab" href="#">Priority ({{ statusCounts.priority.count|default(0) }}) ❗</a>
+        <a data-toggle="tab" data-filter-by="urgent" class="nav-link" id="urgent-tab" href="#">Urgent ({{ statusCounts.urgent.count|default(0) }}) 🚨</a>
     </li>
     <li class="nav-item">
         <a data-toggle="tab" class="nav-link" id="all-tab" href="#">All</a>
