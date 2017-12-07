@@ -22,7 +22,7 @@
             <td>{{ puzzle.status | emojify }}</td>
             <td><a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a></td>
             {% if sol %}
-                <td>
+                <td class="solution">
                     {{ puzzle.solution }}
 {#                     <input
                     name='puzans_"{{ puzzle.PUZID }}' value='{{ puzzle.PUZANS }}'
