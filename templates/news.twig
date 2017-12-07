@@ -26,7 +26,7 @@
         <small class="entry-when">
             {% set difference = date(now).diff(date(update.createdAt)) %}
             {% if difference.days >= 2 %}
-                {{ difference.days }} days
+                {{ difference.days }} days ago
             {% else %}
                 {{ difference.format('%H:%I') }} ago
             {% endif %}
