@@ -1,51 +1,33 @@
 {% extends 'two-col.twig' %}
 
+{% block bodyclass %}by-meta{% endblock %}
+
+{% block filters %}
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <h4 class="nav-link">Jump to:</h4>
+    </li>
+    {% for meta in metas %}
+    <li class="nav-item">
+        <a class="nav-link" href="#meta-{{ meta.parent.id }}">{{ meta.parent.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
 {% block content %}
 {% from 'macros.twig' import puzzle_table %}
 
-
-<h1>All puzzles</h1>
-
-<div class="progress">
-    {% for status in statusCounts %}
-        {# <li>{{ status.Status | emojify }} {{ status.StatusCount }}</li> #}
-      <div class="progress-bar progress-{{ status.Status }}" role="progressbar" style="width: {{ (100 * status.StatusCount / total_puzzle_count) | round }}%" ></div>
-    {% endfor %}
-</div>
+<h1>All puzzles by meta</h1>
 
 {% for meta, puzzles in all_puzzles_by_meta %}
-<h2>
-    <a href="/puzzle/{{ puzzles.0.id }}">{{ meta }}</a>
-    <a class="add-puzzles-to-meta float-right" href="/add/{{ puzzles.0.id }}">+ Add puzzles</a>
-</h2>
-{{ puzzle_table(puzzles) }}
+<section class="pt-2">
+    <span class="anchor-target" id="meta-{{ puzzles.0.id }}"></span>
+    <h2>
+        <a href="/puzzle/{{ puzzles.0.id }}">{{ meta }}</a>
+        <a class="add-puzzles-to-meta float-right" href="/add/{{ puzzles.0.id }}">+ Add puzzles</a>
+    </h2>
+    {{ puzzle_table(puzzles) }}
+</section>
 {% endfor %}
-{% endblock %}
-
-{% block aside %}
-    <div class="mb-3">
-        <h4>{{ total_puzzle_count }} total</h4>
-        <ul class="list-unstyled">
-        {% for status in statusCounts %}
-            <li>{{ status.Status | emojify }} {{ status.StatusCount }}</li>
-        {% endfor %}
-        </ul>
-    </div>
-
-    <div class="card mb-3">
-        <div class="card-body">
-            <small class="solvers">You are logged in as</small>
-            <strong>{{ user.fullName }}</strong><br>
-
-            {% if user.slackId %}
-                <img src="/img/slack.png" width="15px" alt=""> {{ user.slackId }}<br>
-            {% endif %}
-            {% for user_puzzle in user_puzzles %}
-                <a href="/puzzle/{{ user_puzzle.id }}">{{ user_puzzle.title }}</a><br>
-            {% endfor %}
-        </div>
-        <div class="card-footer">
-            <a href="/member/{{ user.id }}/edit">Edit your profile</a>
-        </div>
-    </div>
 {% endblock %}
