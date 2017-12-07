@@ -3,9 +3,6 @@
 {% block filters %}
 <h4 class="nav-link">Filter by</h4>
 <ul class="nav nav-pills flex-column" data-filter-list>
-    <li class="nav-item">
-        <a data-toggle="tab" data-filter-by="all"  class="nav-link" id="all-tab" href="#">All</a>
-    </li>
    <li class="nav-item">
         <a data-toggle="tab" data-filter-by-not="solved" class="nav-link" id="all-tab" href="#">Unsolved</a>
     </li>
@@ -20,6 +17,9 @@
     </li>
     <li class="nav-item">
         <a data-toggle="tab" data-filter-by="stuck" class="nav-link" id="stuck-tab" href="#">Stuck ❓</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" id="all-tab" href="#">All</a>
     </li>
 </ul>
 <h4 class="nav-link">Sort by</h4>
@@ -67,7 +67,9 @@
         {% endfor %}
         </ul>
     </div>
+{% endblock %}
 
+{% block about_you %}
     <div class="card mb-3">
         <div class="card-body">
             <small class="solvers">You are logged in as</small>

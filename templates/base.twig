@@ -58,9 +58,8 @@ $('[data-filter-list] a').click(function() {
     $(this).tab('show');
     var filter = $(this).data('filter-by');
     var filterNot = $(this).data('filter-by-not');
-    if (filter == "all") {
-        $('[data-filter]').show();
-    } else if (filter) {
+    $('[data-filter]').show();
+    if (filter) {
         $('[data-filter]').hide();
         $('[data-filter=' + filter + ']').show();
     } else if (filterNot) {
