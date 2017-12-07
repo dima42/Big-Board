@@ -136,15 +136,6 @@ function show_content() {
 				});
 		});
 
-	// SLACK BOT
-
-	$klein->with('/board', function () use ($klein) {
-
-			$klein->respond('POST', '/?', function ($request, $response) {
-					return bigBoardBot($request, $response);
-				});
-		});
-
 	// LOGOUT
 
 	$klein->respond('GET', '/logout', function () {
@@ -192,18 +183,18 @@ function displayAll() {
 		->select(array('Status', 'StatusCount'))
 		->find();
 
-    $total_puzzle_count = PuzzleQuery::create()
-        ->count();
+	$total_puzzle_count = PuzzleQuery::create()
+		->count();
 
-    $statusCounts = [];
-    $unsolved_count = 0;
-    foreach ($statuses as $status) {
-        $unsolved_count = $unsolved_count + $status['StatusCount'];
-        $statusCounts[$status['Status']] = [
-            "count" => $status['StatusCount'],
-            "percentage" => 100 * $status['StatusCount'] / $total_puzzle_count,
-        ];
-    }
+	$statusCounts   = [];
+	$unsolved_count = 0;
+	foreach ($statuses as $status) {
+		$unsolved_count                  = $unsolved_count+$status['StatusCount'];
+		$statusCounts[$status['Status']] = [
+			"count"      => $status['StatusCount'],
+			"percentage" => 100*$status['StatusCount']/$total_puzzle_count,
+		];
+	}
 
 	$puzzles = PuzzleQuery::create()
 		->orderByTitle()
@@ -211,7 +202,7 @@ function displayAll() {
 
 	render('all.twig', array(
 			'statusCounts'       => $statusCounts,
-            'unsolved_count' => $unsolved_count,
+			'unsolved_count'     => $unsolved_count,
 			'total_puzzle_count' => $total_puzzle_count,
 			'puzzles'            => $puzzles,
 		));
