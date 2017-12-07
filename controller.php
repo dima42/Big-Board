@@ -182,6 +182,56 @@ function displayTest() {
 		));
 }
 
+// PUZZLE LISTS
+
+function displayAllByMeta() {
+    $statuses = PuzzleQuery::create()
+        ->filterByStatus('solved', Criteria::NOT_EQUAL)
+        ->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
+        ->groupBy('Puzzle.Status')
+        ->select(array('Status', 'StatusCount'))
+        ->find();
+
+    $total_puzzle_count = PuzzleQuery::create()
+        ->count();
+
+    $all_puzzles = PuzzlePuzzleQuery::create()
+        ->joinWith('Child')
+        ->orderByParentId()
+        ->find();
+
+    $all_puzzles_by_meta = array();
+    foreach ($all_puzzles as $puzzle) {
+        $all_puzzles_by_meta[$puzzle->getParent()->getTitle()][] = $puzzle->getChild();
+    }
+
+    render('all.twig', array(
+            'statusCounts'        => $statuses,
+            'total_puzzle_count'  => $total_puzzle_count,
+            'all_puzzles_by_meta' => $all_puzzles_by_meta,
+        ));
+}
+
+function displayLoosePuzzles() {
+    // TODO: refactor this to use COUNT() mechanism
+    $all_puzzles = PuzzleQuery::create()
+        ->leftJoinWith('Puzzle.PuzzleParent')
+        ->find();
+
+    $puzzles = array();
+    foreach ($all_puzzles as $puzzle) {
+        if ($puzzle->countPuzzleParents() == 0) {
+            $puzzles[] = $puzzle;
+        }
+    }
+
+    render('loose.twig', array(
+            'puzzles' => $puzzles,
+        ));
+}
+
+// PUZZLE
+
 function displayPuzzle($puzzle_id, $method = "get") {
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
@@ -451,7 +501,7 @@ function addPuzzle($request, $response) {
 	// # post news update?
 }
 
-// MEMBERS
+// ROSTER
 
 function displayRoster() {
 	$members = MemberQuery::create()
@@ -503,53 +553,6 @@ function assignSlackId($slack_id) {
 	redirect('/member/'.$member->getId(), $message);
 }
 
-// LISTS
-
-function displayAllByMeta() {
-	$statuses = PuzzleQuery::create()
-		->filterByStatus('solved', Criteria::NOT_EQUAL)
-		->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
-		->groupBy('Puzzle.Status')
-		->select(array('Status', 'StatusCount'))
-		->find();
-
-	$total_puzzle_count = PuzzleQuery::create()
-		->count();
-
-	$all_puzzles = PuzzlePuzzleQuery::create()
-		->joinWith('Child')
-		->orderByParentId()
-		->find();
-
-	$all_puzzles_by_meta = array();
-	foreach ($all_puzzles as $puzzle) {
-		$all_puzzles_by_meta[$puzzle->getParent()->getTitle()][] = $puzzle->getChild();
-	}
-
-	render('all.twig', array(
-			'statusCounts'        => $statuses,
-			'total_puzzle_count'  => $total_puzzle_count,
-			'all_puzzles_by_meta' => $all_puzzles_by_meta,
-		));
-}
-
-function displayLoosePuzzles() {
-	// TODO: refactor this to use COUNT() mechanism
-	$all_puzzles = PuzzleQuery::create()
-		->leftJoinWith('Puzzle.PuzzleParent')
-		->find();
-
-	$puzzles = array();
-	foreach ($all_puzzles as $puzzle) {
-		if ($puzzle->countPuzzleParents() == 0) {
-			$puzzles[] = $puzzle;
-		}
-	}
-
-	render('loose.twig', array(
-			'puzzles' => $puzzles,
-		));
-}
 
 function displayNews($filter = "all") {
 	$news = NewsQuery::create()
