@@ -203,16 +203,6 @@ function displayHome() {
 }
 
 function displayAllByMeta() {
-	$statuses = PuzzleQuery::create()
-		->filterByStatus('solved', Criteria::NOT_EQUAL)
-		->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
-		->groupBy('Puzzle.Status')
-		->select(array('Status', 'StatusCount'))
-		->find();
-
-	$total_puzzle_count = PuzzleQuery::create()
-		->count();
-
 	$all_puzzles = PuzzlePuzzleQuery::create()
 		->joinWith('Child')
 		->orderByParentId()
@@ -231,8 +221,6 @@ function displayAllByMeta() {
 	ksort($all_puzzles_by_meta);
 
 	render('bymeta.twig', array(
-			'statusCounts'        => $statuses,
-			'total_puzzle_count'  => $total_puzzle_count,
 			'all_puzzles_by_meta' => $all_puzzles_by_meta,
 			'metas'               => $metas,
 		));
