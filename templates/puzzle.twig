@@ -75,9 +75,9 @@
         {% endfor %}
     {% endif %}
         <form class="new-note-form" action="/puzzle/{{ puzzle.id }}/add-note" method="post">
-        <div class="row note-row">
+        <div class="row">
             <div class="col-sm-3">
-                <small class="note-by">{{ user.fullName }}</small>
+                <small>Add a note:</small>
             </div>
             <div class="col-sm-9">
                 <textarea type="text" class="form-control" name="body" rows="2"></textarea>
