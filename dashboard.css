@@ -34,6 +34,21 @@ h2 {
   .sidebar .nav-link {
     border-radius: 0; }
 
+.progress-open {
+  background-color: #006AD8; }
+
+.progress-solved {
+  background-color: #f7f7f7; }
+
+.progress-stuck {
+  background-color: #FFEFE5; }
+
+.progress-priority {
+  background-color: #FFD1B2; }
+
+.progress-urgent {
+  background-color: #FF6600; }
+
 aside {
   /*border-left: 1px solid #eee;*/ }
   aside small {

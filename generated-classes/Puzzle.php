@@ -17,11 +17,11 @@ class Puzzle extends BasePuzzle {
 
 	public function getStatusColor() {
 		$colors = [
-			'open'     => 'green',
-			'solved'   => "#000",
+			'open'     => '#006AD8',
 			'stuck'    => "#FFEFE5",
 			'priority' => "#FFD1B2",
 			'urgent'   => "#FF6600",
+			'solved'   => "#000000",
 		];
 		return $colors[$this->getStatus()]??'green';
 	}

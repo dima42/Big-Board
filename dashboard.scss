@@ -1,5 +1,11 @@
 $monospace: Inconsolata, monospace;
 
+$open: #006AD8;
+$solved: #f7f7f7;
+$stuck: #FFEFE5;
+$priority: #FFD1B2;
+$urgent: #FF6600;
+
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
     padding-top: 3.5rem;
@@ -56,6 +62,29 @@ h2 {
     }
 }
 
+// PROGRESS
+
+.progress-open {
+    background-color: $open;
+}
+
+.progress-solved {
+    background-color: $solved;
+}
+
+.progress-stuck {
+    background-color: $stuck;
+}
+
+.progress-priority {
+    background-color: $priority;
+}
+
+.progress-urgent {
+    background-color: $urgent;
+}
+
+
 // BANNER
 
 .banner {
@@ -109,20 +138,20 @@ aside {
     }
 
     .solved {
-        background:#f7f7f7;
+        background:$solved;
         opacity: .65;
     }
 
     .stuck {
-        background:#FFEFE5;
+        background:$stuck;
     }
 
     .priority {
-        background:#FFD1B2;
+        background:$priority;
     }
 
     .urgent {
-        background:#FF6600;
+        background:$urgent;
 
         a {
             color: white;

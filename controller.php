@@ -6,11 +6,25 @@ function show_content() {
 	$klein = new \Klein\Klein();
 
 	$klein->respond('GET', '/', function () {
-			return displayAllPuzzles();
+			return displayAllByMeta();
 		});
 
 	$klein->respond('GET', '/test', function () {
 			return displayTest();
+		});
+
+	// PUZZLE LISTS
+
+	$klein->respond('GET', '/all', function () {
+			return displayAllByMeta();
+		});
+
+	$klein->respond('GET', '/loose', function () {
+			return displayLoosePuzzles();
+		});
+
+	$klein->respond('GET', '/unsolved', function () {
+			return displayUnsolvedPuzzles();
 		});
 
 	// PUZZLES
@@ -80,15 +94,7 @@ function show_content() {
 			return assignSlackId($request->slack_id);
 		});
 
-	// OTHER LISTS
-
-	$klein->respond('GET', '/loose', function () {
-			return displayLoosePuzzles();
-		});
-
-	$klein->respond('GET', '/unsolved', function () {
-			return displayUnsolvedPuzzles();
-		});
+	// ROSTER
 
 	$klein->respond('GET', '/roster', function () {
 			return displayRoster();
@@ -181,9 +187,9 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		->filterByID($puzzle_id)
 		->findOne();
 
-        if(!$puzzle) {
-            redirect('/', "Puzzle $puzzle_id does not exist.");
-        }
+	if (!$puzzle) {
+		redirect('/', "Puzzle $puzzle_id does not exist.");
+	}
 
 	$notes = NoteQuery::create()
 		->filterByPuzzle($puzzle)
@@ -499,17 +505,16 @@ function assignSlackId($slack_id) {
 
 // LISTS
 
-function displayAllPuzzles() {
+function displayAllByMeta() {
 	$statuses = PuzzleQuery::create()
+		->filterByStatus('solved', Criteria::NOT_EQUAL)
 		->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
 		->groupBy('Puzzle.Status')
 		->select(array('Status', 'StatusCount'))
 		->find();
 
-	$total_puzzles = 0;
-	foreach ($statuses as $status) {
-		$total_puzzles += $status['StatusCount'];
-	}
+	$total_puzzle_count = PuzzleQuery::create()
+		->count();
 
 	$all_puzzles = PuzzlePuzzleQuery::create()
 		->joinWith('Child')
@@ -523,7 +528,7 @@ function displayAllPuzzles() {
 
 	render('all.twig', array(
 			'statusCounts'        => $statuses,
-			'total_puzzles'       => $total_puzzles,
+			'total_puzzle_count'  => $total_puzzle_count,
 			'all_puzzles_by_meta' => $all_puzzles_by_meta,
 		));
 }

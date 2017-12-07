@@ -1,9 +1,17 @@
 {% extends 'two-col.twig' %}
 
 {% block content %}
+{% from 'macros.twig' import puzzle_table %}
+
+
 <h1>All puzzles</h1>
 
-{% from 'macros.twig' import puzzle_table %}
+<div class="progress">
+    {% for status in statusCounts %}
+        {# <li>{{ status.Status | emojify }} {{ status.StatusCount }}</li> #}
+      <div class="progress-bar progress-{{ status.Status }}" role="progressbar" style="width: {{ (100 * status.StatusCount / total_puzzle_count) | round }}%" ></div>
+    {% endfor %}
+</div>
 
 {% for meta, puzzles in all_puzzles_by_meta %}
 <h2>
@@ -16,7 +24,7 @@
 
 {% block aside %}
     <div class="mb-3">
-        <h4>{{ total_puzzles }} total</h4>
+        <h4>{{ total_puzzle_count }} total</h4>
         <ul class="list-unstyled">
         {% for status in statusCounts %}
             <li>{{ status.Status | emojify }} {{ status.StatusCount }}</li>
