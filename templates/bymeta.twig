@@ -3,10 +3,8 @@
 {% block bodyclass %}by-meta{% endblock %}
 
 {% block filters %}
+<h4 class="nav-link">Jump to</h4>
 <ul class="nav nav-pills flex-column">
-    <li class="nav-item">
-        <h4 class="nav-link">Jump to</h4>
-    </li>
     {% for meta in metas %}
     <li class="nav-item">
         <a class="nav-link" href="#meta-{{ meta.parent.id }}">{{ meta.parent.title }}</a>
