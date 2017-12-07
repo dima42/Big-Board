@@ -3,13 +3,8 @@
 {% block content %}
 
 <h1>Loose puzzles</h1>
+<p>Puzzles not attached to a meta.</p>
 
 {% from 'macros.twig' import puzzle_table %}
 {{ puzzle_table(puzzles) }}
-
-{% endblock %}
-
-{% block aside %}
-    <h4>About this page</h4>
-    <p>Puzzles not attached to a meta.</p>
 {% endblock %}
