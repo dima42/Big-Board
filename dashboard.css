@@ -25,6 +25,12 @@ h2 {
   overflow-y: auto;
   /* Scrollable contents if viewport is shorter than content. */
   border-right: 1px solid #eee; }
+  .sidebar h4 {
+    font-size: .8em;
+    text-transform: uppercase;
+    color: #555;
+    font-weight: bold;
+    margin: 0; }
   .sidebar .nav {
     margin-bottom: 20px; }
   .sidebar .nav-item {
@@ -62,11 +68,13 @@ aside {
 .add-puzzles-to-meta {
   font-size: 1rem; }
 
+.solution {
+  font-family: Inconsolata, monospace; }
+
 .puzzle-list {
   margin-bottom: 2em; }
   .puzzle-list td, .puzzle-list th {
     padding: .5rem;
-    font-family: Inconsolata, monospace;
     /*font-size: .9rem;*/ }
   .puzzle-list thead tr {
     background: #e7e7e7; }
@@ -87,6 +95,14 @@ aside {
       color: white; }
   .puzzle-list a {
     display: block; }
+
+.by-meta .anchor-target {
+  display: block;
+  content: " ";
+  margin-top: -80px;
+  height: 80px;
+  visibility: hidden;
+  pointer-events: none; }
 
 .solution-field {
   font-family: Inconsolata, monospace; }
@@ -161,5 +177,5 @@ aside {
   background: transparent url("https://media.giphy.com/media/l378z9JqBTfYDrXUI/source.gif") no-repeat;
   background-size: cover; }
 
-.news-row.important {
+.news-row[data-filter=important] {
   background: #ffff99; }
