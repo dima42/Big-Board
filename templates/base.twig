@@ -57,11 +57,14 @@ window.setTimeout(function() {
 $('.nav a').click(function() {
     $(this).tab('show');
     var filter = $(this).data('filter-by');
+    var filterNot = $(this).data('filter-by-not');
     if (filter == "all") {
         $('[data-filter]').show();
-    } else {
+    } else if (filter) {
         $('[data-filter]').hide();
         $('[data-filter=' + filter + ']').show();
+    } else if (filterNot) {
+        $('[data-filter=' + filterNot + ']').hide();
     }
 });
 </script>

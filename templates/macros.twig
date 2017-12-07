@@ -18,7 +18,7 @@
     </thead>
     <tbody>
     {% for puzzle in puzzles %}
-        <tr id="puzzle{{ puzzle.id }}" class="puzzle {{ puzzle.status }} {% if puzzle.meta == 1 %}meta{% endif %}">
+        <tr id="puzzle{{ puzzle.id }}" data-filter="{{ puzzle.status }}" class="puzzle {% if puzzle.meta == 1 %}meta{% endif %}">
             <td>{{ puzzle.status | emojify }}</td>
             <td><a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a></td>
             {% if sol %}

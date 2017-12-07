@@ -12,7 +12,7 @@ function show_content() {
 	// PUZZLE LISTS
 
 	$klein->respond('GET', '/', function () {
-			return displayHome();
+			return displayAll();
 		});
 
 	$klein->respond('GET', '/bymeta', function () {
@@ -184,7 +184,7 @@ function displayTest() {
 
 // PUZZLE LISTS
 
-function displayHome() {
+function displayAll() {
 	$statuses = PuzzleQuery::create()
 		->filterByStatus('solved', Criteria::NOT_EQUAL)
 		->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
@@ -195,7 +195,10 @@ function displayHome() {
 	$total_puzzle_count = PuzzleQuery::create()
 		->count();
 
-	render('home.twig', array(
+	$puzzles = PuzzleQuery::create()
+		->find();
+
+	render('all.twig', array(
 			'statusCounts'       => $statuses,
 			'total_puzzle_count' => $total_puzzle_count,
 			'puzzles'            => $puzzles,

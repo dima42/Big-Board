@@ -1,0 +1,92 @@
+{% extends 'two-col.twig' %}
+
+{% block filters %}
+<h4 class="nav-link">Filter by</h4>
+<ul class="nav nav-pills flex-column">
+     <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="all"  class="nav-link" id="priority-tab" href="#">All</a>
+    </li>
+   <li class="nav-item">
+        <a data-toggle="tab" data-filter-by-not="solved" class="nav-link" id="all-tab" href="#">Unsolved</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="open" class="nav-link" id="urgent-tab" href="#">Open 🔵</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="urgent" class="nav-link" id="urgent-tab" href="#">Urgent 🚨</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="priority" class="nav-link" id="priority-tab" href="#">Priority ❗</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="stuck" class="nav-link" id="priority-tab" href="#">Stuck ❓</a>
+    </li>
+</ul>
+<h4 class="nav-link">Sort by</h4>
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" id="stalest-tab" href="#">Stalest</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" id="freshest-tab" href="#">Freshest</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" id="freshest-tab" href="#">Newest first</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" id="freshest-tab" href="#">Oldest first</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block main_top %}
+<div class="col-12 col-md-10 ml-sm-auto pt-3">
+    <div class="progress">
+        {% for status in statusCounts %}
+            {# <li>{{ status.Status | emojify }} {{ status.StatusCount }}</li> #}
+            <div class="progress-bar progress-{{ status.Status }}" role="progressbar" style="width: {{ (100 * status.StatusCount / total_puzzle_count) | round }}%" ></div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+{% from 'macros.twig' import puzzle_table %}
+{{ puzzle_table(puzzles) }}
+{% endblock %}
+
+{% block aside %}
+    <div class="mb-3">
+        <h4>{{ total_puzzle_count }} total</h4>
+        <ul class="list-unstyled">
+        {% for status in statusCounts %}
+            <li>{{ status.Status | emojify }} {{ status.StatusCount }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <small class="solvers">You are logged in as</small>
+            <strong>{{ user.fullName }}</strong><br>
+
+            {% if user.slackId %}
+                <img src="/img/slack.png" width="15px" alt=""> {{ user.slackId }}<br>
+            {% endif %}
+            {% for user_puzzle in user_puzzles %}
+                <a href="/puzzle/{{ user_puzzle.id }}">{{ user_puzzle.title }}</a><br>
+            {% endfor %}
+        </div>
+        <div class="card-footer">
+            <a href="/member/{{ user.id }}/edit">Edit your profile</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('.nav li:first-child a').click();
+});
+</script>
+{% endblock %}

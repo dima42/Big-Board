@@ -148,29 +148,30 @@ aside {
         margin: 0;
     }
 
-    .solved {
-        background:$solved;
-        opacity: .65;
-    }
-
-    .stuck {
-        background:$stuck;
-    }
-
-    .priority {
-        background:$priority;
-    }
-
-    .urgent {
-        background:$urgent;
-
-        a {
-            color: white;
-        }
-    }
-
     a {
         display: block;
+    }
+}
+
+
+[data-filter=solved] {
+    background:$solved;
+    opacity: .65;
+}
+
+[data-filter=stuck] {
+    background:$stuck;
+}
+
+[data-filter=priority] {
+    background:$priority;
+}
+
+[data-filter=urgent] {
+    background:$urgent;
+
+    a {
+        color: white;
     }
 }
 

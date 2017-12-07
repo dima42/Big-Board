@@ -82,19 +82,23 @@ aside {
       border-bottom: 1px solid #aaa; }
   .puzzle-list label {
     margin: 0; }
-  .puzzle-list .solved {
-    background: #f7f7f7;
-    opacity: .65; }
-  .puzzle-list .stuck {
-    background: #FFEFE5; }
-  .puzzle-list .priority {
-    background: #FFD1B2; }
-  .puzzle-list .urgent {
-    background: #FF6600; }
-    .puzzle-list .urgent a {
-      color: white; }
   .puzzle-list a {
     display: block; }
+
+[data-filter=solved] {
+  background: #f7f7f7;
+  opacity: .65; }
+
+[data-filter=stuck] {
+  background: #FFEFE5; }
+
+[data-filter=priority] {
+  background: #FFD1B2; }
+
+[data-filter=urgent] {
+  background: #FF6600; }
+  [data-filter=urgent] a {
+    color: white; }
 
 .by-meta .anchor-target {
   display: block;
