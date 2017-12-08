@@ -31,7 +31,8 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function getSlackURL() {
-		return "http://palindrome2017.slack.com/messages/".$this->getSlackChannel();
+		Global $slackDomain;
+		return "http://$slackDomain.slack.com/messages/" .$this->getSlackChannel();
 	}
 
 	public function getSpreadsheetURL() {

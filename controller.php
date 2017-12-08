@@ -90,7 +90,7 @@ function show_content() {
 				});
 			$klein->respond('POST', '/edit/?', function ($request) {
 					if ($request->id == $_SESSION['user_id']) {
-						return saveMember($request->id, $request);
+						return editMember($request->id, $request);
 					}
 					redirect('/roster');
 				});
@@ -597,13 +597,14 @@ function displayMember($member_id, $method = "get") {
 		));
 }
 
-function saveMember($member_id, $request) {
+function editMember($member_id, $request) {
 	$member = $_SESSION['user'];
 
 	$member->setFullName($request->full_name);
 	$member->setStrengths($request->strengths);
-	$member->setSlackHandle($request->slack_handle);
-	$member->setSlackId($request->slack_id);
+	if (isset($request->slack_id)) {
+		$member->setSlackId($request->slack_id);
+	}
 	$member->save();
 
 	$message = "Saved your profile changes.";

@@ -2,6 +2,19 @@
 
 {% block content %}
 
+{% if not member.slackId %}
+<div class="jumbotron bg-warning">
+    <h1 class="display-3">Hi, please connect to Slack</h1>
+    <p class="lead">In order to tag you in the messages this this app posts to Slack, we need to know who you are.</p>
+    <ol class="lead">
+        <li>Go to our <a href="http://{{ slackDomain }}.slack.com/messages/">Slack</a> and type <code>/board</code>. </li>
+        <li>You'll get a private link in response. </li>
+        <li>Tap it, which will send you back here and auto-register you.</li>
+    </ol>
+    <p class="lead">That's it! Thanks.</p>
+</div>
+{% endif %}
+
 <h1>Puzzles you're working on</h1>
 
 {% from 'macros.twig' import puzzle_table %}

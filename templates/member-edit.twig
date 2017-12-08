@@ -21,8 +21,8 @@
     <div class="form-group row">
         <label class="col-sm-3 col-form-label" for="slack_handle">Slack User ID</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" name="slack_id" value="{{ member.slackId }}" placeholder="e.g. U91K835FZ">
-            <small class="form-text text-muted">To set this, type `/board` in Slack, and follow the instructions.</small>
+            <input type="text" class="form-control" name="slack_id" value="{{ member.slackId }}" placeholder="e.g. U91K835FZ" disabled>
+            <small class="form-text text-muted">To set this automatically, type <code>/board</code> in Slack, and follow the instructions.</small>
         </div>
     </div>
     {% endif %}

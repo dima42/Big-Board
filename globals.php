@@ -12,6 +12,12 @@ use DebugBar\StandardDebugBar;
 
 session_start();
 
+Global $slackDomain;
+
+// EDITABLE
+// TODO: Change these:
+$slackDomain = "palindrome2017";
+
 // ALERT
 $_SESSION['alert'] = "";
 
@@ -93,6 +99,7 @@ function render($template, $context = "", $vars = array()) {
 		->findOne();
 
 	Global $twig;
+	Global $slackDomain;
 
 	$member = $_SESSION['user']??null;
 	if ($member) {
@@ -100,11 +107,12 @@ function render($template, $context = "", $vars = array()) {
 		$vars['user_id']      = $_SESSION['user_id'];
 		$vars['user_puzzles'] = $member->getPuzzles();
 	}
-	$vars['alert']      = $_SESSION['alert_message']??null;
-	$vars['statuses']   = ['open', 'stuck', 'priority', 'urgent', 'solved'];
-	$vars['now']        = strftime('%c');
-	$vars['latestNews'] = $latestNews;
-	$vars['context']    = $context;
+	$vars['alert']       = $_SESSION['alert_message']??null;
+	$vars['statuses']    = ['open', 'stuck', 'priority', 'urgent', 'solved'];
+	$vars['now']         = strftime('%c');
+	$vars['latestNews']  = $latestNews;
+	$vars['context']     = $context;
+	$vars['slackDomain'] = $slackDomain;
 
 	Global $DEBUG;
 	if ($DEBUG) {
