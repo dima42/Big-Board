@@ -1,7 +1,8 @@
 {% extends 'loggedin.twig' %}
 
 {% block content %}
-<h1>{{ member.fullName }}</h1>
+<a href="/member/{{ member.id }}">&larr; Back to profile</a>
+<h1>Edit {{ member.fullName }}</h1>
 
 <form action="/member/{{ member.id }}/edit" method="post">
     <div class="form-group row">
@@ -16,13 +17,16 @@
             <input type="text" class="form-control" name="strengths" value="{{ member.strengths }}" placeholder="e.g. Renaissance art; 15th century crytography; Horses.">
         </div>
     </div>
+    {% if not member.slackId %}
     <div class="form-group row">
         <label class="col-sm-3 col-form-label" for="slack_handle">Slack User ID</label>
         <div class="col-sm-9">
             <input type="text" class="form-control" name="slack_id" value="{{ member.slackId }}" placeholder="e.g. U91K835FZ">
-            <small class="form-text text-muted">You don't need to fill this in; we'll programatically ask Slack for it. But feel free to manually add it if you want.</small>
+            <small class="form-text text-muted">To set this, type `/board` in Slack, and follow the instructions.</small>
         </div>
     </div>
+    {% endif %}
+
     <div class="form-group row">
         <div class="offset-sm-3 sm-9">
             <button class="btn btn-primary btn-lg">Submit</button>
