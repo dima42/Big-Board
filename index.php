@@ -5,23 +5,30 @@ require_once "controller.php";
 $klein = new \Klein\Klein();
 
 $klein->with('/api', function () use ($klein) {
-		$klein->respond('POST', '/board', function ($request, $response) {
+		$bot = new Bot();
+
+		// DEBUG
+		$klein->respond('GET', '/board', function ($request, $response) use ($bot) {
+				return $bot->bigBoard($request, $response);
+			});
+
+		$klein->respond('POST', '/board', function ($request, $response) use ($bot) {
 				return bigBoardBot($request, $response);
 			});
 
-		$klein->respond('POST', '/solve', function ($request, $response) {
+		$klein->respond('POST', '/solve', function ($request, $response) use ($bot) {
 				return solveBot($request, $response);
 			});
 
-		$klein->respond('POST', '/info', function ($request, $response) {
+		$klein->respond('POST', '/info', function ($request, $response) use ($bot) {
 				return infoBot($request, $response);
 			});
 
-		$klein->respond('POST', '/join', function ($request, $response) {
+		$klein->respond('POST', '/join', function ($request, $response) use ($bot) {
 				return joinBot($request, $response);
 			});
 
-		$klein->respond('POST', '/note', function ($request, $response) {
+		$klein->respond('POST', '/note', function ($request, $response) use ($bot) {
 				return noteBot($request, $response);
 			});
 

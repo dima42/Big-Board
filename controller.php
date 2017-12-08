@@ -687,11 +687,37 @@ function displayUnsolvedPuzzles() {
 
 // BOTS
 
-function bigBoardBot($request, $response) {
-	if ($request->token != getenv('PALINDROME_SLACKBOT_TOKEN')) {
-		return $response->json(['text' => 'Nothing here. Go away.']);
+class Bot {
+	public function __call($name, $args) {
+		$request  = $args[0];
+		$response = $args[1];
+		$user_id  = $request->user_id;
+
+		$member = MemberQuery::create()
+			->filterBySlackId($user_id)
+			->findOne();
+
+		$this->member = $member;
+		$payload      = ['text' => 'Nothing here. Go away.'];
+
+		if ($request->token == getenv('PALINDROME_SLACKBOT_TOKEN') && $user_id) {
+			if (!$member) {
+				$payload = ["text" => "Hi there! Before you can use the `".$request->command."` command, I need to know who you are. Click this link then try the command again.
+    http://team-palindrome.herokuapp.com/assign_slack_id/".$user_id];
+			} else {
+				$payload = call_user_func_array(array($this, $name), $args);
+			}
+		}
+
+		return $response->json($payload);
 	}
 
+	private function bigBoard($request, $response) {
+		return [];
+	}
+}
+
+function bigBoardBot($request, $response) {
 	$parameter        = $request->text;
 	$puzzleQuery      = PuzzleQuery::create();
 	$channel_response = ['text' => 'I got nothing, sorry. Try again.'];
@@ -781,11 +807,6 @@ function joinBot($request, $response) {
 		$channel_response = [
 			"text" => "`".$request->command."` can only be used inside a puzzle channel.",
 		];
-	} elseif (!$member) {
-		$channel_response = [
-			"text" => "Hi there! Before you can use the `".$request->command."` command, I need to know who you are. Click this link then try the command again.
-http://team-palindrome.herokuapp.com/assign_slack_id/".$slack_user_id,
-		];
 	} else {
 		$response         = $member->joinPuzzle($puzzle);
 		$channel_response = [
@@ -873,11 +894,6 @@ function noteBot($request, $response) {
 	} elseif (!$puzzle) {
 		$channel_response = [
 			"text" => "`".$request->command."` can only be used inside a puzzle channel.",
-		];
-	} elseif (!$member) {
-		$channel_response = [
-			"text" => "Hi there! Before you can use the `".$request->command."` command, I need to know who you are. Click this link then try the command again.
-http://team-palindrome.herokuapp.com/assign_slack_id/".$slack_user_id,
 		];
 	} else {
 		$puzzle->note($body, $member);
