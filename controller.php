@@ -52,6 +52,9 @@ function show_content() {
 			$klein->respond('POST', '/join/?', function ($request) {
 					return joinPuzzle($request->id);
 				});
+			$klein->respond('POST', '/leave/?', function ($request) {
+					return leavePuzzle($request->id);
+				});
 			$klein->respond('POST', '/delete-note/[:note_id]/?', function ($request) {
 					return archivePuzzleNote($request->note_id, $request->id);
 				});
@@ -268,6 +271,14 @@ function displayPuzzle($puzzle_id, $method = "get") {
 
 	$members = $puzzle->getMembers();
 
+	$is_member      = false;
+	$current_member = $_SESSION['user'];
+	foreach ($members as $member) {
+		if ($member->getId() == $current_member->getId()) {
+			$is_member = true;
+		}
+	}
+
 	// TODO: Can we use $puzzle->getParents() for this?
 	$metas_to_show = PuzzlePuzzleQuery::create()
 		->joinWith('PuzzlePuzzle.Parent')
@@ -283,6 +294,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		->filterByChild($puzzle)
 		->count();
 
+	$puzzles = null;
 	if ($me_as_meta > 0) {
 		$puzzles = $puzzle->getChildren();
 	}
@@ -298,6 +310,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'puzzle'    => $puzzle,
 			'notes'     => $notes,
 			'members'   => $members,
+			'is_member' => $is_member,
 			'all_metas' => $metas_to_show,
 			'statuses'  => $statuses,
 			'i_am_meta' => $me_as_meta > 0,
@@ -395,6 +408,17 @@ function joinPuzzle($puzzle_id) {
 	$member = $_SESSION['user'];
 
 	$alert = $member->joinPuzzle($puzzle);
+	redirect('/puzzle/'.$puzzle_id, $alert);
+}
+
+function leavePuzzle($puzzle_id) {
+	$puzzle = PuzzleQuery::create()
+		->filterByID($puzzle_id)
+		->findOne();
+
+	$member = $_SESSION['user'];
+
+	$alert = $member->leavePuzzle($puzzle);
 	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 

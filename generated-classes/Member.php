@@ -24,20 +24,15 @@ class Member extends BaseMember {
 		}
 	}
 
-	// JOIN
+	// JOINING & LEAVING
 
 	public function joinPuzzle($puzzle) {
+		// Go thorugh all the puzzles I'm a member of, and leave them all (except don't leave this puzzle, if I'm already a member)
 		$memberPuzzles = $this->getPuzzles();
-
 		foreach ($memberPuzzles as $key => $memberPuzzle) {
-			if ($puzzle->getId() == $memberPuzzle->getId()) {
-				continue;
+			if ($puzzle->getId() != $memberPuzzle->getId()) {
+				$this->leavePuzzle($memberPuzzle);
 			}
-			PuzzleMemberQuery::create()
-				->filterByMember($this)
-				->filterByPuzzle($memberPuzzle)
-				->delete();
-			$memberPuzzle->postLeave($this);
 		}
 
 		try {
@@ -50,6 +45,15 @@ class Member extends BaseMember {
 
 		$puzzle->postJoin($this);
 		return "You joined ".$puzzle->getTitle().".";
+	}
+
+	public function leavePuzzle($puzzle) {
+		PuzzleMemberQuery::create()
+			->filterByMember($this)
+			->filterByPuzzle($puzzle)
+			->delete();
+		$puzzle->postLeave($this);
+		return "You left ".$puzzle->getTitle().".";
 	}
 
 }

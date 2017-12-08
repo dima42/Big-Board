@@ -117,9 +117,15 @@
             {% endfor %}
         </div>
         <div class="card-footer">
+            {% if not is_member %}
             <form action="/puzzle/{{ puzzle.id }}/join" method="post">
                 <button type="submit" class="join-this-puzzle btn btn-link">Join this puzzle</button>
             </form>
+            {% else %}
+            <form action="/puzzle/{{ puzzle.id }}/leave" method="post">
+                <button type="submit" class="join-this-puzzle btn btn-link">Leave this puzzle</button>
+            </form>
+            {% endif %}
         </div>
     </div>
     {% endif %}
