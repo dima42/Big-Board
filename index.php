@@ -7,29 +7,24 @@ $klein = new \Klein\Klein();
 $klein->with('/api', function () use ($klein) {
 		$bot = new Bot();
 
-		// DEBUG
-		$klein->respond('GET', '/board', function ($request, $response) use ($bot) {
-				return $bot->bigBoard($request, $response);
-			});
-
 		$klein->respond('POST', '/board', function ($request, $response) use ($bot) {
-				return bigBoardBot($request, $response);
+				return $bot->board($request, $response);
 			});
 
 		$klein->respond('POST', '/solve', function ($request, $response) use ($bot) {
-				return solveBot($request, $response);
+				return $bot->solve($request, $response);
 			});
 
 		$klein->respond('POST', '/info', function ($request, $response) use ($bot) {
-				return infoBot($request, $response);
+				return $bot->info($request, $response);
 			});
 
 		$klein->respond('POST', '/join', function ($request, $response) use ($bot) {
-				return joinBot($request, $response);
+				return $bot->join($request, $response);
 			});
 
 		$klein->respond('POST', '/note', function ($request, $response) use ($bot) {
-				return noteBot($request, $response);
+				return $bot->note($request, $response);
 			});
 
 	});
