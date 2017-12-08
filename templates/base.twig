@@ -61,9 +61,9 @@ $('[data-filter-list] a').click(function() {
     $('[data-filter]').show();
     if (filter) {
         $('[data-filter]').hide();
-        $('[data-filter=' + filter + ']').show();
+        $('[data-filter~=' + filter + ']').show();
     } else if (filterNot) {
-        $('[data-filter=' + filterNot + ']').hide();
+        $('[data-filter~=' + filterNot + ']').hide();
     }
 });
 </script>

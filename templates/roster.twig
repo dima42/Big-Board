@@ -7,10 +7,13 @@
         <a data-toggle="tab" class="nav-link" id="all-tab" href="#">All</a>
     </li>
     <li class="nav-item">
-        <a data-toggle="tab" data-filter-by="active" class="nav-link" id="active-tab" href="#">Active</a>
+        <a data-toggle="tab" data-filter-by="active" class="nav-link" id="active-tab" href="#">Working</a>
     </li>
     <li class="nav-item">
-        <a data-toggle="tab" data-filter-by="inactive" class="nav-link" id="inactve-tab" href="#">Inactive</a>
+        <a data-toggle="tab" data-filter-by="inactive" class="nav-link" id="inactve-tab" href="#">Not working</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="strength" class="nav-link" id="active-tab" href="#">Has strength</a>
     </li>
 </ul>
 {% endblock %}
@@ -29,7 +32,7 @@
     </thead>
     <tbody>
     {% for person in roster %}
-    <tr data-filter="{{ person.puzzleMembers|length|yesno('active', 'inactive') }}">
+    <tr data-filter="{{ person.puzzleMembers|length|yesno('active', 'inactive') }} {{ person.strengths|yesno('strength', '') }}">
         <td>{{ person.fullName }}</td>
         <th>{% if person.slackID %}<a href="http://palindrome2018.slack.com/team/{{ person.slackId }}"><img src="/img/slack.png" width="15px" alt=""></a>{% endif %}</th>
         <td>{{ person.strengths }}</td>
