@@ -75,7 +75,7 @@ http://team-palindrome.herokuapp.com/assign_slack_id/".$user_id];
 			$pretext = $count." puzzle titles match a search for `".strtoupper($parameter)."`:";
 		}
 
-		$puzzles     = $puzzleQuery->find();
+		$puzzles     = $puzzleQuery->orderByTitle()->find();
 		$attachments = array_map(function ($puzzle) {
 				return $puzzle->getSlackAttachmentSmall();
 			}, iterator_to_array($puzzles));
