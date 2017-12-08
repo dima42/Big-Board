@@ -82,11 +82,10 @@
 {% block aside_bottom %}
 <div class="mb-3">
     <form action="/puzzle/{{ puzzle.id }}/delete" data-behavior="confirm-delete" method="post">
-        <button type="submit" class="btn border border-danger text-danger" href="">❌ &nbsp; Archive this puzzle</button type="submit">
+        <button type="submit" class="btn border border-danger text-danger" href="">❌ &nbsp; Archive this puzzle</button>
     </form>
 </div>
 {% endblock %}
-
 
 {% block more_scripts %}
 <script>
