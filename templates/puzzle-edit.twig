@@ -77,7 +77,13 @@
         </div>
     </div>
 </form>
-
 {% endblock %}
 
-{% block edit_button %}{% endblock %}
+{% block aside_bottom %}
+<div class="mb-3">
+    <form action="/puzzle/{{ puzzle.id }}/delete" method="post">
+        <button type="submit" class="btn border border-danger text-danger" href="">❌ &nbsp; Delete this puzzle</button type="submit">
+    </form>
+</div>
+{% endblock %}
+

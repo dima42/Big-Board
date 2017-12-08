@@ -90,21 +90,11 @@
 {% endblock %}
 
 {% block aside %}
-    {% block edit_button %}
-    <div class="mb-3">
-        <a class="btn btn-light border" href="/puzzle/{{ puzzle.id }}/edit">✏️  Edit this puzzle</a>
-    </div>
-    {% endblock %}
-
     <div class="puzzle-links list-group mb-3">
         <a class="list-group-item list-group-item-action" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> Puzzle page</a>
         <a class="list-group-item list-group-item-action" href='{{ puzzle.spreadsheetId }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet</a>
         <a class="list-group-item list-group-item-action" href='{{ puzzle.getSlackURL() }}'><img src="/img/slack.png" width="15px" alt=""> Slack</a>
     </div>
-
-    {% if puzzle.status == "featured" %}
-        <div class="alert alert-info">This puzzle is the Featured Puzzle</div>
-    {% endif %}
 
     {% if puzzle.status != "solved" %}
     <div class="card mb-3">
@@ -129,7 +119,12 @@
         </div>
     </div>
     {% endif %}
+{% endblock %}
 
+{% block aside_bottom %}
+<div class="mb-3">
+    <a class="btn btn-dark border border-dark" href="/puzzle/{{ puzzle.id }}/edit">✏️  &nbsp; Edit this puzzle</a>
+</div>
 {% endblock %}
 
 {% block scripts %}
