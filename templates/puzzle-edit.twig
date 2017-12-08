@@ -81,9 +81,22 @@
 
 {% block aside_bottom %}
 <div class="mb-3">
-    <form action="/puzzle/{{ puzzle.id }}/delete" method="post">
-        <button type="submit" class="btn border border-danger text-danger" href="">❌ &nbsp; Delete this puzzle</button type="submit">
+    <form action="/puzzle/{{ puzzle.id }}/delete" data-behavior="confirm-delete" method="post">
+        <button type="submit" class="btn border border-danger text-danger" href="">❌ &nbsp; Archive this puzzle</button type="submit">
     </form>
 </div>
 {% endblock %}
 
+
+{% block more_scripts %}
+<script>
+$(function() {
+    $('[data-behavior=confirm-delete]').submit(function(e) {
+        if(!confirm('You sure you want to archive this puzzle and make it disappear from the site?')) {
+            e.preventDefault();
+        }
+        return true;
+    });
+});
+</script>
+{% endblock %}
