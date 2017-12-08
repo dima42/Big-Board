@@ -312,7 +312,6 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'members'   => $members,
 			'is_member' => $is_member,
 			'all_metas' => $metas_to_show,
-			'statuses'  => $statuses,
 			'i_am_meta' => $me_as_meta > 0,
 			'puzzles'   => $puzzles,
 		));
