@@ -55,6 +55,9 @@ function show_content() {
 			$klein->respond('POST', '/leave/?', function ($request) {
 					return leavePuzzle($request->id);
 				});
+			$klein->respond('POST', '/delete/?', function ($request) {
+					return deletePuzzle($request->id, $request);
+				});
 			$klein->respond('POST', '/delete-note/[:note_id]/?', function ($request) {
 					return archivePuzzleNote($request->note_id, $request->id);
 				});
@@ -363,6 +366,18 @@ function solvePuzzle($puzzle_id, $request) {
 	$alert = $puzzle->solve($request->solution);
 
 	redirect('/puzzle/'.$puzzle_id, $alert);
+}
+
+function deletePuzzle($puzzle_id, $request) {
+	$puzzle = PuzzleQuery::create()
+		->filterByID($puzzle_id)
+		->findOne();
+
+	$puzzle_title = $puzzle->getTitle();
+	$puzzle->delete();
+
+	$alert = "Archived ".$puzzle_title;
+	redirect('/', $alert);
 }
 
 function changePuzzleStatus($puzzle_id, $request) {

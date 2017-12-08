@@ -9,6 +9,8 @@ use \NewsQuery as ChildNewsQuery;
 use \Note as ChildNote;
 use \NoteQuery as ChildNoteQuery;
 use \Puzzle as ChildPuzzle;
+use \PuzzleArchive as ChildPuzzleArchive;
+use \PuzzleArchiveQuery as ChildPuzzleArchiveQuery;
 use \PuzzleMember as ChildPuzzleMember;
 use \PuzzleMemberQuery as ChildPuzzleMemberQuery;
 use \PuzzlePuzzle as ChildPuzzlePuzzle;
@@ -221,6 +223,9 @@ abstract class Puzzle implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    // archivable behavior
+    protected $archiveOnDelete = true;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1027,6 +1032,16 @@ abstract class Puzzle implements ActiveRecordInterface
             $deleteQuery = ChildPuzzleQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
+            // archivable behavior
+            if ($ret) {
+                if ($this->archiveOnDelete) {
+                    // do nothing yet. The object will be archived later when calling ChildPuzzleQuery::delete().
+                } else {
+                    $deleteQuery->setArchiveOnDelete(false);
+                    $this->archiveOnDelete = true;
+                }
+            }
+
             if ($ret) {
                 $deleteQuery->delete($con);
                 $this->postDelete($con);
@@ -4099,6 +4114,118 @@ abstract class Puzzle implements ActiveRecordInterface
         $this->modifiedColumns[PuzzleTableMap::COL_UPDATED_AT] = true;
 
         return $this;
+    }
+
+    // archivable behavior
+
+    /**
+     * Get an archived version of the current object.
+     *
+     * @param ConnectionInterface $con Optional connection object
+     *
+     * @return     ChildPuzzleArchive An archive object, or null if the current object was never archived
+     */
+    public function getArchive(ConnectionInterface $con = null)
+    {
+        if ($this->isNew()) {
+            return null;
+        }
+        $archive = ChildPuzzleArchiveQuery::create()
+            ->filterByPrimaryKey($this->getPrimaryKey())
+            ->findOne($con);
+
+        return $archive;
+    }
+    /**
+     * Copy the data of the current object into a $archiveTablePhpName archive object.
+     * The archived object is then saved.
+     * If the current object has already been archived, the archived object
+     * is updated and not duplicated.
+     *
+     * @param ConnectionInterface $con Optional connection object
+     *
+     * @throws PropelException If the object is new
+     *
+     * @return     ChildPuzzleArchive The archive object based on this object
+     */
+    public function archive(ConnectionInterface $con = null)
+    {
+        if ($this->isNew()) {
+            throw new PropelException('New objects cannot be archived. You must save the current object before calling archive().');
+        }
+        $archive = $this->getArchive($con);
+        if (!$archive) {
+            $archive = new ChildPuzzleArchive();
+            $archive->setPrimaryKey($this->getPrimaryKey());
+        }
+        $this->copyInto($archive, $deepCopy = false, $makeNew = false);
+        $archive->setArchivedAt(time());
+        $archive->save($con);
+
+        return $archive;
+    }
+
+    /**
+     * Revert the the current object to the state it had when it was last archived.
+     * The object must be saved afterwards if the changes must persist.
+     *
+     * @param ConnectionInterface $con Optional connection object
+     *
+     * @throws PropelException If the object has no corresponding archive.
+     *
+     * @return $this|ChildPuzzle The current object (for fluent API support)
+     */
+    public function restoreFromArchive(ConnectionInterface $con = null)
+    {
+        $archive = $this->getArchive($con);
+        if (!$archive) {
+            throw new PropelException('The current object has never been archived and cannot be restored');
+        }
+        $this->populateFromArchive($archive);
+
+        return $this;
+    }
+
+    /**
+     * Populates the the current object based on a $archiveTablePhpName archive object.
+     *
+     * @param      ChildPuzzleArchive $archive An archived object based on the same class
+      * @param      Boolean $populateAutoIncrementPrimaryKeys
+     *               If true, autoincrement columns are copied from the archive object.
+     *               If false, autoincrement columns are left intact.
+      *
+     * @return     ChildPuzzle The current object (for fluent API support)
+     */
+    public function populateFromArchive($archive, $populateAutoIncrementPrimaryKeys = false) {
+        if ($populateAutoIncrementPrimaryKeys) {
+            $this->setId($archive->getId());
+        }
+        $this->setTitle($archive->getTitle());
+        $this->setUrl($archive->getUrl());
+        $this->setSpreadsheetId($archive->getSpreadsheetId());
+        $this->setSolution($archive->getSolution());
+        $this->setStatus($archive->getStatus());
+        $this->setSlackChannel($archive->getSlackChannel());
+        $this->setSlackChannelId($archive->getSlackChannelId());
+        $this->setPostCount($archive->getPostCount());
+        $this->setCreatedAt($archive->getCreatedAt());
+        $this->setUpdatedAt($archive->getUpdatedAt());
+
+        return $this;
+    }
+
+    /**
+     * Removes the object from the database without archiving it.
+     *
+     * @param ConnectionInterface $con Optional connection object
+     *
+     * @return $this|ChildPuzzle The current object (for fluent API support)
+     */
+    public function deleteWithoutArchive(ConnectionInterface $con = null)
+    {
+        $this->archiveOnDelete = false;
+
+        return $this->delete($con);
     }
 
     /**

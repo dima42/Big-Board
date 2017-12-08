@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \Member;
-use \MemberQuery;
+use \PuzzleArchive;
+use \PuzzleArchiveQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'member' table.
+ * This class defines the structure of the 'puzzle_archive' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class MemberTableMap extends TableMap
+class PuzzleArchiveTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class MemberTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.MemberTableMap';
+    const CLASS_NAME = '.Map.PuzzleArchiveTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class MemberTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'member';
+    const TABLE_NAME = 'puzzle_archive';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Member';
+    const OM_CLASS = '\\PuzzleArchive';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Member';
+    const CLASS_DEFAULT = 'PuzzleArchive';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 12;
 
     /**
      * The number of lazy-loaded columns
@@ -69,42 +69,67 @@ class MemberTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 12;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'member.id';
+    const COL_ID = 'puzzle_archive.id';
 
     /**
-     * the column name for the full_name field
+     * the column name for the title field
      */
-    const COL_FULL_NAME = 'member.full_name';
+    const COL_TITLE = 'puzzle_archive.title';
 
     /**
-     * the column name for the google_id field
+     * the column name for the url field
      */
-    const COL_GOOGLE_ID = 'member.google_id';
+    const COL_URL = 'puzzle_archive.url';
 
     /**
-     * the column name for the google_refresh field
+     * the column name for the spreadsheet_id field
      */
-    const COL_GOOGLE_REFRESH = 'member.google_refresh';
+    const COL_SPREADSHEET_ID = 'puzzle_archive.spreadsheet_id';
 
     /**
-     * the column name for the slack_id field
+     * the column name for the solution field
      */
-    const COL_SLACK_ID = 'member.slack_id';
+    const COL_SOLUTION = 'puzzle_archive.solution';
 
     /**
-     * the column name for the slack_handle field
+     * the column name for the status field
      */
-    const COL_SLACK_HANDLE = 'member.slack_handle';
+    const COL_STATUS = 'puzzle_archive.status';
 
     /**
-     * the column name for the strengths field
+     * the column name for the slack_channel field
      */
-    const COL_STRENGTHS = 'member.strengths';
+    const COL_SLACK_CHANNEL = 'puzzle_archive.slack_channel';
+
+    /**
+     * the column name for the slack_channel_id field
+     */
+    const COL_SLACK_CHANNEL_ID = 'puzzle_archive.slack_channel_id';
+
+    /**
+     * the column name for the post_count field
+     */
+    const COL_POST_COUNT = 'puzzle_archive.post_count';
+
+    /**
+     * the column name for the created_at field
+     */
+    const COL_CREATED_AT = 'puzzle_archive.created_at';
+
+    /**
+     * the column name for the updated_at field
+     */
+    const COL_UPDATED_AT = 'puzzle_archive.updated_at';
+
+    /**
+     * the column name for the archived_at field
+     */
+    const COL_ARCHIVED_AT = 'puzzle_archive.archived_at';
 
     /**
      * The default string format for model objects of the related table
@@ -118,11 +143,11 @@ class MemberTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'FullName', 'GoogleId', 'GoogleRefresh', 'SlackId', 'SlackHandle', 'Strengths', ),
-        self::TYPE_CAMELNAME     => array('id', 'fullName', 'googleId', 'googleRefresh', 'slackId', 'slackHandle', 'strengths', ),
-        self::TYPE_COLNAME       => array(MemberTableMap::COL_ID, MemberTableMap::COL_FULL_NAME, MemberTableMap::COL_GOOGLE_ID, MemberTableMap::COL_GOOGLE_REFRESH, MemberTableMap::COL_SLACK_ID, MemberTableMap::COL_SLACK_HANDLE, MemberTableMap::COL_STRENGTHS, ),
-        self::TYPE_FIELDNAME     => array('id', 'full_name', 'google_id', 'google_refresh', 'slack_id', 'slack_handle', 'strengths', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'Title', 'Url', 'SpreadsheetId', 'Solution', 'Status', 'SlackChannel', 'SlackChannelId', 'PostCount', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'title', 'url', 'spreadsheetId', 'solution', 'status', 'slackChannel', 'slackChannelId', 'postCount', 'createdAt', 'updatedAt', 'archivedAt', ),
+        self::TYPE_COLNAME       => array(PuzzleArchiveTableMap::COL_ID, PuzzleArchiveTableMap::COL_TITLE, PuzzleArchiveTableMap::COL_URL, PuzzleArchiveTableMap::COL_SPREADSHEET_ID, PuzzleArchiveTableMap::COL_SOLUTION, PuzzleArchiveTableMap::COL_STATUS, PuzzleArchiveTableMap::COL_SLACK_CHANNEL, PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID, PuzzleArchiveTableMap::COL_POST_COUNT, PuzzleArchiveTableMap::COL_CREATED_AT, PuzzleArchiveTableMap::COL_UPDATED_AT, PuzzleArchiveTableMap::COL_ARCHIVED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'title', 'url', 'spreadsheet_id', 'solution', 'status', 'slack_channel', 'slack_channel_id', 'post_count', 'created_at', 'updated_at', 'archived_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -132,11 +157,11 @@ class MemberTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'FullName' => 1, 'GoogleId' => 2, 'GoogleRefresh' => 3, 'SlackId' => 4, 'SlackHandle' => 5, 'Strengths' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'fullName' => 1, 'googleId' => 2, 'googleRefresh' => 3, 'slackId' => 4, 'slackHandle' => 5, 'strengths' => 6, ),
-        self::TYPE_COLNAME       => array(MemberTableMap::COL_ID => 0, MemberTableMap::COL_FULL_NAME => 1, MemberTableMap::COL_GOOGLE_ID => 2, MemberTableMap::COL_GOOGLE_REFRESH => 3, MemberTableMap::COL_SLACK_ID => 4, MemberTableMap::COL_SLACK_HANDLE => 5, MemberTableMap::COL_STRENGTHS => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'full_name' => 1, 'google_id' => 2, 'google_refresh' => 3, 'slack_id' => 4, 'slack_handle' => 5, 'strengths' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Url' => 2, 'SpreadsheetId' => 3, 'Solution' => 4, 'Status' => 5, 'SlackChannel' => 6, 'SlackChannelId' => 7, 'PostCount' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, 'ArchivedAt' => 11, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheetId' => 3, 'solution' => 4, 'status' => 5, 'slackChannel' => 6, 'slackChannelId' => 7, 'postCount' => 8, 'createdAt' => 9, 'updatedAt' => 10, 'archivedAt' => 11, ),
+        self::TYPE_COLNAME       => array(PuzzleArchiveTableMap::COL_ID => 0, PuzzleArchiveTableMap::COL_TITLE => 1, PuzzleArchiveTableMap::COL_URL => 2, PuzzleArchiveTableMap::COL_SPREADSHEET_ID => 3, PuzzleArchiveTableMap::COL_SOLUTION => 4, PuzzleArchiveTableMap::COL_STATUS => 5, PuzzleArchiveTableMap::COL_SLACK_CHANNEL => 6, PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID => 7, PuzzleArchiveTableMap::COL_POST_COUNT => 8, PuzzleArchiveTableMap::COL_CREATED_AT => 9, PuzzleArchiveTableMap::COL_UPDATED_AT => 10, PuzzleArchiveTableMap::COL_ARCHIVED_AT => 11, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheet_id' => 3, 'solution' => 4, 'status' => 5, 'slack_channel' => 6, 'slack_channel_id' => 7, 'post_count' => 8, 'created_at' => 9, 'updated_at' => 10, 'archived_at' => 11, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -149,20 +174,25 @@ class MemberTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('member');
-        $this->setPhpName('Member');
+        $this->setName('puzzle_archive');
+        $this->setPhpName('PuzzleArchive');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Member');
+        $this->setClassName('\\PuzzleArchive');
         $this->setPackage('');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('full_name', 'FullName', 'VARCHAR', true, 64, null);
-        $this->addColumn('google_id', 'GoogleId', 'VARCHAR', false, 64, null);
-        $this->addColumn('google_refresh', 'GoogleRefresh', 'VARCHAR', false, 64, null);
-        $this->addColumn('slack_id', 'SlackId', 'VARCHAR', false, 24, null);
-        $this->addColumn('slack_handle', 'SlackHandle', 'VARCHAR', false, 48, null);
-        $this->addColumn('strengths', 'Strengths', 'VARCHAR', false, 128, null);
+        $this->addColumn('title', 'Title', 'VARCHAR', false, 128, null);
+        $this->addColumn('url', 'Url', 'VARCHAR', false, 128, null);
+        $this->addColumn('spreadsheet_id', 'SpreadsheetId', 'VARCHAR', false, 128, null);
+        $this->addColumn('solution', 'Solution', 'VARCHAR', false, 128, null);
+        $this->addColumn('status', 'Status', 'VARCHAR', false, 24, null);
+        $this->addColumn('slack_channel', 'SlackChannel', 'VARCHAR', false, 48, null);
+        $this->addColumn('slack_channel_id', 'SlackChannelId', 'VARCHAR', false, 24, null);
+        $this->addColumn('post_count', 'PostCount', 'INTEGER', false, null, null);
+        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('archived_at', 'ArchivedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -170,40 +200,7 @@ class MemberTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Note', '\\Note', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':member_id',
-    1 => ':id',
-  ),
-), 'SET NULL', null, 'Notes', false);
-        $this->addRelation('PuzzleMember', '\\PuzzleMember', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':member_id',
-    1 => ':id',
-  ),
-), 'CASCADE', null, 'PuzzleMembers', false);
-        $this->addRelation('News', '\\News', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':member_id',
-    1 => ':id',
-  ),
-), 'SET NULL', null, 'News', false);
-        $this->addRelation('Puzzle', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Puzzles');
     } // buildRelations()
-    /**
-     * Method to invalidate the instance pool of all tables related to member     * by a foreign key with ON DELETE CASCADE
-     */
-    public static function clearRelatedInstancePool()
-    {
-        // Invalidate objects in related instance pools,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        NoteTableMap::clearInstancePool();
-        PuzzleMemberTableMap::clearInstancePool();
-        NewsTableMap::clearInstancePool();
-    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -262,7 +259,7 @@ class MemberTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? MemberTableMap::CLASS_DEFAULT : MemberTableMap::OM_CLASS;
+        return $withPrefix ? PuzzleArchiveTableMap::CLASS_DEFAULT : PuzzleArchiveTableMap::OM_CLASS;
     }
 
     /**
@@ -276,22 +273,22 @@ class MemberTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Member object, last column rank)
+     * @return array           (PuzzleArchive object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = MemberTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = MemberTableMap::getInstanceFromPool($key))) {
+        $key = PuzzleArchiveTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = PuzzleArchiveTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + MemberTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + PuzzleArchiveTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = MemberTableMap::OM_CLASS;
-            /** @var Member $obj */
+            $cls = PuzzleArchiveTableMap::OM_CLASS;
+            /** @var PuzzleArchive $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            MemberTableMap::addInstanceToPool($obj, $key);
+            PuzzleArchiveTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -314,18 +311,18 @@ class MemberTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = MemberTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = MemberTableMap::getInstanceFromPool($key))) {
+            $key = PuzzleArchiveTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = PuzzleArchiveTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Member $obj */
+                /** @var PuzzleArchive $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                MemberTableMap::addInstanceToPool($obj, $key);
+                PuzzleArchiveTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -346,21 +343,31 @@ class MemberTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(MemberTableMap::COL_ID);
-            $criteria->addSelectColumn(MemberTableMap::COL_FULL_NAME);
-            $criteria->addSelectColumn(MemberTableMap::COL_GOOGLE_ID);
-            $criteria->addSelectColumn(MemberTableMap::COL_GOOGLE_REFRESH);
-            $criteria->addSelectColumn(MemberTableMap::COL_SLACK_ID);
-            $criteria->addSelectColumn(MemberTableMap::COL_SLACK_HANDLE);
-            $criteria->addSelectColumn(MemberTableMap::COL_STRENGTHS);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_ID);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_TITLE);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_URL);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_SPREADSHEET_ID);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_SOLUTION);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_STATUS);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_SLACK_CHANNEL);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_POST_COUNT);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_ARCHIVED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.full_name');
-            $criteria->addSelectColumn($alias . '.google_id');
-            $criteria->addSelectColumn($alias . '.google_refresh');
-            $criteria->addSelectColumn($alias . '.slack_id');
-            $criteria->addSelectColumn($alias . '.slack_handle');
-            $criteria->addSelectColumn($alias . '.strengths');
+            $criteria->addSelectColumn($alias . '.title');
+            $criteria->addSelectColumn($alias . '.url');
+            $criteria->addSelectColumn($alias . '.spreadsheet_id');
+            $criteria->addSelectColumn($alias . '.solution');
+            $criteria->addSelectColumn($alias . '.status');
+            $criteria->addSelectColumn($alias . '.slack_channel');
+            $criteria->addSelectColumn($alias . '.slack_channel_id');
+            $criteria->addSelectColumn($alias . '.post_count');
+            $criteria->addSelectColumn($alias . '.created_at');
+            $criteria->addSelectColumn($alias . '.updated_at');
+            $criteria->addSelectColumn($alias . '.archived_at');
         }
     }
 
@@ -373,7 +380,7 @@ class MemberTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(MemberTableMap::DATABASE_NAME)->getTable(MemberTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(PuzzleArchiveTableMap::DATABASE_NAME)->getTable(PuzzleArchiveTableMap::TABLE_NAME);
     }
 
     /**
@@ -381,16 +388,16 @@ class MemberTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(MemberTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(MemberTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new MemberTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PuzzleArchiveTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(PuzzleArchiveTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new PuzzleArchiveTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Member or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a PuzzleArchive or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Member object or primary key or array of primary keys
+     * @param mixed               $values Criteria or PuzzleArchive object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -401,27 +408,27 @@ class MemberTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MemberTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PuzzleArchiveTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Member) { // it's a model object
+        } elseif ($values instanceof \PuzzleArchive) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(MemberTableMap::DATABASE_NAME);
-            $criteria->add(MemberTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(PuzzleArchiveTableMap::DATABASE_NAME);
+            $criteria->add(PuzzleArchiveTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = MemberQuery::create()->mergeWith($criteria);
+        $query = PuzzleArchiveQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            MemberTableMap::clearInstancePool();
+            PuzzleArchiveTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                MemberTableMap::removeInstanceFromPool($singleval);
+                PuzzleArchiveTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -429,20 +436,20 @@ class MemberTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the member table.
+     * Deletes all rows from the puzzle_archive table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return MemberQuery::create()->doDeleteAll($con);
+        return PuzzleArchiveQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Member or Criteria object.
+     * Performs an INSERT on the database, given a PuzzleArchive or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Member object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or PuzzleArchive object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -451,22 +458,18 @@ class MemberTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MemberTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PuzzleArchiveTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Member object
-        }
-
-        if ($criteria->containsKey(MemberTableMap::COL_ID) && $criteria->keyContainsValue(MemberTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.MemberTableMap::COL_ID.')');
+            $criteria = $criteria->buildCriteria(); // build Criteria from PuzzleArchive object
         }
 
 
         // Set the correct dbName
-        $query = MemberQuery::create()->mergeWith($criteria);
+        $query = PuzzleArchiveQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -475,7 +478,7 @@ class MemberTableMap extends TableMap
         });
     }
 
-} // MemberTableMap
+} // PuzzleArchiveTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-MemberTableMap::buildTableMap();
+PuzzleArchiveTableMap::buildTableMap();

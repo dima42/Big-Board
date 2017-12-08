@@ -18,16 +18,17 @@
             <unique-column name="title" />
         </unique>
         <behavior name="timestampable" />
+        <behavior name="archivable" />
     </table>
     <table name="note" phpName="Note">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="body" type="varchar" size="255" required="true" />
         <column name="puzzle_id" type="integer" required="true"/>
         <column name="member_id" type="integer" required="true"/>
-        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="Note" onDelete="cascade">
+        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="Note" onDelete="SETNULL">
             <reference local="puzzle_id" foreign="id"/>
         </foreign-key>
-        <foreign-key foreignTable="member" phpName="Author" refPhpName="Note">
+        <foreign-key foreignTable="member" phpName="Author" refPhpName="Note" onDelete="SETNULL">
             <reference local="member_id" foreign="id"/>
         </foreign-key>
         <behavior name="timestampable" />
@@ -48,10 +49,10 @@
     <table name="solver" phpName="PuzzleMember" isCrossRef="true">
         <column name="puzzle_id" type="integer" primaryKey="true" />
         <column name="member_id" type="integer" primaryKey="true" />
-        <foreign-key foreignTable="puzzle" phpName="Puzzle">
+        <foreign-key foreignTable="puzzle" phpName="Puzzle" onDelete="CASCADE">
             <reference local="puzzle_id" foreign="id"/>
         </foreign-key>
-        <foreign-key foreignTable="member" phpName="Member">
+        <foreign-key foreignTable="member" phpName="Member" onDelete="CASCADE">
             <reference local="member_id" foreign="id"/>
         </foreign-key>
         <unique>
@@ -63,10 +64,10 @@
     <table name="relationship" phpName="PuzzlePuzzle" isCrossRef="true">
         <column name="puzzle_id" type="integer" primaryKey="true" />
         <column name="parent_id" type="integer" primaryKey="true" />
-        <foreign-key foreignTable="puzzle" phpName="Child" refPhpName="PuzzleParent">
+        <foreign-key foreignTable="puzzle" phpName="Child" refPhpName="PuzzleParent" onDelete="CASCADE">
             <reference local="puzzle_id" foreign="id"/>
         </foreign-key>
-        <foreign-key foreignTable="puzzle" phpName="Parent" refPhpName="PuzzleChild">
+        <foreign-key foreignTable="puzzle" phpName="Parent" refPhpName="PuzzleChild" onDelete="CASCADE">
             <reference local="parent_id" foreign="id"/>
         </foreign-key>
     </table>
@@ -74,12 +75,12 @@
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="news_type" type="varchar" size="16" required="false" />
         <column name="content" type="varchar" size="255" required="true" />
-        <column name="member_id" type="integer" required="false"/>
-        <column name="puzzle_id" type="integer" required="false"/>
-        <foreign-key foreignTable="member" phpName="Member" refPhpName="News">
+        <column name="member_id" type="integer" required="false" />
+        <column name="puzzle_id" type="integer" required="false" />
+        <foreign-key foreignTable="member" phpName="Member" refPhpName="News" onDelete="SETNULL">
             <reference local="member_id" foreign="id"/>
         </foreign-key>
-        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="News">
+        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="News" onDelete="SETNULL">
             <reference local="puzzle_id" foreign="id"/>
         </foreign-key>
         <behavior name="timestampable" />

@@ -200,38 +200,38 @@ class PuzzleTableMap extends TableMap
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), 'CASCADE', null, 'Notes', false);
+), 'SET NULL', null, 'Notes', false);
         $this->addRelation('PuzzleMember', '\\PuzzleMember', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), null, null, 'PuzzleMembers', false);
+), 'CASCADE', null, 'PuzzleMembers', false);
         $this->addRelation('PuzzleParent', '\\PuzzlePuzzle', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), null, null, 'PuzzleParents', false);
+), 'CASCADE', null, 'PuzzleParents', false);
         $this->addRelation('PuzzleChild', '\\PuzzlePuzzle', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':parent_id',
     1 => ':id',
   ),
-), null, null, 'Puzzlechildren', false);
+), 'CASCADE', null, 'Puzzlechildren', false);
         $this->addRelation('News', '\\News', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), null, null, 'News', false);
-        $this->addRelation('Member', '\\Member', RelationMap::MANY_TO_MANY, array(), null, null, 'Members');
-        $this->addRelation('Parent', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), null, null, 'Parents');
-        $this->addRelation('Child', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), null, null, 'Children');
+), 'SET NULL', null, 'News', false);
+        $this->addRelation('Member', '\\Member', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Members');
+        $this->addRelation('Parent', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Parents');
+        $this->addRelation('Child', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Children');
     } // buildRelations()
 
     /**
@@ -245,6 +245,7 @@ class PuzzleTableMap extends TableMap
         return array(
             'aggregate_column' => array('name' => 'post_count', 'expression' => 'COUNT(id)', 'condition' => '', 'foreign_table' => 'note', 'foreign_schema' => '', ),
             'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'archivable' => array('archive_table' => '', 'archive_phpname' => '', 'archive_class' => '', 'log_archived_at' => 'true', 'archived_at_column' => 'archived_at', 'archive_on_insert' => 'false', 'archive_on_update' => 'false', 'archive_on_delete' => 'true', ),
         );
     } // getBehaviors()
     /**
@@ -255,6 +256,9 @@ class PuzzleTableMap extends TableMap
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         NoteTableMap::clearInstancePool();
+        PuzzleMemberTableMap::clearInstancePool();
+        PuzzlePuzzleTableMap::clearInstancePool();
+        NewsTableMap::clearInstancePool();
     }
 
     /**

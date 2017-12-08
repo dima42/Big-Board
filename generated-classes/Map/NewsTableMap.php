@@ -176,14 +176,14 @@ class NewsTableMap extends TableMap
     0 => ':member_id',
     1 => ':id',
   ),
-), null, null, null, false);
+), 'SET NULL', null, null, false);
         $this->addRelation('Puzzle', '\\Puzzle', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), null, null, null, false);
+), 'SET NULL', null, null, false);
     } // buildRelations()
 
     /**
