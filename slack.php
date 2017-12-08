@@ -1,4 +1,6 @@
 <?
+use Propel\Runtime\ActiveQuery\Criteria;
+
 function createNewSlackChannel($slug) {
 	$slack_key = getenv('PALINDROME_SLACK_KEY');
 
