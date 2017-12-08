@@ -162,7 +162,7 @@ function redirect($location, $message = "", $alert_type = "info") {
 }
 
 function displayError($error) {
-	render('error.twig', array(
+	render('error.twig', 'error', array(
 			'error' => $error,
 		));
 }
@@ -174,7 +174,7 @@ function displayTest() {
 
 	return "";
 
-	render('test.twig', array(
+	render('test.twig', '', array(
 			// 'content' => $result,
 		));
 }
@@ -206,7 +206,7 @@ function displayAll() {
 		->orderByTitle()
 		->find();
 
-	render('all.twig', array(
+	render('all.twig', 'all', array(
 			'statusCounts'       => $statusCounts,
 			'unsolved_count'     => $unsolved_count,
 			'total_puzzle_count' => $total_puzzle_count,
@@ -232,7 +232,7 @@ function displayAllByMeta() {
 	}
 	ksort($all_puzzles_by_meta);
 
-	render('bymeta.twig', array(
+	render('bymeta.twig', 'bymeta', array(
 			'all_puzzles_by_meta' => $all_puzzles_by_meta,
 			'metas'               => $metas,
 		));
@@ -251,7 +251,7 @@ function displayLoosePuzzles() {
 		}
 	}
 
-	render('loose.twig', array(
+	render('loose.twig', 'loose', array(
 			'puzzles' => $puzzles,
 		));
 }
@@ -308,7 +308,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		$template = 'puzzle-edit.twig';
 	}
 
-	render($template, array(
+	render($template, 'puzzle', array(
 			'puzzle_id' => $puzzle_id,
 			'puzzle'    => $puzzle,
 			'notes'     => $notes,
@@ -455,7 +455,7 @@ function displayAdd($meta_id = '') {
 		->orderBy('Parent.title')
 		->find();
 
-	render('add.twig', array(
+	render('add.twig', 'add', array(
 			'meta_id' => $meta_id,
 			'metas'   => $metas,
 		));
@@ -576,7 +576,7 @@ function displayRoster() {
 		->orderByFullName()
 		->find();
 
-	render('roster.twig', array(
+	render('roster.twig', 'roster', array(
 			'roster' => $members,
 		));
 }
@@ -591,7 +591,7 @@ function displayMember($member_id, $method = "get") {
 
 	$puzzles = $member->getPuzzles();
 
-	render($template, array(
+	render($template, 'member', array(
 			'member'  => $member,
 			'puzzles' => $puzzles,
 		));
@@ -635,7 +635,7 @@ function displayNews($filter = "all") {
 		$news->find();
 	}
 
-	render('news.twig', array(
+	render('news.twig', 'news', array(
 			'filter'  => $filter,
 			'updates' => $news,
 		));
@@ -680,7 +680,7 @@ function displayUnsolvedPuzzles() {
 		->filterByStatus('solved', Criteria::NOT_EQUAL)
 		->find();
 
-	render('unsolved.twig', array(
+	render('unsolved.twig', 'unsolved', array(
 			'puzzles' => $puzzles,
 		));
 }

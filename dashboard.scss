@@ -28,7 +28,14 @@ h2 {
 
 .navbar-dark .navbar-nav {
     .add-link {
-        color: #eee;
+        color: #ccc;
+    }
+}
+
+.navbar-dark .navbar-nav {
+    .active {
+        background:#555;
+        border-radius: 3px;
     }
 }
 
@@ -182,7 +189,7 @@ aside {
 
 // BY META
 
-.by-meta {
+body.bymeta {
     .anchor-target {
       display: block;
       content: " ";
@@ -284,7 +291,7 @@ aside {
     }
 }
 
-.addPuzzle {
+body.add {
     .templates {
         display: none;
     }

@@ -85,7 +85,7 @@ $yesno = new Twig_Filter('yesno',
 $twig->addFilter($yesno);
 
 // RENDER
-function render($template, $vars = array()) {
+function render($template, $context = "", $vars = array()) {
 	$latestNews = NewsQuery::create()
 		->orderByCreatedAt('desc')
 		->filterByNewsType('important')
@@ -104,6 +104,7 @@ function render($template, $vars = array()) {
 	$vars['statuses']   = ['open', 'stuck', 'priority', 'urgent', 'solved'];
 	$vars['now']        = strftime('%c');
 	$vars['latestNews'] = $latestNews;
+	$vars['context']    = $context;
 
 	Global $DEBUG;
 	if ($DEBUG) {
