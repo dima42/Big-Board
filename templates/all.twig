@@ -84,9 +84,9 @@
 {% block scripts %}
 <script>
 $(function() {
-    loadPuzzleData('/puzzles/all');
-
-    $('.nav li:first-child a').click();
+    loadPuzzleData('/puzzles/all', function() {
+        $('.nav li:first-child a').click();
+    });
 
     var sortByDate = function(a, b, field) {
         var aDate = $(a).attr('data-' + field);

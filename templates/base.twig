@@ -55,19 +55,20 @@ window.setTimeout(function() {
     });
 }, 5000);
 
-var loadPuzzleData = function(url) {
+var loadPuzzleData = function(url, callback) {
     $.get(url, {}, function(response) {
-        loadTemplate(response);
+        loadTemplate(response, callback);
     });
 };
 
-var loadTemplate = function(response) {
+var loadTemplate = function(response, callback) {
     var data = response;
     $.get('templates/puzzle_row.mst', function(template) {
         $.each(data, function(key, puzzleData) {
             var rendered = Mustache.render(template, puzzleData);
             $('tbody').append(rendered);
         });
+        callback();
     });
 };
 
