@@ -59,7 +59,7 @@
 
 {% block content %}
 {% from 'macros.twig' import puzzle_table %}
-{{ puzzle_table(puzzles) }}
+{{ puzzle_table() }}
 {% endblock %}
 
 {% block aside_bottom %}
@@ -84,6 +84,8 @@
 {% block scripts %}
 <script>
 $(function() {
+    loadPuzzleData('/puzzles/all');
+
     $('.nav li:first-child a').click();
 
     var sortByDate = function(a, b, field) {
