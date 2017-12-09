@@ -14,8 +14,6 @@
 {% block content %}
 {% from 'macros.twig' import puzzle_table %}
 
-<div id="target"></div>
-
 <h1>All puzzles by meta</h1>
 
 {% for meta, puzzles in all_puzzles_by_meta %}
@@ -28,17 +26,4 @@
     {{ puzzle_table(puzzles) }}
 </section>
 {% endfor %}
-{% endblock %}
-
-{% block scripts %}
-<script>
-$(function() {
-    loadTemplate('puzzle_list', [{
-        title: "Luke",
-        url: "foo",
-        status: "open",
-        solution: "BOB"
-    }]);
-});
-</script>
 {% endblock %}
