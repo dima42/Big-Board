@@ -12,9 +12,7 @@
 {% endblock %}
 
 {% block content %}
-{% from 'macros.twig' import puzzle_table %}
-
-<div id="target"></div>
+<div id="puzzle-list-container"></div>
 
 <h1>All puzzles by meta</h1>
 
@@ -33,12 +31,7 @@
 {% block scripts %}
 <script>
 $(function() {
-    loadTemplate('puzzle_list', [{
-        title: "Luke",
-        url: "foo",
-        status: "open",
-        solution: "BOB"
-    }]);
+    loadPuzzleData('/puzzles/bymeta');
 });
 </script>
 {% endblock %}
