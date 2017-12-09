@@ -55,6 +55,13 @@ window.setTimeout(function() {
     });
 }, 5000);
 
+var loadTemplate = function(fileName, data) {
+    $.get('templates/'+fileName+'.mst', function(template) {
+        var rendered = Mustache.render(template, {"puzzles":data});
+        $('#target').html(rendered);
+    });
+};
+
 $(function() {
     $('[data-filter-list] a').click(function() {
         $(this).tab('show');
