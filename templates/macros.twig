@@ -1,4 +1,21 @@
-{% macro puzzle_table(puzzles, sol=true, lastmod=false) %}
+{% macro puzzle_table() %}
+<table class="table puzzle-list">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Solution</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+{% endmacro puzzle_table %}
+
+{% macro puzzle_table_v1(puzzles, sol=true, lastmod=false) %}
 <table class="table puzzle-list">
     <thead>
         <tr>
@@ -44,4 +61,4 @@
     {% endfor %}
     </tbody>
 </table>
-{% endmacro puzzle_table %}
+{% endmacro puzzle_table_v1 %}
