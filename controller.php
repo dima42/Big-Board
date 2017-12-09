@@ -23,6 +23,18 @@ function show_content() {
 			return displayLoosePuzzles();
 		});
 
+	$klein->with('/puzzles', function () use ($klein) {
+			$klein->respond('GET', '/all', function ($request, $response) {
+					return allPuzzles($response);
+				});
+			$klein->respond('GET', '/bymeta', function ($request, $response) {
+					return allPuzzlesByMeta($response);
+				});
+			$klein->respond('GET', '/loose', function ($request, $response) {
+					return loosePuzzles($response);
+				});
+		});
+
 	$klein->respond('GET', '/unsolved', function () {
 			return displayUnsolvedPuzzles();
 		});
@@ -179,6 +191,55 @@ function displayTest() {
 		));
 }
 
+// PUZZLE DATA
+
+function allPuzzles($response) {
+	$puzzles = PuzzleQuery::create()
+		->orderByTitle()
+		->find()
+		->toArray();
+
+	return $response->json($puzzles);
+}
+
+function allPuzzlesByMeta($response) {
+	$all_puzzles = PuzzlePuzzleQuery::create()
+		->joinWith('Child')
+		->orderByParentId()
+		->find();
+
+	$metas = PuzzlePuzzleQuery::create()
+		->joinWith('PuzzlePuzzle.Parent')
+		->where('puzzle_id = parent_id')
+		->orderBy('Parent.title')
+		->find();
+
+	$all_puzzles_by_meta = array();
+	foreach ($all_puzzles as $puzzle) {
+		$all_puzzles_by_meta[$puzzle->getParent()->getTitle()][] = $puzzle->getChild();
+	}
+	ksort($all_puzzles_by_meta);
+
+	return $response->json(array(
+			'all_puzzles_by_meta' => $all_puzzles_by_meta,
+			'metas'               => $metas,
+		));
+}
+
+function loosePuzzles($response) {
+	// TODO: refactor this to use COUNT() mechanism
+	$all_puzzles = PuzzleQuery::create()
+		->leftJoinWithPuzzleParent()
+		->find()
+		->toArray();
+
+	$puzzles = array_filter($all_puzzles, function ($puzzle) {
+			return sizeof($puzzle['PuzzleParents']) == 0;
+		});
+
+	return $response->json($puzzles);
+}
+
 // PUZZLE LISTS
 
 function displayAll() {
@@ -202,57 +263,20 @@ function displayAll() {
 		];
 	}
 
-	$puzzles = PuzzleQuery::create()
-		->orderByTitle()
-		->find();
-
 	render('all.twig', 'all', array(
 			'statusCounts'       => $statusCounts,
 			'unsolved_count'     => $unsolved_count,
 			'total_puzzle_count' => $total_puzzle_count,
-			'puzzles'            => $puzzles,
 		));
 }
 
 function displayAllByMeta() {
-	$all_puzzles = PuzzlePuzzleQuery::create()
-		->joinWith('Child')
-		->orderByParentId()
-		->find();
-
-	$metas = PuzzlePuzzleQuery::create()
-		->joinWith('PuzzlePuzzle.Parent')
-		->where('puzzle_id = parent_id')
-		->orderBy('Parent.title')
-		->find();
-
-	$all_puzzles_by_meta = array();
-	foreach ($all_puzzles as $puzzle) {
-		$all_puzzles_by_meta[$puzzle->getParent()->getTitle()][] = $puzzle->getChild();
-	}
-	ksort($all_puzzles_by_meta);
-
 	render('bymeta.twig', 'bymeta', array(
-			'all_puzzles_by_meta' => $all_puzzles_by_meta,
-			'metas'               => $metas,
 		));
 }
 
 function displayLoosePuzzles() {
-	// TODO: refactor this to use COUNT() mechanism
-	$all_puzzles = PuzzleQuery::create()
-		->leftJoinWith('Puzzle.PuzzleParent')
-		->find();
-
-	$puzzles = array();
-	foreach ($all_puzzles as $puzzle) {
-		if ($puzzle->countPuzzleParents() == 0) {
-			$puzzles[] = $puzzle;
-		}
-	}
-
 	render('loose.twig', 'loose', array(
-			'puzzles' => $puzzles,
 		));
 }
 
@@ -562,9 +586,6 @@ function addPuzzle($request, $response) {
 			'existingSlacks' => $existingSlacks,
 			'newPuzzles'     => $newPuzzles,
 		));
-
-	// # send post to slack channel
-	// # post news update?
 }
 
 // ROSTER
