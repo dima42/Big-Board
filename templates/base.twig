@@ -55,10 +55,19 @@ window.setTimeout(function() {
     });
 }, 5000);
 
-var loadTemplate = function(fileName, data) {
-    $.get('templates/'+fileName+'.mst', function(template) {
-        var rendered = Mustache.render(template, {"puzzles":data});
-        $('#target').html(rendered);
+var loadPuzzleData = function(url) {
+    $.get(url, {}, function(response) {
+        loadTemplate(response);
+    });
+};
+
+var loadTemplate = function(response) {
+    var data = response;
+    $.get('templates/puzzle_row.mst', function(template) {
+        $.each(data, function(key, puzzleData) {
+            var rendered = Mustache.render(template, puzzleData);
+            $('tbody').append(rendered);
+        });
     });
 };
 
