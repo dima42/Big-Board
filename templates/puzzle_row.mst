@@ -1,0 +1,8 @@
+<tr id="puzzle{{ Id }}" data-filter="{{ Status }}" data-created="{{ createdAt|date('YmdHi') }}" data-updated="{{ updatedAt|date('YmdHi') }}" class="puzzle {{ #meta }}meta{{ /meta }}">
+    <td>{{ Status }}</td>
+    <td class="title"><a href="/puzzle/{{ Id }}">{{ Title }}</a></td>
+    <td class="solution">{{ Solution }}</td>
+    <td>{{ #Url }}<a href="{{ Url }}"><img src="/img/mit.png" width="20" alt="" title="Puzzle page"></a>{{ /Url }}</td>
+    <td><a href="{{ SpreadsheetURL }}"><img src="/img/drive.png" width="20" alt="" title="Google Spreadsheet"></a></td>
+    <td><a href="{{ SlackURL }}"><img src="/img/slack.png" width="20" alt=""  title="Slack channel"></a></td>
+</tr>
