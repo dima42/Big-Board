@@ -68,7 +68,9 @@ var loadTemplate = function(response, callback) {
             var rendered = Mustache.render(template, puzzleData);
             $('tbody').append(rendered);
         });
-        callback();
+        if (callback) {
+            callback();
+        }
     });
 };
 
