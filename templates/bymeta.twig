@@ -23,7 +23,7 @@
         <a href="/puzzle/{{ meta.parent.id }}">{{ meta.parent.title }}</a>
         <a class="add-puzzles-to-meta float-right" href="/add/{{ meta.parent.id }}">+ Add puzzles</a>
     </h2>
-    {{ puzzle_table() }}
+    {{ puzzle_table(meta.parent.id) }}
 </section>
 {% endfor %}
 {% endblock %}

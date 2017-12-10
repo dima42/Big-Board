@@ -214,14 +214,15 @@ function allPuzzlesByMeta($response) {
 }
 
 function loosePuzzles($response) {
-	// TODO: refactor this to use COUNT() mechanism
 	$all_puzzles = PuzzleQuery::create()
-		->leftJoinWithPuzzleParent()
+		->leftJoinPuzzleParent()
+		->orderByTitle()
+		->withColumn('PuzzleParent.ParentId', 'parentId')
 		->find()
 		->toArray();
 
 	$puzzles = array_filter($all_puzzles, function ($puzzle) {
-			return sizeof($puzzle['PuzzleParents']) == 0;
+			return ($puzzle['parentId'] == null);
 		});
 
 	return $response->json($puzzles);
