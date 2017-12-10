@@ -338,13 +338,13 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	}
 
 	render($template, 'puzzle', array(
-			'puzzle_id'     => $puzzle_id,
-			'puzzle'        => $puzzle,
-			'notes'         => $notes,
-			'members'       => $members,
-			'is_member'     => $is_member,
-			'puzzles_metas' => $puzzles_metas,
-			'i_am_meta'     => $i_am_meta,
+			'puzzle_id' => $puzzle_id,
+			'puzzle'    => $puzzle,
+			'notes'     => $notes,
+			'members'   => $members,
+			'is_member' => $is_member,
+			'all_metas' => $puzzles_metas,
+			'i_am_meta' => $i_am_meta,
 		));
 }
 
