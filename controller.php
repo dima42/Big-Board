@@ -186,7 +186,9 @@ function displayTest() {
 		->filterByID(184)
 		->findOne();
 
-	return "";
+	error_log($puzzle->getSlackChannel());
+	postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge(), $puzzle->getSlackChannel());
+	return;
 
 	render('test.twig', '', array(
 			// 'content' => $result,
@@ -592,8 +594,8 @@ function addPuzzle($request, $response) {
 			addNews($news_text, 'open', $newPuzzle);
 
 			// POST TO SLACK CHANNEL
-			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge(), $channel);
-			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge());
+			postToChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), $newPuzzle->getSlackChannel());
+			postToChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge());
 		}
 	}
 
