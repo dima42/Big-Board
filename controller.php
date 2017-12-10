@@ -258,7 +258,14 @@ function displayAll() {
 }
 
 function displayAllByMeta() {
+	$metas = PuzzlePuzzleQuery::create()
+		->joinWith('PuzzlePuzzle.Parent')
+		->where('puzzle_id = parent_id')
+		->orderBy('Parent.title')
+		->find();
+
 	render('bymeta.twig', 'bymeta', array(
+			'metas' => $metas,
 		));
 }
 
