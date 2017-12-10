@@ -316,20 +316,20 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		}
 	}
 
-	// TODO: Can we use $puzzle->getParents() for this?
-	$puzzles_metas = PuzzlePuzzleQuery::create()
-		->joinWith('PuzzlePuzzle.Parent')
-		->orderByParentId()
-		->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
-		->filterByParentId($puzzle_id, CRITERIA::NOT_EQUAL)
-		->groupBy('Parent.Id')
-		->find();
+	$puzzles_metas = PuzzleQuery::create()
+		->joinPuzzleChild()
+		->orderByTitle()
+		->withColumn('PuzzleChild.PuzzleId', 'PuzzleId')
+		->where('PuzzleChild.PuzzleId = '.$puzzle->getId())
+		->find()
+		->toArray();
 
-	// TODO: Can we use $puzzle->getParents() for this?
-	$me_as_meta = PuzzlePuzzleQuery::create()
-		->filterByParent($puzzle)
-		->filterByChild($puzzle)
-		->count();
+	$i_am_meta = false;
+	foreach ($puzzles_metas as $meta) {
+		if ($meta['Id'] == $puzzle->getId()) {
+			$i_am_meta = true;
+		}
+	}
 
 	$template = 'puzzle.twig';
 
@@ -344,7 +344,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'members'       => $members,
 			'is_member'     => $is_member,
 			'puzzles_metas' => $puzzles_metas,
-			'i_am_meta'     => $me_as_meta > 0,
+			'i_am_meta'     => $i_am_meta,
 		));
 }
 

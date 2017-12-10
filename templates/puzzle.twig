@@ -6,11 +6,11 @@
             {% if i_am_meta %}
                 <span class="badge badge-pill badge-secondary">META</span>
             {% endif %}
-            {% for meta in puzzles_metas if meta.virtualColumns.IsInMeta > 0 %}
+            {% for meta in puzzles_metas if meta.Id != puzzle.Id %}
                 {% if loop.first %}
                 <small>Part of</small>
                 {% endif %}
-                <a class="badge badge-pill badge-primary" href='/puzzle/{{ meta.parent.id }}'>{{ meta.parent.title }}</a>
+                <a class="badge badge-pill badge-primary" href='/puzzle/{{ meta.Id }}'>{{ meta.Title }}</a>
             {% endfor %}
         </div>
 
