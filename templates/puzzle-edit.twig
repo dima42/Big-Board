@@ -35,7 +35,7 @@
         <div class="row">
             <legend class="col-form-legend col-sm-3">Parent meta(s)</legend>
             <div class="col-sm-9">
-                {% for meta in all_metas %}
+                {% for meta in metas_to_show %}
                 <div class="form-check">
                   <label class="form-check-label">
                     <input class="form-check-input" type='checkbox' id="meta{{meta.id}}" {% if meta.virtualColumns.IsInMeta %}checked{% endif %} name='metas[]' value="{{ meta.parent.id }}">

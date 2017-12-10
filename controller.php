@@ -333,18 +333,28 @@ function displayPuzzle($puzzle_id, $method = "get") {
 
 	$template = 'puzzle.twig';
 
+	$metas_to_show = [];
 	if ($method == "edit") {
 		$template = 'puzzle-edit.twig';
+
+		$metas_to_show = PuzzlePuzzleQuery::create()
+			->joinWith('PuzzlePuzzle.Parent')
+			->orderBy('Parent.Title')
+			->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
+			->filterByParentId($puzzle_id, CRITERIA::NOT_EQUAL)
+			->groupBy('Parent.Id')
+			->find();
 	}
 
 	render($template, 'puzzle', array(
-			'puzzle_id' => $puzzle_id,
-			'puzzle'    => $puzzle,
-			'notes'     => $notes,
-			'members'   => $members,
-			'is_member' => $is_member,
-			'all_metas' => $puzzles_metas,
-			'i_am_meta' => $i_am_meta,
+			'puzzle_id'     => $puzzle_id,
+			'puzzle'        => $puzzle,
+			'notes'         => $notes,
+			'members'       => $members,
+			'is_member'     => $is_member,
+			'metas_to_show' => $metas_to_show,
+			'puzzles_metas' => $puzzles_metas,
+			'i_am_meta'     => $i_am_meta,
 		));
 }
 
