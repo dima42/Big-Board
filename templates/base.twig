@@ -68,8 +68,8 @@ var loadTemplate = function(response, callback) {
             var rendered = Mustache.render(template, puzzleData);
 
             var parents = puzzleData['PuzzleParents'];
-            if (!parents) {
-                parents = [{PuzzleID: 0}];
+            if (!parents || parents.length == 0) {
+                parents = [{ParentId: 0}];
             }
 
             $.each(parents, function(key, parent) {

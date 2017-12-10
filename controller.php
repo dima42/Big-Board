@@ -223,7 +223,7 @@ function loosePuzzles($response) {
 		->toArray();
 
 	$puzzles = array_filter($all_puzzles, function ($puzzle) {
-			return ($puzzle['parentId'] == null);
+			return ($puzzle['PuzzleParents'] == []);
 		});
 
 	return $response->json($puzzles);
