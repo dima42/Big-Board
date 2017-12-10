@@ -36,6 +36,9 @@ function show_content() {
 			$klein->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
 					return metaPuzzles($request->meta_id, $response);
 				});
+			$klein->respond('GET', '/member', function ($request, $response) {
+					return memberPuzzles($response);
+				});
 		});
 
 	$klein->respond('GET', '/unsolved', function () {
@@ -238,6 +241,12 @@ function metaPuzzles($meta_id, $response) {
 		->find()
 		->toArray();
 
+	return $response->json($puzzles);
+}
+
+function memberPuzzles($response) {
+	$member  = $_SESSION['user'];
+	$puzzles = $member->getPuzzles()->toArray();
 	return $response->json($puzzles);
 }
 
@@ -622,11 +631,8 @@ function displayMember($member_id, $method = "get") {
 		$template = 'member-edit.twig';
 	}
 
-	$puzzles = $member->getPuzzles();
-
 	render($template, 'member', array(
-			'member'  => $member,
-			'puzzles' => $puzzles,
+			'member' => $member,
 		));
 }
 
