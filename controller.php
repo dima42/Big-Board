@@ -203,27 +203,14 @@ function allPuzzles($response) {
 }
 
 function allPuzzlesByMeta($response) {
-	$all_puzzles = PuzzlePuzzleQuery::create()
-		->joinWith('Child')
-		->orderByParentId()
-		->find();
+	$puzzles = PuzzleQuery::create()
+		->joinPuzzleParent()
+		->orderByTitle()
+		->withColumn('PuzzleParent.ParentId', 'parentId')
+		->find()
+		->toArray();
 
-	$metas = PuzzlePuzzleQuery::create()
-		->joinWith('PuzzlePuzzle.Parent')
-		->where('puzzle_id = parent_id')
-		->orderBy('Parent.title')
-		->find();
-
-	$all_puzzles_by_meta = array();
-	foreach ($all_puzzles as $puzzle) {
-		$all_puzzles_by_meta[$puzzle->getParent()->getTitle()][] = $puzzle->getChild();
-	}
-	ksort($all_puzzles_by_meta);
-
-	return $response->json(array(
-			'all_puzzles_by_meta' => $all_puzzles_by_meta,
-			'metas'               => $metas,
-		));
+	return $response->json($puzzles);
 }
 
 function loosePuzzles($response) {
