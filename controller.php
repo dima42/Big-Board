@@ -33,6 +33,9 @@ function show_content() {
 			$klein->respond('GET', '/loose', function ($request, $response) {
 					return loosePuzzles($response);
 				});
+			$klein->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
+					return metaPuzzles($request->meta_id, $response);
+				});
 		});
 
 	$klein->respond('GET', '/unsolved', function () {
@@ -228,6 +231,18 @@ function loosePuzzles($response) {
 	return $response->json($puzzles);
 }
 
+function metaPuzzles($meta_id, $response) {
+	$puzzles = PuzzleQuery::create()
+		->joinPuzzleParent()
+		->orderByTitle()
+		->withColumn('PuzzleParent.ParentId', 'parentId')
+		->where('PuzzleParent.ParentId = '.$meta_id)
+		->find()
+		->toArray();
+
+	return $response->json($puzzles);
+}
+
 // PUZZLE LISTS
 
 function displayAll() {
@@ -302,7 +317,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	}
 
 	// TODO: Can we use $puzzle->getParents() for this?
-	$metas_to_show = PuzzlePuzzleQuery::create()
+	$puzzles_metas = PuzzlePuzzleQuery::create()
 		->joinWith('PuzzlePuzzle.Parent')
 		->orderByParentId()
 		->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
@@ -316,11 +331,6 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		->filterByChild($puzzle)
 		->count();
 
-	$puzzles = null;
-	if ($me_as_meta > 0) {
-		$puzzles = $puzzle->getChildren();
-	}
-
 	$template = 'puzzle.twig';
 
 	if ($method == "edit") {
@@ -328,14 +338,13 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	}
 
 	render($template, 'puzzle', array(
-			'puzzle_id' => $puzzle_id,
-			'puzzle'    => $puzzle,
-			'notes'     => $notes,
-			'members'   => $members,
-			'is_member' => $is_member,
-			'all_metas' => $metas_to_show,
-			'i_am_meta' => $me_as_meta > 0,
-			'puzzles'   => $puzzles,
+			'puzzle_id'     => $puzzle_id,
+			'puzzle'        => $puzzle,
+			'notes'         => $notes,
+			'members'       => $members,
+			'is_member'     => $is_member,
+			'puzzles_metas' => $puzzles_metas,
+			'i_am_meta'     => $me_as_meta > 0,
 		));
 }
 

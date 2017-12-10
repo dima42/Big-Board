@@ -14,8 +14,6 @@
 {% block content %}
 {% from 'macros.twig' import puzzle_table %}
 
-<h1>All puzzles by meta</h1>
-
 {% for meta in metas %}
 <section class="pt-2">
     <span class="anchor-target" id="meta-{{ meta.parentid }}"></span>

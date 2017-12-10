@@ -6,7 +6,7 @@
             {% if i_am_meta %}
                 <span class="badge badge-pill badge-secondary">META</span>
             {% endif %}
-            {% for meta in all_metas if meta.virtualColumns.IsInMeta > 0 %}
+            {% for meta in puzzles_metas if meta.virtualColumns.IsInMeta > 0 %}
                 {% if loop.first %}
                 <small>Part of</small>
                 {% endif %}
@@ -44,9 +44,9 @@
         </div>
     </form>
 
-    {% from 'macros.twig' import puzzle_table %}
-    {% if puzzles %}
-        {{ puzzle_table(puzzles) }}
+    {% if i_am_meta %}
+        {% from 'macros.twig' import puzzle_table %}
+        {{ puzzle_table( puzzle.id ) }}
     {% endif %}
 
     {% if notes|length %}
@@ -130,6 +130,10 @@
 {% block scripts %}
 <script>
 $(function() {
+    {% if i_am_meta %}
+        loadPuzzleData('/puzzles/meta/{{ puzzle.id }}');
+    {% endif %}
+
     $('[data-behavior=confirm]').submit(function(e) {
         var previousSolution = "{{ puzzle.solution }}";
         var newSolution = $('.solution-field').val();
