@@ -89,8 +89,9 @@ $(function() {
     });
 
     var sortByDate = function(a, b, field) {
-        var aDate = $(a).attr('data-' + field);
-        var bDate = $(b).attr('data-' + field);
+        var aDate = $(a).data(field);
+        var bDate = $(b).data(field);
+        console.log(aDate);
         if (aDate < bDate) {
             return -1;
         } else if (bDate > aDate) {
@@ -117,25 +118,25 @@ $(function() {
 
     $('[data-sort-by=stalest]').click(function(){
         $('tbody tr').sort(function(a, b) {
-            return -1 * sortByDate(a, b, 'updated');
+            return -1 * sortByDate(a, b, 'staleness');
         }).appendTo($('tbody'));
     });
 
     $('[data-sort-by=freshest]').click(function(){
         $('tbody tr').sort(function(a, b) {
-            return sortByDate(a, b, 'updated');
-        }).appendTo($('tbody'));
-    });
-
-    $('[data-sort-by=newest]').click(function(){
-        $('tbody tr').sort(function(a, b) {
-            return -1 * sortByDate(a, b, 'created');
+            return sortByDate(a, b, 'staleness');
         }).appendTo($('tbody'));
     });
 
     $('[data-sort-by=oldest]').click(function(){
         $('tbody tr').sort(function(a, b) {
-            return sortByDate(a, b, 'created');
+            return -1 * sortByDate(a, b, 'age');
+        }).appendTo($('tbody'));
+    });
+
+    $('[data-sort-by=newest]').click(function(){
+        $('tbody tr').sort(function(a, b) {
+            return sortByDate(a, b, 'age');
         }).appendTo($('tbody'));
     });
 

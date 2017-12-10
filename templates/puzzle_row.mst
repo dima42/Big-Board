@@ -1,4 +1,4 @@
-<tr id="puzzle{{ Id }}" data-filter="{{ Status }}" data-created="{{ createdAt|date('YmdHi') }}" data-updated="{{ updatedAt|date('YmdHi') }}" class="puzzle {{ #meta }}meta{{ /meta }}">
+<tr id="puzzle{{ Id }}" data-filter="{{ Status }}" data-age="{{ SinceCreated }}" data-staleness="{{ SinceUpdated }}" class="puzzle {{ #meta }}meta{{ /meta }}">
     <td></td>
     <td class="title"><a href="/puzzle/{{ Id }}">{{ Title }}</a></td>
     <td class="solution">{{ Solution }}</td>
