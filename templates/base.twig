@@ -65,14 +65,22 @@ var loadTemplate = function(response, callback) {
     var data = response;
     $.get('/templates/puzzle_row.mst', function(template) {
         $.each(data, function(key, puzzleData) {
-            var tableID = puzzleData['parentId'] || 0;
             var rendered = Mustache.render(template, puzzleData);
-            var tbody = $('#table-' + tableID).find('tbody');
-            if (tableID == puzzleData['Id']) {
-                tbody.prepend(rendered);
-            } else {
-                tbody.append(rendered);
+
+            var parents = puzzleData['PuzzleParents'];
+            if (!parents) {
+                parents = [{PuzzleID: 0}];
             }
+
+            $.each(parents, function(key, parent) {
+                var tableID = parent['ParentId'];
+                var tbody = $('#table-' + tableID).find('tbody');
+                if (tableID == puzzleData['Id']) {
+                    tbody.prepend(rendered);
+                } else {
+                    tbody.append(rendered);
+                }
+            });
         });
         if (callback) {
             callback();

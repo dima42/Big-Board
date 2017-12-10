@@ -207,9 +207,8 @@ function allPuzzles($response) {
 
 function allPuzzlesByMeta($response) {
 	$puzzles = PuzzleQuery::create()
-		->joinPuzzleParent()
+		->joinWithPuzzleParent()
 		->orderByTitle()
-		->withColumn('PuzzleParent.ParentId', 'parentId')
 		->find()
 		->toArray();
 
@@ -218,9 +217,8 @@ function allPuzzlesByMeta($response) {
 
 function loosePuzzles($response) {
 	$all_puzzles = PuzzleQuery::create()
-		->leftJoinPuzzleParent()
+		->leftJoinWithPuzzleParent()
 		->orderByTitle()
-		->withColumn('PuzzleParent.ParentId', 'parentId')
 		->find()
 		->toArray();
 
