@@ -41,10 +41,6 @@ function show_content() {
 				});
 		});
 
-	$klein->respond('GET', '/unsolved', function () {
-			return displayUnsolvedPuzzles();
-		});
-
 	// PUZZLES
 
 	$klein->with('/puzzle/[:id]', function () use ($klein) {
@@ -713,14 +709,4 @@ function archiveNews($update_id) {
 
 	$alert = "Update archived.";
 	redirect('/news/', $alert);
-}
-
-function displayUnsolvedPuzzles() {
-	$puzzles = PuzzleQuery::create()
-		->filterByStatus('solved', Criteria::NOT_EQUAL)
-		->find();
-
-	render('unsolved.twig', 'unsolved', array(
-			'puzzles' => $puzzles,
-		));
 }
