@@ -28,7 +28,7 @@ function getSlackClient($icon = ":boar:", $username = "Big Board Bot") {
 // TODO: change default channel big-board
 function postToChannel($message, $attachments, $channel = "sandbox", $icon = ":boar:", $bot_name = "Big Board Bot") {
 	$client = getSlackClient($icon, $bot_name);
-	$client->to($channel)->attach($attachments)->send($message);
+	$client->to($channel)->setAttachments($attachments)->send($message);
 }
 
 // SLACK BOT
