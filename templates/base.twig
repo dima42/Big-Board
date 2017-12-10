@@ -65,6 +65,10 @@ var loadTemplate = function(response, callback) {
     var data = response;
     $.get('/templates/puzzle_row.mst', function(template) {
         $.each(data, function(key, puzzleData) {
+            var ssID = puzzleData['SpreadsheetId'];
+            ssID = ssID.replace(/^.+ccc\?key=/, "");
+            puzzleData['SpreadsheetURL'] = "https://docs.google.com/spreadsheets/d/" + ssID;
+
             var rendered = Mustache.render(template, puzzleData);
 
             var parents = puzzleData['PuzzleParents'];
