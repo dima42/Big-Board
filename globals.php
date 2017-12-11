@@ -16,7 +16,7 @@ Global $slackDomain;
 
 // EDITABLE
 // TODO: Change these:
-$slackDomain = "palindrome2017";
+$slackDomain = "palindrome2018";
 
 // ALERT
 $_SESSION['alert'] = "";
