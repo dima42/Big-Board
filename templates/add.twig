@@ -24,7 +24,6 @@
         </select>
     </div>
     <button class="btn btn-primary" type="button" id="scrape-button">Submit URLs &rarr;</button>
-
 </form>
 
 <img class="working" src="https://media.giphy.com/media/ule4vhcY1xEKQ/giphy.gif" alt="">
@@ -38,7 +37,18 @@
 
 {% block scripts %}
 <script>
+var newPuzzleTemplate;
+var successTemplate;
+
 $(function() {
+    $.get('/templates/add_puzzle.mst', function(template) {
+        newPuzzleTemplate = template;
+    });
+
+    $.get('/templates/add_complete.mst', function(template) {
+        successTemplate = template;
+    });
+
     $('#scrape-button').click(function(e) {
         e.preventDefault();
         var urls = $('#urls').val();
@@ -47,19 +57,17 @@ $(function() {
         }
         $('#scrapeForm').hide();
         $('body').attr('data-step', 'scraping');
-        $.get('/templates/add_puzzle.mst', function(template) {
-            $.get('/puzzle_scrape', data, function(response) {
-                $('body').attr('data-step', 'step2');
-                $.each(response, function(i, puzzleData) {
-                    puzzleData['i'] = i + 1;
-                    puzzleData['metaSelect'] = $('#metaSelect').clone().html();
-                    var renderedForm = Mustache.render(template, puzzleData);
-                    // var metaSelect = $('#metaSelect');
-                    // metaSelect.clone().val(metaSelect.val()).attr('name', 'newPuzzles[' + i + '][meta]').appendTo(renderedForm.find('.newPuzzleMeta'));
-                    $('.addForm #form-controls').append(renderedForm);
-                });
-                $('.meta-select').val($('#metaSelect').val());
+        $.get('/puzzle_scrape', data, function(response) {
+            $('body').attr('data-step', 'step2');
+            $.each(response, function(i, puzzleData) {
+                puzzleData['i'] = i + 1;
+                puzzleData['metaSelect'] = $('#metaSelect').clone().html();
+                var renderedForm = Mustache.render(newPuzzleTemplate, puzzleData);
+                // var metaSelect = $('#metaSelect');
+                // metaSelect.clone().val(metaSelect.val()).attr('name', 'newPuzzles[' + i + '][meta]').appendTo(renderedForm.find('.newPuzzleMeta'));
+                $('.addForm #form-controls').append(renderedForm);
             });
+            $('.meta-select').val($('#metaSelect').val());
         });
     });
 
@@ -95,16 +103,10 @@ $(function() {
                 $('#submit-button').hide();
             }
 
-            $.get('/templates/add_complete.mst', function(template) {
-                console.log(template);
-                $.each(response['newPuzzles'], function(i, puzzleData) {
-                    console.log(i, puzzleData);
-                    var renderedCard = Mustache.render(template, puzzleData);
-                    console.log(renderedCard);
-                    $('#' + puzzleData['puzzleID']).html(renderedCard);
-                });
+            $.each(response['newPuzzles'], function(i, puzzleData) {
+                var renderedCard = Mustache.render(successTemplate, puzzleData);
+                $('#' + puzzleData['puzzleID']).html(renderedCard);
             });
-
         });
     });
 
