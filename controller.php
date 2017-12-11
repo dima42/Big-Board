@@ -445,8 +445,14 @@ function changePuzzleStatus($puzzle_id, $request) {
 	if (in_array($newStatus, ['priority', 'urgent'])) {
 		$news_text = "status set to `".$newStatus."`.";
 		addNews($news_text, $newStatus, $puzzle);
-		postToChannel(emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!', $puzzle->getSlackAttachmentMedium(), null, ":bell:", "StatusBot");
-		// TODO: change channel to #general
+
+		postToChannel(
+			emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!',
+			$puzzle->getSlackAttachmentMedium(),
+			"sandbox", // TODO: change channel to 'general'
+			":bell:",
+			"StatusBot"
+		);
 	}
 
 	$alert = "Changed status.";
@@ -705,10 +711,12 @@ function postNews($text) {
 
 	$member = $_SESSION['user'];
 	addNews($text, "important", null, $member);
-	postToChannel('*IMPORTANT NEWS* from '.$member->getFullName(), [
+	postToChannel(
+		'*IMPORTANT NEWS* from '.$member->getFullName(), [
 			"text"  => $text,
 			"color" => "#ff0000",
-		], null, ":mega:", "NewsBot");
+		], "sandbox", ":mega:", "NewsBot");
+	// TODO: change to general
 
 	$alert = "Update posted.";
 	redirect('/news', $alert);
