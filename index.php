@@ -4,29 +4,12 @@ require_once "controller.php";
 
 $klein = new \Klein\Klein();
 
-$klein->with('/api', function () use ($klein) {
+$klein->with('/tobybot', function () use ($klein) {
 		$bot = new Bot();
 
-		$klein->respond('POST', '/board', function ($request, $response) use ($bot) {
-				return $bot->board($request, $response);
+		$klein->respond('POST', $request->command, function ($request, $response) use ($bot) {
+				return $bot->execute($request, $response);
 			});
-
-		$klein->respond('POST', '/solve', function ($request, $response) use ($bot) {
-				return $bot->solve($request, $response);
-			});
-
-		$klein->respond('POST', '/info', function ($request, $response) use ($bot) {
-				return $bot->info($request, $response);
-			});
-
-		$klein->respond('POST', '/join', function ($request, $response) use ($bot) {
-				return $bot->join($request, $response);
-			});
-
-		$klein->respond('POST', '/note', function ($request, $response) use ($bot) {
-				return $bot->note($request, $response);
-			});
-
 	});
 
 $klein->respond('GET', '/oauth', function ($request, $response) use ($pal_client) {
