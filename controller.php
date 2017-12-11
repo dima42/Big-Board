@@ -183,11 +183,15 @@ function displayError($error) {
 
 function displayTest($response) {
 	$puzzle = PuzzleQuery::create()
-		->filterByID(1)
+		->filterByID(156)
 		->findOne();
 
-	$channel = "sandbox";
-	$answer  = postToSlack('*'.$puzzle->getTitle().'* is solved: `'.$puzzle->getSolution().'`', $puzzle->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
+	$member = $_SESSION['user'];
+
+	$answer = inviteToSlackChannel($puzzle->getSlackChannelId(), $member->getSlackId());
+
+	// $channel = "sandbox";
+	// $answer  = postToSlack('*'.$puzzle->getTitle().'* is solved: `'.$puzzle->getSolution().'`', $puzzle->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
 
 	// $answer = postToGeneral(
 	// 	emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!',

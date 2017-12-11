@@ -4,12 +4,17 @@ use Frlnc\Slack\Http\CurlInteractor;
 use Frlnc\Slack\Http\SlackResponseFactory;
 use Propel\Runtime\ActiveQuery\Criteria;
 
-function getSlackChannelID($slug) {
+function getSlackCommander() {
 	$slack_key = getenv('TOBYBOT_SLACK_KEY');
 
 	$interactor = new CurlInteractor;
 	$interactor->setResponseFactory(new SlackResponseFactory);
-	$commander = new Commander($slack_key, $interactor);
+
+	return new Commander($slack_key, $interactor);
+}
+
+function getSlackChannelID($slug) {
+	$commander = getSlackCommander();
 
 	$response = $commander->execute('channels.list', [
 			'channel' => $slug
@@ -31,17 +36,24 @@ function getSlackChannelID($slug) {
 }
 
 function createNewSlackChannel($slug) {
-	$slack_key = getenv('TOBYBOT_SLACK_KEY');
-
-	$interactor = new CurlInteractor;
-	$interactor->setResponseFactory(new SlackResponseFactory);
-	$commander = new Commander($slack_key, $interactor);
+	$commander = getSlackCommander();
 
 	$commander->execute('channels.create', [
 			'name' => $slug
 		]);
 
 	$response = getSlackChannelID($slug);
+
+	return $response;
+}
+
+function inviteToSlackChannel($channel_id, $member_id) {
+	$commander = getSlackCommander();
+
+	$response = $commander->execute('channels.invite', [
+			'channel' => $channel_id,
+			'user'    => $member_id,
+		]);
 
 	return $response;
 }

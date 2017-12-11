@@ -188,8 +188,12 @@ class Puzzle extends BasePuzzle {
 
 	public function postJoin($member) {
 		$memberCount = $this->countMembers();
+
 		$channel     = "sandbox";
 		// $channel     = $this->getSlackChannel(); // TODO: uncomment
+
+		inviteToSlackChannel($this->getSlackChannelId(), $member->getSlackID());
+
 		if ($memberCount > 0) {
 			$this->postMembers($member->getNameForSlack()." joined *".$this->getTitle()."*. Current roster:", $channel);
 		} else {
