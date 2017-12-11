@@ -134,6 +134,7 @@ $(function() {
         loadPuzzleData('/puzzles/meta/{{ puzzle.id }}');
     {% endif %}
 
+    {% if puzzle.solution %}
     $('[data-behavior=confirm]').submit(function(e) {
         var previousSolution = "{{ puzzle.solution }}";
         var newSolution = $('.solution-field').val();
@@ -144,6 +145,7 @@ $(function() {
         }
         return true;
     });
+    {% endif %}
 });
 </script>
 {% block more_scripts %}{% endblock %}
