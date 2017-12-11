@@ -1,4 +1,7 @@
 <?
+use Frlnc\Slack\Core\Commander;
+use Frlnc\Slack\Http\CurlInteractor;
+use Frlnc\Slack\Http\SlackResponseFactory;
 use Propel\Runtime\ActiveQuery\Criteria;
 
 function createNewSlackChannel($slug) {
@@ -13,22 +16,29 @@ function createNewSlackChannel($slug) {
 	return $result;
 }
 
-function getSlackClient($icon = ":boar:", $username = "Big Board Bot") {
-	$settings = [
-		'username'                => $username,
-		'icon'                    => $icon,
-		'link_names'              => true,
-		'markdown_in_attachments' => array('text'),
-	];
-
-	$client = new Maknz\Slack\Client('https://hooks.slack.com/services/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', $settings);
-	return $client;
-}
-
 // TODO: change default channel big-board
-function postToChannel($message, $attachments, $channel = "sandbox", $icon = ":boar:", $bot_name = "Big Board Bot") {
-	$client = getSlackClient($icon, $bot_name);
-	$client->to($channel)->attach($attachments)->send($message);
+function postToChannel($message, $attachments = [], $channel = "sandbox", $icon = ":boar:", $bot_name = "Big Board Bot") {
+	$slack_key = getenv('PALINDROME_SLACK_KEY');
+
+	$interactor = new CurlInteractor;
+	$interactor->setResponseFactory(new SlackResponseFactory);
+	$commander = new Commander($slack_key, $interactor);
+
+	preprint("a");
+	preprint(json_encode($attachments));
+	preprint("b");
+
+	$response = $commander->execute('chat.postMessage', [
+			'no_format'   => true,
+			'channel'     => '#'.$channel,
+			'icon_emoji'  => $icon,
+			'username'    => $bot_name,
+			'text'        => $message,
+			'attachments' => json_encode($attachments),
+			'link_names'  => 1,
+		]);
+
+	return $response;
 }
 
 // SLACK BOT

@@ -1,39 +1,16 @@
-{% macro puzzle_table(puzzles, sol=true, lastmod=false) %}
-<table class="table puzzle-list">
+{% macro puzzle_table(id = 0) %}
+<table id="table-{{ id }}" class="table puzzle-list">
     <thead>
         <tr>
             <th></th>
             <th>Name</th>
-            {% if sol %}
-                <th>Solution</th>
-            {% endif %}
-            {% if lastmod %}
-                <th>Last mod</th>
-                <th>By</th>
-            {% endif %}
+            <th>Solution</th>
             <th></th>
             <th></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-    {% for puzzle in puzzles %}
-        <tr id="puzzle{{ puzzle.id }}" data-filter="{{ puzzle.status }}" data-created="{{ puzzle.createdAt|date('YmdHi') }}" data-updated="{{ puzzle.updatedAt|date('YmdHi') }}" class="puzzle {% if puzzle.meta == 1 %}meta{% endif %}">
-            <td>{{ puzzle.status | emojify }}</td>
-            <td class="title"><a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a></td>
-            {% if sol %}
-                <td class="solution">{{ puzzle.solution }}</td>
-            {% endif %}
-            {% if lastmod %}
-                {% set lastMod = puzzle.getLastMod() %}
-                <td>{{ lastMod.when }}</td>
-                <td>{{ lastMod.who }}</td>
-            {% endif %}
-            <td>{% if puzzle.url %}<a href="{{ puzzle.url }}"><img src="/img/mit.png" width="20" alt="" title="Puzzle page"></a>{% endif %}</td>
-            <td><a href="{{ puzzle.getSpreadsheetURL() }}"><img src="/img/drive.png" width="20" alt="" title="Google Spreadsheet"></a></td>
-            <td><a href="{{ puzzle.getSlackURL() }}"><img src="/img/slack.png" width="20" alt=""  title="Slack channel"></a></td>
-        </tr>
-    {% endfor %}
     </tbody>
 </table>
 {% endmacro puzzle_table %}

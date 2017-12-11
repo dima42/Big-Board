@@ -14,16 +14,22 @@
 {% block content %}
 {% from 'macros.twig' import puzzle_table %}
 
-<h1>All puzzles by meta</h1>
-
-{% for meta, puzzles in all_puzzles_by_meta %}
+{% for meta in metas %}
 <section class="pt-2">
-    <span class="anchor-target" id="meta-{{ puzzles.0.id }}"></span>
+    <span class="anchor-target" id="meta-{{ meta.parentid }}"></span>
     <h2>
-        <a href="/puzzle/{{ puzzles.0.id }}">{{ meta }}</a>
-        <a class="add-puzzles-to-meta float-right" href="/add/{{ puzzles.0.id }}">+ Add puzzles</a>
+        <a href="/puzzle/{{ meta.parent.id }}">{{ meta.parent.title }}</a>
+        <a class="add-puzzles-to-meta float-right" href="/add/{{ meta.parent.id }}">+ Add puzzles</a>
     </h2>
-    {{ puzzle_table(puzzles) }}
+    {{ puzzle_table(meta.parent.id) }}
 </section>
 {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    loadPuzzleData('/puzzles/bymeta');
+});
+</script>
 {% endblock %}

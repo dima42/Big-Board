@@ -136,11 +136,11 @@ class Puzzle extends BasePuzzle {
 			'<#'.$this   ->getSlackChannelId().'>',
 		];
 
-		return [
-			"text"      => join(" ", $content),
-			'color'     => $this->getStatusColor(),
-			"mrkdwn_in" => ['text'],
-		];
+		return [[
+				"text"      => join(" ", $content),
+				'color'     => $this->getStatusColor(),
+				"mrkdwn_in" => ['text'],
+			]];
 	}
 
 	public function getSlackAttachmentMedium() {
@@ -151,10 +151,10 @@ class Puzzle extends BasePuzzle {
 			':slack: <#'.$this->getSlackChannelId().'|'.$this->getSlackChannel().'>'
 		];
 
-		return [
-			'text'  => join(" ", $content),
-			'color' => '#000000',
-		];
+		return [[
+				'text'  => join(" ", $content),
+				'color' => '#000000',
+			]];
 	}
 
 	public function getSlackAttachmentLarge() {
@@ -186,26 +186,40 @@ class Puzzle extends BasePuzzle {
 
 	public function postJoin($member) {
 		$memberCount = $this->countMembers();
-		$channel     = $this->getSlackChannel();
+		$channel     = "sandbox";
+		// $channel     = $this->getSlackChannel(); // TODO: uncomment
 		if ($memberCount > 0) {
 			$this->postMembers($member->getNameForSlack()." joined *".$this->getTitle()."*. Current roster:");
 		} else {
-			$client = getSlackClient(":wave:", "JoinBot");
-			$client->to($channel)->attach([
-					'text'  => $member->getNameForSlack(),
-					'color' => 'good',
-				])->send('First member of *'.$this->getTitle().'*!');
+			postToChannel(
+				'First member of *'.$this->getTitle().'*!',
+				[[
+						'text'  => $member->getNameForSlack(),
+						'color' => 'good',
+					]],
+				$channel,
+				":wave:",
+				"JoinBot"
+			);
 		}
 	}
 
 	public function postLeave($member) {
 		$memberCount = $this->countMembers();
-		$channel     = $this->getSlackChannel();
+
+		$channel = "sandbox";
+		// $channel     = $this->getSlackChannel(); // TODO: uncomment
+
 		if ($memberCount > 0) {
 			$this->postMembers($member->getNameForSlack().' left *'.$this->getTitle().'*. Current roster:');
 		} else {
-			$client = getSlackClient(':wave:', 'JoinBot');
-			$client->to($channel)->send($member->getNameForSlack().' left *'.$this->getTitle().'*. No members remain.');
+			postToChannel(
+				$member->getNameForSlack().' left *'.$this->getTitle().'*. No members remain.',
+				[],
+				$channel,
+				":wave:",
+				"JoinBot"
+			);
 		}
 	}
 
@@ -218,19 +232,35 @@ class Puzzle extends BasePuzzle {
 		return join("\n", $text);
 	}
 
-	public function postMembers($header_msg = "Current roster:", $channel = "sandbox") {
-		$client = getSlackClient(":wave:", "JoinBot");
-		$client->to($channel)->attach([
-				'text'  => $this->getMembersForSlack(),
-				'color' => 'good',
-			])->send($header_msg);
+	public function postMembers($header_msg = "Current roster:") {
+		$channel = "sandbox";
+		// $channel     = $this->getSlackChannel(); // TODO: uncomment
+
+		postToChannel(
+			$header_msg,
+			[[
+					'text'  => $this->getMembersForSlack(),
+					'color' => 'good',
+				]],
+			$channel,
+			":wave:",
+			"JoinBot"
+		);
 	}
 
 	public function postNoteToSlack($note) {
-		$client = getSlackClient(":scroll:", "NoteBot");
-		$client->to($channel)->attach([
-				'text'  => $note->getBody(),
-				'color' => 'good',
-			])->send('*'.$note->getAuthor()->getFullName().'* posted a note:');
+		$channel = "sandbox";
+		// $channel     = $this->getSlackChannel(); // TODO: uncomment
+
+		postToChannel(
+			'*'.$note->getAuthor()->getFullName().'* posted a note:',
+			[[
+					'text'  => $note->getBody(),
+					'color' => 'good',
+				]],
+			$channel,
+			":scroll:",
+			"NoteBot"
+		);
 	}
 }

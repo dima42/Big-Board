@@ -145,7 +145,7 @@ aside {
 
     td, th {
         padding: .5rem;
-        /*font-size: .9rem;*/
+        line-height: 1.2;
     }
 
     thead tr {
@@ -292,10 +292,6 @@ body.bymeta {
 }
 
 body.add {
-    .templates {
-        display: none;
-    }
-
     .working {
         display: none;
     }

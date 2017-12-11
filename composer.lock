@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "99b6afcfcc7fc32d1e98f5ea770639ff",
+    "content-hash": "bb344b29cb351aa170bcc380d3de42fb",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -130,16 +130,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "v1.5.0",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "5beebb01b025c94e93686b7a0ed3edae81fe3e7f"
+                "reference": "c7f2050c68a9ab0bdb0f98567ec08d80ea7d24d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/5beebb01b025c94e93686b7a0ed3edae81fe3e7f",
-                "reference": "5beebb01b025c94e93686b7a0ed3edae81fe3e7f",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/c7f2050c68a9ab0bdb0f98567ec08d80ea7d24d5",
+                "reference": "c7f2050c68a9ab0bdb0f98567ec08d80ea7d24d5",
                 "shasum": ""
             },
             "require": {
@@ -148,12 +148,12 @@
             },
             "require-dev": {
                 "doctrine/cache": "1.*",
-                "phpunit/phpunit": "^5.7"
+                "phpunit/phpunit": "^6.4"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.5.x-dev"
+                    "dev-master": "1.6.x-dev"
                 }
             },
             "autoload": {
@@ -194,7 +194,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2017-07-22T10:58:02+00:00"
+            "time": "2017-12-06T07:11:42+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -640,6 +640,51 @@
                 "rest"
             ],
             "time": "2016-10-17T18:31:11+00:00"
+        },
+        {
+            "name": "frlnc/php-slack",
+            "version": "dev-no-format-support",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/santheo/php-slack.git",
+                "reference": "058fb06ce5f2d3eb9c778301a3783460b3f132ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/santheo/php-slack/zipball/058fb06ce5f2d3eb9c778301a3783460b3f132ce",
+                "reference": "058fb06ce5f2d3eb9c778301a3783460b3f132ce",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Frlnc\\Slack\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Connor Parks",
+                    "email": "connor@connorvg.tv"
+                }
+            ],
+            "description": "A lightweight PHP implementation of Slack's API.",
+            "keywords": [
+                "slack"
+            ],
+            "support": {
+                "source": "https://github.com/santheo/php-slack/tree/no-format-support"
+            },
+            "time": "2017-12-11T02:26:12+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2377,7 +2422,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "propel/propel": 20
+        "propel/propel": 20,
+        "frlnc/php-slack": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -83,7 +83,7 @@ aside {
   margin-bottom: 2em; }
   .puzzle-list td, .puzzle-list th {
     padding: .5rem;
-    /*font-size: .9rem;*/ }
+    line-height: 1.2; }
   .puzzle-list thead tr {
     background: #e7e7e7; }
     .puzzle-list thead tr th {
@@ -166,9 +166,6 @@ body.bymeta .anchor-target {
   margin-bottom: 2.5em; }
   .puzzleInputGroup .input-group-addon {
     width: 10%; }
-
-body.add .templates {
-  display: none; }
 
 body.add .working {
   display: none; }

@@ -5,8 +5,8 @@ use Propel\Runtime\ActiveQuery\Criteria;
 function show_content() {
 	$klein = new \Klein\Klein();
 
-	$klein->respond('GET', '/test', function () {
-			return displayTest();
+	$klein->respond('GET', '/test', function ($request, $response) {
+			return displayTest($response);
 		});
 
 	// PUZZLE LISTS
@@ -23,8 +23,22 @@ function show_content() {
 			return displayLoosePuzzles();
 		});
 
-	$klein->respond('GET', '/unsolved', function () {
-			return displayUnsolvedPuzzles();
+	$klein->with('/puzzles', function () use ($klein) {
+			$klein->respond('GET', '/all', function ($request, $response) {
+					return allPuzzles($response);
+				});
+			$klein->respond('GET', '/bymeta', function ($request, $response) {
+					return allPuzzlesByMeta($response);
+				});
+			$klein->respond('GET', '/loose', function ($request, $response) {
+					return loosePuzzles($response);
+				});
+			$klein->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
+					return metaPuzzles($request->meta_id, $response);
+				});
+			$klein->respond('GET', '/member', function ($request, $response) {
+					return memberPuzzles($response);
+				});
 		});
 
 	// PUZZLES
@@ -167,16 +181,81 @@ function displayError($error) {
 		));
 }
 
-function displayTest() {
+function displayTest($response) {
 	$puzzle = PuzzleQuery::create()
-		->filterByID(184)
+		->filterByID(1)
 		->findOne();
 
-	return "";
+	$puzzle->postJoin($_SESSION['user']);
+	// $answer = postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge());
+	// $answer = postToChannel(
+	// 	emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!',
+	// 	$puzzle->getSlackAttachmentMedium(),
+	// 	"sandbox",
+	// 	":bell:",
+	// 	"StatusBot"
+	// );
+
+	$body = $answer->getBody();
+	preprint($body);
+	return;
 
 	render('test.twig', '', array(
 			// 'content' => $result,
 		));
+}
+
+// PUZZLE DATA
+
+function allPuzzles($response) {
+	$puzzles = PuzzleQuery::create()
+		->orderByTitle()
+		->find()
+		->toArray();
+
+	return $response->json($puzzles);
+}
+
+function allPuzzlesByMeta($response) {
+	$puzzles = PuzzleQuery::create()
+		->joinWithPuzzleParent()
+		->orderByTitle()
+		->find()
+		->toArray();
+
+	return $response->json($puzzles);
+}
+
+function loosePuzzles($response) {
+	$all_puzzles = PuzzleQuery::create()
+		->leftJoinWithPuzzleParent()
+		->orderByTitle()
+		->find()
+		->toArray();
+
+	$puzzles = array_filter($all_puzzles, function ($puzzle) {
+			return ($puzzle['PuzzleParents'] == []);
+		});
+
+	return $response->json($puzzles);
+}
+
+function metaPuzzles($meta_id, $response) {
+	$puzzles = PuzzleQuery::create()
+		->joinPuzzleParent()
+		->orderByTitle()
+		->withColumn('PuzzleParent.ParentId', 'parentId')
+		->where('PuzzleParent.ParentId = '.$meta_id)
+		->find()
+		->toArray();
+
+	return $response->json($puzzles);
+}
+
+function memberPuzzles($response) {
+	$member  = $_SESSION['user'];
+	$puzzles = $member->getPuzzles()->toArray();
+	return $response->json($puzzles);
 }
 
 // PUZZLE LISTS
@@ -202,57 +281,27 @@ function displayAll() {
 		];
 	}
 
-	$puzzles = PuzzleQuery::create()
-		->orderByTitle()
-		->find();
-
 	render('all.twig', 'all', array(
 			'statusCounts'       => $statusCounts,
 			'unsolved_count'     => $unsolved_count,
 			'total_puzzle_count' => $total_puzzle_count,
-			'puzzles'            => $puzzles,
 		));
 }
 
 function displayAllByMeta() {
-	$all_puzzles = PuzzlePuzzleQuery::create()
-		->joinWith('Child')
-		->orderByParentId()
-		->find();
-
 	$metas = PuzzlePuzzleQuery::create()
 		->joinWith('PuzzlePuzzle.Parent')
 		->where('puzzle_id = parent_id')
 		->orderBy('Parent.title')
 		->find();
 
-	$all_puzzles_by_meta = array();
-	foreach ($all_puzzles as $puzzle) {
-		$all_puzzles_by_meta[$puzzle->getParent()->getTitle()][] = $puzzle->getChild();
-	}
-	ksort($all_puzzles_by_meta);
-
 	render('bymeta.twig', 'bymeta', array(
-			'all_puzzles_by_meta' => $all_puzzles_by_meta,
-			'metas'               => $metas,
+			'metas' => $metas,
 		));
 }
 
 function displayLoosePuzzles() {
-	// TODO: refactor this to use COUNT() mechanism
-	$all_puzzles = PuzzleQuery::create()
-		->leftJoinWith('Puzzle.PuzzleParent')
-		->find();
-
-	$puzzles = array();
-	foreach ($all_puzzles as $puzzle) {
-		if ($puzzle->countPuzzleParents() == 0) {
-			$puzzles[] = $puzzle;
-		}
-	}
-
 	render('loose.twig', 'loose', array(
-			'puzzles' => $puzzles,
 		));
 }
 
@@ -282,41 +331,45 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		}
 	}
 
-	// TODO: Can we use $puzzle->getParents() for this?
-	$metas_to_show = PuzzlePuzzleQuery::create()
-		->joinWith('PuzzlePuzzle.Parent')
-		->orderByParentId()
-		->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
-		->filterByParentId($puzzle_id, CRITERIA::NOT_EQUAL)
-		->groupBy('Parent.Id')
-		->find();
+	$puzzles_metas = PuzzleQuery::create()
+		->joinPuzzleChild()
+		->orderByTitle()
+		->withColumn('PuzzleChild.PuzzleId', 'PuzzleId')
+		->where('PuzzleChild.PuzzleId = '.$puzzle->getId())
+		->find()
+		->toArray();
 
-	// TODO: Can we use $puzzle->getParents() for this?
-	$me_as_meta = PuzzlePuzzleQuery::create()
-		->filterByParent($puzzle)
-		->filterByChild($puzzle)
-		->count();
-
-	$puzzles = null;
-	if ($me_as_meta > 0) {
-		$puzzles = $puzzle->getChildren();
+	$i_am_meta = false;
+	foreach ($puzzles_metas as $meta) {
+		if ($meta['Id'] == $puzzle->getId()) {
+			$i_am_meta = true;
+		}
 	}
 
 	$template = 'puzzle.twig';
 
+	$metas_to_show = [];
 	if ($method == "edit") {
 		$template = 'puzzle-edit.twig';
+
+		$metas_to_show = PuzzlePuzzleQuery::create()
+			->joinWith('PuzzlePuzzle.Parent')
+			->orderBy('Parent.Title')
+			->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
+			->filterByParentId($puzzle_id, CRITERIA::NOT_EQUAL)
+			->groupBy('Parent.Id')
+			->find();
 	}
 
 	render($template, 'puzzle', array(
-			'puzzle_id' => $puzzle_id,
-			'puzzle'    => $puzzle,
-			'notes'     => $notes,
-			'members'   => $members,
-			'is_member' => $is_member,
-			'all_metas' => $metas_to_show,
-			'i_am_meta' => $me_as_meta > 0,
-			'puzzles'   => $puzzles,
+			'puzzle_id'     => $puzzle_id,
+			'puzzle'        => $puzzle,
+			'notes'         => $notes,
+			'members'       => $members,
+			'is_member'     => $is_member,
+			'metas_to_show' => $metas_to_show,
+			'puzzles_metas' => $puzzles_metas,
+			'i_am_meta'     => $i_am_meta,
 		));
 }
 
@@ -392,8 +445,14 @@ function changePuzzleStatus($puzzle_id, $request) {
 	if (in_array($newStatus, ['priority', 'urgent'])) {
 		$news_text = "status set to `".$newStatus."`.";
 		addNews($news_text, $newStatus, $puzzle);
-		postToChannel(emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!', $puzzle->getSlackAttachmentMedium(), null, ":bell:", "StatusBot");
-		// TODO: change channel to #general
+
+		postToChannel(
+			emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!',
+			$puzzle->getSlackAttachmentMedium(),
+			"sandbox", // TODO: change channel to 'general'
+			":bell:",
+			"StatusBot"
+		);
 	}
 
 	$alert = "Changed status.";
@@ -551,8 +610,8 @@ function addPuzzle($request, $response) {
 			addNews($news_text, 'open', $newPuzzle);
 
 			// POST TO SLACK CHANNEL
-			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge(), $channel);
-			postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge());
+			postToChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), $newPuzzle->getSlackChannel());
+			postToChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge());
 		}
 	}
 
@@ -562,9 +621,6 @@ function addPuzzle($request, $response) {
 			'existingSlacks' => $existingSlacks,
 			'newPuzzles'     => $newPuzzles,
 		));
-
-	// # send post to slack channel
-	// # post news update?
 }
 
 // ROSTER
@@ -589,11 +645,8 @@ function displayMember($member_id, $method = "get") {
 		$template = 'member-edit.twig';
 	}
 
-	$puzzles = $member->getPuzzles();
-
 	render($template, 'member', array(
-			'member'  => $member,
-			'puzzles' => $puzzles,
+			'member' => $member,
 		));
 }
 
@@ -658,10 +711,12 @@ function postNews($text) {
 
 	$member = $_SESSION['user'];
 	addNews($text, "important", null, $member);
-	postToChannel('*IMPORTANT NEWS* from '.$member->getFullName(), [
+	postToChannel(
+		'*IMPORTANT NEWS* from '.$member->getFullName(), [
 			"text"  => $text,
 			"color" => "#ff0000",
-		], null, ":mega:", "NewsBot");
+		], "sandbox", ":mega:", "NewsBot");
+	// TODO: change to general
 
 	$alert = "Update posted.";
 	redirect('/news', $alert);
@@ -674,14 +729,4 @@ function archiveNews($update_id) {
 
 	$alert = "Update archived.";
 	redirect('/news/', $alert);
-}
-
-function displayUnsolvedPuzzles() {
-	$puzzles = PuzzleQuery::create()
-		->filterByStatus('solved', Criteria::NOT_EQUAL)
-		->find();
-
-	render('unsolved.twig', 'unsolved', array(
-			'puzzles' => $puzzles,
-		));
 }
