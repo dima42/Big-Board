@@ -5,8 +5,8 @@ use Propel\Runtime\ActiveQuery\Criteria;
 function show_content() {
 	$klein = new \Klein\Klein();
 
-	$klein->respond('GET', '/test', function () {
-			return displayTest();
+	$klein->respond('GET', '/test', function ($request, $response) {
+			return displayTest($response);
 		});
 
 	// PUZZLE LISTS
@@ -181,13 +181,23 @@ function displayError($error) {
 		));
 }
 
-function displayTest() {
+function displayTest($response) {
 	$puzzle = PuzzleQuery::create()
-		->filterByID(184)
+		->filterByID(1)
 		->findOne();
 
-	error_log($puzzle->getSlackChannel());
-	postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge(), $puzzle->getSlackChannel());
+	$puzzle->postJoin($_SESSION['user']);
+	// $answer = postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge());
+	// $answer = postToChannel(
+	// 	emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!',
+	// 	$puzzle->getSlackAttachmentMedium(),
+	// 	"sandbox",
+	// 	":bell:",
+	// 	"StatusBot"
+	// );
+
+	$body = $answer->getBody();
+	preprint($body);
 	return;
 
 	render('test.twig', '', array(
