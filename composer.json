@@ -1,5 +1,11 @@
 {
-  "require" : {
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/santheo/php-slack"
+    }
+  ],
+  "require": {
     "silex/silex": "^2.0.4",
     "monolog/monolog": "^1.22",
     "twig/twig": "^2.0",
@@ -11,7 +17,9 @@
     "maknz/slack": "^1.7",
     "maximebf/debugbar": "^1.14",
     "aptoma/twig-markdown": "^3.0",
-    "michelf/php-markdown": "^1.7"
+    "michelf/php-markdown": "^1.7",
+    "guzzlehttp/guzzle": "~6.0",
+    "frlnc/php-slack": "dev-no-format-support"
   },
   "require-dev": {
     "deployer/deployer": "^6.0",
@@ -21,6 +29,8 @@
     "bin-dir": "/usr/local/bin"
   },
   "autoload": {
-    "classmap": ["generated-classes/"]
+    "classmap": [
+      "generated-classes/"
+    ]
   }
 }
