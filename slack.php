@@ -4,29 +4,67 @@ use Frlnc\Slack\Http\CurlInteractor;
 use Frlnc\Slack\Http\SlackResponseFactory;
 use Propel\Runtime\ActiveQuery\Criteria;
 
-function createNewSlackChannel($slug) {
-	$slack_key = getenv('PALINDROME_SLACK_KEY');
-
-	$curl = curl_init();
-	curl_setopt($curl, CURLOPT_URL, "https://slack.com/api/channels.create?token=".$slack_key."&name=".$slug);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-	$result = curl_exec($curl);
-	curl_close($curl);
-
-	return $result;
-}
-
-// TODO: change default channel big-board
-function postToChannel($message, $attachments = [], $channel = "sandbox", $icon = ":boar:", $bot_name = "Big Board Bot") {
-	$slack_key = getenv('PALINDROME_SLACK_KEY');
+function getSlackChannelID($slug) {
+	$slack_key = getenv('TOBYBOT_SLACK_KEY');
 
 	$interactor = new CurlInteractor;
 	$interactor->setResponseFactory(new SlackResponseFactory);
 	$commander = new Commander($slack_key, $interactor);
 
-	preprint("a");
-	preprint(json_encode($attachments));
-	preprint("b");
+	$response = $commander->execute('channels.list', [
+			'channel' => $slug
+		]);
+
+	$response_body = $response->getBody();
+
+	if ($response_body['ok'] != 1) {
+		return false;
+	}
+
+	foreach ($response_body['channels'] as $key => $channel) {
+		if ($channel['name'] == $slug) {
+			return $channel['id'];
+		}
+	}
+
+	return 0;
+}
+
+function createNewSlackChannel($slug) {
+	$slack_key = getenv('TOBYBOT_SLACK_KEY');
+
+	$interactor = new CurlInteractor;
+	$interactor->setResponseFactory(new SlackResponseFactory);
+	$commander = new Commander($slack_key, $interactor);
+
+	$commander->execute('channels.create', [
+			'name' => $slug
+		]);
+
+	$response = getSlackChannelID($slug);
+
+	return $response;
+}
+
+// TODO: change default channel big-board
+function postToGeneral($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {
+	// $channel = "general"; TODO: Uncomment
+	$channel = "sandbox";
+	return postToSlack($message, $attachments, $icon, $bot_name, $channel);
+}
+
+function postToBigBoard($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {
+	// $channel = "big-board"; TODO: Uncomment
+	$channel = "sandbox";
+	return postToSlack($message, $attachments, $icon, $bot_name, $channel);
+}
+
+function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot", $channel = "sandbox") {
+	$slack_key = getenv('BIGBOARDBOT_SLACK_KEY');
+
+	$interactor = new CurlInteractor;
+	$interactor->setResponseFactory(new SlackResponseFactory);
+	$commander = new Commander($slack_key, $interactor);
 
 	$response = $commander->execute('chat.postMessage', [
 			'no_format'   => true,
@@ -56,16 +94,27 @@ class Bot {
 		$this->member = $member;
 		$payload      = ['text' => 'Nothing here. Go away.'];
 
+		$command = substr($request->command, 1);
+
 		if ($request->token == getenv('PALINDROME_SLACKBOT_TOKEN') && $user_id) {
 			if (!$member) {
 				$payload = ["text" => "Hi there! Before you can use `".$request->command."`, I need to know who you are. Click this link then try the command again:
 http://team-palindrome.herokuapp.com/assign_slack_id/".$user_id];
 			} else {
-				$payload = call_user_func_array(array($this, $name), $args);
+				// TODO: instead of requiring a fake method call ($bot->execute), just package this all up in the constructor? Or actually make an execute method instead of __call
+				$payload = call_user_func_array(array($this, $command), $args);
 			}
 		}
 
 		return $response->json($payload);
+	}
+
+	private function connect($request, $response) {
+		$channel_response = [
+			"text" => "You're already connected. Thanks!",
+		];
+
+		return $channel_response;
 	}
 
 	private function board($request, $response) {
@@ -91,6 +140,8 @@ http://team-palindrome.herokuapp.com/assign_slack_id/".$user_id];
 		$attachments = array_map(function ($puzzle) {
 				return $puzzle->getSlackAttachmentSmall();
 			}, iterator_to_array($puzzles));
+
+		error_log(json_encode($attachments));
 
 		return [
 			'link_names'    => true,

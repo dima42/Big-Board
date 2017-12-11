@@ -186,18 +186,25 @@ function displayTest($response) {
 		->filterByID(1)
 		->findOne();
 
-	$puzzle->postJoin($_SESSION['user']);
-	// $answer = postToChannel('*'.$puzzle->getTitle().'*', $puzzle->getSlackAttachmentLarge());
-	// $answer = postToChannel(
+	$channel = "sandbox";
+	$answer  = postToSlack('*'.$puzzle->getTitle().'* is solved: `'.$puzzle->getSolution().'`', $puzzle->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
+
+	// $answer = postToGeneral(
 	// 	emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!',
 	// 	$puzzle->getSlackAttachmentMedium(),
-	// 	"sandbox",
 	// 	":bell:",
 	// 	"StatusBot"
 	// );
 
-	$body = $answer->getBody();
-	preprint($body);
+	// $answer = createNewSlackChannel("test".rand(100, 999));
+	// $answer = getSlackChannelID("sandbox");
+
+	// $body = $answer->getBody();
+	// preprint($body);
+	// return;
+
+	// preprint($answer->toArray());
+	preprint($answer);
 	return;
 
 	render('test.twig', '', array(
@@ -446,10 +453,9 @@ function changePuzzleStatus($puzzle_id, $request) {
 		$news_text = "status set to `".$newStatus."`.";
 		addNews($news_text, $newStatus, $puzzle);
 
-		postToChannel(
+		postToGeneral(
 			emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!',
 			$puzzle->getSlackAttachmentMedium(),
-			"sandbox", // TODO: change channel to 'general'
 			":bell:",
 			"StatusBot"
 		);
@@ -556,6 +562,7 @@ function addPuzzle($request, $response) {
 		$puzzleTitleExists = PuzzleQuery::create()
 			->filterByTitle($puzzleContent['title'])
 			->findOne();
+		$slackNameExists = (getSlackChannelID($puzzleContent['slack']) != 0);
 
 		if ($puzzleURLExists) {
 			$existingURLs[] = $puzzleId;
@@ -565,13 +572,12 @@ function addPuzzle($request, $response) {
 			$existingTitles[] = $puzzleId;
 		}
 
-		if (!$puzzleURLExists && !$puzzleTitleExists) {
-			$slack_response = json_decode(createNewSlackChannel($puzzleContent['slack']), true);
+		if ($puzzleTitleExists) {
+			$existingSlacks[] = $puzzleId;
+		}
 
-			if (!$slack_response['ok']) {
-				$existingSlacks[] = $puzzleId;
-				continue;
-			}
+		if (!$puzzleURLExists && !$puzzleTitleExists) {
+			$newChannelID = createNewSlackChannel($puzzleContent['slack']);
 
 			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
 
@@ -579,8 +585,8 @@ function addPuzzle($request, $response) {
 			$newPuzzle->setTitle($puzzleContent['title']);
 			$newPuzzle->setUrl($puzzleContent['url']);
 			$newPuzzle->setSpreadsheetId($spreadsheet_id);
-			$newPuzzle->setSlackChannel($slack_response['channel']['name']);
-			$newPuzzle->setSlackChannelId($slack_response['channel']['id']);
+			$newPuzzle->setSlackChannel($puzzleContent['slack']);
+			$newPuzzle->setSlackChannelId($newChannelID);
 			$newPuzzle->setStatus('open');
 			$newPuzzle->save();
 
@@ -610,8 +616,9 @@ function addPuzzle($request, $response) {
 			addNews($news_text, 'open', $newPuzzle);
 
 			// POST TO SLACK CHANNEL
-			postToChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), $newPuzzle->getSlackChannel());
-			postToChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge());
+			postToSlack('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), ":hatching_chick:", "NewPuzzleBot", $newPuzzle->getSlackChannel());
+			postToGeneral('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), ":hatching_chick:", "NewPuzzleBot");
+			;
 		}
 	}
 
@@ -711,12 +718,14 @@ function postNews($text) {
 
 	$member = $_SESSION['user'];
 	addNews($text, "important", null, $member);
-	postToChannel(
+	postToGeneral(
 		'*IMPORTANT NEWS* from '.$member->getFullName(), [
 			"text"  => $text,
 			"color" => "#ff0000",
-		], "sandbox", ":mega:", "NewsBot");
-	// TODO: change to general
+		],
+		":mega:",
+		"NewsBot"
+	);
 
 	$alert = "Update posted.";
 	redirect('/news', $alert);
