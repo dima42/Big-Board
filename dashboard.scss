@@ -156,12 +156,31 @@ aside {
         }
     }
 
+    &:hover tbody tr {
+        opacity: .8;
+    }
+
+    tbody tr:hover {
+        opacity: 1;
+        // background:white;
+        // box-shadow: 0 0 2px rgba(0,0,0,.2);
+
+        td {
+            border-top: 1px solid #888;
+            border-bottom: 1px solid #888;
+        }
+    }
+
     label {
         margin: 0;
     }
 
     a {
         display: block;
+
+        &:hover {
+            text-decoration: none;
+        }
     }
 }
 

@@ -88,10 +88,19 @@ aside {
     background: #e7e7e7; }
     .puzzle-list thead tr th {
       border-bottom: 1px solid #aaa; }
+  .puzzle-list:hover tbody tr {
+    opacity: .8; }
+  .puzzle-list tbody tr:hover {
+    opacity: 1; }
+    .puzzle-list tbody tr:hover td {
+      border-top: 1px solid #888;
+      border-bottom: 1px solid #888; }
   .puzzle-list label {
     margin: 0; }
   .puzzle-list a {
     display: block; }
+    .puzzle-list a:hover {
+      text-decoration: none; }
 
 [data-filter=solved] {
   background: #f7f7f7;
