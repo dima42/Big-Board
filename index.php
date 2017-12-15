@@ -7,7 +7,7 @@ $klein = new \Klein\Klein();
 $klein->with('/tobybot', function () use ($klein) {
 		$bot = new Bot();
 
-		$klein->respond('POST', $request->command, function ($request, $response) use ($bot) {
+		$klein->respond('POST', $request->command??'', function ($request, $response) use ($bot) {
 				return $bot->execute($request, $response);
 			});
 	});
