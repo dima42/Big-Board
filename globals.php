@@ -64,28 +64,6 @@ $twig   = new Twig_Environment($loader, array(
 $twig->addExtension(new MarkdownExtension($engine));
 
 // TWIG FILTERS
-function emojify($status) {
-	switch ($status) {
-		case "open":
-			return "⚪️";
-		case "stuck":
-			return "❓";
-		case "priority":
-			return "❗️";
-		case "urgent":
-			return "🚨";
-		case "solved":
-			return "🏁";
-		case "important":
-			return "📣";
-	}
-
-	return "😐";
-}
-
-$emojify = new Twig_Filter('emojify', 'emojify');
-$twig->addFilter($emojify);
-
 $default = new Twig_Filter('default',
 	function ($input, $default) {
 		if (!$input) {
