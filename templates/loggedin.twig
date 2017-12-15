@@ -43,7 +43,7 @@
   </ul>
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link {{ context == 'member' ? 'active' }}" href="/you">{{ not user.slackId ? "⚠️ " }} You</a>
+      <a class="nav-link {{ context == 'member' ? 'active' }}" href="/you">{% if not user.slackId %}<span style="color: #FFC108;" class="fas fa-exclamation-triangle"></span>{% endif %} You</a>
     </li>
   </ul>
 </div>
