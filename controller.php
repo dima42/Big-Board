@@ -36,8 +36,8 @@ function show_content() {
 			$klein->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
 					return metaPuzzles($request->meta_id, $response);
 				});
-			$klein->respond('GET', '/member', function ($request, $response) {
-					return memberPuzzles($response);
+			$klein->respond('GET', '/member/[:member_id]', function ($request, $response) {
+					return memberPuzzles($request->member_id, $response);
 				});
 		});
 
@@ -80,34 +80,28 @@ function show_content() {
 	// MEMBER
 
 	$klein->respond('GET', '/me', function () {
-			redirect('/member/'.$_SESSION['user_id']);
+			redirect('/member/'.$_SESSION['user']->getId());
 		});
 
 	$klein->respond('GET', '/you', function () {
-			redirect('/member/'.$_SESSION['user_id']);
+			redirect('/member/'.$_SESSION['user']->getId());
 		});
 
 	$klein->respond('GET', '/member', function () {
-			redirect('/member/'.$_SESSION['user_id']);
+			redirect('/member/'.$_SESSION['user']->getId());
 		});
 
-	$klein->with('/member/[:id]', function () use ($klein) {
-
-			$klein->respond('GET', '/?', function ($request) {
+	$klein->with('/member', function () use ($klein) {
+			$klein->respond('GET', '/[i:id]/?', function ($request) {
 					return displayMember($request->id);
 				});
 			$klein->respond('GET', '/edit/?', function ($request) {
-					if ($request->id == $_SESSION['user_id']) {
-						return displayMember($request->id, 'edit');
-					}
-					redirect('/roster');
+					return displayMemberEdit();
 				});
 			$klein->respond('POST', '/edit/?', function ($request) {
-					if ($request->id == $_SESSION['user_id']) {
-						return editMember($request->id, $request);
-					}
-					redirect('/roster');
+					return saveMember($request);
 				});
+
 		});
 
 	$klein->respond('GET', '/assign_slack_id/[:slack_id]', function ($request) {
@@ -263,8 +257,11 @@ function metaPuzzles($meta_id, $response) {
 	return $response->json($puzzles);
 }
 
-function memberPuzzles($response) {
-	$member  = $_SESSION['user'];
+function memberPuzzles($member_id, $response) {
+	$member = MemberQuery::create()
+		->filterById($member_id)
+		->findOne();
+
 	$puzzles = $member->getPuzzles()->toArray();
 	return $response->json($puzzles);
 }
@@ -648,20 +645,30 @@ function displayRoster() {
 		));
 }
 
-function displayMember($member_id, $method = "get") {
-	$template = 'member.twig';
-	$member   = $_SESSION['user'];
+function displayMember($member_id) {
+	$is_user = false;
+	$member  = MemberQuery::create()
+		->filterById($member_id)
+		->findOne();
 
-	if ($method == "edit") {
-		$template = 'member-edit.twig';
+	// If it's the logged in use, take this chance to refresh the session object in case member data has changed
+	if ($member_id == $_SESSION['user']->getId()) {
+		$is_user          = true;
+		$_SESSION['user'] = $member;
 	}
 
-	render($template, 'member', array(
-			'member' => $member,
+	render('member.twig', 'member', array(
+			'member'  => $member,
+			'is_user' => $is_user,
 		));
 }
 
-function editMember($member_id, $request) {
+function displayMemberEdit() {
+	render('member-edit.twig', 'member', array(
+		));
+}
+
+function saveMember($request) {
 	$member = $_SESSION['user'];
 
 	$member->setFullName($request->full_name);
@@ -671,14 +678,18 @@ function editMember($member_id, $request) {
 	}
 	$member->save();
 
+	$_SESSION['user'] = $member;
+
 	$message = "Saved your profile changes.";
-	redirect('/member/'.$member_id.'/edit', $message);
+	redirect('/member/edit', $message);
 }
 
 function assignSlackId($slack_id) {
 	$member = $_SESSION['user'];
 	$member->setSlackId($slack_id);
 	$member->save();
+
+	$_SESSION['user'] = $member;
 
 	$message = "Thanks! Saved your Slack ID.";
 	redirect('/member/'.$member->getId(), $message);

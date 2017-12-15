@@ -1,27 +1,27 @@
 {% extends 'loggedin.twig' %}
 
 {% block content %}
-<a href="/member/{{ member.id }}">&larr; Back to profile</a>
-<h1>Edit {{ member.fullName }}</h1>
+<a href="/member/{{ user.id }}">&larr; Back to profile</a>
+<h1>Edit {{ user.fullName }}</h1>
 
-<form action="/member/{{ member.id }}/edit" method="post">
+<form action="/member/edit" method="post">
     <div class="form-group row">
         <label class="col-sm-3 col-form-label" for="full_name">Name</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" name="full_name" value="{{ member.fullName }}">
+            <input type="text" class="form-control" name="full_name" value="{{ user.fullName }}">
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-3 col-form-label" for="strengths">Strengths</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" name="strengths" value="{{ member.strengths }}" placeholder="e.g. Renaissance art; 15th century crytography; Horses.">
+            <input type="text" class="form-control" name="strengths" value="{{ user.strengths }}" placeholder="e.g. Renaissance art; 15th century crytography; Horses.">
         </div>
     </div>
-    {% if not member.slackId %}
+    {% if not user.slackId %}
     <div class="form-group row">
         <label class="col-sm-3 col-form-label" for="slack_handle">Slack User ID</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" name="slack_id" value="{{ member.slackId }}" placeholder="e.g. U91K835FZ" disabled>
+            <input type="text" class="form-control" name="slack_id" value="{{ user.slackId }}" placeholder="e.g. U91K835FZ" disabled>
             <small class="form-text text-muted">To set this automatically, type <code>/connect</code> in Slack, and follow the instructions.</small>
         </div>
     </div>

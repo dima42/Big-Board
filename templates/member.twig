@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% if not member.slackId %}
+{% if is_user and not user.slackId %}
 <div class="jumbotron bg-warning">
     <h1 class="display-3">Hi, please connect to Slack</h1>
     <p class="lead">In order to tag you in the messages this this app posts to Slack, we need to know who you are.</p>
@@ -15,7 +15,13 @@
 </div>
 {% endif %}
 
-<h1>Puzzles you're working on</h1>
+<h1>{{ member.fullName }}</h1>
+
+{% if member.strengths %}
+<p>
+    {{ member.strengths }}
+</p>
+{% endif %}
 
 {% from 'macros.twig' import puzzle_table %}
 {{ puzzle_table() }}
@@ -25,14 +31,14 @@
 <div class="card mb-3">
     <div class="card-body">
         <small class="solvers">You are logged in as</small>
-        <strong>{{ member.fullName }}</strong><br>
-        {{ member.strengths|default("(No strengths listed) 😿") }}<br>
-        {% if member.slackId %}
-            <img src="/img/slack.png" width="15px" alt=""> {{ member.slackId }}
+        <a href="/you"><strong>{{ user.fullName }}</strong></a><br>
+        {{ user.strengths|default("(No strengths listed) 😿") }}<br>
+        {% if user.slackId %}
+            <img src="/img/slack.png" width="15px" alt=""> {{ user.slackId }}
         {% endif %}
     </div>
     <div class="card-footer">
-        <a href="/member/{{ member.id }}/edit">Edit your profile</a>
+        <a href="/member/edit">Edit your profile</a>
     </div>
 </div>
 {% endblock %}
@@ -48,7 +54,7 @@
 {% block scripts %}
 <script>
 $(function() {
-    loadPuzzleData('/puzzles/member');
+    loadPuzzleData('/puzzles/member/{{ member.id }}');
 });
 </script>
 {% endblock %}
