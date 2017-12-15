@@ -2551,23 +2551,29 @@ readers do not read off random characters that represent icons */
 
 .icon-open {
   font-family: 'Font Awesome 5 Free';
-  font-weight: 900; }
+  font-weight: 900;
+  color: #FF6600; }
 
 .icon-stuck {
   font-family: 'Font Awesome 5 Free';
-  font-weight: 900; }
+  font-weight: 900;
+  color: #FF6600; }
 
 .icon-priority {
   font-family: 'Font Awesome 5 Free';
-  font-weight: 900; }
+  font-weight: 900;
+  color: #FF6600; }
 
 .icon-urgent {
   font-family: 'Font Awesome 5 Free';
-  font-weight: 900; }
+  font-weight: 900;
+  color: #FF6600;
+  color: white; }
 
 .icon-solved {
   font-family: 'Font Awesome 5 Free';
-  font-weight: 900; }
+  font-weight: 900;
+  color: #FF6600; }
 
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
