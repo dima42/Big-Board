@@ -1,4 +1,22 @@
-$fa-font-path: "webfonts/";
+@import 'scss/variables';
+@import 'scss/mixins';
+@import 'scss/core';
+@import 'scss/larger';
+@import 'scss/fixed-width';
+@import 'scss/list';
+@import 'scss/bordered-pulled';
+@import 'scss/animated';
+@import 'scss/rotated-flipped';
+@import 'scss/stacked';
+@import 'scss/icons';
+@import 'scss/screen-reader';
+
+    // 'open'     => 'circle',
+    // 'stuck'    => 'question',
+    // 'priority' => 'exclamation',
+    // 'urgent'   => 'bell',
+    // 'solved'   => 'checkered',
+
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
