@@ -269,7 +269,7 @@ function memberPuzzles($member_id, $response) {
 // PUZZLE LISTS
 
 function displayAll() {
-	$statuses = PuzzleQuery::create()
+	$statuseGroups = PuzzleQuery::create()
 		->filterByStatus('solved', Criteria::NOT_EQUAL)
 		->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
 		->groupBy('Puzzle.Status')
@@ -281,7 +281,7 @@ function displayAll() {
 
 	$statusCounts   = [];
 	$unsolved_count = 0;
-	foreach ($statuses as $status) {
+	foreach ($statuseGroups as $status) {
 		$unsolved_count                  = $unsolved_count+$status['StatusCount'];
 		$statusCounts[$status['Status']] = [
 			"count"      => $status['StatusCount'],
