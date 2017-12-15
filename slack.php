@@ -178,7 +178,7 @@ http://team-palindrome.herokuapp.com/assign_slack_id/".$user_id];
 			];
 		} else {
 			$status = $puzzle->getStatus();
-			$text   = "*".$puzzle->getTitle()."* is ".emojify($puzzle->getStatus())." ".strtoupper($status);
+			$text   = "*".$puzzle->getTitle()."* is :".$puzzle->getStatus().": ".strtoupper($status);
 			if ($status == "solved") {
 				$text .= ": `".$puzzle->getSolution()."`";
 			}

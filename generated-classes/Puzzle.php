@@ -130,12 +130,12 @@ class Puzzle extends BasePuzzle {
 
 	public function getSlackAttachmentSmall() {
 		$content = [
-			emojify($this->getStatus()),
-			'<'.$this    ->getBigBoardURL().'|:boar:> ',
-			'<'.$this    ->getUrl().'|:mit:>',
-			'<'.$this    ->getSpreadsheetURL().'|:drive:> ',
-			'*'.$this    ->getTitle().'*',
-			'<#'.$this   ->getSlackChannelId().'>',
+			":".$this ->getStatus().":",
+			'<'.$this ->getBigBoardURL().'|:boar:> ',
+			'<'.$this ->getUrl().'|:mit:>',
+			'<'.$this ->getSpreadsheetURL().'|:drive:> ',
+			'*'.$this ->getTitle().'*',
+			'<#'.$this->getSlackChannelId().'>',
 		];
 
 		return [
@@ -189,7 +189,7 @@ class Puzzle extends BasePuzzle {
 	public function postJoin($member) {
 		$memberCount = $this->countMembers();
 
-		$channel     = "sandbox";
+		$channel = "sandbox";
 		// $channel     = $this->getSlackChannel(); // TODO: uncomment
 
 		inviteToSlackChannel($this->getSlackChannelId(), $member->getSlackID());

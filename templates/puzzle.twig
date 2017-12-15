@@ -16,7 +16,7 @@
 
         <h1>
             <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
-            {{ puzzle.status | emojify }}
+            <i class="icon-{{ puzzle.status }}"></i>
         </h1>
     </div>
 
@@ -35,7 +35,7 @@
             <span class="input-group-addon">Status</span>
             <select id="statusSelect" class="form-control" name="status">
                 {% for status in statuses %}
-                    <option {% if status == puzzle.status %}selected{% endif %} value="{{ status }}">{{ status|emojify }} {{ status|capitalize }}</option>
+                    <option {% if status == puzzle.status %}selected{% endif %} value="{{ status }}">{{ status|capitalize }}</option>
                 {% endfor %}
             </select>
             <span class="input-group-btn">

@@ -188,7 +188,7 @@ function displayTest($response) {
 	// $answer  = postToSlack('*'.$puzzle->getTitle().'* is solved: `'.$puzzle->getSolution().'`', $puzzle->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
 
 	// $answer = postToGeneral(
-	// 	emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!',
+	// 	'URGENT help is needed on *'.$puzzle->getTitle().'*!',
 	// 	$puzzle->getSlackAttachmentMedium(),
 	// 	":bell:",
 	// 	"StatusBot"
@@ -455,7 +455,7 @@ function changePuzzleStatus($puzzle_id, $request) {
 		addNews($news_text, $newStatus, $puzzle);
 
 		postToGeneral(
-			emojify($puzzle->getStatus()).' URGENT help is needed on *'.$puzzle->getTitle().'*!',
+			':urgent: URGENT help is needed on *'.$puzzle->getTitle().'*!',
 			$puzzle->getSlackAttachmentMedium(),
 			":bell:",
 			"StatusBot"

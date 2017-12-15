@@ -24,7 +24,7 @@
                   <label class="form-check-label">
                     <input class="form-check-input" type="radio" name="status" id="status-{{ status }}" {% if status == puzzle.status %}checked{% endif %} value="{{ status }}">
                     {{ status|capitalize }}
-                    {{ status|emojify }}
+                    <i class="icon-{{ status }}"></i>
                   </label>
                 </div>
                 {% endfor %}
