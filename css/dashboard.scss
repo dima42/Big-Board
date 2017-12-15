@@ -11,6 +11,34 @@
 @import 'scss/icons';
 @import 'scss/screen-reader';
 
+@mixin icon($name) {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    @extend .fas;
+    @extend .fa-fw;
+    @extend .fa-#{$name};
+}
+
+.icon-open {
+    @include icon('circle-notch');
+}
+
+.icon-stuck {
+    @include icon('question');
+}
+
+.icon-priority {
+    @include icon('exclamation');
+}
+
+.icon-urgent {
+    @include icon('bell');
+}
+
+.icon-solved {
+    @include icon('flag-checkered');
+}
+
     // 'open'     => 'circle',
     // 'stuck'    => 'question',
     // 'priority' => 'exclamation',
