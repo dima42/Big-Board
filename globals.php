@@ -41,6 +41,20 @@ function preprint($arr) {
 	echo "</pre>";
 }
 
+// STATUSES
+
+$STATUSES = [
+	'open'     => 'circle',
+	'stuck'    => 'question',
+	'priority' => 'exclamation',
+	'urgent'   => 'bell',
+	'solved'   => 'flag-checkered',
+];
+
+function getFAicon($status) {
+	return "fas fa-".$STATUSES[$status]??$STATUSES['open'];
+}
+
 // TWIG
 Global $twig;
 $engine = new MarkdownEngine\MichelfMarkdownEngine();
