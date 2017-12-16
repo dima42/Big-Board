@@ -247,10 +247,9 @@ function loosePuzzles($response) {
 
 function metaPuzzles($meta_id, $response) {
 	$puzzles = PuzzleQuery::create()
-		->joinPuzzleParent()
-		->orderByTitle()
-		->withColumn('PuzzleParent.ParentId', 'parentId')
+		->joinWithPuzzleParent()
 		->where('PuzzleParent.ParentId = '.$meta_id)
+		->orderByTitle()
 		->find()
 		->toArray();
 
