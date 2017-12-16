@@ -1,0 +1,171 @@
+{% extends 'two-col.twig' %}
+
+{% block filters %}
+<h4 class="nav-link">Jump to</h4>
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
+    <li class="nav-item"><a class="nav-link" href="#organization">Organization</a></li>
+    <li class="nav-item"><a class="nav-link" href="#puzzles">Puzzles</a></li>
+    <li class="nav-item"><a class="nav-link" href="#adding">Adding</a></li>
+    <li class="nav-item"><a class="nav-link" href="#slack">Slack</a></li>
+    <li class="nav-item"><a class="nav-link" href="#spreadsheets">Spreadsheets</a></li>
+    <li class="nav-item"><a class="nav-link" href="#feedback">Feedback</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-5">Hello, 🌸 / 🐑 / 🐺</h1>
+
+<section class="mb-5">
+    <span id="overview" class="anchor-target"></span>
+    <h2>High-level overview</h2>
+
+    <p>The Big Board is a web app (you're on it) + a series of Slack commands that allows us to easily…</p>
+
+    <ul>
+        <li>Organize the puzzles</li>
+        <li>Communicate with other solvers</li>
+        <li>Indicate which puzzles we're working on</li>
+        <li>Find teammates to help when help is needed</li>
+    </ul>
+
+</section>
+<section class="mb-5">
+    <span id="organization" class="anchor-target"></span>
+
+    <h2>Basic organization</h2>
+
+    <p>
+        The <a href="/">homepage</a> lists all puzzles and gives you the ability to filter them by status (open, stuck, priority) and/or sort them in the following ways:
+    </p>
+
+    <ul>
+        <li>Stalest (longest time since changed)</li>
+        <li>Freshest (opposite)</li>
+        <li>Oldest (longest time since creation)</li>
+        <li>Newest (opposite)</li>
+    </ul>
+
+    <p>
+        The top navbar also includes links to:
+    </p>
+
+    <ul>
+        <li>List the <a href="/bymeta">puzzles by meta</a></li>
+        <li>List the <a href="/loose">puzzles with no meta</a></li>
+        <li>See the <a href="/roster">roster of our team</a></li>
+        <li>Read all the <a href="/news">latest news</a></li>
+        <li><a href="/add">Add puzzles</a></li>
+    </ul>
+</section>
+<section class="mb-5">
+    <span id="puzzles" class="anchor-target"></span>
+
+    <h2>Puzzle pages</h2>
+
+    <p>
+        Clicking the name of any puzzle will take you to a detail page for that puzzle, where you can:
+    </p>
+
+    <ul>
+        <li>Add a note</li>
+        <li>Change status</li>
+        <li>Add a solution</li>
+        <li>Edit any of the puzzle's metadata</li>
+        <li>(If it's a meta) See list of associated puzzles</li>
+    </ul>
+
+    <p>
+        On the right rail of of each puzzle page you'll find the 3 external links that come with each puzzle:
+    </p>
+
+    <ul>
+        <li>The puzzle's page on the Mystery Hunt puzzle site</li>
+        <li>The puzzle's spreadsheet in our Google Drive</li>
+        <li>The puzzle's Slack channel.</li>
+    </ul>
+</section>
+<section class="mb-5">
+    <span id="adding" class="anchor-target"></span>
+
+    <h2>Adding puzzles</h2>
+
+    <p>
+        <a href="/add">Adding puzzles</a> is slightly automated, and it assumes that the Mystery Hunt puzzle URLs are not password-protected. If this ends up not being the case, we'll tweak this page to be entirely manual. As it is now, this is how it works:
+    </p>
+
+    <ul>
+        <li>Paste any number of links in the box, one per line.</li>
+        <li>Select a meta if they're all part of the same one. Or select "This is a new meta" if you're adding a new one.</li>
+        <li>Click "Submit URLs".</li>
+        <li>The app will ping the URLs and grab the puzzles' title(s).</li>
+        <li>You'll get a new form for each puzzle, where you can edit data or leave them as is.</li>
+        <li>Hit "Submit puzzles".</li>
+    </ul>
+
+    <p>At this point, the app will make sure that the title, URL and Slack channels are unique. If not, it'll tell you to change. If you're good, it'll do the following:</p>
+
+    <ul>
+        <li>Set up a separate page for the puzzle.</li>
+        <li>Create the spreadsheet in the Drive.</li>
+        <li>Create the Slack channel.</li>
+    </ul>
+</section>
+
+<section class="mb-5">
+    <span id="slack" class="anchor-target"></span>
+
+    <h2>Slack features</h2>
+
+    <p>The app integrates nicely with Slack. Here are the interactions that trigger an event in Slack:</p>
+    <ul>
+        <li>When a puzzle is created, a new Slack channel is created, all the meta-links are sent to that new channel, a message is sent to <code>#general</code></li>
+        <li>When a puzzle is solved, a messge is posted in <code>#general</code></li>
+        <li>When a puzzle is set to 'priority' status, a message is posted in <code>#general</code></li>
+        <li>When a note is added to a puzzle, that note is posted in that puzzle's channel.</li>
+        <li>When someone joins a puzzle, an alert is posted in that puzzle's channel, and that person is invited to that channel.</li>
+        <li>When a news update is posted, that news is posted in <code>#general</code></li>
+    </ul>
+    <p>And here are the things you can do in Slack. In any channel, you can:</p>
+    <ul>
+        <li>Type <code>/board</code> to see a list of unsolved puzzles.</li>
+        <li>Type <code>/board [open | stuck | priority]</code> to see a list of puzzles with that status.</li>
+        <li>Type <code>/board [text]</code> to search for puzzle titles with that text.</li>
+    </ul>
+    <p>And in any puzzle channel, you can:</p>
+    <ul>
+        <li>Type <code>/info</code> to get all the meta-links and list of members for a puzzle.</li>
+        <li>Type <code>/note</code> to see the list of notes.</li>
+        <li>Type <code>/note [text]</code> to add a note with that text.</li>
+        <li>Type <code>/solve [solution]</code> to enter a puzzle's solution.</li>
+        <li>Type <code>/workon</code> to join a puzzle. If you are already a member of a puzzle, this will forcefully un-join you from it.</li>
+    </ul>
+</section>
+
+<section class="mb-5">
+    <span id="spreadsheets" class="anchor-target"></span>
+
+    <h2>Spreadsheets</h2>
+
+    <p>New spreadsheets are made by duplicating a "Template" file that lives in our Drive. The template has some simple formatting applied to it, and it has a bunch of custom formula attached to it that will be helpful for puzzle solving. All the available formulas are listed in the Examples tab. They are:</p>
+    <ul>
+        <li><code><b>pattern(str)</b></code> — capitalizes and removes any punctuation</li>
+        <li><code><b>strip(str)</b></code> — capitalizes and removes all non-alpha-numeric, including spaces</li>
+        <li><code><b>nth(n, str)</b></code> — returns the nth letter of strip(str)</li>
+        <li><code><b>columnify(str)</b></code> — splits the letters of a string into a bunch of cells, horizontally</li>
+        <li><code><b>position_of(char)</b></code> — returns the alpha position of a character</li>
+        <li><code><b>letter_at(n)</b></code> — return sthe nth letter of the alphabet</li>
+        <li><code><b>shift_string(str, n)</b></code> — shifts an entire string n letters down the alphabet</li>
+        <li><code><b>sum_letters(str)</b></code> — return the sum of the alpha position of every letter in the string.</li>
+        <li><code><b>alphabetize(str)</b></code> — sort the letters of a string, alphabetically</li>
+        <li><code><b>difference(str1, str2)</b></code> — return the letters that are in str1, but not str2.</li>
+    </ul>
+</section>
+
+<section class="mb-5">
+    <span id="feedback" class="anchor-target"></span>
+    <h2>Feedback</h2>
+    <p>Got ideas for improvements? Ping <a href="https://palindrome2018.slack.com/team/U87J885FZ">@santheo</a> on Slack, or email Sandy at <a href="mailto:santheo@gmail.com">santheo@gmail.com</a>.</p>
+</section>
+
+{% endblock %}

@@ -2564,7 +2564,8 @@ readers do not read off random characters that represent icons */
 .icon-solved {
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
-  color: #FF6600; }
+  color: #FF6600;
+  color: #444; }
 
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
@@ -2677,7 +2678,7 @@ aside {
 [data-filter=priority] {
   background: #FFD1B2; }
 
-body.bymeta .anchor-target {
+.anchor-target {
   display: block;
   content: " ";
   margin-top: -80px;
@@ -2757,3 +2758,8 @@ body.add.trippy {
 
 .news-row[data-filter=important] {
   background: #ffff99; }
+
+.about h2 {
+  padding-bottom: .3em;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: .5em; }

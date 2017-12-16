@@ -150,6 +150,12 @@ function show_content() {
 				});
 		});
 
+	// ABOUT
+
+	$klein->respond('GET', '/about', function () {
+			return displayAbout();
+		});
+
 	// LOGOUT
 
 	$klein->respond('GET', '/logout', function () {
@@ -756,4 +762,11 @@ function archiveNews($update_id) {
 
 	$alert = "Update archived.";
 	redirect('/news/', $alert);
+}
+
+// ABOUT
+
+function displayAbout() {
+	render('about.twig', 'about', array(
+		));
 }

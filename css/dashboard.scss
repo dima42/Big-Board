@@ -34,6 +34,7 @@
 
 .icon-solved {
     @include icon('flag-checkered');
+    color: #444;
 }
 
 $monospace: Inconsolata, monospace;
@@ -230,17 +231,15 @@ aside {
     background:$priority;
 }
 
-// BY META
+// DEEP LINKS (/bymeta and /about)
 
-body.bymeta {
-    .anchor-target {
-      display: block;
-      content: " ";
-      margin-top: -80px;
-      height: 80px;
-      visibility: hidden;
-      pointer-events: none;
-    }
+.anchor-target {
+    display: block;
+    content: " ";
+    margin-top: -80px;
+    height: 80px;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 // PUZZLE PAGE
@@ -377,5 +376,15 @@ body.add {
 
     &[data-filter=important] {
         background:lighten(yellow, 30%);
+    }
+}
+
+// ABOUT
+
+.about {
+    h2 {
+        padding-bottom: .3em;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: .5em;
     }
 }
