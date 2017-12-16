@@ -20,7 +20,6 @@ class Puzzle extends BasePuzzle {
 			'open'     => '#006AD8',
 			'stuck'    => "#FFEFE5",
 			'priority' => "#FFD1B2",
-			'urgent'   => "#FF6600",
 			'solved'   => "#000000",
 		];
 		return $colors[$this->getStatus()]??'green';

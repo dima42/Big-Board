@@ -188,7 +188,7 @@ function displayTest($response) {
 	// $answer  = postToSlack('*'.$puzzle->getTitle().'* is solved: `'.$puzzle->getSolution().'`', $puzzle->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
 
 	// $answer = postToGeneral(
-	// 	'URGENT help is needed on *'.$puzzle->getTitle().'*!',
+	// 	' help is needed on *'.$puzzle->getTitle().'*!',
 	// 	$puzzle->getSlackAttachmentMedium(),
 	// 	":bell:",
 	// 	"StatusBot"
@@ -269,7 +269,9 @@ function memberPuzzles($member_id, $response) {
 // PUZZLE LISTS
 
 function displayAll() {
-	$statuseGroups = PuzzleQuery::create()
+	Global $STATUSES;
+
+	$statusGroups = PuzzleQuery::create()
 		->filterByStatus('solved', Criteria::NOT_EQUAL)
 		->withColumn('COUNT(Puzzle.Status)', 'StatusCount')
 		->groupBy('Puzzle.Status')
@@ -279,13 +281,15 @@ function displayAll() {
 	$total_puzzle_count = PuzzleQuery::create()
 		->count();
 
-	$statusCounts   = [];
+	$statusCounts   = [[], [], []];
 	$unsolved_count = 0;
-	foreach ($statuseGroups as $status) {
-		$unsolved_count                  = $unsolved_count+$status['StatusCount'];
-		$statusCounts[$status['Status']] = [
+	foreach ($statusGroups as $status) {
+		$unsolved_count          = $unsolved_count+$status['StatusCount'];
+		$position                = array_search($status['Status'], array_keys($STATUSES));
+		$statusCounts[$position] = [
 			"count"      => $status['StatusCount'],
 			"percentage" => 100*$status['StatusCount']/$total_puzzle_count,
+			"status"     => $status['Status'],
 		];
 	}
 
@@ -450,12 +454,12 @@ function changePuzzleStatus($puzzle_id, $request) {
 	$puzzle->setStatus($newStatus);
 	$puzzle->save();
 
-	if (in_array($newStatus, ['priority', 'urgent'])) {
+	if ($newStatus == 'priority') {
 		$news_text = "status set to `".$newStatus."`.";
 		addNews($news_text, $newStatus, $puzzle);
 
 		postToGeneral(
-			':urgent: URGENT help is needed on *'.$puzzle->getTitle().'*!',
+			':priority: *'.$puzzle->getTitle().'* was set to PRIORITY.',
 			$puzzle->getSlackAttachmentMedium(),
 			":bell:",
 			"StatusBot"

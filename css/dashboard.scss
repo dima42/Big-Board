@@ -32,20 +32,9 @@
     @include icon('exclamation');
 }
 
-.icon-urgent {
-    @include icon('bell');
-    color: white;
-}
-
 .icon-solved {
     @include icon('flag-checkered');
 }
-
-    // 'open'     => 'circle',
-    // 'stuck'    => 'question',
-    // 'priority' => 'exclamation',
-    // 'urgent'   => 'bell',
-    // 'solved'   => 'checkered',
 
 $monospace: Inconsolata, monospace;
 
@@ -53,7 +42,6 @@ $open: #dadada;
 $solved: #f7f7f7;
 $stuck: #FFEFE5;
 $priority: #FFD1B2;
-$urgent: #FF6600;
 
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
@@ -143,11 +131,6 @@ h2 {
 .progress-priority {
     background-color: $priority;
 }
-
-.progress-urgent {
-    background-color: $urgent;
-}
-
 
 // BANNER
 
@@ -245,14 +228,6 @@ aside {
 
 [data-filter=priority] {
     background:$priority;
-}
-
-[data-filter=urgent] {
-    background:$urgent;
-
-    a {
-        color: white;
-    }
 }
 
 // BY META

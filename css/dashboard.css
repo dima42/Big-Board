@@ -3,7 +3,6 @@
 .icon-open,
 .icon-stuck,
 .icon-priority,
-.icon-urgent,
 .icon-solved,
 .far,
 .fal,
@@ -57,7 +56,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-urgent, .icon-solved {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved {
   text-align: center;
   width: 1.25em; }
 
@@ -91,7 +90,6 @@
 .fa-pull-left.icon-open,
 .fa-pull-left.icon-stuck,
 .fa-pull-left.icon-priority,
-.fa-pull-left.icon-urgent,
 .fa-pull-left.icon-solved,
 .far.fa-pull-left,
 .fal.fa-pull-left,
@@ -103,7 +101,6 @@
 .fa-pull-right.icon-open,
 .fa-pull-right.icon-stuck,
 .fa-pull-right.icon-priority,
-.fa-pull-right.icon-urgent,
 .fa-pull-right.icon-solved,
 .far.fa-pull-right,
 .fal.fa-pull-right,
@@ -413,7 +410,7 @@ readers do not read off random characters that represent icons */
 .fa-behance-square:before {
   content: "\f1b5"; }
 
-.fa-bell:before, .icon-urgent:before {
+.fa-bell:before {
   content: "\f0f3"; }
 
 .fa-bell-slash:before {
@@ -2564,12 +2561,6 @@ readers do not read off random characters that represent icons */
   font-weight: 900;
   color: #FF6600; }
 
-.icon-urgent {
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
-  color: #FF6600;
-  color: white; }
-
 .icon-solved {
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
@@ -2633,9 +2624,6 @@ h2 {
 .progress-priority {
   background-color: #FFD1B2; }
 
-.progress-urgent {
-  background-color: #FF6600; }
-
 aside {
   /*border-left: 1px solid #eee;*/ }
   aside small {
@@ -2688,11 +2676,6 @@ aside {
 
 [data-filter=priority] {
   background: #FFD1B2; }
-
-[data-filter=urgent] {
-  background: #FF6600; }
-  [data-filter=urgent] a {
-    color: white; }
 
 body.bymeta .anchor-target {
   display: block;

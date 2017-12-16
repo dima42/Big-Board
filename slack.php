@@ -138,7 +138,7 @@ http://team-palindrome.herokuapp.com/assign_slack_id/".$user_id];
 			$puzzleQuery->filterByStatus('solved', Criteria::NOT_EQUAL);
 			$count   = $puzzleQuery->count();
 			$pretext = $count." puzzles are unsolved:";
-		} elseif (in_array($parameter, ['open', 'priority', 'urgent', 'solved'])) {
+		} elseif (in_array($parameter, ['open', 'stuck', 'priority', 'solved'])) {
 			$puzzleQuery->filterByStatus($parameter);
 			$count   = $puzzleQuery->count();
 			$pretext = $count." puzzles marked `".strtoupper($parameter)."`:";

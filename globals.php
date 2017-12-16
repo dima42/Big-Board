@@ -43,11 +43,11 @@ function preprint($arr) {
 
 // STATUSES
 
+Global $STATUSES;
 $STATUSES = [
 	'open'     => 'circle',
 	'stuck'    => 'question',
 	'priority' => 'exclamation',
-	'urgent'   => 'bell',
 	'solved'   => 'flag-checkered',
 ];
 
@@ -100,7 +100,7 @@ function render($template, $context = "", $vars = array()) {
 		$vars['user_puzzles'] = $member->getPuzzles();
 	}
 	$vars['alert']       = $_SESSION['alert_message']??null;
-	$vars['statuses']    = ['open', 'stuck', 'priority', 'urgent', 'solved'];
+	$vars['statuses']    = ['open', 'stuck', 'priority', 'solved'];
 	$vars['now']         = strftime('%c');
 	$vars['latestNews']  = $latestNews;
 	$vars['context']     = $context;
