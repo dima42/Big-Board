@@ -158,7 +158,7 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function getSlackAttachmentLarge() {
-		// No need for Slack channel b/c this info can only be returned to the puzzle's Slack channel.
+		// No need to include Slack channel in attachment list b/c this info can only be returned to the puzzle's Slack channel.
 		$puzzle_info = [
 			':boar: <'.$this ->getBigBoardURL().'|Big Board>',
 			':mit: <'.$this  ->getUrl().'|Puzzle page>',
