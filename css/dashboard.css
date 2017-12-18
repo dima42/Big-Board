@@ -2615,14 +2615,14 @@ h2 {
 
 .progress {
   height: 1.2rem;
-  background: #B2E0FF;
-  border: 1px solid #B2E0FF; }
+  background: #f7f7f7;
+  border: 1px solid #f7f7f7; }
 
 .progress-open {
   background-color: white; }
 
 .progress-solved {
-  background-color: #B2E0FF; }
+  background-color: #f7f7f7; }
 
 .progress-stuck {
   background-color: #FFEFE5; }
@@ -2670,7 +2670,7 @@ aside {
       text-decoration: none; }
 
 [data-filter=solved] {
-  background: #B2E0FF;
+  background: #f7f7f7;
   opacity: .65; }
 
 [data-filter=stuck] {

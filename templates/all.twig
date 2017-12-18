@@ -46,7 +46,6 @@
         <small class="text-muted">/ {{ total_puzzle_count }}</small>
     </h1>
     <div class="progress">
-        <div class="progress-bar progress-solved" role="progressbar" style="width: {{ solved_percentage }}%" ></div>
         {% for pos, statusCount in statusCounts %}
             <div class="progress-bar progress-{{ statusCount.status }}" role="progressbar" style="width: {{ statusCount.percentage }}%" ></div>
         {% endfor %}
