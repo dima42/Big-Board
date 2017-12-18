@@ -5,9 +5,9 @@ propel:
               adapter: mysql
               classname: Propel\Runtime\Connection\ConnectionWrapper
               # classname: Propel\Runtime\Connection\DebugPDO
-              dsn: "mysql:host=%env.PALINDROME_DB_HOST%;dbname=%env.PALINDROME_DB_NAME%"
-              user: %env.PALINDROME_DB_USERNAME%
-              password: %env.PALINDROME_DB_PASSWORD%
+              dsn: "mysql:host=%env.BIG_BOARD_DB_HOST%;dbname=%env.BIG_BOARD_DB_NAME%"
+              user: %env.BIG_BOARD_DB_USERNAME%
+              password: %env.BIG_BOARD_DB_PASSWORD%
               attributes:
   runtime:
       defaultConnection: palindrome
