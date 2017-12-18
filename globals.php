@@ -16,7 +16,9 @@ Global $slackDomain;
 
 // - - - - - - - - - -
 // EDITABLE. Change these:
-$slackDomain = "palindrome2018";
+$slackDomain             = "palindrome2018";
+$google_client_id        = "938479797888";
+$google_application_name = "Palindrome Big Board";
 // - - - - - - - - - -
 
 // ALERT
@@ -135,8 +137,8 @@ if (!$pal_client) {
 	// SET UP GOOGLE_CLIENT OBJECT
 	$pal_client = new Google_Client();
 	$pal_client->setAccessType("offline");
-	$pal_client->setApplicationName("Palindrome Big Board");
-	$pal_client->setClientId('938479797888.apps.googleusercontent.com');
+	$pal_client->setApplicationName($google_application_name);
+	$pal_client->setClientId($google_client_id.".apps.googleusercontent.com");
 	$pal_client->setClientSecret(getenv('GOOGLE_CLIENT_SECRET'));
 	$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']."/oauth");
 
