@@ -14,9 +14,10 @@ session_start();
 
 Global $slackDomain;
 
-// EDITABLE
-// TODO: Change these:
+// - - - - - - - - - -
+// EDITABLE. Change these:
 $slackDomain = "palindrome2018";
+// - - - - - - - - - -
 
 // ALERT
 $_SESSION['alert'] = "";
@@ -136,7 +137,6 @@ if (!$pal_client) {
 	$pal_client->setAccessType("offline");
 	$pal_client->setApplicationName("Palindrome Big Board");
 	$pal_client->setClientId('938479797888.apps.googleusercontent.com');
-	// TODO: put the following in a environment variable
 	$pal_client->setClientSecret(getenv('GOOGLE_CLIENT_SECRET'));
 	$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']."/oauth");
 

@@ -109,7 +109,6 @@ function is_in_palindrome($pal_drive) {
 		$hunt_folder = $pal_drive->files->get("0B5NGrtZ8ORMrYzY0MzFjYWEtZDRkZC00ZDNhLTg2N2YtZDljM2FiNmJhMjg5");
 		debug("userPermission.id: ".$hunt_folder["userPermission"]["id"]);
 		if ($hunt_folder["userPermission"]["id"] == "me") {
-			// TODO: set up both user and user_id session vars
 			$member = new Member();
 			$member->setFullName($user_full_name);
 			$member->setGoogleId($user_google_id);
