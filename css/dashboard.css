@@ -2613,11 +2613,16 @@ h2 {
   .sidebar .nav-link {
     border-radius: 0; }
 
+.progress {
+  height: 1.2rem;
+  background: #B2E0FF;
+  border: 1px solid #B2E0FF; }
+
 .progress-open {
-  background-color: #dadada; }
+  background-color: white; }
 
 .progress-solved {
-  background-color: #f7f7f7; }
+  background-color: #B2E0FF; }
 
 .progress-stuck {
   background-color: #FFEFE5; }
@@ -2634,10 +2639,6 @@ aside {
   font-weight: bold;
   text-transform: uppercase;
   color: #777; }
-
-.progress {
-  height: 1.2rem;
-  background: #006AD8; }
 
 .add-puzzles-to-meta {
   font-size: 1rem; }
@@ -2669,7 +2670,7 @@ aside {
       text-decoration: none; }
 
 [data-filter=solved] {
-  background: #f7f7f7;
+  background: #B2E0FF;
   opacity: .65; }
 
 [data-filter=stuck] {

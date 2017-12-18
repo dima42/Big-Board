@@ -40,7 +40,7 @@
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
-$solved: #f7f7f7;
+$solved: #B2E0FF;
 $stuck: #FFEFE5;
 $priority: #FFD1B2;
 
@@ -117,8 +117,14 @@ h2 {
 
 // PROGRESS
 
+.progress {
+    height: 1.2rem;
+    background:$solved;
+    border: 1px solid $solved;
+}
+
 .progress-open {
-    background-color: $open;
+    background-color: white;
 }
 
 .progress-solved {
@@ -159,11 +165,6 @@ aside {
 }
 
 // PUZZLE LISTS
-
-.progress {
-    height: 1.2rem;
-    background:#006AD8;
-}
 
 .add-puzzles-to-meta {
     font-size: 1rem;

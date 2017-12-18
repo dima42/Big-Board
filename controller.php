@@ -301,6 +301,7 @@ function displayAll() {
 	render('all.twig', 'all', array(
 			'statusCounts'       => $statusCounts,
 			'unsolved_count'     => $unsolved_count,
+			'solved_percentage'  => 100*($total_puzzle_count-$unsolved_count)/$total_puzzle_count,
 			'total_puzzle_count' => $total_puzzle_count,
 		));
 }
