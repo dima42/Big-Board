@@ -90,8 +90,7 @@ class Puzzle extends BasePuzzle {
 			addNews($news_text, $newStatus, $this);
 
 			// POST TO SLACK
-			$channel = "sandbox";
-			// $channel = $this->getSlackChannel(); // TODO: uncomment this line
+			$channel = $this->getSlackChannel();
 			postToSlack('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
 			postToGeneral('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot");
 		} else {
@@ -188,8 +187,7 @@ class Puzzle extends BasePuzzle {
 	public function postJoin($member) {
 		$memberCount = $this->countMembers();
 
-		$channel = "sandbox";
-		// $channel     = $this->getSlackChannel(); // TODO: uncomment
+		$channel = $this->getSlackChannel();
 
 		inviteToSlackChannel($this->getSlackChannelId(), $member->getSlackID());
 
@@ -212,8 +210,7 @@ class Puzzle extends BasePuzzle {
 	public function postLeave($member) {
 		$memberCount = $this->countMembers();
 
-		$channel = "sandbox";
-		// $channel     = $this->getSlackChannel(); // TODO: uncomment
+		$channel = $this->getSlackChannel();
 
 		if ($memberCount > 0) {
 			$this->postMembers($member->getNameForSlack().' left *'.$this->getTitle().'*. Current roster:', $channel);
@@ -251,8 +248,7 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function postNoteToSlack($note) {
-		$channel = "sandbox";
-		// $channel     = $this->getSlackChannel(); // TODO: uncomment
+		$channel = $this->getSlackChannel();
 
 		postToSlack(
 			'*'.$note->getAuthor()->getFullName().'* posted a note:',

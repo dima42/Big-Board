@@ -58,16 +58,13 @@ function inviteToSlackChannel($channel_id, $member_id) {
 	return $response;
 }
 
-// TODO: change default channel big-board
 function postToGeneral($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {
-	// $channel = "general"; TODO: Uncomment
-	$channel = "sandbox";
+	$channel = "general";
 	return postToSlack($message, $attachments, $icon, $bot_name, $channel);
 }
 
 function postToBigBoard($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {
-	// $channel = "big-board"; TODO: Uncomment
-	$channel = "sandbox";
+	$channel = "big-board";
 	return postToSlack($message, $attachments, $icon, $bot_name, $channel);
 }
 
