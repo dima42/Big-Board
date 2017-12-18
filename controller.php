@@ -627,8 +627,7 @@ function addPuzzle($request, $response) {
 
 			// POST TO SLACK CHANNEL
 			postToSlack('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), ":hatching_chick:", "NewPuzzleBot", $newPuzzle->getSlackChannel());
-			postToGeneral('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), ":hatching_chick:", "NewPuzzleBot");
-			;
+			postToGeneral('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentMedium(), ":hatching_chick:", "NewPuzzleBot");
 		}
 	}
 
