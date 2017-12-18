@@ -110,7 +110,6 @@ class Bot {
 				$payload = ["text" => "Hi there! Before you can use `".$request->command."`, I need to know who you are. Click this link then try the command again:
 http://team-palindrome.herokuapp.com/assign_slack_id/".$user_id];
 			} else {
-				// TODO: instead of requiring a fake method call ($bot->execute), just package this all up in the constructor? Or actually make an execute method instead of __call
 				$payload = call_user_func_array(array($this, $command), $args);
 			}
 		}

@@ -44,7 +44,6 @@ $klein->respond(function () use ($pal_client, $pal_drive) {
 
 $klein->dispatch();
 
-// TODO: How to notice if they have cookies turned off and alert them
 function is_authorized($pal_client) {
 	// If no access_token in session, check the cookies
 	if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) {

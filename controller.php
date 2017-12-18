@@ -523,7 +523,6 @@ function archivePuzzleNote($note_id, $puzzle_id) {
 // ADDING PUZZLES
 
 function displayAdd($meta_id = '') {
-	// TODO: We use this on /bymeta too. Abstract to generated-class?
 	$metas = PuzzlePuzzleQuery::create()
 		->joinWith('PuzzlePuzzle.Parent')
 		->where('puzzle_id = parent_id')
