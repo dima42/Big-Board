@@ -2635,10 +2635,10 @@ aside {
   aside small {
     display: block; }
 
-.latest-news, .solvers {
+.latest-news, .subhead {
   font-weight: bold;
   text-transform: uppercase;
-  color: #777; }
+  color: #aaa; }
 
 .add-puzzles-to-meta {
   font-size: 1rem; }

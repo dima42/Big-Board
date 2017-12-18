@@ -20,6 +20,7 @@
 
     {% block aside_bottom %}{% endblock %}
 
+    <p>
     <small>
     <a href="/about">About this site</a><br>
     HQ: 4-159, 4-146, 4-145<br>
@@ -29,7 +30,8 @@
     {{ now }}
     {# Page will reload every 180 seconds automatically. #}
     </small>
+    </p>
 
-    <P>{{ error }}</p>
+    {% block aside_footer %}{% endblock %}
 </aside>
 {% endblock %}

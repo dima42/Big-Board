@@ -157,7 +157,7 @@ aside {
 %card-subhead {
     font-weight: bold;
     text-transform: uppercase;
-    color: #777;
+    color: #aaa;
 }
 
 .latest-news {
@@ -271,7 +271,7 @@ aside {
     }
 }
 
-.solvers {
+.subhead {
     @extend %card-subhead;
 }
 

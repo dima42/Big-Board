@@ -17,33 +17,27 @@
 
 <h1>{{ member.fullName }}</h1>
 
-{% if member.strengths %}
 <p>
-    {{ member.strengths }}
+    {% if member.strengths %}
+        {{ member.strengths }}<br>
+    {% endif %}
+
+    {% if is_user and member.slackId %}
+        <img src="/img/slack.png" width="15px" alt=""> {{ member.slackId }}
+    {% endif %}
 </p>
-{% endif %}
 
 {% from 'macros.twig' import puzzle_table %}
 {{ puzzle_table() }}
 {% endblock %}
 
 {% block aside %}
-<div class="card mb-3">
-    <div class="card-body">
-        <small class="solvers">You are logged in as</small>
-        <a href="/you"><strong>{{ user.fullName }}</strong></a><br>
-        {{ user.strengths|default("(No strengths listed) 😿") }}<br>
-        {% if user.slackId %}
-            <img src="/img/slack.png" width="15px" alt=""> {{ user.slackId }}
-        {% endif %}
-    </div>
-    <div class="card-footer">
-        <a href="/member/edit">Edit your profile</a>
-    </div>
+<div class="mb-3">
+    <a class="btn btn-dark border border-dark" href="/member/edit">✏️  &nbsp; Edit your profile</a>
 </div>
 {% endblock %}
 
-{% block aside_bottom %}
+{% block aside_footer %}
 <div class="mb-3">
     <form action="/logout" method="get">
         <button type="submit" class="btn border border-dark text-dark" href="">✌ &nbsp; Log out of BB</button>

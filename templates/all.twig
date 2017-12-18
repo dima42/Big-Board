@@ -59,21 +59,16 @@
 {{ puzzle_table() }}
 {% endblock %}
 
-{% block aside_bottom %}
+{% block aside %}
     <div class="card mb-3">
         <div class="card-body">
-            <small class="solvers">You are logged in as</small>
-            <strong>{{ user.fullName }}</strong><br>
+            <small class="subhead">You are</small>
+            <a href="/you"><strong>{{ user.fullName }}</strong></a><br>
+            <small class="subhead">Working on</small>
 
-            {% if user.slackId %}
-                <img src="/img/slack.png" width="15px" alt=""> {{ user.slackId }}<br>
-            {% endif %}
             {% for user_puzzle in user_puzzles %}
                 <a href="/puzzle/{{ user_puzzle.id }}">{{ user_puzzle.title }}</a><br>
             {% endfor %}
-        </div>
-        <div class="card-footer">
-            <a href="/member/{{ user.id }}/edit">Edit your profile</a>
         </div>
     </div>
 {% endblock %}
