@@ -30,13 +30,13 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($pal_client
 $klein->respond(function () use ($pal_client, $pal_drive) {
 		if (!is_authorized($pal_client)) {
 			$authUrl = $pal_client->createAuthUrl();
-			return render('loggedout.twig', array(
+			return render('loggedout.twig', 'loggedout', array(
 					'auth_url' => $authUrl,
 				));
 		}
 
 		if (!is_in_palindrome($pal_drive)) {
-			return render('buggeroff.twig');
+			return render('buggeroff.twig', 'buggeroff');
 		}
 
 		return show_content();
