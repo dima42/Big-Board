@@ -2616,7 +2616,7 @@ h2 {
 .progress {
   height: 1.2rem;
   background: #f7f7f7;
-  border: 1px solid #f7f7f7; }
+  border: 1px solid #ddd; }
 
 .progress-open {
   background-color: white; }
