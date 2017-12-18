@@ -743,10 +743,10 @@ function postNews($text) {
 	$member = $_SESSION['user'];
 	addNews($text, "important", null, $member);
 	postToGeneral(
-		'*IMPORTANT NEWS* from '.$member->getFullName(), [
-			"text"  => $text,
-			"color" => "#ff0000",
-		],
+		'*IMPORTANT NEWS* from '.$member->getFullName(), [[
+				"text"  => $text,
+				"color" => "#ff0000",
+			]],
 		":mega:",
 		"NewsBot"
 	);
