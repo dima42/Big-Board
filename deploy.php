@@ -27,9 +27,11 @@ set('allow_anonymous_stats', false);
 desc('Rebuild model');
 task('rebuild', function () {
 		$result = run('propel model:build');
-		$result2 = run('composer dump-autoload');
 		writeln($result);
+		$result2 = run('propel sql:build --overwrite');
 		writeln($result2);
+		$result3 = run('composer dump-autoload');
+		writeln($result3);
 	});
 
 desc('Generate SQL changes');
