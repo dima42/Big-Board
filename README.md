@@ -89,3 +89,25 @@ Define these locally and Heroku.
 - `TOBYBOT_VERIFICATION_TOKEN` - Verification Token, listed under Basic Information. 24 characters long.
 - `BIGBOARDBOT_SLACK_KEY` - Bot User OAuth Access Token for a standard bot. Starts with `xoxb`.
 
+## Set up local app
+
+Run:
+
+`composer update --ignore-platform-reqs`
+
+At this point, make sure all the installed libraries (which are probably at `vendor/bin/`) are on your PATH. Then run:
+
+```
+composer dump-autoload
+propel config:convert
+propel sql:insert
+```
+
+## Push to Heroku
+
+To set up the DB on Heroku, first push, then run:
+
+```
+heroku run bash
+propel sql:insert
+```
