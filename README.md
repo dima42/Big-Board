@@ -72,18 +72,18 @@ Provision a MySQL add-on. I used ClearDB. Create a DB. Note your:
 
 Define these locally and Heroku.
 
-*Database configuration*
+**Database configuration**
 
 - `BIG_BOARD_DB_HOST`
 - `BIG_BOARD_DB_NAME`
 - `BIG_BOARD_DB_USERNAME`
 - `BIG_BOARD_DB_PASSWORD`
 
-*Google Drive configuration*
+**Google Drive configuration**
 
 - `GOOGLE_CLIENT_SECRET`
 
-*Slack configuration*
+**Slack configuration**
 
 - `TOBYBOT_SLACK_KEY` - OAuth Acces token. Starts with `xoxa`.
 - `TOBYBOT_VERIFICATION_TOKEN` - Verification Token, listed under Basic Information. 24 characters long.
@@ -93,9 +93,11 @@ Define these locally and Heroku.
 
 Run:
 
-`composer update --ignore-platform-reqs`
+```
+composer update --ignore-platform-reqs
+```
 
-At this point, make sure all the installed libraries (which are probably at `vendor/bin/`) are on your PATH. Then run:
+At this point, make sure all the installed libraries (which are at `vendor/bin/`) are on your PATH. Then run:
 
 ```
 composer dump-autoload
