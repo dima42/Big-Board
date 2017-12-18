@@ -105,7 +105,7 @@ class Bot {
 
 		$command = substr($request->command, 1);
 
-		if ($request->token == getenv('PALINDROME_SLACKBOT_TOKEN') && $user_id) {
+		if ($request->token == getenv('TOBYBOT_VERIFICATION_TOKEN') && $user_id) {
 			if (!$member) {
 				$payload = ["text" => "Hi there! Before you can use `".$request->command."`, I need to know who you are. Click this link then try the command again:
 http://team-palindrome.herokuapp.com/assign_slack_id/".$user_id];
