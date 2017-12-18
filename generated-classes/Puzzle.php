@@ -146,8 +146,8 @@ class Puzzle extends BasePuzzle {
 	public function getSlackAttachmentMedium() {
 		$content = [
 			':boar: <'.$this  ->getBigBoardURL().'|Big Board> ',
-			':mit: <'.$this   ->getUrl().'|Puzzle page>',
-			':drive: <'.$this ->getSpreadsheetURL().'|Spreadsheet> ',
+			':mit: <'.$this   ->getUrl().'|Puzzle>',
+			':drive: <'.$this ->getSpreadsheetURL().'|Sheet> ',
 			':slack: <#'.$this->getSlackChannelId().'|'.$this->getSlackChannel().'>'
 		];
 
