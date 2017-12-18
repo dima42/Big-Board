@@ -4,29 +4,31 @@
 
 - PHP 7+
 - MySQL
-- Composer
+- [Composer](https://getcomposer.org/)
 
 ## Set up Slack
+
+### Channels
 
 - Make a `#big-board` channel.
 
 ### Bots
 
-You'll need to create two bots:
+You'll need to create two bots
 
-### 1. *Big Board Bot*.
+#### Big Board Bot
 
 1. Go to https://api.slack.com/apps
-2. Click *Create New App*.
+2. Click **Create New App**.
 3. _Don't_ click the "Interested in the next generation of apps?" link.
 4.  Name it whatever you'd like and choose your team's workspace.
 5.  Under Bot User, name it whatever you'd like.
 6.  Under OAuth & Permissions > Scopes, add `bot` permissions.
 
-### 2. *TobyBot*.
+#### TobyBot
 
 1. Go to https://api.slack.com/apps
-2. Click *Create New App*.
+2. Click **Create New App**.
 3. _Do_ click the "Interested in the next generation of apps?" link. This will take you to the Developer Previvew page.
 4. Click "Create a developer preview app".
 5. Name it TobyBot and choose your team's workspace.
@@ -44,6 +46,18 @@ You'll need to create two bots:
     - `users:write`
 
 ## Set up Google API project
+
+1. [Go here](https://console.developers.google.com/apis/credentials)
+2. Click "Create credentials". Choose "OAuth client ID".
+3. Add Authorized JavaScript origins
+    - `http://localhost:8888`
+    - `http://[YOURAPP].herokuapp.com`
+4. Add Authorized redirect URIs:
+    - `http://localhost:8888`
+    - `http://localhost:8888/oauth`
+    - `http://[YOURAPP].herokuapp.com`
+    - `http://[YOURAPP].herokuapp.com/oauth`
+5. Note your Client ID and Client secret.
 
 ## Set up Heroku instance
 
