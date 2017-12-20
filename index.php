@@ -105,7 +105,7 @@ function is_in_palindrome($pal_drive) {
 	// If it's a new user, make sure they have access to our drive
 	$hunt_folder = new Google_DriveFile();
 	try {
-		$hunt_folder = $pal_drive->files->get("0B5NGrtZ8ORMrYzY0MzFjYWEtZDRkZC00ZDNhLTg2N2YtZDljM2FiNmJhMjg5");
+		$hunt_folder = $pal_drive->files->get(getenv('GOOGLE_DRIVE_ID'));
 		debug("userPermission.id: ".$hunt_folder["userPermission"]["id"]);
 		if ($hunt_folder["userPermission"]["id"] == "me") {
 			$member = new Member();

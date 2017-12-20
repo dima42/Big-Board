@@ -107,8 +107,7 @@ class Bot {
 
 		if ($request->token == getenv('TOBYBOT_VERIFICATION_TOKEN') && $user_id) {
 			if (!$member) {
-				$payload = ["text" => "Hi there! Before you can use `".$request->command."`, I need to know who you are. Click this link then try the command again:
-http://team-palindrome.herokuapp.com/assign_slack_id/".$user_id];
+				$payload = ["text" => "Hi there! Before you can use `".$request->command."`, I need to know who you are. Click this link then try the command again: http://".getenv('HEROKU_APP_DOMAIN').".herokuapp.com/assign_slack_id/".$user_id];
 			} else {
 				$payload = call_user_func_array(array($this, $command), $args);
 			}
