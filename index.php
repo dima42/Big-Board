@@ -1,6 +1,5 @@
 <?php
 require_once "globals.php";
-require_once "controller.php";
 
 $klein = new \Klein\Klein();
 
@@ -39,8 +38,16 @@ $klein->respond(function () use ($pal_client, $pal_drive) {
 			return render('buggeroff.twig', 'buggeroff');
 		}
 
-		return show_content();
 	});
+
+// If user not authorized do not allow them to get matched to any remaining routes
+$klein->respond(function () use ($klein, $pal_client, $pal_drive) {
+		if (!is_authorized($pal_client) || !is_in_palindrome($pal_drive)) {
+			$klein->skipRemaining();
+		}
+    });
+
+$klein->with('', 'controller.php');
 
 $klein->dispatch();
 
