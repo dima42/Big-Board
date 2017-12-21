@@ -26,7 +26,7 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($pal_client
 		return redirect("/");
 	});
 
-$klein->respond(function () use ($pal_client, $pal_drive) {
+$klein->respond(function () use ($klein, $pal_client, $pal_drive) {
 		if (!is_authorized($pal_client)) {
 			$authUrl = $pal_client->createAuthUrl();
 			return render('loggedout.twig', 'loggedout', array(
@@ -40,9 +40,9 @@ $klein->respond(function () use ($pal_client, $pal_drive) {
 
 	});
 
-// If user not authorized do not allow them to get matched to any remaining routes
-$klein->respond(function () use ($klein, $pal_client, $pal_drive) {
-		if (!is_authorized($pal_client) || !is_in_palindrome($pal_drive)) {
+// If user not authorized or not in palindrome do not allow them to get matched to any remaining routes
+$klein->respond(function () use ($klein, $pal_client) {
+		if ($pal_client->isAccessTokenExpired() || !is_a($_SESSION['user'], 'Member') > 0) {
 			$klein->skipRemaining();
 		}
     });
