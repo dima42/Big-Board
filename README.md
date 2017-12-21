@@ -70,31 +70,44 @@ Provision a MySQL add-on. I used ClearDB. Create a DB. Note your:
 
 ## Config variables
 
-Define these locally and Heroku.
+Define these locally and Heroku.  Locally: copy `envvars_example.config` to `envvars.config`, fill out the fields, and run `source envars.config`.  On Heroku: config variables are in the settings tab.
+
+Some notes on figuring these out:
 
 **Database configuration**
 
-- `BIG_BOARD_DB_HOST`
-- `BIG_BOARD_DB_NAME`
-- `BIG_BOARD_DB_USERNAME`
-- `BIG_BOARD_DB_PASSWORD`
+
+-- `BIG_BOARD_DB_HOST`
+-- `BIG_BOARD_DB_NAME`
+-- `BIG_BOARD_DB_USERNAME`
+-- `BIG_BOARD_DB_PASSWORD`
+
+On Heroku - there's a `CLEARDB_DATABASE_URL` config variable which is in the format `mysql://BIG_BOARD_DB_USERNAME:BIG_BOARD_DB_PASSWORD@BIG_BOARD_DB_HOST/BIG_BOARD_DB_NAME?reconnect=true`.
+
+Locally - Run mysql and create a database and a user.  host is localhost, the rest is what you set while creating this.
 
 **Google Drive configuration**
 
-- `GOOGLE_CLIENT_SECRET`
+- `GOOGLE_CLIENT_SECRET` and `GOOGLE_CLIENT_ID` - you got these while setting up gooogle credentials earlier
+- `GOOGLE_DRIVE_ID` - go to google drive for your team folder, look at the url - it's the long id string there.  Similarly for `GOOGLE_DOCS_TEMPLATE_ID`
 
 **Slack configuration**
 
-- `TOBYBOT_SLACK_KEY` - OAuth Acces token. Starts with `xoxa`.
+- `SLACK_DOMAIN` - just the id, without any dots or the slack.com domain -- e.g. palindrome2018
+- `TOBYBOT_SLACK_KEY` - OAuth Access token. Starts with `xoxa`.
 - `TOBYBOT_VERIFICATION_TOKEN` - Verification Token, listed under Basic Information. 24 characters long.
 - `BIGBOARDBOT_SLACK_KEY` - Bot User OAuth Access Token for a standard bot. Starts with `xoxb`.
+
+**Other**
+
+- `SIDEBAR_TEAM_INFO` - data that goes in Big Board sidebar.  Semicolon separated;  each semicolon starts a new line.
 
 ## Set up local app
 
 Run:
 
 ```
-composer update --ignore-platform-reqs
+composer install --ignore-platform-reqs
 ```
 
 At this point, make sure all the installed libraries (which are at `vendor/bin/`) are on your PATH. Then run:
@@ -104,6 +117,8 @@ composer dump-autoload
 propel config:convert
 propel sql:insert
 ```
+
+You can run the app locally with e.g. `php -S localhost:8888`
 
 ## Push to Heroku
 

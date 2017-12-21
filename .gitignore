@@ -2,6 +2,7 @@
 .DS_Store
 *.phpintel
 *.php-tmp
+*.swp
 error_log*
 
 /vendor/*
@@ -10,3 +11,4 @@ propel.log
 propel_palindrome.log
 
 generated-conf/config.php
+envvars.config

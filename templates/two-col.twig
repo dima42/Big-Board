@@ -23,10 +23,9 @@
     <p>
     <small>
     <a href="/about">Big Board documentation</a><br>
-    HQ: 4-159, 4-146, 4-145<br>
-    Phone: 617 715-4577<br>
-    <a href="mailto:team-palindrome@mit.edu">team-palindrome@mit.edu</a><br>
-    u: palindrome p: aplanacanal<br>
+    {% for line in sidebarInfo %}
+        {{ line }} <br>
+    {% endfor %}
     {{ now }}
     {# Page will reload every 180 seconds automatically. #}
     </small>
