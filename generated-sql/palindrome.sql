@@ -68,6 +68,8 @@ CREATE TABLE `member`
     `slack_id` VARCHAR(24),
     `slack_handle` VARCHAR(48),
     `strengths` VARCHAR(128),
+    `avatar` VARCHAR(128),
+    `phone_number` VARCHAR(24),
     PRIMARY KEY (`id`),
     UNIQUE INDEX `member_u_060aec` (`full_name`)
 ) ENGINE=InnoDB;
