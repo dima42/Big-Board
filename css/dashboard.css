@@ -2707,6 +2707,16 @@ aside {
   width: 100%;
   text-align: left; }
 
+.avatar {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  border: 1px solid #444;
+  background-size: 100%;
+  vertical-align: middle;
+  margin: 3px 3px 3px 0; }
+
 .note-row, .news-row {
   padding: .8em 0;
   border-bottom: 1px solid #eee; }
