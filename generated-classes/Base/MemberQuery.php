@@ -27,6 +27,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery orderBySlackId($order = Criteria::ASC) Order by the slack_id column
  * @method     ChildMemberQuery orderBySlackHandle($order = Criteria::ASC) Order by the slack_handle column
  * @method     ChildMemberQuery orderByStrengths($order = Criteria::ASC) Order by the strengths column
+ * @method     ChildMemberQuery orderByAvatar($order = Criteria::ASC) Order by the avatar column
+ * @method     ChildMemberQuery orderByPhoneNumber($order = Criteria::ASC) Order by the phone_number column
  *
  * @method     ChildMemberQuery groupById() Group by the id column
  * @method     ChildMemberQuery groupByFullName() Group by the full_name column
@@ -35,6 +37,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery groupBySlackId() Group by the slack_id column
  * @method     ChildMemberQuery groupBySlackHandle() Group by the slack_handle column
  * @method     ChildMemberQuery groupByStrengths() Group by the strengths column
+ * @method     ChildMemberQuery groupByAvatar() Group by the avatar column
+ * @method     ChildMemberQuery groupByPhoneNumber() Group by the phone_number column
  *
  * @method     ChildMemberQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildMemberQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -85,7 +89,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMember findOneByGoogleRefresh(string $google_refresh) Return the first ChildMember filtered by the google_refresh column
  * @method     ChildMember findOneBySlackId(string $slack_id) Return the first ChildMember filtered by the slack_id column
  * @method     ChildMember findOneBySlackHandle(string $slack_handle) Return the first ChildMember filtered by the slack_handle column
- * @method     ChildMember findOneByStrengths(string $strengths) Return the first ChildMember filtered by the strengths column *
+ * @method     ChildMember findOneByStrengths(string $strengths) Return the first ChildMember filtered by the strengths column
+ * @method     ChildMember findOneByAvatar(string $avatar) Return the first ChildMember filtered by the avatar column
+ * @method     ChildMember findOneByPhoneNumber(string $phone_number) Return the first ChildMember filtered by the phone_number column *
 
  * @method     ChildMember requirePk($key, ConnectionInterface $con = null) Return the ChildMember by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMember requireOne(ConnectionInterface $con = null) Return the first ChildMember matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -97,6 +103,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMember requireOneBySlackId(string $slack_id) Return the first ChildMember filtered by the slack_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMember requireOneBySlackHandle(string $slack_handle) Return the first ChildMember filtered by the slack_handle column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMember requireOneByStrengths(string $strengths) Return the first ChildMember filtered by the strengths column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMember requireOneByAvatar(string $avatar) Return the first ChildMember filtered by the avatar column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMember requireOneByPhoneNumber(string $phone_number) Return the first ChildMember filtered by the phone_number column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMember[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMember objects based on current ModelCriteria
  * @method     ChildMember[]|ObjectCollection findById(int $id) Return ChildMember objects filtered by the id column
@@ -106,6 +114,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMember[]|ObjectCollection findBySlackId(string $slack_id) Return ChildMember objects filtered by the slack_id column
  * @method     ChildMember[]|ObjectCollection findBySlackHandle(string $slack_handle) Return ChildMember objects filtered by the slack_handle column
  * @method     ChildMember[]|ObjectCollection findByStrengths(string $strengths) Return ChildMember objects filtered by the strengths column
+ * @method     ChildMember[]|ObjectCollection findByAvatar(string $avatar) Return ChildMember objects filtered by the avatar column
+ * @method     ChildMember[]|ObjectCollection findByPhoneNumber(string $phone_number) Return ChildMember objects filtered by the phone_number column
  * @method     ChildMember[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -204,7 +214,7 @@ abstract class MemberQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, full_name, google_id, google_refresh, slack_id, slack_handle, strengths FROM member WHERE id = :p0';
+        $sql = 'SELECT id, full_name, google_id, google_refresh, slack_id, slack_handle, strengths, avatar, phone_number FROM member WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -483,6 +493,56 @@ abstract class MemberQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MemberTableMap::COL_STRENGTHS, $strengths, $comparison);
+    }
+
+    /**
+     * Filter the query on the avatar column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAvatar('fooValue');   // WHERE avatar = 'fooValue'
+     * $query->filterByAvatar('%fooValue%', Criteria::LIKE); // WHERE avatar LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $avatar The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildMemberQuery The current query, for fluid interface
+     */
+    public function filterByAvatar($avatar = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($avatar)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(MemberTableMap::COL_AVATAR, $avatar, $comparison);
+    }
+
+    /**
+     * Filter the query on the phone_number column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPhoneNumber('fooValue');   // WHERE phone_number = 'fooValue'
+     * $query->filterByPhoneNumber('%fooValue%', Criteria::LIKE); // WHERE phone_number LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $phoneNumber The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildMemberQuery The current query, for fluid interface
+     */
+    public function filterByPhoneNumber($phoneNumber = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($phoneNumber)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(MemberTableMap::COL_PHONE_NUMBER, $phoneNumber, $comparison);
     }
 
     /**

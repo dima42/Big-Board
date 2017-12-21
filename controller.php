@@ -182,33 +182,20 @@ function displayError($error) {
 }
 
 function displayTest($response) {
-	$puzzle = PuzzleQuery::create()
-		->filterByID(156)
-		->findOne();
-
 	$member = $_SESSION['user'];
 
-	$answer = inviteToSlackChannel($puzzle->getSlackChannelId(), $member->getSlackId());
+	$commander = getSlackCommander();
 
-	// $channel = "sandbox";
-	// $answer  = postToSlack('*'.$puzzle->getTitle().'* is solved: `'.$puzzle->getSolution().'`', $puzzle->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
+	$answer = $commander->execute('users.info', [
+			'user' => $member->getSlackId()
+		]);
 
-	// $answer = postToGeneral(
-	// 	' help is needed on *'.$puzzle->getTitle().'*!',
-	// 	$puzzle->getSlackAttachmentMedium(),
-	// 	":bell:",
-	// 	"StatusBot"
-	// );
+	// Avatar options: image_24, 32, 48, 72, 192, 512, 1024
+	$avatar = $answer->getBody()['user']['profile']['image_192'];
+	$member->setAvatar($avatar);
+	$member->save();
 
-	// $answer = createNewSlackChannel("test".rand(100, 999));
-	// $answer = getSlackChannelID("sandbox");
-
-	// $body = $answer->getBody();
-	// preprint($body);
-	// return;
-
-	// preprint($answer->toArray());
-	preprint($answer);
+	preprint($avatar);
 	return;
 
 	render('test.twig', '', array(
@@ -276,7 +263,7 @@ function allMembers($response) {
 		->leftJoin('PuzzleMember')
 		->withColumn('PuzzleMember.PuzzleId', 'PuzzleId')
 		->orderByFullName()
-		->select(array('FullName', 'Strengths', 'SlackId', 'PuzzleId'))
+		->select(array('FullName', 'Strengths', 'PhoneNumber', 'SlackId', 'PuzzleId'))
 		->find()
 		->toArray();
 
@@ -657,6 +644,7 @@ function displayRoster() {
 	$puzzles_with_members = PuzzleQuery::create()
 		->joinWith('PuzzleMember')
 		->orderBy('Title')
+		->groupBy('Title')
 		->select(['Id', 'Title'])
 		->find();
 
@@ -693,6 +681,7 @@ function saveMember($request) {
 
 	$member->setFullName($request->full_name);
 	$member->setStrengths($request->strengths);
+	$member->setPhoneNumber($request->phone_number);
 	if (isset($request->slack_id)) {
 		$member->setSlackId($request->slack_id);
 	}
@@ -711,7 +700,9 @@ function assignSlackId($slack_id) {
 
 	$_SESSION['user'] = $member;
 
-	$message = "Thanks! Saved your Slack ID.";
+	scrapeAvatar($member);
+
+	$message = "Thanks! Saved your Slack ID and grabbed your avatar.";
 	redirect('/member/'.$member->getId(), $message);
 }
 

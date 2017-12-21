@@ -99,8 +99,9 @@
     {% if puzzle.status != "solved" %}
     <div class="card mb-3">
         <div class="card-body">
-            <small class="solvers">SOLVERS</small>
+            <small class="subhead">SOLVERS</small>
             {% for member in members %}
+                <a style="background-image:url({{ member.avatar }});" href="http://{{ slackDomain }}.slack.com/team/{{ SlackId }}" class="avatar"></a>
                 {{ member.fullName }}<br>
             {% else %}
                 No one 😔

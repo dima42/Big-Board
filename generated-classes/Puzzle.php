@@ -30,7 +30,7 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function getSlackURL() {
-		return "http://".getenv('SLACK_DOMAIN').".slack.com/messages/" .$this->getSlackChannel();
+		return "http://".getenv('SLACK_DOMAIN').".slack.com/messages/".$this->getSlackChannel();
 	}
 
 	public function getSpreadsheetURL() {
@@ -212,10 +212,10 @@ class Puzzle extends BasePuzzle {
 		$channel = $this->getSlackChannel();
 
 		if ($memberCount > 0) {
-			$this->postMembers($member->getNameForSlack().' left *'.$this->getTitle().'*. Current roster:', $channel);
+			$this->postMembers($member->getFullName().' left *'.$this->getTitle().'*. Current roster:', $channel);
 		} else {
 			postToSlack(
-				$member->getNameForSlack().' left *'.$this->getTitle().'*. No members remain.',
+				$member->getFullName().' left *'.$this->getTitle().'*. No members remain.',
 				[],
 				":wave:",
 				"JoinBot",
@@ -228,7 +228,7 @@ class Puzzle extends BasePuzzle {
 		$members = $this->getMembers();
 		$text    = [];
 		foreach ($members as $key => $member) {
-			$text[] = $member->getNameForSlack();
+			$text[] = $member->getFullName();
 		}
 		return join("\n", $text);
 	}

@@ -88,6 +88,21 @@ function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = 
 	return $response;
 }
 
+function scrapeAvatar($member) {
+	$commander      = getSlackCommander();
+	$slack_response = $commander->execute('users.info', [
+			'user' => $member->getSlackId()
+		]);
+
+	$response_body = $slack_response->getBody();
+	if ($response_body['ok'] == 1) {
+		// Avatar options: image_24, 32, 48, 72, 192, 512, 1024
+		$avatar = $slack_response->getBody()['user']['profile']['image_192'];
+		$member->setAvatar($avatar);
+		$member->save();
+	}
+}
+
 // SLACK BOT
 
 class Bot {
@@ -107,13 +122,25 @@ class Bot {
 
 		if ($request->token == getenv('TOBYBOT_VERIFICATION_TOKEN') && $user_id) {
 			if (!$member) {
-				$payload = ["text" => "Hi there! Before you can use `".$request->command."`, I need to know who you are. Click this link then try the command again: http://".getenv('HEROKU_APP_DOMAIN').".herokuapp.com/assign_slack_id/".$user_id];
+				$payload = ["text" => "Hi there! Before you can use `".$request->command."`, I need to know who you are. Click this link then try the command again: http://".getenv('APP_DOMAIN')."/assign_slack_id/".$user_id];
 			} else {
 				$payload = call_user_func_array(array($this, $command), $args);
+				// If this user doesn't have an avatar, grab it
+				if (!$member->getAvatar()) {
+					scrapeAvatar($member);
+				}
 			}
 		}
 
 		return $response->json($payload);
+	}
+
+	private function avatar($request, $response) {
+		scrapeAvatar($this->member);
+		$channel_response = [
+			"text" => "Avatar scraped"
+		];
+		return $channel_response;
 	}
 
 	private function connect($request, $response) {

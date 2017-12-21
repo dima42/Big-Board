@@ -122,6 +122,20 @@ abstract class Member implements ActiveRecordInterface
     protected $strengths;
 
     /**
+     * The value for the avatar field.
+     *
+     * @var        string
+     */
+    protected $avatar;
+
+    /**
+     * The value for the phone_number field.
+     *
+     * @var        string
+     */
+    protected $phone_number;
+
+    /**
      * @var        ObjectCollection|ChildNote[] Collection to store aggregation of ChildNote objects.
      */
     protected $collNotes;
@@ -477,6 +491,26 @@ abstract class Member implements ActiveRecordInterface
     }
 
     /**
+     * Get the [avatar] column value.
+     *
+     * @return string
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * Get the [phone_number] column value.
+     *
+     * @return string
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phone_number;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param int $v new value
@@ -617,6 +651,46 @@ abstract class Member implements ActiveRecordInterface
     } // setStrengths()
 
     /**
+     * Set the value of [avatar] column.
+     *
+     * @param string $v new value
+     * @return $this|\Member The current object (for fluent API support)
+     */
+    public function setAvatar($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->avatar !== $v) {
+            $this->avatar = $v;
+            $this->modifiedColumns[MemberTableMap::COL_AVATAR] = true;
+        }
+
+        return $this;
+    } // setAvatar()
+
+    /**
+     * Set the value of [phone_number] column.
+     *
+     * @param string $v new value
+     * @return $this|\Member The current object (for fluent API support)
+     */
+    public function setPhoneNumber($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->phone_number !== $v) {
+            $this->phone_number = $v;
+            $this->modifiedColumns[MemberTableMap::COL_PHONE_NUMBER] = true;
+        }
+
+        return $this;
+    } // setPhoneNumber()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -672,6 +746,12 @@ abstract class Member implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : MemberTableMap::translateFieldName('Strengths', TableMap::TYPE_PHPNAME, $indexType)];
             $this->strengths = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : MemberTableMap::translateFieldName('Avatar', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->avatar = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : MemberTableMap::translateFieldName('PhoneNumber', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->phone_number = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -680,7 +760,7 @@ abstract class Member implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = MemberTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = MemberTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Member'), 0, $e);
@@ -991,6 +1071,12 @@ abstract class Member implements ActiveRecordInterface
         if ($this->isColumnModified(MemberTableMap::COL_STRENGTHS)) {
             $modifiedColumns[':p' . $index++]  = 'strengths';
         }
+        if ($this->isColumnModified(MemberTableMap::COL_AVATAR)) {
+            $modifiedColumns[':p' . $index++]  = 'avatar';
+        }
+        if ($this->isColumnModified(MemberTableMap::COL_PHONE_NUMBER)) {
+            $modifiedColumns[':p' . $index++]  = 'phone_number';
+        }
 
         $sql = sprintf(
             'INSERT INTO member (%s) VALUES (%s)',
@@ -1022,6 +1108,12 @@ abstract class Member implements ActiveRecordInterface
                         break;
                     case 'strengths':
                         $stmt->bindValue($identifier, $this->strengths, PDO::PARAM_STR);
+                        break;
+                    case 'avatar':
+                        $stmt->bindValue($identifier, $this->avatar, PDO::PARAM_STR);
+                        break;
+                    case 'phone_number':
+                        $stmt->bindValue($identifier, $this->phone_number, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1106,6 +1198,12 @@ abstract class Member implements ActiveRecordInterface
             case 6:
                 return $this->getStrengths();
                 break;
+            case 7:
+                return $this->getAvatar();
+                break;
+            case 8:
+                return $this->getPhoneNumber();
+                break;
             default:
                 return null;
                 break;
@@ -1143,6 +1241,8 @@ abstract class Member implements ActiveRecordInterface
             $keys[4] => $this->getSlackId(),
             $keys[5] => $this->getSlackHandle(),
             $keys[6] => $this->getStrengths(),
+            $keys[7] => $this->getAvatar(),
+            $keys[8] => $this->getPhoneNumber(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1250,6 +1350,12 @@ abstract class Member implements ActiveRecordInterface
             case 6:
                 $this->setStrengths($value);
                 break;
+            case 7:
+                $this->setAvatar($value);
+                break;
+            case 8:
+                $this->setPhoneNumber($value);
+                break;
         } // switch()
 
         return $this;
@@ -1296,6 +1402,12 @@ abstract class Member implements ActiveRecordInterface
         }
         if (array_key_exists($keys[6], $arr)) {
             $this->setStrengths($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setAvatar($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setPhoneNumber($arr[$keys[8]]);
         }
     }
 
@@ -1358,6 +1470,12 @@ abstract class Member implements ActiveRecordInterface
         }
         if ($this->isColumnModified(MemberTableMap::COL_STRENGTHS)) {
             $criteria->add(MemberTableMap::COL_STRENGTHS, $this->strengths);
+        }
+        if ($this->isColumnModified(MemberTableMap::COL_AVATAR)) {
+            $criteria->add(MemberTableMap::COL_AVATAR, $this->avatar);
+        }
+        if ($this->isColumnModified(MemberTableMap::COL_PHONE_NUMBER)) {
+            $criteria->add(MemberTableMap::COL_PHONE_NUMBER, $this->phone_number);
         }
 
         return $criteria;
@@ -1451,6 +1569,8 @@ abstract class Member implements ActiveRecordInterface
         $copyObj->setSlackId($this->getSlackId());
         $copyObj->setSlackHandle($this->getSlackHandle());
         $copyObj->setStrengths($this->getStrengths());
+        $copyObj->setAvatar($this->getAvatar());
+        $copyObj->setPhoneNumber($this->getPhoneNumber());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2540,6 +2660,8 @@ abstract class Member implements ActiveRecordInterface
         $this->slack_id = null;
         $this->slack_handle = null;
         $this->strengths = null;
+        $this->avatar = null;
+        $this->phone_number = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
