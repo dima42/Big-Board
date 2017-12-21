@@ -76,7 +76,13 @@ Some notes on figuring these out:
 
 **Database configuration**
 
-On Heroku - there's a `CLEARDB_DATABASE_URL` config variable which is in the format `mysql://BIG_BOARD_DB_USERNAME:BIG_BOARD_DB_PASSWORD@BIG_BOARD_DB_HOST/BIG_BOARD_DB_NAME?reconnect=true`
+
+-- `BIG_BOARD_DB_HOST`
+-- `BIG_BOARD_DB_NAME`
+-- `BIG_BOARD_DB_USERNAME`
+-- `BIG_BOARD_DB_PASSWORD`
+
+On Heroku - there's a `CLEARDB_DATABASE_URL` config variable which is in the format `mysql://BIG_BOARD_DB_USERNAME:BIG_BOARD_DB_PASSWORD@BIG_BOARD_DB_HOST/BIG_BOARD_DB_NAME?reconnect=true`.
 
 Locally - Run mysql and create a database and a user.  host is localhost, the rest is what you set while creating this.
 
@@ -88,9 +94,13 @@ Locally - Run mysql and create a database and a user.  host is localhost, the re
 **Slack configuration**
 
 - `SLACK_DOMAIN` - just the id, without any dots or the slack.com domain -- e.g. palindrome2018
-- `TOBYBOT_SLACK_KEY` - OAuth Acces token. Starts with `xoxa`.
+- `TOBYBOT_SLACK_KEY` - OAuth Access token. Starts with `xoxa`.
 - `TOBYBOT_VERIFICATION_TOKEN` - Verification Token, listed under Basic Information. 24 characters long.
 - `BIGBOARDBOT_SLACK_KEY` - Bot User OAuth Access Token for a standard bot. Starts with `xoxb`.
+
+**Other**
+
+- `SIDEBAR_TEAM_INFO` - data that goes in Big Board sidebar.  Semicolon separated;  each semicolon starts a new line.
 
 ## Set up local app
 

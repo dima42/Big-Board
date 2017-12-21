@@ -110,7 +110,7 @@ function render($template, $context = "", $vars = array()) {
 	$vars['slackDomain']   = $slackDomain;
 	$vars['googleDriveId'] = getenv('GOOGLE_DRIVE_ID');
 	$vars['huntUrl']       = getenv('HUNT_URL');
-	$vars['sidebarInfo']   = getenv('SIDEBAR_TEAM_INFO');
+	$vars['sidebarInfo']   = explode(";", getenv('SIDEBAR_TEAM_INFO'));
 
 	Global $DEBUG;
 	if ($DEBUG) {
