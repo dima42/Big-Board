@@ -2757,6 +2757,14 @@ body.add.trippy {
   background: transparent url("https://media.giphy.com/media/l378z9JqBTfYDrXUI/source.gif") no-repeat;
   background-size: cover; }
 
+.slack-link {
+  width: 2.5em;
+  padding-left: 0;
+  padding-right: 0; }
+
+.by-puzzle .strengths, .by-puzzle .working-on {
+  display: none; }
+
 .news-row[data-filter=important] {
   background: #ffff99; }
 

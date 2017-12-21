@@ -1,0 +1,8 @@
+<tr>
+    <td class="slack-link">
+        {{#SlackId}}<a href="http://{{ slackDomain }}.slack.com/team/{{ SlackId }}"><img src="/img/slack.png" width="15px" alt=""></a>{{/SlackId}}
+    </td>
+    <td>{{ FullName }}</td>
+    <td class="strengths">{{ Strengths }}</td>
+    <td class="working-on">{{ PuzzleTitle }}</td>
+</tr>

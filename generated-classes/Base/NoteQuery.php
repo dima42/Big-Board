@@ -556,7 +556,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      *
      * @return $this|ChildNoteQuery The current query, for fluid interface
      */
-    public function joinPuzzle($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinPuzzle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Puzzle');
@@ -591,7 +591,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      *
      * @return \PuzzleQuery A secondary query class using the current class as primary query
      */
-    public function usePuzzleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function usePuzzleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinPuzzle($relationAlias, $joinType)
@@ -633,7 +633,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      *
      * @return $this|ChildNoteQuery The current query, for fluid interface
      */
-    public function joinAuthor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinAuthor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Author');
@@ -668,7 +668,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      *
      * @return \MemberQuery A secondary query class using the current class as primary query
      */
-    public function useAuthorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useAuthorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinAuthor($relationAlias, $joinType)

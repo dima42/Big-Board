@@ -26,12 +26,11 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function getBigBoardURL() {
-		return "http://team-palindrome.herokuapp.com/puzzle/".$this->getId();
+		return "http://".getenv("HEROKU_APP_DOMAIN")."/puzzle/".$this->getId();
 	}
 
 	public function getSlackURL() {
-		Global $slackDomain;
-		return "http://$slackDomain.slack.com/messages/" .$this->getSlackChannel();
+		return "http://".getenv('SLACK_DOMAIN').".slack.com/messages/" .$this->getSlackChannel();
 	}
 
 	public function getSpreadsheetURL() {

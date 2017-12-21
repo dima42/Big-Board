@@ -14,3 +14,16 @@
     </tbody>
 </table>
 {% endmacro puzzle_table %}
+
+{% macro member_table(id = 0, title = "Not active") %}
+<section class="pt-2">
+    <span class="anchor-target" id="puzzle-{{ id }}"></span>
+    <h2>
+        <a href="/puzzle/{{ id }}">{{ title }}</a>
+    </h2>
+    <table id="table-{{ id }}" class="table" data-title="{{ title }}">
+        <tbody>
+        </tbody>
+    </table>
+</section>
+{% endmacro member_table %}

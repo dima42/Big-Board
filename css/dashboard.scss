@@ -373,6 +373,24 @@ body.add {
     }
 }
 
+// ROSTER
+
+.slack-link {
+    width: 2.5em;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.by-puzzle {
+    .strengths, .working-on {
+        display: none;
+    }
+}
+
+.by-alpha {
+
+}
+
 // NEWS
 
 .news-row {

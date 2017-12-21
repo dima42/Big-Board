@@ -30,11 +30,9 @@
         Links
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-        <a class="dropdown-item" href="http://palindrome2018.slack.com/messages/general">Slack</a>
-        <a class="dropdown-item" href="https://drive.google.com/drive/u/0/folders/0B5NGrtZ8ORMreUJoSlV2NjFPYVk">Google Drive</a>
-        <a class="dropdown-item" href='https://plus.google.com/hangouts/_/7lw6rz5zwbkiaozrwld6q77ahaa?authuser=0&hl=en'>Hangout 1</a>
-        <a class="dropdown-item" href='https://plus.google.com/hangouts/_/ha2iwh7ioc4ctfnehufqfvomzya?authuser=0&hl=en'>Hangout 2</a>
-        <a class="dropdown-item" href="https://monsters-et-manus.com/">The Hunt</a>
+        <a class="dropdown-item" href="http://{{ slackDomain }}.slack.com/messages/general">Slack</a>
+        <a class="dropdown-item" href="https://drive.google.com/drive/u/0/folders/{{ googleDriveId }}">Google Drive</a>
+        <a class="dropdown-item" href="{{huntUrl}}">The Hunt</a>
       </div>
     </li>
     <li class="nav-item">
@@ -72,5 +70,8 @@
 {% block footer %}{% endblock %}
 
 {% block external_scripts %}
+<script>
+var slackDomain = "{{ slackDomain }}";
+</script>
 <script src="/js/scripts.js"></script>
 {% endblock %}

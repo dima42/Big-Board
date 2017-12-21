@@ -12,15 +12,6 @@ use DebugBar\StandardDebugBar;
 
 session_start();
 
-Global $slackDomain;
-
-// - - - - - - - - - -
-// EDITABLE. Change these:
-$slackDomain             = "palindrome2018";
-$google_client_id        = "938479797888";
-$google_application_name = "Palindrome Big Board";
-// - - - - - - - - - -
-
 // ALERT
 $_SESSION['alert'] = "";
 
@@ -94,7 +85,6 @@ function render($template, $context = "", $vars = array()) {
 		->findOne();
 
 	Global $twig;
-	Global $slackDomain;
 
 	$member = $_SESSION['user']??null;
 	if ($member) {
@@ -102,12 +92,15 @@ function render($template, $context = "", $vars = array()) {
 		$vars['user_id']      = $_SESSION['user_id'];
 		$vars['user_puzzles'] = $member->getPuzzles();
 	}
-	$vars['alert']       = $_SESSION['alert_message']??null;
-	$vars['statuses']    = ['open', 'stuck', 'priority', 'solved'];
-	$vars['now']         = strftime('%c');
-	$vars['latestNews']  = $latestNews;
-	$vars['context']     = $context;
-	$vars['slackDomain'] = $slackDomain;
+	$vars['alert']         = $_SESSION['alert_message']??null;
+	$vars['statuses']      = ['open', 'stuck', 'priority', 'solved'];
+	$vars['now']           = strftime('%c');
+	$vars['latestNews']    = $latestNews;
+	$vars['context']       = $context;
+	$vars['slackDomain']   = getenv('SLACK_DOMAIN');
+	$vars['googleDriveId'] = getenv('GOOGLE_DRIVE_ID');
+	$vars['huntUrl']       = getenv('HUNT_URL');
+	$vars['sidebarInfo']   = explode(";", getenv('SIDEBAR_TEAM_INFO'));
 
 	Global $DEBUG;
 	if ($DEBUG) {
@@ -137,8 +130,8 @@ if (!$pal_client) {
 	// SET UP GOOGLE_CLIENT OBJECT
 	$pal_client = new Google_Client();
 	$pal_client->setAccessType("offline");
-	$pal_client->setApplicationName($google_application_name);
-	$pal_client->setClientId($google_client_id.".apps.googleusercontent.com");
+	$pal_client->setApplicationName(getenv('GOOGLE_APPLICATION_NAME'));
+	$pal_client->setClientId(getenv('GOOGLE_CLIENT_ID').".apps.googleusercontent.com");
 	$pal_client->setClientSecret(getenv('GOOGLE_CLIENT_SECRET'));
 	$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']."/oauth");
 
@@ -149,8 +142,7 @@ function create_file_from_template($title) {
 	Global $pal_drive;
 	$file = new Google_DriveFile();
 	$file->setTitle($title);
-	// 1nXyGRx_EJTXeK7_dpewFnRjzL6eiM7prC6-T02cdMu4 is ID of our Template file, which is inside Mystery Hunt 2018/All Puzzles.
-	$copy = $pal_drive->files->copy('1nXyGRx_EJTXeK7_dpewFnRjzL6eiM7prC6-T02cdMu4', $file);
+	$copy = $pal_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file);
 
 	return $copy['id'];
 }

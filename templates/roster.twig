@@ -1,56 +1,73 @@
 {% extends 'loggedin.twig' %}
 
 {% block filters %}
-<h4 class="nav-link">Filter by</h4>
+<h4 class="nav-link">Order by</h4>
 <ul class="nav nav-pills flex-column" data-filter-list>
     <li class="nav-item">
-        <a data-toggle="tab" class="nav-link" id="all-tab" href="#">All</a>
+        <a data-toggle="tab" class="nav-link" id="by-puzzle-tab" href="#by-puzzle">Puzzle</a>
     </li>
     <li class="nav-item">
-        <a data-toggle="tab" data-filter-by="active" class="nav-link" id="active-tab" href="#">Working</a>
-    </li>
-    <li class="nav-item">
-        <a data-toggle="tab" data-filter-by="inactive" class="nav-link" id="inactve-tab" href="#">Not working</a>
-    </li>
-    <li class="nav-item">
-        <a data-toggle="tab" data-filter-by="strength" class="nav-link" id="active-tab" href="#">Has strength</a>
+        <a data-toggle="tab" class="nav-link" id="by-alpha-tab" href="#by-alpha">Alpha</a>
     </li>
 </ul>
+
+<div class="jump-to-tabs">
+    <h4 class="nav-link">Jump to</h4>
+    <ul class="nav nav-pills flex-column">
+        {% for puzzle in puzzles %}
+        <li class="nav-item">
+            <a class="nav-link" href="#puzzle-{{ puzzle.Id }}">{{ puzzle.Title }}</a>
+        </li>
+        {% endfor %}
+        <li class="nav-item">
+            <a class="nav-link" href="#puzzle-0">Not active</a>
+        </li>
+    </ul>
+</div>
+
 {% endblock %}
 
 {% block content %}
-<h1>Team Palindrome</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th><img src="/img/slack.png" width="15px" alt=""></th>
-            <th>Strengths</th>
-            <th>Working on…</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for person in roster %}
-    <tr data-filter="{{ person.puzzleMembers|length|yesno('active', 'inactive') }} {{ person.strengths|yesno('strength', '') }}">
-        <td>{{ person.fullName }}</td>
-        <th>{% if person.slackID %}<a href="http://palindrome2018.slack.com/team/{{ person.slackId }}"><img src="/img/slack.png" width="15px" alt=""></a>{% endif %}</th>
-        <td>{{ person.strengths }}</td>
-        <td>
-            {% for pm in person.puzzleMembers %}
-                <a href="/puzzle/{{ pm.puzzle.id }}">{{ pm.puzzle.title }}</a><br>
-            {% endfor %}
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="tab-content">
+    <div class="tab-pane by-puzzle" id="by-puzzle">
+
+        {% from 'macros.twig' import member_table %}
+        <h1 class="mb-3">Who's working on what</h1>
+
+        {% for puzzle in puzzles %}
+        {{ member_table(puzzle.Id, puzzle.Title) }}
+        {% endfor %}
+
+        {{ member_table(0) }}
+    </div>
+    <div class="tab-pane by-alpha" id="by-alpha">
+
+        <h1 class="mb-3">Team Palindrome</h1>
+
+        <table id="table-alpha" class="table">
+            <tbody>
+            </tbody>
+        </table>
+
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
 <script>
 $(function() {
     $('.nav a').first().click();
+
+    $('#by-puzzle-tab').on('show.bs.tab', function(e) {
+        $('.jump-to-tabs').show();
+    });
+
+    $('#by-puzzle-tab').on('hide.bs.tab', function(e) {
+        $('.jump-to-tabs').hide();
+    });
+
+    loadMemberData('/members');
 });
 </script>
 {% endblock %}

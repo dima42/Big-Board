@@ -1,6 +1,5 @@
 <?php
 require_once "globals.php";
-require_once "controller.php";
 
 $klein = new \Klein\Klein();
 
@@ -27,7 +26,7 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($pal_client
 		return redirect("/");
 	});
 
-$klein->respond(function () use ($pal_client, $pal_drive) {
+$klein->respond(function () use ($klein, $pal_client, $pal_drive) {
 		if (!is_authorized($pal_client)) {
 			$authUrl = $pal_client->createAuthUrl();
 			return render('loggedout.twig', 'loggedout', array(
@@ -39,8 +38,16 @@ $klein->respond(function () use ($pal_client, $pal_drive) {
 			return render('buggeroff.twig', 'buggeroff');
 		}
 
-		return show_content();
 	});
+
+// If user not authorized or not in palindrome do not allow them to get matched to any remaining routes
+$klein->respond(function () use ($klein, $pal_client) {
+		if ($pal_client->isAccessTokenExpired() || !is_a($_SESSION['user'], 'Member') > 0) {
+			$klein->skipRemaining();
+		}
+	});
+
+$klein->with('', 'controller.php');
 
 $klein->dispatch();
 
@@ -105,7 +112,7 @@ function is_in_palindrome($pal_drive) {
 	// If it's a new user, make sure they have access to our drive
 	$hunt_folder = new Google_DriveFile();
 	try {
-		$hunt_folder = $pal_drive->files->get("0B5NGrtZ8ORMrYzY0MzFjYWEtZDRkZC00ZDNhLTg2N2YtZDljM2FiNmJhMjg5");
+		$hunt_folder = $pal_drive->files->get(getenv('GOOGLE_DRIVE_ID'));
 		debug("userPermission.id: ".$hunt_folder["userPermission"]["id"]);
 		if ($hunt_folder["userPermission"]["id"] == "me") {
 			$member = new Member();

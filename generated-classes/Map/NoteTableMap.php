@@ -153,8 +153,8 @@ class NoteTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('body', 'Body', 'VARCHAR', true, 255, null);
-        $this->addForeignKey('puzzle_id', 'PuzzleId', 'INTEGER', 'puzzle', 'id', true, null, null);
-        $this->addForeignKey('member_id', 'MemberId', 'INTEGER', 'member', 'id', true, null, null);
+        $this->addForeignKey('puzzle_id', 'PuzzleId', 'INTEGER', 'puzzle', 'id', false, null, null);
+        $this->addForeignKey('member_id', 'MemberId', 'INTEGER', 'member', 'id', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
