@@ -657,6 +657,7 @@ function displayRoster() {
 	$puzzles_with_members = PuzzleQuery::create()
 		->joinWith('PuzzleMember')
 		->orderBy('Title')
+		->groupBy('Title')
 		->select(['Id', 'Title'])
 		->find();
 
