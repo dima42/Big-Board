@@ -263,7 +263,7 @@ function allMembers($response) {
 		->leftJoin('PuzzleMember')
 		->withColumn('PuzzleMember.PuzzleId', 'PuzzleId')
 		->orderByFullName()
-		->select(array('FullName', 'Strengths', 'SlackId', 'PuzzleId'))
+		->select(array('FullName', 'Strengths', 'PhoneNumber', 'SlackId', 'PuzzleId'))
 		->find()
 		->toArray();
 
@@ -681,6 +681,7 @@ function saveMember($request) {
 
 	$member->setFullName($request->full_name);
 	$member->setStrengths($request->strengths);
+	$member->setPhoneNumber($request->phone_number);
 	if (isset($request->slack_id)) {
 		$member->setSlackId($request->slack_id);
 	}

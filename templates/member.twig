@@ -24,6 +24,10 @@
         {{ member.strengths }}<br>
     {% endif %}
 
+    {% if member.phoneNumber %}
+        {{ member.phoneNumber }}<br>
+    {% endif %}
+
     {% if is_user and member.slackId %}
         <img src="/img/slack.png" width="15px" alt=""> {{ member.slackId }}
     {% endif %}

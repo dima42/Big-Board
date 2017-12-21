@@ -17,6 +17,12 @@
             <input type="text" class="form-control" name="strengths" value="{{ user.strengths }}" placeholder="e.g. Renaissance art; 15th century crytography; Horses.">
         </div>
     </div>
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label" for="phone_number">Phone number</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" name="phone_number" value="{{ user.phoneNumber }}">
+        </div>
+    </div>
     {% if not user.slackId %}
     <div class="form-group row">
         <label class="col-sm-3 col-form-label" for="slack_handle">Slack User ID</label>
