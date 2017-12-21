@@ -12,3 +12,4 @@ propel_palindrome.log
 
 generated-conf/config.php
 envvars.config
+envvars.sh
