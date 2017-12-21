@@ -5,5 +5,5 @@
     <td>{{ FullName }}</td>
     <td class="phone-number">{{ PhoneNumber }}</td>
     <td class="strengths">{{ Strengths }}</td>
-    <td class="working-on">{{ PuzzleTitle }}</td>
+    <td class="working-on"><a href="/puzzle/{{ PuzzleId }}">{{ PuzzleTitle }}</a></td>
 </tr>
