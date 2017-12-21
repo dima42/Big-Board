@@ -6,11 +6,11 @@ window.setTimeout(function() {
 
 var loadPuzzleData = function(url, callback) {
     $.get(url, {}, function(response) {
-        loadTemplate(response, callback);
+        loadPuzzleTemplate(response, callback);
     });
 };
 
-var loadTemplate = function(response, callback) {
+var loadPuzzleTemplate = function(response, callback) {
     var data = response;
     var now = Date.now();
     $.get('/templates/puzzle_row.mst', function(template) {
@@ -43,6 +43,34 @@ var loadTemplate = function(response, callback) {
         }
     });
 };
+
+var loadMemberData = function(url, callback) {
+    $.get(url, {}, function(response) {
+        loadMemberTemplate(response, callback);
+    });
+};
+
+var loadMemberTemplate = function(response, callback) {
+    $.get('/templates/member_row.mst', function(template) {
+        $.each(response, function(key, memberData) {
+            if(memberData['PuzzleId'] != null) {
+                memberData['PuzzleTitle'] = $('#table-' + memberData['PuzzleId']).data('title');
+            }
+            memberData['slackDomain'] = slackDomain;
+
+            var rendered = Mustache.render(template, memberData);
+            var puzzleID = memberData['PuzzleId'] || 0;
+            var tbody = $('#table-' + puzzleID).find('tbody');
+            tbody.append(rendered);
+
+            $('#table-alpha tbody').append(rendered);
+        });
+        if (callback) {
+            callback();
+        }
+    });
+};
+
 
 $(function() {
     $('[data-filter-list] a').click(function() {

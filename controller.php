@@ -40,6 +40,10 @@ $this->with('/puzzles', function () {
 			});
 	});
 
+$this->respond('GET', '/members', function ($request, $response) {
+		return allMembers($response);
+	});
+
 // PUZZLES
 
 $this->with('/puzzle/[:id]', function () {
@@ -265,6 +269,18 @@ function memberPuzzles($member_id, $response) {
 
 	$puzzles = $member->getPuzzles()->toArray();
 	return $response->json($puzzles);
+}
+
+function allMembers($response) {
+	$members = MemberQuery::create()
+		->leftJoin('PuzzleMember')
+		->withColumn('PuzzleMember.PuzzleId', 'PuzzleId')
+		->orderByFullName()
+		->select(array('FullName', 'Strengths', 'SlackId', 'PuzzleId'))
+		->find()
+		->toArray();
+
+	return $response->json($members);
 }
 
 // PUZZLE LISTS
@@ -638,14 +654,14 @@ function addPuzzle($request, $response) {
 // ROSTER
 
 function displayRoster() {
-	$members = MemberQuery::create()
-		->leftJoinWith('PuzzleMember')
-		->leftJoinWith('PuzzleMember.Puzzle')
-		->orderByFullName()
+	$puzzles_with_members = PuzzleQuery::create()
+		->joinWith('PuzzleMember')
+		->orderBy('Title')
+		->select(['Id', 'Title'])
 		->find();
 
 	render('roster.twig', 'roster', array(
-			'roster' => $members,
+			'puzzles' => $puzzles_with_members,
 		));
 }
 
