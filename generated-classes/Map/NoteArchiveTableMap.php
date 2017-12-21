@@ -158,8 +158,8 @@ class NoteArchiveTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('body', 'Body', 'VARCHAR', true, 255, null);
-        $this->addColumn('puzzle_id', 'PuzzleId', 'INTEGER', true, null, null);
-        $this->addColumn('member_id', 'MemberId', 'INTEGER', true, null, null);
+        $this->addColumn('puzzle_id', 'PuzzleId', 'INTEGER', false, null, null);
+        $this->addColumn('member_id', 'MemberId', 'INTEGER', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('archived_at', 'ArchivedAt', 'TIMESTAMP', false, null, null);
