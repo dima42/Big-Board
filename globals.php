@@ -12,15 +12,6 @@ use DebugBar\StandardDebugBar;
 
 session_start();
 
-Global $slackDomain;
-Global $google_drive_id;
-
-// - - - - - - - - - -
-$slackDomain             = getenv('SLACK_DOMAIN');
-$google_client_id        = getenv('GOOGLE_CLIENT_ID');
-$google_application_name = getenv('GOOGLE_APPLICATION_NAME');
-// - - - - - - - - - -
-
 // ALERT
 $_SESSION['alert'] = "";
 
@@ -94,7 +85,6 @@ function render($template, $context = "", $vars = array()) {
 		->findOne();
 
 	Global $twig;
-	Global $slackDomain;
 
 	$member = $_SESSION['user']??null;
 	if ($member) {
@@ -107,7 +97,7 @@ function render($template, $context = "", $vars = array()) {
 	$vars['now']           = strftime('%c');
 	$vars['latestNews']    = $latestNews;
 	$vars['context']       = $context;
-	$vars['slackDomain']   = $slackDomain;
+	$vars['slackDomain']   = getenv('SLACK_DOMAIN');
 	$vars['googleDriveId'] = getenv('GOOGLE_DRIVE_ID');
 	$vars['huntUrl']       = getenv('HUNT_URL');
 	$vars['sidebarInfo']   = explode(";", getenv('SIDEBAR_TEAM_INFO'));
@@ -140,8 +130,8 @@ if (!$pal_client) {
 	// SET UP GOOGLE_CLIENT OBJECT
 	$pal_client = new Google_Client();
 	$pal_client->setAccessType("offline");
-	$pal_client->setApplicationName($google_application_name);
-	$pal_client->setClientId($google_client_id.".apps.googleusercontent.com");
+	$pal_client->setApplicationName(getenv('GOOGLE_APPLICATION_NAME'));
+	$pal_client->setClientId(getenv('GOOGLE_CLIENT_ID').".apps.googleusercontent.com");
 	$pal_client->setClientSecret(getenv('GOOGLE_CLIENT_SECRET'));
 	$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']."/oauth");
 
@@ -150,7 +140,6 @@ if (!$pal_client) {
 
 function create_file_from_template($title) {
 	Global $pal_drive;
-    Global $google_docs_template_id;
 	$file = new Google_DriveFile();
 	$file->setTitle($title);
 	$copy = $pal_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file);
