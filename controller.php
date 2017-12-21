@@ -2,169 +2,171 @@
 use Cocur\Slugify\Slugify;
 use Propel\Runtime\ActiveQuery\Criteria;
 
-$this->respond('GET', '/test', function ($request, $response) {
-        return displayTest($response);
-    });
+$this->respond('GET', '/test',
+
+function ($request, $response) {
+		return displayTest($response);
+	});
 
 // PUZZLE LISTS
 
 $this->respond('GET', '/', function () {
-        return displayAll();
-    });
+		return displayAll();
+	});
 
 $this->respond('GET', '/bymeta', function () {
-        return displayAllByMeta();
-    });
+		return displayAllByMeta();
+	});
 
 $this->respond('GET', '/loose', function () {
-        return displayLoosePuzzles();
-    });
+		return displayLoosePuzzles();
+	});
 
 $this->with('/puzzles', function () {
-        $this->respond('GET', '/all', function ($request, $response) {
-                return allPuzzles($response);
-            });
-        $this->respond('GET', '/bymeta', function ($request, $response) {
-                return allPuzzlesByMeta($response);
-            });
-        $this->respond('GET', '/loose', function ($request, $response) {
-                return loosePuzzles($response);
-            });
-        $this->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
-                return metaPuzzles($request->meta_id, $response);
-            });
-        $this->respond('GET', '/member/[:member_id]', function ($request, $response) {
-                return memberPuzzles($request->member_id, $response);
-            });
-    });
+		$this->respond('GET', '/all', function ($request, $response) {
+				return allPuzzles($response);
+			});
+		$this->respond('GET', '/bymeta', function ($request, $response) {
+				return allPuzzlesByMeta($response);
+			});
+		$this->respond('GET', '/loose', function ($request, $response) {
+				return loosePuzzles($response);
+			});
+		$this->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
+				return metaPuzzles($request->meta_id, $response);
+			});
+		$this->respond('GET', '/member/[:member_id]', function ($request, $response) {
+				return memberPuzzles($request->member_id, $response);
+			});
+	});
 
 // PUZZLES
 
 $this->with('/puzzle/[:id]', function () {
 
-        $this->respond('GET', '/?', function ($request) {
-                return displayPuzzle($request->id);
-            });
-        $this->respond('GET', '/edit/?', function ($request) {
-                return displayPuzzle($request->id, 'edit');
-            });
-        $this->respond('POST', '/edit/?', function ($request) {
-                return editPuzzle($request->id, $request);
-            });
-        $this->respond('POST', '/solve/?', function ($request) {
-                return solvePuzzle($request->id, $request);
-            });
-        $this->respond('POST', '/change-status/?', function ($request) {
-                return changePuzzleStatus($request->id, $request);
-            });
-        $this->respond('POST', '/add-note/?', function ($request) {
-                return addNote($request->id, $request);
-            });
-        $this->respond('POST', '/join/?', function ($request) {
-                return joinPuzzle($request->id);
-            });
-        $this->respond('POST', '/leave/?', function ($request) {
-                return leavePuzzle($request->id);
-            });
-        $this->respond('POST', '/delete/?', function ($request) {
-                return deletePuzzle($request->id, $request);
-            });
-        $this->respond('POST', '/delete-note/[:note_id]/?', function ($request) {
-                return archivePuzzleNote($request->note_id, $request->id);
-            });
-    });
+		$this->respond('GET', '/?', function ($request) {
+				return displayPuzzle($request->id);
+			});
+		$this->respond('GET', '/edit/?', function ($request) {
+				return displayPuzzle($request->id, 'edit');
+			});
+		$this->respond('POST', '/edit/?', function ($request) {
+				return editPuzzle($request->id, $request);
+			});
+		$this->respond('POST', '/solve/?', function ($request) {
+				return solvePuzzle($request->id, $request);
+			});
+		$this->respond('POST', '/change-status/?', function ($request) {
+				return changePuzzleStatus($request->id, $request);
+			});
+		$this->respond('POST', '/add-note/?', function ($request) {
+				return addNote($request->id, $request);
+			});
+		$this->respond('POST', '/join/?', function ($request) {
+				return joinPuzzle($request->id);
+			});
+		$this->respond('POST', '/leave/?', function ($request) {
+				return leavePuzzle($request->id);
+			});
+		$this->respond('POST', '/delete/?', function ($request) {
+				return deletePuzzle($request->id, $request);
+			});
+		$this->respond('POST', '/delete-note/[:note_id]/?', function ($request) {
+				return archivePuzzleNote($request->note_id, $request->id);
+			});
+	});
 
 // MEMBER
 
 $this->respond('GET', '/me', function () {
-        redirect('/member/'.$_SESSION['user']->getId());
-    });
+		redirect('/member/'.$_SESSION['user']->getId());
+	});
 
 $this->respond('GET', '/you', function () {
-        redirect('/member/'.$_SESSION['user']->getId());
-    });
+		redirect('/member/'.$_SESSION['user']->getId());
+	});
 
 $this->respond('GET', '/member', function () {
-        redirect('/member/'.$_SESSION['user']->getId());
-    });
+		redirect('/member/'.$_SESSION['user']->getId());
+	});
 
 $this->with('/member', function () {
-        $this->respond('GET', '/[i:id]/?', function ($request) {
-                return displayMember($request->id);
-            });
-        $this->respond('GET', '/edit/?', function ($request) {
-                return displayMemberEdit();
-            });
-        $this->respond('POST', '/edit/?', function ($request) {
-                return saveMember($request);
-            });
+		$this->respond('GET', '/[i:id]/?', function ($request) {
+				return displayMember($request->id);
+			});
+		$this->respond('GET', '/edit/?', function ($request) {
+				return displayMemberEdit();
+			});
+		$this->respond('POST', '/edit/?', function ($request) {
+				return saveMember($request);
+			});
 
-    });
+	});
 
 $this->respond('GET', '/assign_slack_id/[:slack_id]', function ($request) {
-        return assignSlackId($request->slack_id);
-    });
+		return assignSlackId($request->slack_id);
+	});
 
 // ROSTER
 
 $this->respond('GET', '/roster', function () {
-        return displayRoster();
-    });
+		return displayRoster();
+	});
 
 // ADDING
 
 $this->with('/add', function () {
 
-        $this->respond('GET', '/?', function ($request) {
-                return displayAdd();
-            });
-        $this->respond('GET', '/[:meta_id]/?', function ($request) {
-                return displayAdd($request->meta_id);
-            });
-        $this->respond('POST', '/?', function ($request, $response) {
-                return addPuzzle($request, $response);
-            });
-    });
+		$this->respond('GET', '/?', function ($request) {
+				return displayAdd();
+			});
+		$this->respond('GET', '/[:meta_id]/?', function ($request) {
+				return displayAdd($request->meta_id);
+			});
+		$this->respond('POST', '/?', function ($request, $response) {
+				return addPuzzle($request, $response);
+			});
+	});
 
 $this->respond('GET', '/puzzle_scrape', function ($request, $response) {
-        return puzzleScrape($request, $response);
-    });
+		return puzzleScrape($request, $response);
+	});
 
 // NEWS
 
 $this->with('/news', function () {
-        $this->respond('GET', '/?', function ($request) {
-                return displayNews("all");
-            });
-        $this->respond('GET', '/[:filter]/?', function ($request) {
-                return displayNews($request->filter);
-            });
-        $this->respond('POST', '/add/?', function ($request) {
-                return postNews($request->body);
-            });
-        $this->respond('POST', '/[:update_id]/delete/?', function ($request) {
-                return archiveNews($request->update_id);
-            });
-    });
+		$this->respond('GET', '/?', function ($request) {
+				return displayNews("all");
+			});
+		$this->respond('GET', '/[:filter]/?', function ($request) {
+				return displayNews($request->filter);
+			});
+		$this->respond('POST', '/add/?', function ($request) {
+				return postNews($request->body);
+			});
+		$this->respond('POST', '/[:update_id]/delete/?', function ($request) {
+				return archiveNews($request->update_id);
+			});
+	});
 
 // ABOUT
 
 $this->respond('GET', '/about', function () {
-        return displayAbout();
-    });
+		return displayAbout();
+	});
 
 // LOGOUT
 
 $this->respond('GET', '/logout', function () {
-        session_unset();
-        setcookie("PAL_ACCESS_TOKEN", "", time()-3600);
-        setcookie("refresh_token", "", time()-3600);
-        return redirect("/");
-    });
+		session_unset();
+		setcookie("PAL_ACCESS_TOKEN", "", time()-3600);
+		setcookie("refresh_token", "", time()-3600);
+		return redirect("/");
+	});
 
 function redirect($location, $message = "", $alert_type = "info") {
-$_SESSION['alert_message'] = array("message" => $message, "type" => $alert_type);
-header("Location: ".$location);
+	$_SESSION['alert_message'] = array("message" => $message, "type" => $alert_type);
+	header("Location: ".$location);
 	exit();
 	ob_flush();
 }
