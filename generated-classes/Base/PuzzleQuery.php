@@ -712,7 +712,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      *
      * @return $this|ChildPuzzleQuery The current query, for fluid interface
      */
-    public function joinNote($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinNote($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Note');
@@ -747,7 +747,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      *
      * @return \NoteQuery A secondary query class using the current class as primary query
      */
-    public function useNoteQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useNoteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinNote($relationAlias, $joinType)

@@ -1231,9 +1231,10 @@ abstract class Puzzle implements ActiveRecordInterface
 
             if ($this->notesScheduledForDeletion !== null) {
                 if (!$this->notesScheduledForDeletion->isEmpty()) {
-                    \NoteQuery::create()
-                        ->filterByPrimaryKeys($this->notesScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->notesScheduledForDeletion as $note) {
+                        // need to save related object because we set the relation to null
+                        $note->save($con);
+                    }
                     $this->notesScheduledForDeletion = null;
                 }
             }
@@ -2257,7 +2258,7 @@ abstract class Puzzle implements ActiveRecordInterface
                 $this->notesScheduledForDeletion = clone $this->collNotes;
                 $this->notesScheduledForDeletion->clear();
             }
-            $this->notesScheduledForDeletion[]= clone $note;
+            $this->notesScheduledForDeletion[]= $note;
             $note->setPuzzle(null);
         }
 

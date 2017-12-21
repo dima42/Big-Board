@@ -36,8 +36,8 @@ CREATE TABLE `note`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `body` VARCHAR(255) NOT NULL,
-    `puzzle_id` INTEGER NOT NULL,
-    `member_id` INTEGER NOT NULL,
+    `puzzle_id` INTEGER,
+    `member_id` INTEGER,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`id`),
@@ -181,8 +181,8 @@ CREATE TABLE `note_archive`
 (
     `id` INTEGER NOT NULL,
     `body` VARCHAR(255) NOT NULL,
-    `puzzle_id` INTEGER NOT NULL,
-    `member_id` INTEGER NOT NULL,
+    `puzzle_id` INTEGER,
+    `member_id` INTEGER,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     `archived_at` DATETIME,

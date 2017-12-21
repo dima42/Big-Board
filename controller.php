@@ -1,176 +1,170 @@
-<?
+<?php
 use Cocur\Slugify\Slugify;
 use Propel\Runtime\ActiveQuery\Criteria;
 
-function show_content() {
-	$klein = new \Klein\Klein();
+$this->respond('GET', '/test', function ($request, $response) {
+        return displayTest($response);
+    });
 
-	$klein->respond('GET', '/test', function ($request, $response) {
-			return displayTest($response);
-		});
+// PUZZLE LISTS
 
-	// PUZZLE LISTS
+$this->respond('GET', '/', function () {
+        return displayAll();
+    });
 
-	$klein->respond('GET', '/', function () {
-			return displayAll();
-		});
+$this->respond('GET', '/bymeta', function () {
+        return displayAllByMeta();
+    });
 
-	$klein->respond('GET', '/bymeta', function () {
-			return displayAllByMeta();
-		});
+$this->respond('GET', '/loose', function () {
+        return displayLoosePuzzles();
+    });
 
-	$klein->respond('GET', '/loose', function () {
-			return displayLoosePuzzles();
-		});
+$this->with('/puzzles', function () {
+        $this->respond('GET', '/all', function ($request, $response) {
+                return allPuzzles($response);
+            });
+        $this->respond('GET', '/bymeta', function ($request, $response) {
+                return allPuzzlesByMeta($response);
+            });
+        $this->respond('GET', '/loose', function ($request, $response) {
+                return loosePuzzles($response);
+            });
+        $this->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
+                return metaPuzzles($request->meta_id, $response);
+            });
+        $this->respond('GET', '/member/[:member_id]', function ($request, $response) {
+                return memberPuzzles($request->member_id, $response);
+            });
+    });
 
-	$klein->with('/puzzles', function () use ($klein) {
-			$klein->respond('GET', '/all', function ($request, $response) {
-					return allPuzzles($response);
-				});
-			$klein->respond('GET', '/bymeta', function ($request, $response) {
-					return allPuzzlesByMeta($response);
-				});
-			$klein->respond('GET', '/loose', function ($request, $response) {
-					return loosePuzzles($response);
-				});
-			$klein->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
-					return metaPuzzles($request->meta_id, $response);
-				});
-			$klein->respond('GET', '/member/[:member_id]', function ($request, $response) {
-					return memberPuzzles($request->member_id, $response);
-				});
-		});
+// PUZZLES
 
-	// PUZZLES
+$this->with('/puzzle/[:id]', function () {
 
-	$klein->with('/puzzle/[:id]', function () use ($klein) {
+        $this->respond('GET', '/?', function ($request) {
+                return displayPuzzle($request->id);
+            });
+        $this->respond('GET', '/edit/?', function ($request) {
+                return displayPuzzle($request->id, 'edit');
+            });
+        $this->respond('POST', '/edit/?', function ($request) {
+                return editPuzzle($request->id, $request);
+            });
+        $this->respond('POST', '/solve/?', function ($request) {
+                return solvePuzzle($request->id, $request);
+            });
+        $this->respond('POST', '/change-status/?', function ($request) {
+                return changePuzzleStatus($request->id, $request);
+            });
+        $this->respond('POST', '/add-note/?', function ($request) {
+                return addNote($request->id, $request);
+            });
+        $this->respond('POST', '/join/?', function ($request) {
+                return joinPuzzle($request->id);
+            });
+        $this->respond('POST', '/leave/?', function ($request) {
+                return leavePuzzle($request->id);
+            });
+        $this->respond('POST', '/delete/?', function ($request) {
+                return deletePuzzle($request->id, $request);
+            });
+        $this->respond('POST', '/delete-note/[:note_id]/?', function ($request) {
+                return archivePuzzleNote($request->note_id, $request->id);
+            });
+    });
 
-			$klein->respond('GET', '/?', function ($request) {
-					return displayPuzzle($request->id);
-				});
-			$klein->respond('GET', '/edit/?', function ($request) {
-					return displayPuzzle($request->id, 'edit');
-				});
-			$klein->respond('POST', '/edit/?', function ($request) {
-					return editPuzzle($request->id, $request);
-				});
-			$klein->respond('POST', '/solve/?', function ($request) {
-					return solvePuzzle($request->id, $request);
-				});
-			$klein->respond('POST', '/change-status/?', function ($request) {
-					return changePuzzleStatus($request->id, $request);
-				});
-			$klein->respond('POST', '/add-note/?', function ($request) {
-					return addNote($request->id, $request);
-				});
-			$klein->respond('POST', '/join/?', function ($request) {
-					return joinPuzzle($request->id);
-				});
-			$klein->respond('POST', '/leave/?', function ($request) {
-					return leavePuzzle($request->id);
-				});
-			$klein->respond('POST', '/delete/?', function ($request) {
-					return deletePuzzle($request->id, $request);
-				});
-			$klein->respond('POST', '/delete-note/[:note_id]/?', function ($request) {
-					return archivePuzzleNote($request->note_id, $request->id);
-				});
-		});
+// MEMBER
 
-	// MEMBER
+$this->respond('GET', '/me', function () {
+        redirect('/member/'.$_SESSION['user']->getId());
+    });
 
-	$klein->respond('GET', '/me', function () {
-			redirect('/member/'.$_SESSION['user']->getId());
-		});
+$this->respond('GET', '/you', function () {
+        redirect('/member/'.$_SESSION['user']->getId());
+    });
 
-	$klein->respond('GET', '/you', function () {
-			redirect('/member/'.$_SESSION['user']->getId());
-		});
+$this->respond('GET', '/member', function () {
+        redirect('/member/'.$_SESSION['user']->getId());
+    });
 
-	$klein->respond('GET', '/member', function () {
-			redirect('/member/'.$_SESSION['user']->getId());
-		});
+$this->with('/member', function () {
+        $this->respond('GET', '/[i:id]/?', function ($request) {
+                return displayMember($request->id);
+            });
+        $this->respond('GET', '/edit/?', function ($request) {
+                return displayMemberEdit();
+            });
+        $this->respond('POST', '/edit/?', function ($request) {
+                return saveMember($request);
+            });
 
-	$klein->with('/member', function () use ($klein) {
-			$klein->respond('GET', '/[i:id]/?', function ($request) {
-					return displayMember($request->id);
-				});
-			$klein->respond('GET', '/edit/?', function ($request) {
-					return displayMemberEdit();
-				});
-			$klein->respond('POST', '/edit/?', function ($request) {
-					return saveMember($request);
-				});
+    });
 
-		});
+$this->respond('GET', '/assign_slack_id/[:slack_id]', function ($request) {
+        return assignSlackId($request->slack_id);
+    });
 
-	$klein->respond('GET', '/assign_slack_id/[:slack_id]', function ($request) {
-			return assignSlackId($request->slack_id);
-		});
+// ROSTER
 
-	// ROSTER
+$this->respond('GET', '/roster', function () {
+        return displayRoster();
+    });
 
-	$klein->respond('GET', '/roster', function () {
-			return displayRoster();
-		});
+// ADDING
 
-	// ADDING
+$this->with('/add', function () {
 
-	$klein->with('/add', function () use ($klein) {
+        $this->respond('GET', '/?', function ($request) {
+                return displayAdd();
+            });
+        $this->respond('GET', '/[:meta_id]/?', function ($request) {
+                return displayAdd($request->meta_id);
+            });
+        $this->respond('POST', '/?', function ($request, $response) {
+                return addPuzzle($request, $response);
+            });
+    });
 
-			$klein->respond('GET', '/?', function ($request) {
-					return displayAdd();
-				});
-			$klein->respond('GET', '/[:meta_id]/?', function ($request) {
-					return displayAdd($request->meta_id);
-				});
-			$klein->respond('POST', '/?', function ($request, $response) {
-					return addPuzzle($request, $response);
-				});
-		});
+$this->respond('GET', '/puzzle_scrape', function ($request, $response) {
+        return puzzleScrape($request, $response);
+    });
 
-	$klein->respond('GET', '/puzzle_scrape', function ($request, $response) {
-			return puzzleScrape($request, $response);
-		});
+// NEWS
 
-	// NEWS
+$this->with('/news', function () {
+        $this->respond('GET', '/?', function ($request) {
+                return displayNews("all");
+            });
+        $this->respond('GET', '/[:filter]/?', function ($request) {
+                return displayNews($request->filter);
+            });
+        $this->respond('POST', '/add/?', function ($request) {
+                return postNews($request->body);
+            });
+        $this->respond('POST', '/[:update_id]/delete/?', function ($request) {
+                return archiveNews($request->update_id);
+            });
+    });
 
-	$klein->with('/news', function () use ($klein) {
-			$klein->respond('GET', '/?', function ($request) {
-					return displayNews("all");
-				});
-			$klein->respond('GET', '/[:filter]/?', function ($request) {
-					return displayNews($request->filter);
-				});
-			$klein->respond('POST', '/add/?', function ($request) {
-					return postNews($request->body);
-				});
-			$klein->respond('POST', '/[:update_id]/delete/?', function ($request) {
-					return archiveNews($request->update_id);
-				});
-		});
+// ABOUT
 
-	// ABOUT
+$this->respond('GET', '/about', function () {
+        return displayAbout();
+    });
 
-	$klein->respond('GET', '/about', function () {
-			return displayAbout();
-		});
+// LOGOUT
 
-	// LOGOUT
-
-	$klein->respond('GET', '/logout', function () {
-			session_unset();
-			setcookie("PAL_ACCESS_TOKEN", "", time()-3600);
-			setcookie("refresh_token", "", time()-3600);
-			return redirect("/");
-		});
-
-	$klein->dispatch();
-}
+$this->respond('GET', '/logout', function () {
+        session_unset();
+        setcookie("PAL_ACCESS_TOKEN", "", time()-3600);
+        setcookie("refresh_token", "", time()-3600);
+        return redirect("/");
+    });
 
 function redirect($location, $message = "", $alert_type = "info") {
-	$_SESSION['alert_message'] = array("message" => $message, "type" => $alert_type);
-	header("Location: ".$location);
+$_SESSION['alert_message'] = array("message" => $message, "type" => $alert_type);
+header("Location: ".$location);
 	exit();
 	ob_flush();
 }
