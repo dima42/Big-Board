@@ -45,7 +45,7 @@ $klein->respond(function () use ($klein, $pal_client) {
 		if ($pal_client->isAccessTokenExpired() || !is_a($_SESSION['user'], 'Member') > 0) {
 			$klein->skipRemaining();
 		}
-    });
+	});
 
 $klein->with('', 'controller.php');
 

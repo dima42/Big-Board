@@ -76,11 +76,10 @@ Some notes on figuring these out:
 
 **Database configuration**
 
-
--- `BIG_BOARD_DB_HOST`
--- `BIG_BOARD_DB_NAME`
--- `BIG_BOARD_DB_USERNAME`
--- `BIG_BOARD_DB_PASSWORD`
+- `BIG_BOARD_DB_HOST`
+- `BIG_BOARD_DB_NAME`
+- `BIG_BOARD_DB_USERNAME`
+- `BIG_BOARD_DB_PASSWORD`
 
 On Heroku - there's a `CLEARDB_DATABASE_URL` config variable which is in the format `mysql://BIG_BOARD_DB_USERNAME:BIG_BOARD_DB_PASSWORD@BIG_BOARD_DB_HOST/BIG_BOARD_DB_NAME?reconnect=true`.
 
@@ -88,7 +87,8 @@ Locally - Run mysql and create a database and a user.  host is localhost, the re
 
 **Google Drive configuration**
 
-- `GOOGLE_CLIENT_SECRET` and `GOOGLE_CLIENT_ID` - you got these while setting up gooogle credentials earlier
+- `GOOGLE_CLIENT_ID` - you got this while setting up gooogle credentials earlier
+- `GOOGLE_CLIENT_SECRET` - same
 - `GOOGLE_DRIVE_ID` - go to google drive for your team folder, look at the url - it's the long id string there.  Similarly for `GOOGLE_DOCS_TEMPLATE_ID`
 
 **Slack configuration**
