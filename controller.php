@@ -297,7 +297,7 @@ function displayAll() {
 		];
 	}
 
-	render('all.twig', 'all', array(
+	render('all.twig', 'puzzles', array(
 			'statusCounts'       => $statusCounts,
 			'unsolved_count'     => $unsolved_count,
 			'solved_percentage'  => 100*($total_puzzle_count-$unsolved_count)/$total_puzzle_count,
@@ -378,7 +378,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			->find();
 	}
 
-	render($template, 'puzzle', array(
+	render($template, 'puzzles', array(
 			'puzzle_id'     => $puzzle_id,
 			'puzzle'        => $puzzle,
 			'notes'         => $notes,
