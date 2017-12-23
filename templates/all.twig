@@ -59,6 +59,7 @@
 {% endblock %}
 
 {% block aside %}
+    {% if user_puzzles|length >0 %}
     <div class="card mb-3">
         <div class="card-header">
             <small class="subhead">You are working on</small>
@@ -69,6 +70,7 @@
             {% endfor %}
         </div>
     </div>
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}
