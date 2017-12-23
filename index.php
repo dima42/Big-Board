@@ -83,8 +83,8 @@ function is_authorized($pal_client) {
 }
 
 function is_in_palindrome($pal_drive) {
-	// If 'user_id' is set in SESSION and 'user' is a Member, then we're good.
-	if (is_a($_SESSION['user'], 'Member') > 0) {
+	// If 'user' is set in SESSION and 'user' is a Member, then we're good.
+	if (isset($_SESSION['user']) && is_a($_SESSION['user'], 'Member') > 0) {
 		debug('Found user in SESSION: '.$_SESSION['user']->getFullName());
 		return true;
 	}
