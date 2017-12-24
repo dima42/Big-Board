@@ -44,6 +44,13 @@ You'll need to create two bots
     - `users.profile:write`
     - `users:read`
     - `users:write`
+7. Click "Slash Commands". Create these seven commands. For each one, define the Request URL as `http://[YOURAPP].herokuapp.com/tobybot`. Include Descriptions and Usage Hints as desired.
+    - `/board`
+    - `/solve`
+    - `/info`
+    - `/workon`
+    - `/note`
+    - `/connect`
 
 ## Set up Google API project
 
