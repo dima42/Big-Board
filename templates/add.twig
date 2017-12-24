@@ -22,6 +22,7 @@
         </select>
     </div>
     <button class="btn btn-primary" type="button" id="scrape-button">Submit URLs &rarr;</button>
+    <button class="btn btn-primary" type="button" id="bypass-scrape-button">Add puzzles manually &rarr;</button>
 </form>
 
 <img class="working" src="https://media.giphy.com/media/ule4vhcY1xEKQ/giphy.gif" alt="">
@@ -29,6 +30,7 @@
 <form class="addForm" action="/add" method="post">
     <div class="addFormError alert alert-danger"></div>
     <div id="form-controls"></div>
+    <button id="add-button" class="btn btn-primary" type="button">Add puzzle</button>
     <button id="submit-button" class="btn btn-primary" type="submit">Submit puzzles</button>
 </form>
 {% endblock %}
@@ -69,6 +71,13 @@ $(function() {
         });
     });
 
+    $('#bypass-scrape-button').click(function(e) {
+        e.preventDefault();
+        $('#scrapeForm').hide();
+        $('body').attr('data-step', 'step2');
+        $('.meta-select').val($('#metaSelect').val());
+    });
+
     $('.addForm').submit(function(e) {
         e.preventDefault();
 
@@ -106,6 +115,14 @@ $(function() {
                 $('#' + puzzleData['puzzleID']).html(renderedCard);
             });
         });
+    });
+
+    $('#add-button').click(function(e) {
+        var puzzleData = [];
+        puzzleData['i'] = $("#form-controls").children().length + 1;
+        puzzleData['metaSelect'] = $('#metaSelect').clone().html();
+        var renderedForm = Mustache.render(newPuzzleTemplate, puzzleData);
+        $('.addForm #form-controls').append(renderedForm);
     });
 
     $('.addForm').on('click', '.removePuzzle', function(e) {
