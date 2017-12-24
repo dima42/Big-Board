@@ -19,7 +19,11 @@
 <section class="pt-2">
     <span class="anchor-target" id="puzzle-{{ id }}"></span>
     <h2>
-        <a href="/puzzle/{{ id }}">{{ title }}</a>
+        {% if id != 0 %}
+            <a href="/puzzle/{{ id }}">{{ title }}</a>
+        {% else %}
+            {{ title }}
+        {% endif %}
     </h2>
     <table id="table-{{ id }}" class="table" data-title="{{ title }}">
         <tbody>
