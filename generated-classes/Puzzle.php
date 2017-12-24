@@ -26,7 +26,7 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function getBigBoardURL() {
-		return "http://".getenv("HEROKU_APP_DOMAIN")."/puzzle/".$this->getId();
+		return "http://".getenv("APP_DOMAIN")."/puzzle/".$this->getId();
 	}
 
 	public function getSlackURL() {
