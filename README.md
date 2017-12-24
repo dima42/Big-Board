@@ -10,11 +10,11 @@
 
 ### Channels
 
-- Make a `#big-board` channel.
+Create a `#big-board` channel.
 
 ### Bots
 
-You'll need to create two bots
+Create two bots:
 
 #### Big Board Bot
 
@@ -135,3 +135,5 @@ To set up the DB on Heroku, first push, then run:
 heroku run bash
 propel sql:insert
 ```
+
+Set up automatic deployments by connecting your Heroku instance to your GitHub repo.
