@@ -12,7 +12,7 @@
         <span class="input-group-addon">Meta</span>
         <select class="meta-select form-control" name="newPuzzles[{{i}}][meta]">
         {{{ metaSelect }}}
-    </select>
+        </select>
     </div>
     <div class="input-group newPuzzleSlack mb-2">
         <span class="input-group-addon"><img src="/img/slack.png" width="15px" alt=""></span>

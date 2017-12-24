@@ -353,22 +353,12 @@ body.add {
         display: none;
     }
 
-    .addForm {
-        display: none;
-    }
-
     .addFormError {
         display: none;
     }
 
     &[data-step='scraping'] {
         .working {
-            display: block;
-        }
-    }
-
-    &[data-step='step2'] {
-        .addForm {
             display: block;
         }
     }
