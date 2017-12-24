@@ -169,7 +169,7 @@ class MemberTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('full_name', 'FullName', 'VARCHAR', true, 64, null);
         $this->addColumn('google_id', 'GoogleId', 'VARCHAR', false, 64, null);
-        $this->addColumn('google_refresh', 'GoogleRefresh', 'VARCHAR', false, 64, null);
+        $this->addColumn('google_refresh', 'GoogleRefresh', 'VARCHAR', false, 128, null);
         $this->addColumn('slack_id', 'SlackId', 'VARCHAR', false, 24, null);
         $this->addColumn('slack_handle', 'SlackHandle', 'VARCHAR', false, 48, null);
         $this->addColumn('strengths', 'Strengths', 'VARCHAR', false, 128, null);

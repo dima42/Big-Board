@@ -64,7 +64,7 @@ CREATE TABLE `member`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `full_name` VARCHAR(64) NOT NULL,
     `google_id` VARCHAR(64),
-    `google_refresh` VARCHAR(64),
+    `google_refresh` VARCHAR(128),
     `slack_id` VARCHAR(24),
     `slack_handle` VARCHAR(48),
     `strengths` VARCHAR(128),

@@ -38,7 +38,7 @@
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="full_name" type="varchar" size="64" required="true" />
         <column name="google_id" type="varchar" size="64" required="false" />
-        <column name="google_refresh" type="varchar" size="64" required="false" />
+        <column name="google_refresh" type="varchar" size="128" required="false" />
         <column name="slack_id" type="varchar" size="24" required="false" />
         <column name="slack_handle" type="varchar" size="48" required="false" />
         <column name="strengths" type="varchar" size="128" required="false" />
