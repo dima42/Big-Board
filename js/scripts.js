@@ -18,6 +18,7 @@ var loadPuzzleTemplate = function(response, callback) {
             var ssID = puzzleData['SpreadsheetId'];
             ssID = ssID.replace(/^.+ccc\?key=/, "");
             puzzleData['SpreadsheetURL'] = "https://docs.google.com/spreadsheets/d/" + ssID;
+            puzzleData['SlackURL'] = "http://" + slackDomain + ".slack.com/messages/"+puzzleData['SlackChannel'];
             puzzleData['SinceCreated'] = now - new Date(puzzleData['CreatedAt']);
             puzzleData['SinceUpdated'] = now - new Date(puzzleData['UpdatedAt']);
 
