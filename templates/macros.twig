@@ -31,3 +31,14 @@
     </table>
 </section>
 {% endmacro member_table %}
+
+{% macro avatar(member, size='sm') %}
+<div class="nav-section">
+<a class="solver" href="/member/{{ member.id }}">
+    {% if member.avatar %}
+    <span class="avatar-wrapper {{ size }}" style="background-image:url({{ member.avatar }});"></span>
+    {% endif %}
+    <span class="solver-name">{{ member.fullName }}</span>
+</a>
+</div>
+{% endmacro %}

@@ -2612,6 +2612,31 @@ h2 {
     margin-left: 0; }
   .sidebar .nav-link {
     border-radius: 0; }
+  .sidebar .nav-section {
+    padding: .5rem 1rem; }
+  .sidebar .solver {
+    display: block;
+    color: white;
+    background: #000;
+    border-radius: 4px;
+    width: 100%;
+    border: 1px solid black; }
+    .sidebar .solver:hover {
+      background: #222; }
+    .sidebar .solver img {
+      border-radius: 4px 4px 0 0;
+      width: 100%; }
+  .sidebar .avatar-wrapper {
+    display: block;
+    height: 124px;
+    background-size: 100%;
+    background-position: center center; }
+    .sidebar .avatar-wrapper.sm {
+      height: 80px; }
+  .sidebar .solver-name {
+    border-radius: 0 0 4px 4px;
+    padding: .3em .5em;
+    font-size: .8rem; }
 
 .progress {
   height: 1.2rem;
@@ -2703,11 +2728,6 @@ aside {
   background-repeat: no-repeat;
   background-image: linear-gradient(transparent, transparent), url("data:image/svg+xml,%3C%3Fxml version=%221.0%22 encoding=%22UTF-8%22%3F%3E%0A%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22%3E%0A%09%3Cpath fill=%22%23fff%22 stroke=%22%2336c%22 d=%22M1.5 4.518h5.982V10.5H1.5z%22/%3E%0A%09%3Cpath fill=%22%2336c%22 d=%22M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z%22/%3E%0A%09%3Cpath fill=%22%23fff%22 d=%22M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z%22/%3E%0A%3C/svg%3E%0A");
   padding-right: 28px; }
-
-.join-this-puzzle {
-  padding: 0;
-  width: 100%;
-  text-align: left; }
 
 .avatar {
   border-radius: 50%;

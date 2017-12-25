@@ -1,5 +1,10 @@
 {% extends 'two-col.twig' %}
 
+{% block filters %}
+    {% from 'macros.twig' import avatar %}
+    {{ avatar(member, 'lg') }}
+{% endblock %}
+
 {% block content %}
 
 {% if is_user and not user.slackId %}
@@ -16,8 +21,6 @@
 {% endif %}
 
 <h1>{{ member.fullName }}</h1>
-
-<img src="{{ member.avatar }}" alt="" width="96">
 
 <p>
     {% if member.strengths %}

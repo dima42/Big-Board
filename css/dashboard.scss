@@ -113,6 +113,45 @@ h2 {
     .nav-link {
         border-radius: 0;
     }
+
+    .nav-section {
+        padding: .5rem 1rem;
+    }
+
+    .solver {
+        display: block;
+        color: white;
+        background:#000;
+        border-radius: 4px;
+        width: 100%;
+        border: 1px solid black;
+
+        &:hover {
+            background: #222;
+        }
+
+        img {
+            border-radius: 4px 4px 0 0;
+            width: 100%;
+        }
+    }
+
+    .avatar-wrapper {
+        display: block;
+        height: 124px;
+        background-size: 100%;
+        background-position: center center;
+
+        &.sm {
+            height: 80px;
+        }
+    }
+
+    .solver-name {
+        border-radius: 0 0 4px 4px;
+        padding: .3em .5em;
+        font-size: .8rem;
+    }
 }
 
 // PROGRESS
@@ -279,10 +318,10 @@ aside {
     @extend %card-subhead;
 }
 
-.join-this-puzzle {
-    padding: 0;
-    width: 100%;
-    text-align: left;
+.join-leave {
+    // padding: 0;
+    // width: 100%;
+    // text-align: left;
 }
 
 .avatar {

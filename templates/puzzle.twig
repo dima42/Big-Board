@@ -1,5 +1,41 @@
 {% extends 'two-col.twig' %}
 
+{% block filters %}
+    {% from 'macros.twig' import avatar %}
+    {% if is_meta %}
+        {% if puzzle.wrangler %}
+        <h4 class="nav-link">Wrangler</h4>
+        {{ avatar(puzzle.wrangler) }}
+        {% endif %}
+    {% endif %}
+
+    <h4 class="nav-link">Solvers</h4>
+
+    {% if puzzle.status != "solved" %}
+
+        {% for member in members %}
+            {{ avatar(member) }}
+        {% else %}
+            <div class="nav-section">
+            No one 😔
+            </div>
+        {% endfor %}
+
+    {% endif %}
+
+        <div class="nav-section">
+        {% if not is_member %}
+        <form class="join-leave" action="/puzzle/{{ puzzle.id }}/join" method="post">
+            <button type="submit" class="btn btn-info">Work on this</button>
+        </form>
+        {% else %}
+        <form class="join-leave" action="/puzzle/{{ puzzle.id }}/leave" method="post">
+            <button type="submit" class="btn btn-info">Leave this</button>
+        </form>
+        {% endif %}
+        </div>
+{% endblock %}
+
 {% block content %}
     <div class="puzzle-header">
         <div class="puzzle-metas">
@@ -95,31 +131,6 @@
         <a class="list-group-item list-group-item-action" href='{{ puzzle.getSpreadsheetURL() }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet</a>
         <a class="list-group-item list-group-item-action" href='{{ puzzle.getSlackURL() }}'><img src="/img/slack.png" width="15px" alt=""> Slack</a>
     </div>
-
-    {% if puzzle.status != "solved" %}
-    <div class="card mb-3">
-        <div class="card-body">
-            <small class="subhead">SOLVERS</small>
-            {% for member in members %}
-                <a style="background-image:url({{ member.avatar }});" href="http://{{ slackDomain }}.slack.com/team/{{ SlackId }}" class="avatar"></a>
-                {{ member.fullName }}<br>
-            {% else %}
-                No one 😔
-            {% endfor %}
-        </div>
-        <div class="card-footer">
-            {% if not is_member %}
-            <form action="/puzzle/{{ puzzle.id }}/join" method="post">
-                <button type="submit" class="join-this-puzzle btn btn-link">Join this puzzle</button>
-            </form>
-            {% else %}
-            <form action="/puzzle/{{ puzzle.id }}/leave" method="post">
-                <button type="submit" class="join-this-puzzle btn btn-link">Leave this puzzle</button>
-            </form>
-            {% endif %}
-        </div>
-    </div>
-    {% endif %}
 
     <div class="mb-3">
         <a class="btn btn-dark border border-dark" href="/puzzle/{{ puzzle.id }}/edit">✏️  &nbsp; Edit this puzzle</a>

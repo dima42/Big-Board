@@ -327,6 +327,7 @@ function displayLoosePuzzles() {
 
 function displayPuzzle($puzzle_id, $method = "get") {
 	$puzzle = PuzzleQuery::create()
+		->leftJoinWithWrangler()
 		->filterByID($puzzle_id)
 		->findOne();
 
