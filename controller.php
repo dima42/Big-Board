@@ -367,6 +367,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	$template = 'puzzle.twig';
 
 	$metas_to_show = [];
+	$all_members   = [];
 	if ($method == "edit") {
 		$template = 'puzzle-edit.twig';
 
@@ -376,6 +377,10 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
 			->filterByParentId($puzzle_id, CRITERIA::NOT_EQUAL)
 			->groupBy('Parent.Id')
+			->find();
+
+		$all_members = MemberQuery::create()
+			->orderBy('FullName')
 			->find();
 	}
 
@@ -388,6 +393,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'metas_to_show' => $metas_to_show,
 			'puzzles_metas' => $puzzles_metas,
 			'i_am_meta'     => $i_am_meta,
+			'all_members'   => $all_members,
 		));
 }
 
@@ -400,6 +406,7 @@ function editPuzzle($puzzle_id, $request) {
 	$puzzle->setStatus($request->status);
 	$puzzle->setSpreadsheetId($request->spreadsheet_id);
 	$puzzle->setSlackChannel($request->slack_channel);
+	$puzzle->setWranglerId($request->wrangler);
 	$puzzle->save();
 
 	// Remove all parents, even myself if I'm a meta

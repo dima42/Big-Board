@@ -31,6 +31,17 @@
             </div>
         </div>
     </fieldset>
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label" for="solution">Wrangler</label>
+        <div class="col-sm-9">
+            <select class="form-control" name="wrangler">
+                <option value="">- - -</option>
+                {% for member in all_members %}
+                    <option value="{{ member.id }}" {% if member.id == puzzle.wrangler.id %}selected{% endif %}>{{ member.fullName }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
     <fieldset class="form-group">
         <div class="row">
             <legend class="col-form-legend col-sm-3">Parent meta(s)</legend>
