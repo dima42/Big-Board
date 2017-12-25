@@ -44,7 +44,7 @@
 <select id="metaSelectTemplate" class="form-control meta-select d-none">
         <option value="">- - -</option>
     {% for meta in metas %}
-        <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
+        <option value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
     {% endfor %}
         <option value="">- - -</option>
         <option value="0">🆕 This is a new meta</option>
@@ -79,11 +79,10 @@ function slugify(text) {
 }
 
 $(function() {
-    $('.nav li:first-child a').click();
-
     $.get('/templates/add_puzzle.mst', function(template) {
         newPuzzleTemplate = template;
         addPuzzleForm();
+        $('[data-meta={{meta_id}}]').click();
     });
 
     $.get('/templates/add_complete.mst', function(template) {

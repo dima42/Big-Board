@@ -523,7 +523,7 @@ function archivePuzzleNote($note_id, $puzzle_id) {
 
 // ADDING PUZZLES
 
-function displayAdd($meta_id = '') {
+function displayAdd($meta_id = '-1') {
 	$metas = PuzzlePuzzleQuery::create()
 		->joinWith('PuzzlePuzzle.Parent')
 		->where('puzzle_id = parent_id')
