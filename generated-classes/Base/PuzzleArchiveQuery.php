@@ -27,6 +27,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleArchiveQuery orderByStatus($order = Criteria::ASC) Order by the status column
  * @method     ChildPuzzleArchiveQuery orderBySlackChannel($order = Criteria::ASC) Order by the slack_channel column
  * @method     ChildPuzzleArchiveQuery orderBySlackChannelId($order = Criteria::ASC) Order by the slack_channel_id column
+ * @method     ChildPuzzleArchiveQuery orderByWranglerId($order = Criteria::ASC) Order by the wrangler_id column
  * @method     ChildPuzzleArchiveQuery orderByPostCount($order = Criteria::ASC) Order by the post_count column
  * @method     ChildPuzzleArchiveQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildPuzzleArchiveQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
@@ -40,6 +41,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleArchiveQuery groupByStatus() Group by the status column
  * @method     ChildPuzzleArchiveQuery groupBySlackChannel() Group by the slack_channel column
  * @method     ChildPuzzleArchiveQuery groupBySlackChannelId() Group by the slack_channel_id column
+ * @method     ChildPuzzleArchiveQuery groupByWranglerId() Group by the wrangler_id column
  * @method     ChildPuzzleArchiveQuery groupByPostCount() Group by the post_count column
  * @method     ChildPuzzleArchiveQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildPuzzleArchiveQuery groupByUpdatedAt() Group by the updated_at column
@@ -64,6 +66,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleArchive findOneByStatus(string $status) Return the first ChildPuzzleArchive filtered by the status column
  * @method     ChildPuzzleArchive findOneBySlackChannel(string $slack_channel) Return the first ChildPuzzleArchive filtered by the slack_channel column
  * @method     ChildPuzzleArchive findOneBySlackChannelId(string $slack_channel_id) Return the first ChildPuzzleArchive filtered by the slack_channel_id column
+ * @method     ChildPuzzleArchive findOneByWranglerId(int $wrangler_id) Return the first ChildPuzzleArchive filtered by the wrangler_id column
  * @method     ChildPuzzleArchive findOneByPostCount(int $post_count) Return the first ChildPuzzleArchive filtered by the post_count column
  * @method     ChildPuzzleArchive findOneByCreatedAt(string $created_at) Return the first ChildPuzzleArchive filtered by the created_at column
  * @method     ChildPuzzleArchive findOneByUpdatedAt(string $updated_at) Return the first ChildPuzzleArchive filtered by the updated_at column
@@ -80,6 +83,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleArchive requireOneByStatus(string $status) Return the first ChildPuzzleArchive filtered by the status column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzleArchive requireOneBySlackChannel(string $slack_channel) Return the first ChildPuzzleArchive filtered by the slack_channel column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzleArchive requireOneBySlackChannelId(string $slack_channel_id) Return the first ChildPuzzleArchive filtered by the slack_channel_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPuzzleArchive requireOneByWranglerId(int $wrangler_id) Return the first ChildPuzzleArchive filtered by the wrangler_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzleArchive requireOneByPostCount(int $post_count) Return the first ChildPuzzleArchive filtered by the post_count column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzleArchive requireOneByCreatedAt(string $created_at) Return the first ChildPuzzleArchive filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzleArchive requireOneByUpdatedAt(string $updated_at) Return the first ChildPuzzleArchive filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -94,6 +98,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleArchive[]|ObjectCollection findByStatus(string $status) Return ChildPuzzleArchive objects filtered by the status column
  * @method     ChildPuzzleArchive[]|ObjectCollection findBySlackChannel(string $slack_channel) Return ChildPuzzleArchive objects filtered by the slack_channel column
  * @method     ChildPuzzleArchive[]|ObjectCollection findBySlackChannelId(string $slack_channel_id) Return ChildPuzzleArchive objects filtered by the slack_channel_id column
+ * @method     ChildPuzzleArchive[]|ObjectCollection findByWranglerId(int $wrangler_id) Return ChildPuzzleArchive objects filtered by the wrangler_id column
  * @method     ChildPuzzleArchive[]|ObjectCollection findByPostCount(int $post_count) Return ChildPuzzleArchive objects filtered by the post_count column
  * @method     ChildPuzzleArchive[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildPuzzleArchive objects filtered by the created_at column
  * @method     ChildPuzzleArchive[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildPuzzleArchive objects filtered by the updated_at column
@@ -196,7 +201,7 @@ abstract class PuzzleArchiveQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, title, url, spreadsheet_id, solution, status, slack_channel, slack_channel_id, post_count, created_at, updated_at, archived_at FROM puzzle_archive WHERE id = :p0';
+        $sql = 'SELECT id, title, url, spreadsheet_id, solution, status, slack_channel, slack_channel_id, wrangler_id, post_count, created_at, updated_at, archived_at FROM puzzle_archive WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -500,6 +505,47 @@ abstract class PuzzleArchiveQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID, $slackChannelId, $comparison);
+    }
+
+    /**
+     * Filter the query on the wrangler_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByWranglerId(1234); // WHERE wrangler_id = 1234
+     * $query->filterByWranglerId(array(12, 34)); // WHERE wrangler_id IN (12, 34)
+     * $query->filterByWranglerId(array('min' => 12)); // WHERE wrangler_id > 12
+     * </code>
+     *
+     * @param     mixed $wranglerId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildPuzzleArchiveQuery The current query, for fluid interface
+     */
+    public function filterByWranglerId($wranglerId = null, $comparison = null)
+    {
+        if (is_array($wranglerId)) {
+            $useMinMax = false;
+            if (isset($wranglerId['min'])) {
+                $this->addUsingAlias(PuzzleArchiveTableMap::COL_WRANGLER_ID, $wranglerId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($wranglerId['max'])) {
+                $this->addUsingAlias(PuzzleArchiveTableMap::COL_WRANGLER_ID, $wranglerId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(PuzzleArchiveTableMap::COL_WRANGLER_ID, $wranglerId, $comparison);
     }
 
     /**

@@ -48,6 +48,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildMemberQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildMemberQuery leftJoinWrangledPuzzle($relationAlias = null) Adds a LEFT JOIN clause to the query using the WrangledPuzzle relation
+ * @method     ChildMemberQuery rightJoinWrangledPuzzle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the WrangledPuzzle relation
+ * @method     ChildMemberQuery innerJoinWrangledPuzzle($relationAlias = null) Adds a INNER JOIN clause to the query using the WrangledPuzzle relation
+ *
+ * @method     ChildMemberQuery joinWithWrangledPuzzle($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the WrangledPuzzle relation
+ *
+ * @method     ChildMemberQuery leftJoinWithWrangledPuzzle() Adds a LEFT JOIN clause and with to the query using the WrangledPuzzle relation
+ * @method     ChildMemberQuery rightJoinWithWrangledPuzzle() Adds a RIGHT JOIN clause and with to the query using the WrangledPuzzle relation
+ * @method     ChildMemberQuery innerJoinWithWrangledPuzzle() Adds a INNER JOIN clause and with to the query using the WrangledPuzzle relation
+ *
  * @method     ChildMemberQuery leftJoinNote($relationAlias = null) Adds a LEFT JOIN clause to the query using the Note relation
  * @method     ChildMemberQuery rightJoinNote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Note relation
  * @method     ChildMemberQuery innerJoinNote($relationAlias = null) Adds a INNER JOIN clause to the query using the Note relation
@@ -78,7 +88,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery rightJoinWithNews() Adds a RIGHT JOIN clause and with to the query using the News relation
  * @method     ChildMemberQuery innerJoinWithNews() Adds a INNER JOIN clause and with to the query using the News relation
  *
- * @method     \NoteQuery|\PuzzleMemberQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \PuzzleQuery|\NoteQuery|\PuzzleMemberQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildMember findOne(ConnectionInterface $con = null) Return the first ChildMember matching the query
  * @method     ChildMember findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMember matching the query, or a new ChildMember object populated from the query conditions when no match is found
@@ -543,6 +553,79 @@ abstract class MemberQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MemberTableMap::COL_PHONE_NUMBER, $phoneNumber, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \Puzzle object
+     *
+     * @param \Puzzle|ObjectCollection $puzzle the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMemberQuery The current query, for fluid interface
+     */
+    public function filterByWrangledPuzzle($puzzle, $comparison = null)
+    {
+        if ($puzzle instanceof \Puzzle) {
+            return $this
+                ->addUsingAlias(MemberTableMap::COL_ID, $puzzle->getWranglerId(), $comparison);
+        } elseif ($puzzle instanceof ObjectCollection) {
+            return $this
+                ->useWrangledPuzzleQuery()
+                ->filterByPrimaryKeys($puzzle->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByWrangledPuzzle() only accepts arguments of type \Puzzle or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the WrangledPuzzle relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildMemberQuery The current query, for fluid interface
+     */
+    public function joinWrangledPuzzle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('WrangledPuzzle');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'WrangledPuzzle');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the WrangledPuzzle relation Puzzle object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \PuzzleQuery A secondary query class using the current class as primary query
+     */
+    public function useWrangledPuzzleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinWrangledPuzzle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'WrangledPuzzle', '\PuzzleQuery');
     }
 
     /**

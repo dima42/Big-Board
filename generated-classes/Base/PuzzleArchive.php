@@ -118,6 +118,13 @@ abstract class PuzzleArchive implements ActiveRecordInterface
     protected $slack_channel_id;
 
     /**
+     * The value for the wrangler_id field.
+     *
+     * @var        int
+     */
+    protected $wrangler_id;
+
+    /**
      * The value for the post_count field.
      *
      * @var        int
@@ -459,6 +466,16 @@ abstract class PuzzleArchive implements ActiveRecordInterface
     }
 
     /**
+     * Get the [wrangler_id] column value.
+     *
+     * @return int
+     */
+    public function getWranglerId()
+    {
+        return $this->wrangler_id;
+    }
+
+    /**
      * Get the [post_count] column value.
      *
      * @return int
@@ -689,6 +706,26 @@ abstract class PuzzleArchive implements ActiveRecordInterface
     } // setSlackChannelId()
 
     /**
+     * Set the value of [wrangler_id] column.
+     *
+     * @param int $v new value
+     * @return $this|\PuzzleArchive The current object (for fluent API support)
+     */
+    public function setWranglerId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->wrangler_id !== $v) {
+            $this->wrangler_id = $v;
+            $this->modifiedColumns[PuzzleArchiveTableMap::COL_WRANGLER_ID] = true;
+        }
+
+        return $this;
+    } // setWranglerId()
+
+    /**
      * Set the value of [post_count] column.
      *
      * @param int $v new value
@@ -828,22 +865,25 @@ abstract class PuzzleArchive implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : PuzzleArchiveTableMap::translateFieldName('SlackChannelId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->slack_channel_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : PuzzleArchiveTableMap::translateFieldName('PostCount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : PuzzleArchiveTableMap::translateFieldName('WranglerId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->wrangler_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : PuzzleArchiveTableMap::translateFieldName('PostCount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_count = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : PuzzleArchiveTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : PuzzleArchiveTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : PuzzleArchiveTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : PuzzleArchiveTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : PuzzleArchiveTableMap::translateFieldName('ArchivedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : PuzzleArchiveTableMap::translateFieldName('ArchivedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -856,7 +896,7 @@ abstract class PuzzleArchive implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = PuzzleArchiveTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = PuzzleArchiveTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\PuzzleArchive'), 0, $e);
@@ -1077,6 +1117,9 @@ abstract class PuzzleArchive implements ActiveRecordInterface
         if ($this->isColumnModified(PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'slack_channel_id';
         }
+        if ($this->isColumnModified(PuzzleArchiveTableMap::COL_WRANGLER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'wrangler_id';
+        }
         if ($this->isColumnModified(PuzzleArchiveTableMap::COL_POST_COUNT)) {
             $modifiedColumns[':p' . $index++]  = 'post_count';
         }
@@ -1123,6 +1166,9 @@ abstract class PuzzleArchive implements ActiveRecordInterface
                         break;
                     case 'slack_channel_id':
                         $stmt->bindValue($identifier, $this->slack_channel_id, PDO::PARAM_STR);
+                        break;
+                    case 'wrangler_id':
+                        $stmt->bindValue($identifier, $this->wrangler_id, PDO::PARAM_INT);
                         break;
                     case 'post_count':
                         $stmt->bindValue($identifier, $this->post_count, PDO::PARAM_INT);
@@ -1216,15 +1262,18 @@ abstract class PuzzleArchive implements ActiveRecordInterface
                 return $this->getSlackChannelId();
                 break;
             case 8:
-                return $this->getPostCount();
+                return $this->getWranglerId();
                 break;
             case 9:
-                return $this->getCreatedAt();
+                return $this->getPostCount();
                 break;
             case 10:
-                return $this->getUpdatedAt();
+                return $this->getCreatedAt();
                 break;
             case 11:
+                return $this->getUpdatedAt();
+                break;
+            case 12:
                 return $this->getArchivedAt();
                 break;
             default:
@@ -1264,21 +1313,22 @@ abstract class PuzzleArchive implements ActiveRecordInterface
             $keys[5] => $this->getStatus(),
             $keys[6] => $this->getSlackChannel(),
             $keys[7] => $this->getSlackChannelId(),
-            $keys[8] => $this->getPostCount(),
-            $keys[9] => $this->getCreatedAt(),
-            $keys[10] => $this->getUpdatedAt(),
-            $keys[11] => $this->getArchivedAt(),
+            $keys[8] => $this->getWranglerId(),
+            $keys[9] => $this->getPostCount(),
+            $keys[10] => $this->getCreatedAt(),
+            $keys[11] => $this->getUpdatedAt(),
+            $keys[12] => $this->getArchivedAt(),
         );
-        if ($result[$keys[9]] instanceof \DateTimeInterface) {
-            $result[$keys[9]] = $result[$keys[9]]->format('c');
-        }
-
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('c');
         }
 
         if ($result[$keys[11]] instanceof \DateTimeInterface) {
             $result[$keys[11]] = $result[$keys[11]]->format('c');
+        }
+
+        if ($result[$keys[12]] instanceof \DateTimeInterface) {
+            $result[$keys[12]] = $result[$keys[12]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1344,15 +1394,18 @@ abstract class PuzzleArchive implements ActiveRecordInterface
                 $this->setSlackChannelId($value);
                 break;
             case 8:
-                $this->setPostCount($value);
+                $this->setWranglerId($value);
                 break;
             case 9:
-                $this->setCreatedAt($value);
+                $this->setPostCount($value);
                 break;
             case 10:
-                $this->setUpdatedAt($value);
+                $this->setCreatedAt($value);
                 break;
             case 11:
+                $this->setUpdatedAt($value);
+                break;
+            case 12:
                 $this->setArchivedAt($value);
                 break;
         } // switch()
@@ -1406,16 +1459,19 @@ abstract class PuzzleArchive implements ActiveRecordInterface
             $this->setSlackChannelId($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setPostCount($arr[$keys[8]]);
+            $this->setWranglerId($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setCreatedAt($arr[$keys[9]]);
+            $this->setPostCount($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setUpdatedAt($arr[$keys[10]]);
+            $this->setCreatedAt($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setArchivedAt($arr[$keys[11]]);
+            $this->setUpdatedAt($arr[$keys[11]]);
+        }
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setArchivedAt($arr[$keys[12]]);
         }
     }
 
@@ -1481,6 +1537,9 @@ abstract class PuzzleArchive implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID)) {
             $criteria->add(PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID, $this->slack_channel_id);
+        }
+        if ($this->isColumnModified(PuzzleArchiveTableMap::COL_WRANGLER_ID)) {
+            $criteria->add(PuzzleArchiveTableMap::COL_WRANGLER_ID, $this->wrangler_id);
         }
         if ($this->isColumnModified(PuzzleArchiveTableMap::COL_POST_COUNT)) {
             $criteria->add(PuzzleArchiveTableMap::COL_POST_COUNT, $this->post_count);
@@ -1588,6 +1647,7 @@ abstract class PuzzleArchive implements ActiveRecordInterface
         $copyObj->setStatus($this->getStatus());
         $copyObj->setSlackChannel($this->getSlackChannel());
         $copyObj->setSlackChannelId($this->getSlackChannelId());
+        $copyObj->setWranglerId($this->getWranglerId());
         $copyObj->setPostCount($this->getPostCount());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1634,6 +1694,7 @@ abstract class PuzzleArchive implements ActiveRecordInterface
         $this->status = null;
         $this->slack_channel = null;
         $this->slack_channel_id = null;
+        $this->wrangler_id = null;
         $this->post_count = null;
         $this->created_at = null;
         $this->updated_at = null;

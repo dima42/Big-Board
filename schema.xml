@@ -9,6 +9,10 @@
         <column name="status" type="varchar" size="24" required="false" />
         <column name="slack_channel" type="varchar" size="48" required="false" />
         <column name="slack_channel_id" type="varchar" size="24" required="false" />
+        <column name="wrangler_id" type="integer" required="false" />
+        <foreign-key foreignTable="member" phpName="Wrangler" refPhpName="WrangledPuzzle" onDelete="SETNULL">
+            <reference local="wrangler_id" foreign="id"/>
+        </foreign-key>
         <behavior name="aggregate_column">
             <parameter name="name" value="post_count" />
             <parameter name="foreign_table" value="note" />

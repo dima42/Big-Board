@@ -182,6 +182,13 @@ class MemberTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('WrangledPuzzle', '\\Puzzle', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':wrangler_id',
+    1 => ':id',
+  ),
+), 'SET NULL', null, 'WrangledPuzzles', false);
         $this->addRelation('Note', '\\Note', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -212,6 +219,7 @@ class MemberTableMap extends TableMap
     {
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        PuzzleTableMap::clearInstancePool();
         NoteTableMap::clearInstancePool();
         PuzzleMemberTableMap::clearInstancePool();
         NewsTableMap::clearInstancePool();
