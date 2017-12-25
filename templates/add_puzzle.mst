@@ -2,11 +2,11 @@
     <h4>New puzzle #{{ i }} <a class="small removePuzzle" href="#">Remove?</a></h4>
     <div class="input-group newPuzzleTitle mb-2">
         <span class="input-group-addon">Title</span>
-        <input type="text" class="form-control" name="newPuzzles[{{i}}][title]" value="{{ title }}">
+        <input type="text" class="form-control" name="newPuzzles[{{i}}][title]" value="{{ title }}" required>
     </div>
     <div class="input-group newPuzzleURL mb-2">
         <span class="input-group-addon">URL</span>
-        <input type="text" class="form-control" name="newPuzzles[{{i}}][url]" value="{{ url }}">
+        <input type="text" class="form-control" name="newPuzzles[{{i}}][url]" value="{{ url }}" required>
     </div>
     <div class="input-group newPuzzleMeta mb-2">
         <span class="input-group-addon">Meta</span>
@@ -16,6 +16,6 @@
     </div>
     <div class="input-group newPuzzleSlack mb-2">
         <span class="input-group-addon"><img src="/img/slack.png" width="15px" alt=""></span>
-        <input type="text" class="form-control" name="newPuzzles[{{i}}][slack]" maxlength="21" value="{{ slack }}">
+        <input type="text" class="form-control" name="newPuzzles[{{i}}][slack]" maxlength="21" value="{{ slack }}" required>
     </div>
 </div>
