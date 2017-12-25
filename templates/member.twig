@@ -2,7 +2,9 @@
 
 {% block filters %}
     {% from 'macros.twig' import avatar %}
-    {{ avatar(member, 'lg') }}
+    {% if member.avatar %}
+    {{ avatar(member, 'lg', false) }}
+    {% endif %}
 {% endblock %}
 
 {% block content %}

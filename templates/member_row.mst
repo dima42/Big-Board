@@ -2,7 +2,7 @@
     <td class="slack-link">
         {{#SlackId}}<a href="http://{{ slackDomain }}.slack.com/team/{{ SlackId }}"><img src="/img/slack.png" width="15px" alt=""></a>{{/SlackId}}
     </td>
-    <td>{{ FullName }}</td>
+    <td><a href="/member/{{Id}}">{{ FullName }}</a></td>
     <td class="phone-number">{{ PhoneNumber }}</td>
     <td class="strengths">{{ Strengths }}</td>
     <td class="working-on"><a href="/puzzle/{{ PuzzleId }}">{{ PuzzleTitle }}</a></td>
