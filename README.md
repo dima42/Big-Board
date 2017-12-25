@@ -2,7 +2,7 @@
 
 ## Local requirements
 
-- PHP 7+
+- PHP 7.1
 - MySQL
 - [Composer](https://getcomposer.org/)
 
