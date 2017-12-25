@@ -28,6 +28,7 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($pal_client
 
 // If user not authorized or not in palindrome do not allow them to get matched to any remaining routes
 $klein->respond(function () use ($klein, $pal_client, $pal_drive) {
+		debug('');
 		if (!is_authorized($pal_client)) {
 			$authUrl = $pal_client->createAuthUrl();
 			render('loggedout.twig', 'loggedout', array(
@@ -85,7 +86,7 @@ function is_authorized($pal_client) {
 function is_in_palindrome($pal_drive) {
 	// If 'user' is set in SESSION and 'user' is a Member, then we're good.
 	if (isset($_SESSION['user']) && is_a($_SESSION['user'], 'Member') > 0) {
-		debug('Found user in SESSION: '.$_SESSION['user']->getFullName());
+		debug('Found member in SESSION: '.$_SESSION['user']->getFullName());
 		return true;
 	}
 
