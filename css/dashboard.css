@@ -2648,6 +2648,8 @@ aside {
 
 .puzzle-list {
   margin-bottom: 2em; }
+  .puzzle-list th {
+    font-size: .9em; }
   .puzzle-list td, .puzzle-list th {
     padding: .5rem;
     line-height: 1.2; }

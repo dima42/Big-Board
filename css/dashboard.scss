@@ -180,6 +180,10 @@ aside {
 .puzzle-list {
     margin-bottom: 2em;
 
+    th {
+        font-size: .9em;
+    }
+
     td, th {
         padding: .5rem;
         line-height: 1.2;
