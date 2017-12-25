@@ -69,12 +69,13 @@ function addPuzzleForm() {
 }
 
 function slugify(text) {
-    return text.toString().toLowerCase()
+    var t = text.toString().toLowerCase()
         .replace(/\s+/g, '-')           // Replace spaces with -
         .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
         .replace(/\-\-+/g, '-')         // Replace multiple - with single -
         .replace(/^-+/, '')             // Trim - from start of text
         .replace(/-+$/, '');            // Trim - from end of text
+    return t.substr(0, 21);
 }
 
 $(function() {
@@ -142,6 +143,22 @@ $(function() {
     $('.addForm').on('click', '.removePuzzle', function(e) {
         e.preventDefault();
         $(this).closest('.puzzleInputGroup').remove();
+    });
+
+    $('.addForm').on('keyup', '.title-field', function(e) {
+        var slackField = $(this).closest('.puzzleInputGroup').find('.slack-field');
+        if (slackField.data('edited') != 1) {
+            var slug = slugify($(this).val());
+            $(this).closest('.puzzleInputGroup').find('.slack-field').val(slug);
+        }
+    });
+
+    $('.addForm').on('keyup', '.slack-field', function(e) {
+        if ($(this).val() != "") {
+            $(this).data('edited', '1');
+        } else {
+            $(this).data('edited', '');
+        }
     });
 });
 </script>
