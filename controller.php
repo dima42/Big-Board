@@ -357,10 +357,10 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		->find()
 		->toArray();
 
-	$i_am_meta = false;
+	$is_meta = false;
 	foreach ($puzzles_metas as $meta) {
 		if ($meta['Id'] == $puzzle->getId()) {
-			$i_am_meta = true;
+			$is_meta = true;
 		}
 	}
 
@@ -392,7 +392,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'is_member'     => $is_member,
 			'metas_to_show' => $metas_to_show,
 			'puzzles_metas' => $puzzles_metas,
-			'i_am_meta'     => $i_am_meta,
+			'is_meta'       => $is_meta,
 			'all_members'   => $all_members,
 		));
 }
@@ -424,7 +424,7 @@ function editPuzzle($puzzle_id, $request) {
 	}
 
 	// Add self as parent if it's a meta
-	if ($request->i_am_meta == "y") {
+	if ($request->is_meta == "y") {
 		$puzzle->addParent($puzzle);
 	}
 

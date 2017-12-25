@@ -3,7 +3,7 @@
 {% block content %}
     <div class="puzzle-header">
         <div class="puzzle-metas">
-            {% if i_am_meta %}
+            {% if is_meta %}
                 <span class="badge badge-pill badge-secondary">META</span>
             {% endif %}
             {% for meta in puzzles_metas if meta.Id != puzzle.Id %}
@@ -44,7 +44,7 @@
         </div>
     </form>
 
-    {% if i_am_meta %}
+    {% if is_meta %}
         {% from 'macros.twig' import puzzle_table %}
         {{ puzzle_table( puzzle.id ) }}
     {% endif %}
@@ -129,7 +129,7 @@
 {% block scripts %}
 <script>
 $(function() {
-    {% if i_am_meta %}
+    {% if is_meta %}
         loadPuzzleData('/puzzles/meta/{{ puzzle.id }}');
     {% endif %}
 
