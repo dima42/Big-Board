@@ -101,6 +101,7 @@ function render($template, $context = "", $vars = array()) {
 	$vars['googleDriveId'] = getenv('GOOGLE_DRIVE_ID');
 	$vars['huntUrl']       = getenv('HUNT_URL');
 	$vars['sidebarInfo']   = explode(";", getenv('SIDEBAR_TEAM_INFO'));
+	$vars['teamName']      = getenv('TEAM_NAME');
 
 	Global $DEBUG;
 	if ($DEBUG) {
