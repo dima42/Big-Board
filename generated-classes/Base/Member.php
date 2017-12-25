@@ -18,6 +18,7 @@ use Map\MemberTableMap;
 use Map\NewsTableMap;
 use Map\NoteTableMap;
 use Map\PuzzleMemberTableMap;
+use Map\PuzzleTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -136,6 +137,12 @@ abstract class Member implements ActiveRecordInterface
     protected $phone_number;
 
     /**
+     * @var        ObjectCollection|ChildPuzzle[] Collection to store aggregation of ChildPuzzle objects.
+     */
+    protected $collWrangledPuzzles;
+    protected $collWrangledPuzzlesPartial;
+
+    /**
      * @var        ObjectCollection|ChildNote[] Collection to store aggregation of ChildNote objects.
      */
     protected $collNotes;
@@ -176,6 +183,12 @@ abstract class Member implements ActiveRecordInterface
      * @var ObjectCollection|ChildPuzzle[]
      */
     protected $puzzlesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildPuzzle[]
+     */
+    protected $wrangledPuzzlesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -821,6 +834,8 @@ abstract class Member implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collWrangledPuzzles = null;
+
             $this->collNotes = null;
 
             $this->collPuzzleMembers = null;
@@ -970,6 +985,24 @@ abstract class Member implements ActiveRecordInterface
                 }
             }
 
+
+            if ($this->wrangledPuzzlesScheduledForDeletion !== null) {
+                if (!$this->wrangledPuzzlesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->wrangledPuzzlesScheduledForDeletion as $wrangledPuzzle) {
+                        // need to save related object because we set the relation to null
+                        $wrangledPuzzle->save($con);
+                    }
+                    $this->wrangledPuzzlesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collWrangledPuzzles !== null) {
+                foreach ($this->collWrangledPuzzles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
 
             if ($this->notesScheduledForDeletion !== null) {
                 if (!$this->notesScheduledForDeletion->isEmpty()) {
@@ -1250,6 +1283,21 @@ abstract class Member implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collWrangledPuzzles) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'puzzles';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'puzzles';
+                        break;
+                    default:
+                        $key = 'WrangledPuzzles';
+                }
+
+                $result[$key] = $this->collWrangledPuzzles->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collNotes) {
 
                 switch ($keyType) {
@@ -1577,6 +1625,12 @@ abstract class Member implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getWrangledPuzzles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addWrangledPuzzle($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getNotes() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addNote($relObj->copy($deepCopy));
@@ -1636,6 +1690,10 @@ abstract class Member implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('WrangledPuzzle' == $relationName) {
+            $this->initWrangledPuzzles();
+            return;
+        }
         if ('Note' == $relationName) {
             $this->initNotes();
             return;
@@ -1648,6 +1706,231 @@ abstract class Member implements ActiveRecordInterface
             $this->initNews();
             return;
         }
+    }
+
+    /**
+     * Clears out the collWrangledPuzzles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addWrangledPuzzles()
+     */
+    public function clearWrangledPuzzles()
+    {
+        $this->collWrangledPuzzles = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collWrangledPuzzles collection loaded partially.
+     */
+    public function resetPartialWrangledPuzzles($v = true)
+    {
+        $this->collWrangledPuzzlesPartial = $v;
+    }
+
+    /**
+     * Initializes the collWrangledPuzzles collection.
+     *
+     * By default this just sets the collWrangledPuzzles collection to an empty array (like clearcollWrangledPuzzles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initWrangledPuzzles($overrideExisting = true)
+    {
+        if (null !== $this->collWrangledPuzzles && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = PuzzleTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collWrangledPuzzles = new $collectionClassName;
+        $this->collWrangledPuzzles->setModel('\Puzzle');
+    }
+
+    /**
+     * Gets an array of ChildPuzzle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildMember is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildPuzzle[] List of ChildPuzzle objects
+     * @throws PropelException
+     */
+    public function getWrangledPuzzles(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collWrangledPuzzlesPartial && !$this->isNew();
+        if (null === $this->collWrangledPuzzles || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collWrangledPuzzles) {
+                // return empty collection
+                $this->initWrangledPuzzles();
+            } else {
+                $collWrangledPuzzles = ChildPuzzleQuery::create(null, $criteria)
+                    ->filterByWrangler($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collWrangledPuzzlesPartial && count($collWrangledPuzzles)) {
+                        $this->initWrangledPuzzles(false);
+
+                        foreach ($collWrangledPuzzles as $obj) {
+                            if (false == $this->collWrangledPuzzles->contains($obj)) {
+                                $this->collWrangledPuzzles->append($obj);
+                            }
+                        }
+
+                        $this->collWrangledPuzzlesPartial = true;
+                    }
+
+                    return $collWrangledPuzzles;
+                }
+
+                if ($partial && $this->collWrangledPuzzles) {
+                    foreach ($this->collWrangledPuzzles as $obj) {
+                        if ($obj->isNew()) {
+                            $collWrangledPuzzles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collWrangledPuzzles = $collWrangledPuzzles;
+                $this->collWrangledPuzzlesPartial = false;
+            }
+        }
+
+        return $this->collWrangledPuzzles;
+    }
+
+    /**
+     * Sets a collection of ChildPuzzle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $wrangledPuzzles A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildMember The current object (for fluent API support)
+     */
+    public function setWrangledPuzzles(Collection $wrangledPuzzles, ConnectionInterface $con = null)
+    {
+        /** @var ChildPuzzle[] $wrangledPuzzlesToDelete */
+        $wrangledPuzzlesToDelete = $this->getWrangledPuzzles(new Criteria(), $con)->diff($wrangledPuzzles);
+
+
+        $this->wrangledPuzzlesScheduledForDeletion = $wrangledPuzzlesToDelete;
+
+        foreach ($wrangledPuzzlesToDelete as $wrangledPuzzleRemoved) {
+            $wrangledPuzzleRemoved->setWrangler(null);
+        }
+
+        $this->collWrangledPuzzles = null;
+        foreach ($wrangledPuzzles as $wrangledPuzzle) {
+            $this->addWrangledPuzzle($wrangledPuzzle);
+        }
+
+        $this->collWrangledPuzzles = $wrangledPuzzles;
+        $this->collWrangledPuzzlesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Puzzle objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Puzzle objects.
+     * @throws PropelException
+     */
+    public function countWrangledPuzzles(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collWrangledPuzzlesPartial && !$this->isNew();
+        if (null === $this->collWrangledPuzzles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collWrangledPuzzles) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getWrangledPuzzles());
+            }
+
+            $query = ChildPuzzleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByWrangler($this)
+                ->count($con);
+        }
+
+        return count($this->collWrangledPuzzles);
+    }
+
+    /**
+     * Method called to associate a ChildPuzzle object to this object
+     * through the ChildPuzzle foreign key attribute.
+     *
+     * @param  ChildPuzzle $l ChildPuzzle
+     * @return $this|\Member The current object (for fluent API support)
+     */
+    public function addWrangledPuzzle(ChildPuzzle $l)
+    {
+        if ($this->collWrangledPuzzles === null) {
+            $this->initWrangledPuzzles();
+            $this->collWrangledPuzzlesPartial = true;
+        }
+
+        if (!$this->collWrangledPuzzles->contains($l)) {
+            $this->doAddWrangledPuzzle($l);
+
+            if ($this->wrangledPuzzlesScheduledForDeletion and $this->wrangledPuzzlesScheduledForDeletion->contains($l)) {
+                $this->wrangledPuzzlesScheduledForDeletion->remove($this->wrangledPuzzlesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildPuzzle $wrangledPuzzle The ChildPuzzle object to add.
+     */
+    protected function doAddWrangledPuzzle(ChildPuzzle $wrangledPuzzle)
+    {
+        $this->collWrangledPuzzles[]= $wrangledPuzzle;
+        $wrangledPuzzle->setWrangler($this);
+    }
+
+    /**
+     * @param  ChildPuzzle $wrangledPuzzle The ChildPuzzle object to remove.
+     * @return $this|ChildMember The current object (for fluent API support)
+     */
+    public function removeWrangledPuzzle(ChildPuzzle $wrangledPuzzle)
+    {
+        if ($this->getWrangledPuzzles()->contains($wrangledPuzzle)) {
+            $pos = $this->collWrangledPuzzles->search($wrangledPuzzle);
+            $this->collWrangledPuzzles->remove($pos);
+            if (null === $this->wrangledPuzzlesScheduledForDeletion) {
+                $this->wrangledPuzzlesScheduledForDeletion = clone $this->collWrangledPuzzles;
+                $this->wrangledPuzzlesScheduledForDeletion->clear();
+            }
+            $this->wrangledPuzzlesScheduledForDeletion[]= $wrangledPuzzle;
+            $wrangledPuzzle->setWrangler(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -2680,6 +2963,11 @@ abstract class Member implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collWrangledPuzzles) {
+                foreach ($this->collWrangledPuzzles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collNotes) {
                 foreach ($this->collNotes as $o) {
                     $o->clearAllReferences($deep);
@@ -2702,6 +2990,7 @@ abstract class Member implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collWrangledPuzzles = null;
         $this->collNotes = null;
         $this->collPuzzleMembers = null;
         $this->collNews = null;

@@ -59,7 +59,7 @@ class PuzzleArchiveTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 13;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class PuzzleArchiveTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 13;
 
     /**
      * the column name for the id field
@@ -112,6 +112,11 @@ class PuzzleArchiveTableMap extends TableMap
     const COL_SLACK_CHANNEL_ID = 'puzzle_archive.slack_channel_id';
 
     /**
+     * the column name for the wrangler_id field
+     */
+    const COL_WRANGLER_ID = 'puzzle_archive.wrangler_id';
+
+    /**
      * the column name for the post_count field
      */
     const COL_POST_COUNT = 'puzzle_archive.post_count';
@@ -143,11 +148,11 @@ class PuzzleArchiveTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Title', 'Url', 'SpreadsheetId', 'Solution', 'Status', 'SlackChannel', 'SlackChannelId', 'PostCount', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'title', 'url', 'spreadsheetId', 'solution', 'status', 'slackChannel', 'slackChannelId', 'postCount', 'createdAt', 'updatedAt', 'archivedAt', ),
-        self::TYPE_COLNAME       => array(PuzzleArchiveTableMap::COL_ID, PuzzleArchiveTableMap::COL_TITLE, PuzzleArchiveTableMap::COL_URL, PuzzleArchiveTableMap::COL_SPREADSHEET_ID, PuzzleArchiveTableMap::COL_SOLUTION, PuzzleArchiveTableMap::COL_STATUS, PuzzleArchiveTableMap::COL_SLACK_CHANNEL, PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID, PuzzleArchiveTableMap::COL_POST_COUNT, PuzzleArchiveTableMap::COL_CREATED_AT, PuzzleArchiveTableMap::COL_UPDATED_AT, PuzzleArchiveTableMap::COL_ARCHIVED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'title', 'url', 'spreadsheet_id', 'solution', 'status', 'slack_channel', 'slack_channel_id', 'post_count', 'created_at', 'updated_at', 'archived_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id', 'Title', 'Url', 'SpreadsheetId', 'Solution', 'Status', 'SlackChannel', 'SlackChannelId', 'WranglerId', 'PostCount', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'title', 'url', 'spreadsheetId', 'solution', 'status', 'slackChannel', 'slackChannelId', 'wranglerId', 'postCount', 'createdAt', 'updatedAt', 'archivedAt', ),
+        self::TYPE_COLNAME       => array(PuzzleArchiveTableMap::COL_ID, PuzzleArchiveTableMap::COL_TITLE, PuzzleArchiveTableMap::COL_URL, PuzzleArchiveTableMap::COL_SPREADSHEET_ID, PuzzleArchiveTableMap::COL_SOLUTION, PuzzleArchiveTableMap::COL_STATUS, PuzzleArchiveTableMap::COL_SLACK_CHANNEL, PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID, PuzzleArchiveTableMap::COL_WRANGLER_ID, PuzzleArchiveTableMap::COL_POST_COUNT, PuzzleArchiveTableMap::COL_CREATED_AT, PuzzleArchiveTableMap::COL_UPDATED_AT, PuzzleArchiveTableMap::COL_ARCHIVED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'title', 'url', 'spreadsheet_id', 'solution', 'status', 'slack_channel', 'slack_channel_id', 'wrangler_id', 'post_count', 'created_at', 'updated_at', 'archived_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -157,11 +162,11 @@ class PuzzleArchiveTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Url' => 2, 'SpreadsheetId' => 3, 'Solution' => 4, 'Status' => 5, 'SlackChannel' => 6, 'SlackChannelId' => 7, 'PostCount' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, 'ArchivedAt' => 11, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheetId' => 3, 'solution' => 4, 'status' => 5, 'slackChannel' => 6, 'slackChannelId' => 7, 'postCount' => 8, 'createdAt' => 9, 'updatedAt' => 10, 'archivedAt' => 11, ),
-        self::TYPE_COLNAME       => array(PuzzleArchiveTableMap::COL_ID => 0, PuzzleArchiveTableMap::COL_TITLE => 1, PuzzleArchiveTableMap::COL_URL => 2, PuzzleArchiveTableMap::COL_SPREADSHEET_ID => 3, PuzzleArchiveTableMap::COL_SOLUTION => 4, PuzzleArchiveTableMap::COL_STATUS => 5, PuzzleArchiveTableMap::COL_SLACK_CHANNEL => 6, PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID => 7, PuzzleArchiveTableMap::COL_POST_COUNT => 8, PuzzleArchiveTableMap::COL_CREATED_AT => 9, PuzzleArchiveTableMap::COL_UPDATED_AT => 10, PuzzleArchiveTableMap::COL_ARCHIVED_AT => 11, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheet_id' => 3, 'solution' => 4, 'status' => 5, 'slack_channel' => 6, 'slack_channel_id' => 7, 'post_count' => 8, 'created_at' => 9, 'updated_at' => 10, 'archived_at' => 11, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Url' => 2, 'SpreadsheetId' => 3, 'Solution' => 4, 'Status' => 5, 'SlackChannel' => 6, 'SlackChannelId' => 7, 'WranglerId' => 8, 'PostCount' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, 'ArchivedAt' => 12, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheetId' => 3, 'solution' => 4, 'status' => 5, 'slackChannel' => 6, 'slackChannelId' => 7, 'wranglerId' => 8, 'postCount' => 9, 'createdAt' => 10, 'updatedAt' => 11, 'archivedAt' => 12, ),
+        self::TYPE_COLNAME       => array(PuzzleArchiveTableMap::COL_ID => 0, PuzzleArchiveTableMap::COL_TITLE => 1, PuzzleArchiveTableMap::COL_URL => 2, PuzzleArchiveTableMap::COL_SPREADSHEET_ID => 3, PuzzleArchiveTableMap::COL_SOLUTION => 4, PuzzleArchiveTableMap::COL_STATUS => 5, PuzzleArchiveTableMap::COL_SLACK_CHANNEL => 6, PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID => 7, PuzzleArchiveTableMap::COL_WRANGLER_ID => 8, PuzzleArchiveTableMap::COL_POST_COUNT => 9, PuzzleArchiveTableMap::COL_CREATED_AT => 10, PuzzleArchiveTableMap::COL_UPDATED_AT => 11, PuzzleArchiveTableMap::COL_ARCHIVED_AT => 12, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheet_id' => 3, 'solution' => 4, 'status' => 5, 'slack_channel' => 6, 'slack_channel_id' => 7, 'wrangler_id' => 8, 'post_count' => 9, 'created_at' => 10, 'updated_at' => 11, 'archived_at' => 12, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -189,6 +194,7 @@ class PuzzleArchiveTableMap extends TableMap
         $this->addColumn('status', 'Status', 'VARCHAR', false, 24, null);
         $this->addColumn('slack_channel', 'SlackChannel', 'VARCHAR', false, 48, null);
         $this->addColumn('slack_channel_id', 'SlackChannelId', 'VARCHAR', false, 24, null);
+        $this->addColumn('wrangler_id', 'WranglerId', 'INTEGER', false, null, null);
         $this->addColumn('post_count', 'PostCount', 'INTEGER', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -351,6 +357,7 @@ class PuzzleArchiveTableMap extends TableMap
             $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_STATUS);
             $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_SLACK_CHANNEL);
             $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_SLACK_CHANNEL_ID);
+            $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_WRANGLER_ID);
             $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_POST_COUNT);
             $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(PuzzleArchiveTableMap::COL_UPDATED_AT);
@@ -364,6 +371,7 @@ class PuzzleArchiveTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.status');
             $criteria->addSelectColumn($alias . '.slack_channel');
             $criteria->addSelectColumn($alias . '.slack_channel_id');
+            $criteria->addSelectColumn($alias . '.wrangler_id');
             $criteria->addSelectColumn($alias . '.post_count');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');

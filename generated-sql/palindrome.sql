@@ -19,11 +19,17 @@ CREATE TABLE `puzzle`
     `status` VARCHAR(24),
     `slack_channel` VARCHAR(48),
     `slack_channel_id` VARCHAR(24),
+    `wrangler_id` INTEGER,
     `post_count` INTEGER,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `puzzle_u_639136` (`title`)
+    UNIQUE INDEX `puzzle_u_639136` (`title`),
+    INDEX `puzzle_fi_707a36` (`wrangler_id`),
+    CONSTRAINT `puzzle_fk_707a36`
+        FOREIGN KEY (`wrangler_id`)
+        REFERENCES `member` (`id`)
+        ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -165,11 +171,13 @@ CREATE TABLE `puzzle_archive`
     `status` VARCHAR(24),
     `slack_channel` VARCHAR(48),
     `slack_channel_id` VARCHAR(24),
+    `wrangler_id` INTEGER,
     `post_count` INTEGER,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     `archived_at` DATETIME,
     PRIMARY KEY (`id`),
+    INDEX `puzzle_fi_707a36` (`wrangler_id`),
     INDEX `puzzle_archive_i_639136` (`title`)
 ) ENGINE=InnoDB;
 

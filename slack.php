@@ -175,8 +175,6 @@ class Bot {
 				return $puzzle->getSlackAttachmentSmall();
 			}, iterator_to_array($puzzles));
 
-		error_log(json_encode($attachments));
-
 		return [
 			'link_names'    => true,
 			"response_type" => "in_channel",

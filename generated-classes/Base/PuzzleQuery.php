@@ -29,6 +29,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery orderByStatus($order = Criteria::ASC) Order by the status column
  * @method     ChildPuzzleQuery orderBySlackChannel($order = Criteria::ASC) Order by the slack_channel column
  * @method     ChildPuzzleQuery orderBySlackChannelId($order = Criteria::ASC) Order by the slack_channel_id column
+ * @method     ChildPuzzleQuery orderByWranglerId($order = Criteria::ASC) Order by the wrangler_id column
  * @method     ChildPuzzleQuery orderByPostCount($order = Criteria::ASC) Order by the post_count column
  * @method     ChildPuzzleQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildPuzzleQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
@@ -41,6 +42,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery groupByStatus() Group by the status column
  * @method     ChildPuzzleQuery groupBySlackChannel() Group by the slack_channel column
  * @method     ChildPuzzleQuery groupBySlackChannelId() Group by the slack_channel_id column
+ * @method     ChildPuzzleQuery groupByWranglerId() Group by the wrangler_id column
  * @method     ChildPuzzleQuery groupByPostCount() Group by the post_count column
  * @method     ChildPuzzleQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildPuzzleQuery groupByUpdatedAt() Group by the updated_at column
@@ -52,6 +54,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildPuzzleQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildPuzzleQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildPuzzleQuery leftJoinWrangler($relationAlias = null) Adds a LEFT JOIN clause to the query using the Wrangler relation
+ * @method     ChildPuzzleQuery rightJoinWrangler($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Wrangler relation
+ * @method     ChildPuzzleQuery innerJoinWrangler($relationAlias = null) Adds a INNER JOIN clause to the query using the Wrangler relation
+ *
+ * @method     ChildPuzzleQuery joinWithWrangler($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Wrangler relation
+ *
+ * @method     ChildPuzzleQuery leftJoinWithWrangler() Adds a LEFT JOIN clause and with to the query using the Wrangler relation
+ * @method     ChildPuzzleQuery rightJoinWithWrangler() Adds a RIGHT JOIN clause and with to the query using the Wrangler relation
+ * @method     ChildPuzzleQuery innerJoinWithWrangler() Adds a INNER JOIN clause and with to the query using the Wrangler relation
  *
  * @method     ChildPuzzleQuery leftJoinNote($relationAlias = null) Adds a LEFT JOIN clause to the query using the Note relation
  * @method     ChildPuzzleQuery rightJoinNote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Note relation
@@ -103,7 +115,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery rightJoinWithNews() Adds a RIGHT JOIN clause and with to the query using the News relation
  * @method     ChildPuzzleQuery innerJoinWithNews() Adds a INNER JOIN clause and with to the query using the News relation
  *
- * @method     \NoteQuery|\PuzzleMemberQuery|\PuzzlePuzzleQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \MemberQuery|\NoteQuery|\PuzzleMemberQuery|\PuzzlePuzzleQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPuzzle findOne(ConnectionInterface $con = null) Return the first ChildPuzzle matching the query
  * @method     ChildPuzzle findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPuzzle matching the query, or a new ChildPuzzle object populated from the query conditions when no match is found
@@ -116,6 +128,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzle findOneByStatus(string $status) Return the first ChildPuzzle filtered by the status column
  * @method     ChildPuzzle findOneBySlackChannel(string $slack_channel) Return the first ChildPuzzle filtered by the slack_channel column
  * @method     ChildPuzzle findOneBySlackChannelId(string $slack_channel_id) Return the first ChildPuzzle filtered by the slack_channel_id column
+ * @method     ChildPuzzle findOneByWranglerId(int $wrangler_id) Return the first ChildPuzzle filtered by the wrangler_id column
  * @method     ChildPuzzle findOneByPostCount(int $post_count) Return the first ChildPuzzle filtered by the post_count column
  * @method     ChildPuzzle findOneByCreatedAt(string $created_at) Return the first ChildPuzzle filtered by the created_at column
  * @method     ChildPuzzle findOneByUpdatedAt(string $updated_at) Return the first ChildPuzzle filtered by the updated_at column *
@@ -131,6 +144,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzle requireOneByStatus(string $status) Return the first ChildPuzzle filtered by the status column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzle requireOneBySlackChannel(string $slack_channel) Return the first ChildPuzzle filtered by the slack_channel column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzle requireOneBySlackChannelId(string $slack_channel_id) Return the first ChildPuzzle filtered by the slack_channel_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPuzzle requireOneByWranglerId(int $wrangler_id) Return the first ChildPuzzle filtered by the wrangler_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzle requireOneByPostCount(int $post_count) Return the first ChildPuzzle filtered by the post_count column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzle requireOneByCreatedAt(string $created_at) Return the first ChildPuzzle filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzle requireOneByUpdatedAt(string $updated_at) Return the first ChildPuzzle filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -144,6 +158,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzle[]|ObjectCollection findByStatus(string $status) Return ChildPuzzle objects filtered by the status column
  * @method     ChildPuzzle[]|ObjectCollection findBySlackChannel(string $slack_channel) Return ChildPuzzle objects filtered by the slack_channel column
  * @method     ChildPuzzle[]|ObjectCollection findBySlackChannelId(string $slack_channel_id) Return ChildPuzzle objects filtered by the slack_channel_id column
+ * @method     ChildPuzzle[]|ObjectCollection findByWranglerId(int $wrangler_id) Return ChildPuzzle objects filtered by the wrangler_id column
  * @method     ChildPuzzle[]|ObjectCollection findByPostCount(int $post_count) Return ChildPuzzle objects filtered by the post_count column
  * @method     ChildPuzzle[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildPuzzle objects filtered by the created_at column
  * @method     ChildPuzzle[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildPuzzle objects filtered by the updated_at column
@@ -248,7 +263,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, title, url, spreadsheet_id, solution, status, slack_channel, slack_channel_id, post_count, created_at, updated_at FROM puzzle WHERE id = :p0';
+        $sql = 'SELECT id, title, url, spreadsheet_id, solution, status, slack_channel, slack_channel_id, wrangler_id, post_count, created_at, updated_at FROM puzzle WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -555,6 +570,49 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     }
 
     /**
+     * Filter the query on the wrangler_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByWranglerId(1234); // WHERE wrangler_id = 1234
+     * $query->filterByWranglerId(array(12, 34)); // WHERE wrangler_id IN (12, 34)
+     * $query->filterByWranglerId(array('min' => 12)); // WHERE wrangler_id > 12
+     * </code>
+     *
+     * @see       filterByWrangler()
+     *
+     * @param     mixed $wranglerId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterByWranglerId($wranglerId = null, $comparison = null)
+    {
+        if (is_array($wranglerId)) {
+            $useMinMax = false;
+            if (isset($wranglerId['min'])) {
+                $this->addUsingAlias(PuzzleTableMap::COL_WRANGLER_ID, $wranglerId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($wranglerId['max'])) {
+                $this->addUsingAlias(PuzzleTableMap::COL_WRANGLER_ID, $wranglerId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(PuzzleTableMap::COL_WRANGLER_ID, $wranglerId, $comparison);
+    }
+
+    /**
      * Filter the query on the post_count column
      *
      * Example usage:
@@ -679,6 +737,83 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         }
 
         return $this->addUsingAlias(PuzzleTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \Member object
+     *
+     * @param \Member|ObjectCollection $member The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterByWrangler($member, $comparison = null)
+    {
+        if ($member instanceof \Member) {
+            return $this
+                ->addUsingAlias(PuzzleTableMap::COL_WRANGLER_ID, $member->getId(), $comparison);
+        } elseif ($member instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(PuzzleTableMap::COL_WRANGLER_ID, $member->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByWrangler() only accepts arguments of type \Member or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Wrangler relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function joinWrangler($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Wrangler');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Wrangler');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Wrangler relation Member object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \MemberQuery A secondary query class using the current class as primary query
+     */
+    public function useWranglerQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinWrangler($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Wrangler', '\MemberQuery');
     }
 
     /**

@@ -136,6 +136,13 @@ abstract class Puzzle implements ActiveRecordInterface
     protected $slack_channel_id;
 
     /**
+     * The value for the wrangler_id field.
+     *
+     * @var        int
+     */
+    protected $wrangler_id;
+
+    /**
      * The value for the post_count field.
      *
      * @var        int
@@ -155,6 +162,11 @@ abstract class Puzzle implements ActiveRecordInterface
      * @var        DateTime
      */
     protected $updated_at;
+
+    /**
+     * @var        ChildMember
+     */
+    protected $aWrangler;
 
     /**
      * @var        ObjectCollection|ChildNote[] Collection to store aggregation of ChildNote objects.
@@ -581,6 +593,16 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
+     * Get the [wrangler_id] column value.
+     *
+     * @return int
+     */
+    public function getWranglerId()
+    {
+        return $this->wrangler_id;
+    }
+
+    /**
      * Get the [post_count] column value.
      *
      * @return int
@@ -791,6 +813,30 @@ abstract class Puzzle implements ActiveRecordInterface
     } // setSlackChannelId()
 
     /**
+     * Set the value of [wrangler_id] column.
+     *
+     * @param int $v new value
+     * @return $this|\Puzzle The current object (for fluent API support)
+     */
+    public function setWranglerId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->wrangler_id !== $v) {
+            $this->wrangler_id = $v;
+            $this->modifiedColumns[PuzzleTableMap::COL_WRANGLER_ID] = true;
+        }
+
+        if ($this->aWrangler !== null && $this->aWrangler->getId() !== $v) {
+            $this->aWrangler = null;
+        }
+
+        return $this;
+    } // setWranglerId()
+
+    /**
      * Set the value of [post_count] column.
      *
      * @param int $v new value
@@ -910,16 +956,19 @@ abstract class Puzzle implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : PuzzleTableMap::translateFieldName('SlackChannelId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->slack_channel_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : PuzzleTableMap::translateFieldName('PostCount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : PuzzleTableMap::translateFieldName('WranglerId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->wrangler_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : PuzzleTableMap::translateFieldName('PostCount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_count = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : PuzzleTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : PuzzleTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : PuzzleTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : PuzzleTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -932,7 +981,7 @@ abstract class Puzzle implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 11; // 11 = PuzzleTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 12; // 12 = PuzzleTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Puzzle'), 0, $e);
@@ -954,6 +1003,9 @@ abstract class Puzzle implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aWrangler !== null && $this->wrangler_id !== $this->aWrangler->getId()) {
+            $this->aWrangler = null;
+        }
     } // ensureConsistency
 
     /**
@@ -993,6 +1045,7 @@ abstract class Puzzle implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aWrangler = null;
             $this->collNotes = null;
 
             $this->collPuzzleMembers = null;
@@ -1130,6 +1183,18 @@ abstract class Puzzle implements ActiveRecordInterface
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
+
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aWrangler !== null) {
+                if ($this->aWrangler->isModified() || $this->aWrangler->isNew()) {
+                    $affectedRows += $this->aWrangler->save($con);
+                }
+                $this->setWrangler($this->aWrangler);
+            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -1366,6 +1431,9 @@ abstract class Puzzle implements ActiveRecordInterface
         if ($this->isColumnModified(PuzzleTableMap::COL_SLACK_CHANNEL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'slack_channel_id';
         }
+        if ($this->isColumnModified(PuzzleTableMap::COL_WRANGLER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'wrangler_id';
+        }
         if ($this->isColumnModified(PuzzleTableMap::COL_POST_COUNT)) {
             $modifiedColumns[':p' . $index++]  = 'post_count';
         }
@@ -1409,6 +1477,9 @@ abstract class Puzzle implements ActiveRecordInterface
                         break;
                     case 'slack_channel_id':
                         $stmt->bindValue($identifier, $this->slack_channel_id, PDO::PARAM_STR);
+                        break;
+                    case 'wrangler_id':
+                        $stmt->bindValue($identifier, $this->wrangler_id, PDO::PARAM_INT);
                         break;
                     case 'post_count':
                         $stmt->bindValue($identifier, $this->post_count, PDO::PARAM_INT);
@@ -1506,12 +1577,15 @@ abstract class Puzzle implements ActiveRecordInterface
                 return $this->getSlackChannelId();
                 break;
             case 8:
-                return $this->getPostCount();
+                return $this->getWranglerId();
                 break;
             case 9:
-                return $this->getCreatedAt();
+                return $this->getPostCount();
                 break;
             case 10:
+                return $this->getCreatedAt();
+                break;
+            case 11:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1552,16 +1626,17 @@ abstract class Puzzle implements ActiveRecordInterface
             $keys[5] => $this->getStatus(),
             $keys[6] => $this->getSlackChannel(),
             $keys[7] => $this->getSlackChannelId(),
-            $keys[8] => $this->getPostCount(),
-            $keys[9] => $this->getCreatedAt(),
-            $keys[10] => $this->getUpdatedAt(),
+            $keys[8] => $this->getWranglerId(),
+            $keys[9] => $this->getPostCount(),
+            $keys[10] => $this->getCreatedAt(),
+            $keys[11] => $this->getUpdatedAt(),
         );
-        if ($result[$keys[9]] instanceof \DateTimeInterface) {
-            $result[$keys[9]] = $result[$keys[9]]->format('c');
-        }
-
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('c');
+        }
+
+        if ($result[$keys[11]] instanceof \DateTimeInterface) {
+            $result[$keys[11]] = $result[$keys[11]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1570,6 +1645,21 @@ abstract class Puzzle implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aWrangler) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'member';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'member';
+                        break;
+                    default:
+                        $key = 'Wrangler';
+                }
+
+                $result[$key] = $this->aWrangler->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->collNotes) {
 
                 switch ($keyType) {
@@ -1704,12 +1794,15 @@ abstract class Puzzle implements ActiveRecordInterface
                 $this->setSlackChannelId($value);
                 break;
             case 8:
-                $this->setPostCount($value);
+                $this->setWranglerId($value);
                 break;
             case 9:
-                $this->setCreatedAt($value);
+                $this->setPostCount($value);
                 break;
             case 10:
+                $this->setCreatedAt($value);
+                break;
+            case 11:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1763,13 +1856,16 @@ abstract class Puzzle implements ActiveRecordInterface
             $this->setSlackChannelId($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setPostCount($arr[$keys[8]]);
+            $this->setWranglerId($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setCreatedAt($arr[$keys[9]]);
+            $this->setPostCount($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setUpdatedAt($arr[$keys[10]]);
+            $this->setCreatedAt($arr[$keys[10]]);
+        }
+        if (array_key_exists($keys[11], $arr)) {
+            $this->setUpdatedAt($arr[$keys[11]]);
         }
     }
 
@@ -1835,6 +1931,9 @@ abstract class Puzzle implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PuzzleTableMap::COL_SLACK_CHANNEL_ID)) {
             $criteria->add(PuzzleTableMap::COL_SLACK_CHANNEL_ID, $this->slack_channel_id);
+        }
+        if ($this->isColumnModified(PuzzleTableMap::COL_WRANGLER_ID)) {
+            $criteria->add(PuzzleTableMap::COL_WRANGLER_ID, $this->wrangler_id);
         }
         if ($this->isColumnModified(PuzzleTableMap::COL_POST_COUNT)) {
             $criteria->add(PuzzleTableMap::COL_POST_COUNT, $this->post_count);
@@ -1938,6 +2037,7 @@ abstract class Puzzle implements ActiveRecordInterface
         $copyObj->setStatus($this->getStatus());
         $copyObj->setSlackChannel($this->getSlackChannel());
         $copyObj->setSlackChannelId($this->getSlackChannelId());
+        $copyObj->setWranglerId($this->getWranglerId());
         $copyObj->setPostCount($this->getPostCount());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -2005,6 +2105,57 @@ abstract class Puzzle implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildMember object.
+     *
+     * @param  ChildMember $v
+     * @return $this|\Puzzle The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setWrangler(ChildMember $v = null)
+    {
+        if ($v === null) {
+            $this->setWranglerId(NULL);
+        } else {
+            $this->setWranglerId($v->getId());
+        }
+
+        $this->aWrangler = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildMember object, it will not be re-added.
+        if ($v !== null) {
+            $v->addWrangledPuzzle($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildMember object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildMember The associated ChildMember object.
+     * @throws PropelException
+     */
+    public function getWrangler(ConnectionInterface $con = null)
+    {
+        if ($this->aWrangler === null && ($this->wrangler_id != 0)) {
+            $this->aWrangler = ChildMemberQuery::create()->findPk($this->wrangler_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aWrangler->addWrangledPuzzles($this);
+             */
+        }
+
+        return $this->aWrangler;
     }
 
 
@@ -3985,6 +4136,9 @@ abstract class Puzzle implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aWrangler) {
+            $this->aWrangler->removeWrangledPuzzle($this);
+        }
         $this->id = null;
         $this->title = null;
         $this->url = null;
@@ -3993,6 +4147,7 @@ abstract class Puzzle implements ActiveRecordInterface
         $this->status = null;
         $this->slack_channel = null;
         $this->slack_channel_id = null;
+        $this->wrangler_id = null;
         $this->post_count = null;
         $this->created_at = null;
         $this->updated_at = null;
@@ -4064,6 +4219,7 @@ abstract class Puzzle implements ActiveRecordInterface
         $this->collMembers = null;
         $this->collParents = null;
         $this->collChildren = null;
+        $this->aWrangler = null;
     }
 
     /**
@@ -4208,6 +4364,7 @@ abstract class Puzzle implements ActiveRecordInterface
         $this->setStatus($archive->getStatus());
         $this->setSlackChannel($archive->getSlackChannel());
         $this->setSlackChannelId($archive->getSlackChannelId());
+        $this->setWranglerId($archive->getWranglerId());
         $this->setPostCount($archive->getPostCount());
         $this->setCreatedAt($archive->getCreatedAt());
         $this->setUpdatedAt($archive->getUpdatedAt());
