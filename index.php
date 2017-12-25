@@ -68,7 +68,7 @@ function is_authorized($pal_client) {
 
 	// If no access_token in SESSION, check cookies for refresh_token, and refresh
 	if (isset($_COOKIE['refresh_token'])) {
-		debug("refresh token in SESSION: ".$_SESSION['refresh_token']);
+		debug("refresh token in SESSION: ".$_COOKIE['refresh_token']);
 		$pal_client->refreshToken($_COOKIE['refresh_token']);
 		$_SESSION['access_token']  = $pal_client->getAccessToken();
 		$token_dump                = json_decode($_SESSION['access_token']);
