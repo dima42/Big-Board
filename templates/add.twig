@@ -1,73 +1,105 @@
 {% extends 'loggedin.twig' %}
 
+{% block filters %}
+{# <ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" id="manual-tab" href="/news">Manually</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" id="url-tab" href="#">Batch URLs</a>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" id="title-tab" href="#">Batch Titles</a>
+    </li>
+</ul> #}
+
+<h4 class="nav-link">Set meta:</h4>
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" data-meta="-1" href="#">(Various)</a>
+    </li>
+    {% for meta in metas %}
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" data-meta="{{ meta.parent.id }}" href="#">{{ meta.parent.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+
 {% block content %}
-<h1>Add puzzle(s)</h1>
-<form id="scrapeForm" action="" method="get">
-
-    <p>
-        Paste any number of links in the box, one line at a time:
-    </p>
-    <div class="form-group">
-        <textarea name="url-list" id="urls" rows="10" class="form-control"></textarea>
-    </div>
-    <div class="form-group">
-        <label for="meta">Meta info:</label>
-        <select id="metaSelect" class="form-control" name="meta">
-                <option value="">- - -</option>
-            {% for meta in metas %}
-                <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
-            {% endfor %}
-                <option value="">- - -</option>
-                <option value="0">🆕 This is a new meta</option>
-        </select>
-    </div>
-    <button class="btn btn-primary" type="button" id="scrape-button">Submit URLs &rarr;</button>
-</form>
-
-<img class="working" src="https://media.giphy.com/media/ule4vhcY1xEKQ/giphy.gif" alt="">
+<h1 class="mb-3">Add puzzle(s)</h1>
 
 <form class="addForm" action="/add" method="post">
     <div class="addFormError alert alert-danger"></div>
     <div id="form-controls"></div>
-    <button id="submit-button" class="btn btn-primary" type="submit">Submit puzzles</button>
+    <div class="float-left">
+        <button id="submit-button" class="btn btn-primary" type="submit">Submit puzzles</button>
+    </div>
+    <div class="float-right">
+        <button id="add-another-puzzle" class="btn btn-success" type="button">+Add another puzzle</button>
+    </div>
 </form>
+
+<select id="metaSelectTemplate" class="form-control meta-select d-none">
+        <option value="">- - -</option>
+    {% for meta in metas %}
+        <option {% if meta.parent.id == meta_id %}selected{% endif %} value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
+    {% endfor %}
+        <option value="">- - -</option>
+        <option value="0">🆕 This is a new meta</option>
+</select>
 {% endblock %}
 
 {% block scripts %}
 <script>
 var newPuzzleTemplate;
 var successTemplate;
+var selectedMeta = "";
+
+function addPuzzleForm() {
+    var puzzleData = [];
+    puzzleData['i'] = $("#form-controls").children().length + 1;
+    puzzleData['metaSelect'] = $('#metaSelectTemplate').clone().removeClass('d-none').html();
+    var renderedForm = Mustache.render(newPuzzleTemplate, puzzleData);
+    $('.addForm #form-controls').append(renderedForm);
+    if (selectedMeta > 0) {
+        $('.meta-select').val(selectedMeta).prop('disabled', 'disabled');
+    }
+}
+
+function slugify(text) {
+    var t = text.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+    return t.substr(0, 21);
+}
 
 $(function() {
+    $('.nav li:first-child a').click();
+
     $.get('/templates/add_puzzle.mst', function(template) {
         newPuzzleTemplate = template;
+        addPuzzleForm();
     });
 
     $.get('/templates/add_complete.mst', function(template) {
         successTemplate = template;
     });
 
-    $('#scrape-button').click(function(e) {
-        e.preventDefault();
-        var urls = $('#urls').val();
-        var data = {
-            'urls': urls
+    $('[data-meta]').click(function(e) {
+        selectedMeta = $(this).data('meta');
+        if (selectedMeta == -1) {
+            $('.meta-select').attr('disabled', false);
+        } else {
+            $('.meta-select').val(selectedMeta).prop('disabled', 'disabled');
         }
-        $('#scrapeForm').hide();
-        $('body').attr('data-step', 'scraping');
-        $.get('/puzzle_scrape', data, function(response) {
-            $('body').attr('data-step', 'step2');
-            $.each(response, function(i, puzzleData) {
-                puzzleData['i'] = i + 1;
-                puzzleData['metaSelect'] = $('#metaSelect').clone().html();
-                var renderedForm = Mustache.render(newPuzzleTemplate, puzzleData);
-                // var metaSelect = $('#metaSelect');
-                // metaSelect.clone().val(metaSelect.val()).attr('name', 'newPuzzles[' + i + '][meta]').appendTo(renderedForm.find('.newPuzzleMeta'));
-                $('.addForm #form-controls').append(renderedForm);
-            });
-            $('.meta-select').val($('#metaSelect').val());
-        });
     });
+
+    $('#add-another-puzzle').click(addPuzzleForm);
 
     $('.addForm').submit(function(e) {
         e.preventDefault();
@@ -111,6 +143,22 @@ $(function() {
     $('.addForm').on('click', '.removePuzzle', function(e) {
         e.preventDefault();
         $(this).closest('.puzzleInputGroup').remove();
+    });
+
+    $('.addForm').on('keyup', '.title-field', function(e) {
+        var slackField = $(this).closest('.puzzleInputGroup').find('.slack-field');
+        if (slackField.data('edited') != 1) {
+            var slug = slugify($(this).val());
+            $(this).closest('.puzzleInputGroup').find('.slack-field').val(slug);
+        }
+    });
+
+    $('.addForm').on('keyup', '.slack-field', function(e) {
+        if ($(this).val() != "") {
+            $(this).data('edited', '1');
+        } else {
+            $(this).data('edited', '');
+        }
     });
 });
 </script>

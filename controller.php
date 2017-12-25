@@ -297,9 +297,7 @@ function displayAll() {
 		];
 	}
 
-	$solved_percentage = $total_puzzle_count == 0 ?
-		0 :
-		($total_puzzle_count-$unsolved_count)/$total_puzzle_count;
+	$solved_percentage = ($total_puzzle_count == 0)?0:($total_puzzle_count-$unsolved_count)/$total_puzzle_count;
 	render('all.twig', 'puzzles', array(
 			'statusCounts'       => $statusCounts,
 			'unsolved_count'     => $unsolved_count,
