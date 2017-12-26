@@ -15,12 +15,19 @@
 {% from 'macros.twig' import puzzle_table %}
 
 {% for meta in metas %}
-<section class="pt-2">
+<section class="puzzle-section">
     <span class="anchor-target" id="meta-{{ meta.parentid }}"></span>
     <h2>
         <a href="/puzzle/{{ meta.parent.id }}">{{ meta.parent.title }}</a>
-        <a class="add-puzzles-to-meta float-right" href="/add/{{ meta.parent.id }}">+ Add puzzles</a>
     </h2>
+    <div class="puzzle-metadata row">
+        <div class="col col-sm-6 wrangler">
+            Wrangler: <a href="/member/{{ meta.parent.wrangler.Id }}">{{ meta.parent.wrangler.fullName }}</a>
+        </div>
+        <div class="col col-sm-6 add-puzzles-to-meta">
+            <a class="add-puzzles-to-meta" href="/add/{{ meta.parent.id }}">+ Add puzzles</a>
+        </div>
+    </div>
     {{ puzzle_table(meta.parent.id) }}
 </section>
 {% endfor %}

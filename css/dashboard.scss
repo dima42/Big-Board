@@ -224,8 +224,25 @@ aside {
 #open-tab, #stuck-tab, #priority-tab {
 }
 
-.add-puzzles-to-meta {
-    font-size: 1rem;
+.puzzle-section {
+    h2 {
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+}
+
+.puzzle-metadata {
+    color: #444;
+    margin-bottom: 8px;
+    font-size: .8rem;
+
+    .wrangler a {
+        font-weight: bold;
+    }
+
+    .add-puzzles-to-meta {
+        text-align: right;
+    }
 }
 
 .solution {
@@ -236,7 +253,7 @@ aside {
     margin-bottom: 2em;
 
     th {
-        font-size: .9em;
+        font-size: .8em;
     }
 
     td, th {
@@ -245,7 +262,7 @@ aside {
     }
 
     thead tr {
-        background: #e7e7e7;
+        background: #eee;
 
         th {
             border-bottom: 1px solid #aaa;

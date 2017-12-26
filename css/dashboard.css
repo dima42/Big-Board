@@ -2674,8 +2674,18 @@ aside {
   text-transform: uppercase;
   color: #aaa; }
 
-.add-puzzles-to-meta {
-  font-size: 1rem; }
+.puzzle-section h2 {
+  margin-bottom: 5px;
+  font-weight: bold; }
+
+.puzzle-metadata {
+  color: #444;
+  margin-bottom: 8px;
+  font-size: .8rem; }
+  .puzzle-metadata .wrangler a {
+    font-weight: bold; }
+  .puzzle-metadata .add-puzzles-to-meta {
+    text-align: right; }
 
 .solution {
   font-family: Inconsolata, monospace; }
@@ -2683,12 +2693,12 @@ aside {
 .puzzle-list {
   margin-bottom: 2em; }
   .puzzle-list th {
-    font-size: .9em; }
+    font-size: .8em; }
   .puzzle-list td, .puzzle-list th {
     padding: .5rem;
     line-height: 1.2; }
   .puzzle-list thead tr {
-    background: #e7e7e7; }
+    background: #eee; }
     .puzzle-list thead tr th {
       border-bottom: 1px solid #aaa; }
   .puzzle-list:hover tbody tr {

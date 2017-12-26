@@ -309,6 +309,7 @@ function displayAll() {
 function displayAllByMeta() {
 	$metas = PuzzlePuzzleQuery::create()
 		->joinWith('PuzzlePuzzle.Parent')
+		->leftJoinWith('PuzzlePuzzle.Parent.Wrangler')
 		->where('puzzle_id = parent_id')
 		->orderBy('Parent.title')
 		->find();
