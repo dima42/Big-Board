@@ -1,7 +1,7 @@
 {% extends 'loggedin.twig' %}
 
 {% block filters %}
-<h4 class="nav-link">Order by</h4>
+<h4 class="nav-header">Order by</h4>
 <ul class="nav nav-pills flex-column" data-filter-list>
     <li class="nav-item">
         <a data-toggle="tab" class="nav-link" id="by-puzzle-tab" href="#by-puzzle">Puzzle</a>
@@ -12,7 +12,7 @@
 </ul>
 
 <div class="jump-to-tabs">
-    <h4 class="nav-link">Jump to</h4>
+    <h4 class="nav-header">Jump to</h4>
     <ul class="nav nav-pills flex-column">
         {% for puzzle in puzzles %}
         <li class="nav-item">

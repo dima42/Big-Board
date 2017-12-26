@@ -352,15 +352,15 @@ function displayPuzzle($puzzle_id, $method = "get") {
 
 	$puzzles_metas = PuzzleQuery::create()
 		->joinPuzzleChild()
+		->leftJoinWithWrangler()
 		->orderByTitle()
 		->withColumn('PuzzleChild.PuzzleId', 'PuzzleId')
 		->where('PuzzleChild.PuzzleId = '.$puzzle->getId())
-		->find()
-		->toArray();
+		->find();
 
 	$is_meta = false;
 	foreach ($puzzles_metas as $meta) {
-		if ($meta['Id'] == $puzzle->getId()) {
+		if ($meta->getId() == $puzzle->getId()) {
 			$is_meta = true;
 		}
 	}
@@ -368,7 +368,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	$template = 'puzzle.twig';
 
 	$metas_to_show = [];
-	$all_members   = [];
+	$full_roster   = [];
 	if ($method == "edit") {
 		$template = 'puzzle-edit.twig';
 
@@ -380,7 +380,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			->groupBy('Parent.Id')
 			->find();
 
-		$all_members = MemberQuery::create()
+		$full_roster = MemberQuery::create()
 			->orderBy('FullName')
 			->find();
 	}
@@ -394,7 +394,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'metas_to_show' => $metas_to_show,
 			'puzzles_metas' => $puzzles_metas,
 			'is_meta'       => $is_meta,
-			'all_members'   => $all_members,
+			'all_members'   => $full_roster,
 		));
 }
 

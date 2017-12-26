@@ -45,6 +45,7 @@ $priority: #FFD1B2;
 $solved: #f7f7f7;
 
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
+
 body {
     padding-top: 3.5rem;
     font-size: 1rem;
@@ -60,6 +61,10 @@ h1 {
 
 h2 {
     font-size: 1.5rem;
+}
+
+a {
+    color: darken(#007bff,20%);
 }
 
 // TOPNAV
@@ -90,13 +95,19 @@ h2 {
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
     border-right: 1px solid #eee;
 
-    h4 {
-        font-size: .8em;
-        text-transform: uppercase;
-        color: #555;
-        font-weight: bold;
-        margin: 0;
+    h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
     }
+
+    h4 {
+        font-size: .75em;
+        text-transform: uppercase;
+        color: #666;
+        font-weight: bold;
+        margin: 0 0 1em 0;
+    }
+
 
     .nav {
         margin-bottom: 20px;
@@ -114,8 +125,14 @@ h2 {
         border-radius: 0;
     }
 
+    .nav-header {
+        padding: .5rem 1rem;
+        margin-bottom: 0;
+    }
+
     .nav-section {
         padding: .5rem 1rem;
+        margin-bottom: .5rem;
     }
 
     .solver {
@@ -290,6 +307,25 @@ aside {
 
 // PUZZLE PAGE
 
+.puzzle-metas {
+    background:#f7f7f7;
+    margin-bottom: .75em;
+    padding: .3em .5em;
+    color: #444;
+
+    a {
+        color: #444;
+        border-bottom: 1px dashed;
+        font-weight: bold;
+
+        &:hover {
+            color: black;
+            text-decoration: none;
+            border-bottom-style: solid;
+        }
+    }
+}
+
 .solution-field {
     font-family: $monospace;
 }
@@ -318,9 +354,6 @@ aside {
 }
 
 .join-leave {
-    // padding: 0;
-    // width: 100%;
-    // text-align: left;
 }
 
 .avatar {

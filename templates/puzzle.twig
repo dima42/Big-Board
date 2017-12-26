@@ -2,51 +2,52 @@
 
 {% block filters %}
     {% from 'macros.twig' import avatar %}
-    {% if is_meta %}
-        {% if puzzle.wrangler %}
-        <h4 class="nav-link">Wrangler</h4>
-        {{ avatar(puzzle.wrangler) }}
-        {% endif %}
-    {% endif %}
-
-    <h4 class="nav-link">Solvers</h4>
+    <div class="nav-section">
+        <h4>Wrangler</h4>
+        {% for meta in puzzles_metas %}
+            {% if meta.Wrangler %}
+            {{ avatar(meta.Wrangler) }}
+            {% endif %}
+        {% else %}
+        {% endfor %}
+    </div>
 
     {% if puzzle.status != "solved" %}
+    <div class="nav-section">
+        <h4>Solvers</h4>
 
         {% for member in members %}
             {{ avatar(member) }}
         {% else %}
-            <div class="nav-section">
-            No one 😔
-            </div>
+            No one :(
         {% endfor %}
+    </div>
 
-    {% endif %}
-
-        <div class="nav-section">
+    <div class="nav-section">
         {% if not is_member %}
         <form class="join-leave" action="/puzzle/{{ puzzle.id }}/join" method="post">
-            <button type="submit" class="btn btn-info">Work on this</button>
+            <button type="submit" class="btn btn-primary">Work on this</button>
         </form>
         {% else %}
         <form class="join-leave" action="/puzzle/{{ puzzle.id }}/leave" method="post">
-            <button type="submit" class="btn btn-info">Leave this</button>
+            <button type="submit" class="btn btn-primary">Leave this</button>
         </form>
         {% endif %}
-        </div>
+    </div>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
     <div class="puzzle-header">
-        <div class="puzzle-metas">
+        <div class="puzzle-metas small">
             {% if is_meta %}
                 <span class="badge badge-pill badge-secondary">META</span>
             {% endif %}
             {% for meta in puzzles_metas if meta.Id != puzzle.Id %}
                 {% if loop.first %}
-                <small>Part of</small>
+                Part of
                 {% endif %}
-                <a class="badge badge-pill badge-primary" href='/puzzle/{{ meta.Id }}'>{{ meta.Title }}</a>
+                <a class="" href='/puzzle/{{ meta.Id }}'>{{ meta.Title }}</a>
             {% endfor %}
         </div>
 
@@ -62,7 +63,7 @@
             <span class="input-group-addon">Solution</span>
             <input type="text" class="solution-field form-control" name="solution" placeholder="Enter solution here" value="{{ puzzle.solution }}">
             <span class="input-group-btn">
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-dark" type="submit">Go</button>
             </span>
         </div>
     </form>
@@ -75,7 +76,7 @@
                 {% endfor %}
             </select>
             <span class="input-group-btn">
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-dark" type="submit">Go</button>
             </span>
         </div>
     </form>
@@ -118,7 +119,7 @@
             <div class="col-sm-9">
                 <textarea type="text" class="form-control" name="body" rows="2"></textarea>
                 <br>
-                <button class="btn btn-primary" type="submit">Submit new note</button>
+                <button class="btn btn-dark" type="submit">Submit new note</button>
             </div>
         </div>
         </form>
@@ -133,7 +134,7 @@
     </div>
 
     <div class="mb-3">
-        <a class="btn btn-dark border border-dark" href="/puzzle/{{ puzzle.id }}/edit">✏️  &nbsp; Edit this puzzle</a>
+        <a class="btn btn-light border border-dark" href="/puzzle/{{ puzzle.id }}/edit">✏️  &nbsp; Edit this puzzle</a>
     </div>
 {% endblock %}
 

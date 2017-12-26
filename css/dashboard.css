@@ -2580,6 +2580,9 @@ h1 {
 h2 {
   font-size: 1.5rem; }
 
+a {
+  color: #004a99; }
+
 .navbar-dark .navbar-nav .add-link {
   color: #ccc; }
 
@@ -2598,12 +2601,15 @@ h2 {
   overflow-y: auto;
   /* Scrollable contents if viewport is shorter than content. */
   border-right: 1px solid #eee; }
+  .sidebar h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem; }
   .sidebar h4 {
-    font-size: .8em;
+    font-size: .75em;
     text-transform: uppercase;
-    color: #555;
+    color: #666;
     font-weight: bold;
-    margin: 0; }
+    margin: 0 0 1em 0; }
   .sidebar .nav {
     margin-bottom: 20px; }
   .sidebar .nav-item {
@@ -2612,8 +2618,12 @@ h2 {
     margin-left: 0; }
   .sidebar .nav-link {
     border-radius: 0; }
+  .sidebar .nav-header {
+    padding: .5rem 1rem;
+    margin-bottom: 0; }
   .sidebar .nav-section {
-    padding: .5rem 1rem; }
+    padding: .5rem 1rem;
+    margin-bottom: .5rem; }
   .sidebar .solver {
     display: block;
     background: #fff;
@@ -2712,6 +2722,20 @@ aside {
   height: 80px;
   visibility: hidden;
   pointer-events: none; }
+
+.puzzle-metas {
+  background: #f7f7f7;
+  margin-bottom: .75em;
+  padding: .3em .5em;
+  color: #444; }
+  .puzzle-metas a {
+    color: #444;
+    border-bottom: 1px dashed;
+    font-weight: bold; }
+    .puzzle-metas a:hover {
+      color: black;
+      text-decoration: none;
+      border-bottom-style: solid; }
 
 .solution-field {
   font-family: Inconsolata, monospace; }
