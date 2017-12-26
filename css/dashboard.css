@@ -2622,7 +2622,7 @@ a {
     padding: .5rem 1rem;
     margin-bottom: 0; }
   .sidebar .nav-section {
-    padding: .5rem 1rem;
+    padding: 0 1rem .5rem;
     margin-bottom: .5rem; }
   .sidebar .solver {
     display: block;
