@@ -65,6 +65,7 @@ Create two bots:
     - `http://[YOURAPP].herokuapp.com`
     - `http://[YOURAPP].herokuapp.com/oauth`
 5. Note your Client ID and Client secret.
+6. Add the privacy policy URL (http://your-domain/privacy) to your OAuth consent screen at https://console.cloud.google.com/apis/credentials.  Once your app is live, you'll need to go through the verification process at https://support.google.com/cloud/answer/7454865 to get rid of the "unverified app" screen.
 
 ## Set up Heroku instance
 

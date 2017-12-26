@@ -26,6 +26,10 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($pal_client
 		return redirect("/");
 	});
 
+$klein->respond('GET', '/privacy', function ($request, $response) {
+		return render('privacy.twig', 'privacy');
+	});
+
 // If user not authorized or not in palindrome do not allow them to get matched to any remaining routes
 $klein->respond(function () use ($klein, $pal_client, $pal_drive) {
 		debug('');
