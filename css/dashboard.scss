@@ -120,11 +120,10 @@ h2 {
 
     .solver {
         display: block;
-        color: white;
-        background:#000;
+        background:#fff;
         border-radius: 4px;
         width: 100%;
-        border: 1px solid black;
+        border: 1px solid #ccc;
 
         &:hover {
             background: #222;

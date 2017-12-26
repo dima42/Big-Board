@@ -2616,11 +2616,10 @@ h2 {
     padding: .5rem 1rem; }
   .sidebar .solver {
     display: block;
-    color: white;
-    background: #000;
+    background: #fff;
     border-radius: 4px;
     width: 100%;
-    border: 1px solid black; }
+    border: 1px solid #ccc; }
     .sidebar .solver:hover {
       background: #222; }
     .sidebar .solver img {
