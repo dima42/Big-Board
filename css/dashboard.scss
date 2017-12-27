@@ -37,6 +37,11 @@
     color: #444;
 }
 
+.icon-edit {
+    @include icon('pencil-alt');
+    color: #111111;
+}
+
 .icon-archive {
     @include icon('archive');
     color: #DC3545;

@@ -4,6 +4,7 @@
 .icon-stuck,
 .icon-priority,
 .icon-solved,
+.icon-edit,
 .icon-archive,
 .far,
 .fal,
@@ -57,7 +58,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-archive {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive {
   text-align: center;
   width: 1.25em; }
 
@@ -92,6 +93,7 @@
 .fa-pull-left.icon-stuck,
 .fa-pull-left.icon-priority,
 .fa-pull-left.icon-solved,
+.fa-pull-left.icon-edit,
 .fa-pull-left.icon-archive,
 .far.fa-pull-left,
 .fal.fa-pull-left,
@@ -104,6 +106,7 @@
 .fa-pull-right.icon-stuck,
 .fa-pull-right.icon-priority,
 .fa-pull-right.icon-solved,
+.fa-pull-right.icon-edit,
 .fa-pull-right.icon-archive,
 .far.fa-pull-right,
 .fal.fa-pull-right,
@@ -1691,7 +1694,7 @@ readers do not read off random characters that represent icons */
 .fa-pen-square:before {
   content: "\f14b"; }
 
-.fa-pencil-alt:before {
+.fa-pencil-alt:before, .icon-edit:before {
   content: "\f303"; }
 
 .fa-percent:before {
@@ -2569,6 +2572,12 @@ readers do not read off random characters that represent icons */
   font-weight: 900;
   color: #FF6600;
   color: #444; }
+
+.icon-edit {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #111111; }
 
 .icon-archive {
   font-family: 'Font Awesome 5 Free';
