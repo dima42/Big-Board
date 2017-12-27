@@ -33,6 +33,49 @@ CREATE TABLE `puzzle`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- topic
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `topic`;
+
+CREATE TABLE `topic`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(255) NOT NULL,
+    `slack_channel` VARCHAR(48),
+    `slack_channel_id` VARCHAR(24),
+    `tree_left` INTEGER,
+    `tree_right` INTEGER,
+    `tree_level` INTEGER,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- puzzleTopic
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `puzzleTopic`;
+
+CREATE TABLE `puzzleTopic`
+(
+    `puzzle_id` INTEGER NOT NULL,
+    `topic_id` INTEGER NOT NULL,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`puzzle_id`,`topic_id`),
+    UNIQUE INDEX `puzzleTopic_u_b508ba` (`puzzle_id`, `topic_id`),
+    INDEX `puzzleTopic_fi_5f1143` (`topic_id`),
+    CONSTRAINT `puzzleTopic_fk_937852`
+        FOREIGN KEY (`puzzle_id`)
+        REFERENCES `puzzle` (`id`)
+        ON DELETE CASCADE,
+    CONSTRAINT `puzzleTopic_fk_5f1143`
+        FOREIGN KEY (`topic_id`)
+        REFERENCES `topic` (`id`)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- note
 -- ---------------------------------------------------------------------
 

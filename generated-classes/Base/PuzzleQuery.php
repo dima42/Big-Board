@@ -65,6 +65,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery rightJoinWithWrangler() Adds a RIGHT JOIN clause and with to the query using the Wrangler relation
  * @method     ChildPuzzleQuery innerJoinWithWrangler() Adds a INNER JOIN clause and with to the query using the Wrangler relation
  *
+ * @method     ChildPuzzleQuery leftJoinPuzzleTopic($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleTopic relation
+ * @method     ChildPuzzleQuery rightJoinPuzzleTopic($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleTopic relation
+ * @method     ChildPuzzleQuery innerJoinPuzzleTopic($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleTopic relation
+ *
+ * @method     ChildPuzzleQuery joinWithPuzzleTopic($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PuzzleTopic relation
+ *
+ * @method     ChildPuzzleQuery leftJoinWithPuzzleTopic() Adds a LEFT JOIN clause and with to the query using the PuzzleTopic relation
+ * @method     ChildPuzzleQuery rightJoinWithPuzzleTopic() Adds a RIGHT JOIN clause and with to the query using the PuzzleTopic relation
+ * @method     ChildPuzzleQuery innerJoinWithPuzzleTopic() Adds a INNER JOIN clause and with to the query using the PuzzleTopic relation
+ *
  * @method     ChildPuzzleQuery leftJoinNote($relationAlias = null) Adds a LEFT JOIN clause to the query using the Note relation
  * @method     ChildPuzzleQuery rightJoinNote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Note relation
  * @method     ChildPuzzleQuery innerJoinNote($relationAlias = null) Adds a INNER JOIN clause to the query using the Note relation
@@ -115,7 +125,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery rightJoinWithNews() Adds a RIGHT JOIN clause and with to the query using the News relation
  * @method     ChildPuzzleQuery innerJoinWithNews() Adds a INNER JOIN clause and with to the query using the News relation
  *
- * @method     \MemberQuery|\NoteQuery|\PuzzleMemberQuery|\PuzzlePuzzleQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \MemberQuery|\PuzzleTopicQuery|\NoteQuery|\PuzzleMemberQuery|\PuzzlePuzzleQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPuzzle findOne(ConnectionInterface $con = null) Return the first ChildPuzzle matching the query
  * @method     ChildPuzzle findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPuzzle matching the query, or a new ChildPuzzle object populated from the query conditions when no match is found
@@ -817,6 +827,79 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     }
 
     /**
+     * Filter the query by a related \PuzzleTopic object
+     *
+     * @param \PuzzleTopic|ObjectCollection $puzzleTopic the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterByPuzzleTopic($puzzleTopic, $comparison = null)
+    {
+        if ($puzzleTopic instanceof \PuzzleTopic) {
+            return $this
+                ->addUsingAlias(PuzzleTableMap::COL_ID, $puzzleTopic->getPuzzleId(), $comparison);
+        } elseif ($puzzleTopic instanceof ObjectCollection) {
+            return $this
+                ->usePuzzleTopicQuery()
+                ->filterByPrimaryKeys($puzzleTopic->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPuzzleTopic() only accepts arguments of type \PuzzleTopic or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the PuzzleTopic relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function joinPuzzleTopic($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('PuzzleTopic');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'PuzzleTopic');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the PuzzleTopic relation PuzzleTopic object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \PuzzleTopicQuery A secondary query class using the current class as primary query
+     */
+    public function usePuzzleTopicQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPuzzleTopic($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'PuzzleTopic', '\PuzzleTopicQuery');
+    }
+
+    /**
      * Filter the query by a related \Note object
      *
      * @param \Note|ObjectCollection $note the related object to use as filter
@@ -1179,6 +1262,23 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         return $this
             ->joinNews($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'News', '\NewsQuery');
+    }
+
+    /**
+     * Filter the query by a related Topic object
+     * using the puzzleTopic table as cross reference
+     *
+     * @param Topic $topic the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterByTopic($topic, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->usePuzzleTopicQuery()
+            ->filterByTopic($topic, $comparison)
+            ->endUse();
     }
 
     /**
