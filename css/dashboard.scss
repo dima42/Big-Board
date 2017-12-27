@@ -37,6 +37,11 @@
     color: #444;
 }
 
+.icon-archive {
+    @include icon('archive');
+    color: #DC3545;
+}
+
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
