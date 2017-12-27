@@ -22,7 +22,11 @@
     </h2>
     <div class="puzzle-metadata row">
         <div class="col col-sm-6 wrangler">
+            {% if meta.parent.wrangler %}
             Wrangler: <a href="/member/{{ meta.parent.wrangler.Id }}">{{ meta.parent.wrangler.fullName }}</a>
+            {% else %}
+            <i>No assigned wrangler</i>
+            {% endif %}
         </div>
         <div class="col col-sm-6 add-puzzles-to-meta">
             <a class="add-puzzles-to-meta" href="/add/{{ meta.parent.id }}">+ Add puzzles</a>
