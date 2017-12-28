@@ -405,6 +405,12 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			->find();
 	}
 
+	$rootTopic = TopicQuery::create()
+		->findRoot();
+
+	$topics = $rootTopic
+		->getBranch();
+
 	render($template, 'puzzles', array(
 			'puzzle_id'     => $puzzle_id,
 			'puzzle'        => $puzzle,
@@ -415,6 +421,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'puzzles_metas' => $puzzles_metas,
 			'is_meta'       => $is_meta,
 			'all_members'   => $full_roster,
+			'topics'        => $topics,
 		));
 }
 

@@ -2735,28 +2735,28 @@ aside {
   visibility: hidden;
   pointer-events: none; }
 
-.topic {
+.topics .topic {
   padding: .5em .6em;
   border: 1px solid #eee;
   margin-top: -1px;
   border-left: 5px solid #f3f3f3; }
 
-.level1 {
+.topics .level1 {
   margin-top: 1em; }
 
-.level2 {
+.topics .level2 {
   border-left-color: #e7e7e7;
   margin-left: 1em; }
 
-.level3 {
+.topics .level3 {
   border-left-color: #c7c7c7;
   margin-left: 2em; }
 
-.level4 {
+.topics .level4 {
   border-left-color: #aaa;
   margin-left: 3em; }
 
-.move-topic {
+.topics .move-topic {
   display: inline-block; }
 
 .puzzle-metas {
@@ -2823,6 +2823,15 @@ aside {
 
 .new-note-form {
   padding-top: 1em; }
+
+.puzzles .level2 {
+  margin-left: 1.2em; }
+
+.puzzles .level3 {
+  margin-left: 2.4em; }
+
+.puzzles .level4 {
+  margin-left: 3.6em; }
 
 .puzzleInputGroup {
   margin-bottom: 2.5em; }

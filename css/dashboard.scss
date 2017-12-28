@@ -326,34 +326,36 @@ aside {
 
 // TOPICS
 
-.topic {
-    padding: .5em .6em;
-    border: 1px solid #eee;
-    margin-top: -1px;
-    border-left: 5px solid #f3f3f3;
-}
+.topics {
+    .topic {
+        padding: .5em .6em;
+        border: 1px solid #eee;
+        margin-top: -1px;
+        border-left: 5px solid #f3f3f3;
+    }
 
-.level1 {
-    margin-top: 1em;
-}
+    .level1 {
+        margin-top: 1em;
+    }
 
-.level2 {
-    border-left-color: #e7e7e7;
-    margin-left: 1em;
-}
+    .level2 {
+        border-left-color: #e7e7e7;
+        margin-left: 1em;
+    }
 
-.level3 {
-    border-left-color: #c7c7c7;
-    margin-left: 2em;
-}
+    .level3 {
+        border-left-color: #c7c7c7;
+        margin-left: 2em;
+    }
 
-.level4 {
-    border-left-color: #aaa;
-    margin-left: 3em;
-}
+    .level4 {
+        border-left-color: #aaa;
+        margin-left: 3em;
+    }
 
-.move-topic {
-    display: inline-block;
+    .move-topic {
+        display: inline-block;
+    }
 }
 
 // PUZZLE PAGE
@@ -462,6 +464,20 @@ aside {
 
 .new-note-form {
     padding-top: 1em
+}
+
+.puzzles {
+    .level2 {
+        margin-left: 1.2em;
+    }
+
+    .level3 {
+        margin-left: 2.4em;
+    }
+
+    .level4 {
+        margin-left: 3.6em;
+    }
 }
 
 // ADD PUZZLE

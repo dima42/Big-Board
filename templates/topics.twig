@@ -1,6 +1,5 @@
 {% extends 'loggedin.twig' %}
 
-
 {% block content %}
 {% for topic in topics if topic.level > 0 %}
     <div class="topic level{{ topic.level }}" data-level="{{ topic.level }}" data-pk="{{ topic.id }}">
