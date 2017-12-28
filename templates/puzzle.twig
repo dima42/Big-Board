@@ -133,6 +133,18 @@
         <a class="list-group-item list-group-item-action" href='{{ puzzle.getSlackURL() }}'><img src="/img/slack.png" width="15px" alt=""> Slack</a>
     </div>
 
+    <div class="list-group mb-3">
+        {% for topic in categories if topic.level > 0 %}
+            <a data-behavior="topic-alert" data-id="{{ topic.id }}" class="{% if topic.id in topic_alerts %}alerted{% endif %} level{{ topic.level }} list-group-item list-group-item-action" href='#'>{{ topic.title }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="list-group mb-3">
+        {% for topic in skills if topic.level > 0 %}
+            <a data-behavior="topic-alert" data-id="{{ topic.id }}" class="{% if topic.id in topic_alerts %}alerted{% endif %} level{{ topic.level }} list-group-item list-group-item-action" href='#'>{{ topic.title }}</a>
+        {% endfor %}
+    </div>
+
     <div class="mb-3">
         <a class="btn btn-light border border-dark" href="/puzzle/{{ puzzle.id }}/edit">✏️  &nbsp; Edit this puzzle</a>
     </div>
@@ -141,6 +153,23 @@
 {% block scripts %}
 <script>
 $(function() {
+    $('[data-behavior=topic-alert]').click(function(e) {
+        e.preventDefault();
+
+        var data = {
+            'topic_id': $(this).data('id')
+        };
+        var link = $(this);
+
+        $.post('/topics/alert/{{ puzzle.id }}', data, function(response) {
+            console.log(response, response['ok']);
+            if(response['ok']) {
+                console.log($(this));
+                link.addClass('alerted');
+            }
+        });
+    });
+
     {% if is_meta %}
         loadPuzzleData('/puzzles/meta/{{ puzzle.id }}');
     {% endif %}

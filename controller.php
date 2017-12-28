@@ -97,6 +97,9 @@ $this->with('/topics', function () {
 		$this->respond('POST', '/[:id]/move_dn/?', function ($request, $response) {
 				return moveTopic($request, $request->id, 'down');
 			});
+		$this->respond('POST', '/alert/[:id]/?', function ($request, $response) {
+				return alertTopic($request, $response, $request->id);
+			});
 	});
 
 // MEMBER
@@ -405,11 +408,19 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			->find();
 	}
 
-	$rootTopic = TopicQuery::create()
-		->findRoot();
-
-	$topics = $rootTopic
+	$categories = TopicQuery::create()
+		->findRoot(1)
 		->getBranch();
+
+	$skills = TopicQuery::create()
+		->findRoot(2)
+		->getBranch();
+
+	$topic_alerts = TopicAlertQuery::create()
+		->filterByPuzzle($puzzle)
+		->select('TopicId')
+		->find()
+		->toArray();
 
 	render($template, 'puzzles', array(
 			'puzzle_id'     => $puzzle_id,
@@ -421,7 +432,9 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'puzzles_metas' => $puzzles_metas,
 			'is_meta'       => $is_meta,
 			'all_members'   => $full_roster,
-			'topics'        => $topics,
+			'categories'    => $categories,
+			'skills'        => $skills,
+			'topic_alerts'  => $topic_alerts,
 		));
 }
 
@@ -724,6 +737,31 @@ function moveTopic($request, $id, $dir) {
 	redirect('/topics', $topic->getTitle().' moved '.$dir.'.');
 }
 
+function alertTopic($request, $response, $puzzle_id) {
+	$topic = TopicQuery::create()
+		->findPk($request->topic_id);
+
+	$puzzle = PuzzleQuery::create()
+		->findPk($puzzle_id);
+
+	// TODO: Send alert to Slack.
+	// TODO: Don't allow if link has .alerted class
+
+	$ta = new TopicAlert();
+	$ta->setPuzzle($puzzle);
+	$ta->setTopic($topic);
+	$ta->save();
+
+	postToSlack("*".$puzzle->getTitle()."* has been tagged ".$topic->getTitle(), $puzzle->getSlackAttachmentMedium(), ":label:", "TagBot", $topic->getSlackChannelId());
+
+	$json = [
+		'ok'     => 1,
+		'puzzle' => $puzzle_id,
+		'topic'  => $topic->getId(),
+	];
+
+	return $response->json($json);
+}
 // MEMBERS
 
 function displayRoster() {
