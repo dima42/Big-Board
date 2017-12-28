@@ -5,7 +5,7 @@
 {% for topic in scope %}
     <div class="topic level{{ topic.level }}" data-level="{{ topic.level }}" data-pk="{{ topic.id }}">
         {{ topic.title }}
-        <a class="badge badge-light" href="#" data-behavior="add-topic">+</a>
+        <a class="badge badge-light" href="#" data-behavior="add-topic">+ Child</a>
         <div class="float-right">
             {% if topic.hasNextSibling %}
             <form method="post" class="move-topic" action="/topics/{{ topic.id }}/move_dn">
