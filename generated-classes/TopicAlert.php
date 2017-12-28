@@ -1,9 +1,9 @@
 <?php
 
-use Base\PuzzleTopic as BasePuzzleTopic;
+use Base\TopicAlert as BaseTopicAlert;
 
 /**
- * Skeleton subclass for representing a row from the 'puzzleTopic' table.
+ * Skeleton subclass for representing a row from the 'topic_alert' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\PuzzleTopic as BasePuzzleTopic;
  * long as it does not already exist in the output directory.
  *
  */
-class PuzzleTopic extends BasePuzzleTopic
+class TopicAlert extends BaseTopicAlert
 {
 
 }

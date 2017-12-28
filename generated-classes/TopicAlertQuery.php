@@ -1,9 +1,9 @@
 <?php
 
-use Base\PuzzleTopicQuery as BasePuzzleTopicQuery;
+use Base\TopicAlertQuery as BaseTopicAlertQuery;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'puzzleTopic' table.
+ * Skeleton subclass for performing query and update operations on the 'topic_alert' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\PuzzleTopicQuery as BasePuzzleTopicQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class PuzzleTopicQuery extends BasePuzzleTopicQuery
+class TopicAlertQuery extends BaseTopicAlertQuery
 {
 
 }

@@ -33,7 +33,7 @@
             <parameter name="use_scope" value="true" />
         </behavior>
     </table>
-    <table name="puzzleTopic" phpName="PuzzleTopic" isCrossRef="true">
+    <table name="topic_alert" phpName="TopicAlert" isCrossRef="true">
         <column name="puzzle_id" type="integer" primaryKey="true" />
         <column name="topic_id" type="integer" primaryKey="true" />
         <foreign-key foreignTable="puzzle" phpName="Puzzle" onDelete="CASCADE">

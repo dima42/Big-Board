@@ -47,17 +47,17 @@ use Propel\Runtime\Map\TableMap;
  * @method     ChildTopicQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildTopicQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildTopicQuery leftJoinPuzzleTopic($relationAlias = null) Adds a LEFT JOIN clause to the query using the PuzzleTopic relation
- * @method     ChildTopicQuery rightJoinPuzzleTopic($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PuzzleTopic relation
- * @method     ChildTopicQuery innerJoinPuzzleTopic($relationAlias = null) Adds a INNER JOIN clause to the query using the PuzzleTopic relation
+ * @method     ChildTopicQuery leftJoinTopicAlert($relationAlias = null) Adds a LEFT JOIN clause to the query using the TopicAlert relation
+ * @method     ChildTopicQuery rightJoinTopicAlert($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TopicAlert relation
+ * @method     ChildTopicQuery innerJoinTopicAlert($relationAlias = null) Adds a INNER JOIN clause to the query using the TopicAlert relation
  *
- * @method     ChildTopicQuery joinWithPuzzleTopic($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PuzzleTopic relation
+ * @method     ChildTopicQuery joinWithTopicAlert($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the TopicAlert relation
  *
- * @method     ChildTopicQuery leftJoinWithPuzzleTopic() Adds a LEFT JOIN clause and with to the query using the PuzzleTopic relation
- * @method     ChildTopicQuery rightJoinWithPuzzleTopic() Adds a RIGHT JOIN clause and with to the query using the PuzzleTopic relation
- * @method     ChildTopicQuery innerJoinWithPuzzleTopic() Adds a INNER JOIN clause and with to the query using the PuzzleTopic relation
+ * @method     ChildTopicQuery leftJoinWithTopicAlert() Adds a LEFT JOIN clause and with to the query using the TopicAlert relation
+ * @method     ChildTopicQuery rightJoinWithTopicAlert() Adds a RIGHT JOIN clause and with to the query using the TopicAlert relation
+ * @method     ChildTopicQuery innerJoinWithTopicAlert() Adds a INNER JOIN clause and with to the query using the TopicAlert relation
  *
- * @method     \PuzzleTopicQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \TopicAlertQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildTopic findOne(ConnectionInterface $con = null) Return the first ChildTopic matching the query
  * @method     ChildTopic findOneOrCreate(ConnectionInterface $con = null) Return the first ChildTopic matching the query, or a new ChildTopic object populated from the query conditions when no match is found
@@ -561,40 +561,40 @@ abstract class TopicQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \PuzzleTopic object
+     * Filter the query by a related \TopicAlert object
      *
-     * @param \PuzzleTopic|ObjectCollection $puzzleTopic the related object to use as filter
+     * @param \TopicAlert|ObjectCollection $topicAlert the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildTopicQuery The current query, for fluid interface
      */
-    public function filterByPuzzleTopic($puzzleTopic, $comparison = null)
+    public function filterByTopicAlert($topicAlert, $comparison = null)
     {
-        if ($puzzleTopic instanceof \PuzzleTopic) {
+        if ($topicAlert instanceof \TopicAlert) {
             return $this
-                ->addUsingAlias(TopicTableMap::COL_ID, $puzzleTopic->getTopicId(), $comparison);
-        } elseif ($puzzleTopic instanceof ObjectCollection) {
+                ->addUsingAlias(TopicTableMap::COL_ID, $topicAlert->getTopicId(), $comparison);
+        } elseif ($topicAlert instanceof ObjectCollection) {
             return $this
-                ->usePuzzleTopicQuery()
-                ->filterByPrimaryKeys($puzzleTopic->getPrimaryKeys())
+                ->useTopicAlertQuery()
+                ->filterByPrimaryKeys($topicAlert->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByPuzzleTopic() only accepts arguments of type \PuzzleTopic or Collection');
+            throw new PropelException('filterByTopicAlert() only accepts arguments of type \TopicAlert or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the PuzzleTopic relation
+     * Adds a JOIN clause to the query using the TopicAlert relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildTopicQuery The current query, for fluid interface
      */
-    public function joinPuzzleTopic($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinTopicAlert($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('PuzzleTopic');
+        $relationMap = $tableMap->getRelation('TopicAlert');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -609,14 +609,14 @@ abstract class TopicQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'PuzzleTopic');
+            $this->addJoinObject($join, 'TopicAlert');
         }
 
         return $this;
     }
 
     /**
-     * Use the PuzzleTopic relation PuzzleTopic object
+     * Use the TopicAlert relation TopicAlert object
      *
      * @see useQuery()
      *
@@ -624,18 +624,18 @@ abstract class TopicQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \PuzzleTopicQuery A secondary query class using the current class as primary query
+     * @return \TopicAlertQuery A secondary query class using the current class as primary query
      */
-    public function usePuzzleTopicQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useTopicAlertQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinPuzzleTopic($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'PuzzleTopic', '\PuzzleTopicQuery');
+            ->joinTopicAlert($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TopicAlert', '\TopicAlertQuery');
     }
 
     /**
      * Filter the query by a related Puzzle object
-     * using the puzzleTopic table as cross reference
+     * using the topic_alert table as cross reference
      *
      * @param Puzzle $puzzle the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
@@ -645,7 +645,7 @@ abstract class TopicQuery extends ModelCriteria
     public function filterByPuzzle($puzzle, $comparison = Criteria::EQUAL)
     {
         return $this
-            ->usePuzzleTopicQuery()
+            ->useTopicAlertQuery()
             ->filterByPuzzle($puzzle, $comparison)
             ->endUse();
     }

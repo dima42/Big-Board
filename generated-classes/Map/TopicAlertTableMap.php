@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \PuzzleTopic;
-use \PuzzleTopicQuery;
+use \TopicAlert;
+use \TopicAlertQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class PuzzleTopicTableMap extends TableMap
+class TopicAlertTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class PuzzleTopicTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.PuzzleTopicTableMap';
+    const CLASS_NAME = '.Map.TopicAlertTableMap';
 
     /**
      * The default database name for this class
@@ -49,12 +49,12 @@ class PuzzleTopicTableMap extends TableMap
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\PuzzleTopic';
+    const OM_CLASS = '\\TopicAlert';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'PuzzleTopic';
+    const CLASS_DEFAULT = 'TopicAlert';
 
     /**
      * The total number of columns
@@ -105,7 +105,7 @@ class PuzzleTopicTableMap extends TableMap
     protected static $fieldNames = array (
         self::TYPE_PHPNAME       => array('PuzzleId', 'TopicId', 'CreatedAt', 'UpdatedAt', ),
         self::TYPE_CAMELNAME     => array('puzzleId', 'topicId', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(PuzzleTopicTableMap::COL_PUZZLE_ID, PuzzleTopicTableMap::COL_TOPIC_ID, PuzzleTopicTableMap::COL_CREATED_AT, PuzzleTopicTableMap::COL_UPDATED_AT, ),
+        self::TYPE_COLNAME       => array(TopicAlertTableMap::COL_PUZZLE_ID, TopicAlertTableMap::COL_TOPIC_ID, TopicAlertTableMap::COL_CREATED_AT, TopicAlertTableMap::COL_UPDATED_AT, ),
         self::TYPE_FIELDNAME     => array('puzzle_id', 'topic_id', 'created_at', 'updated_at', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
@@ -119,7 +119,7 @@ class PuzzleTopicTableMap extends TableMap
     protected static $fieldKeys = array (
         self::TYPE_PHPNAME       => array('PuzzleId' => 0, 'TopicId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, ),
         self::TYPE_CAMELNAME     => array('puzzleId' => 0, 'topicId' => 1, 'createdAt' => 2, 'updatedAt' => 3, ),
-        self::TYPE_COLNAME       => array(PuzzleTopicTableMap::COL_PUZZLE_ID => 0, PuzzleTopicTableMap::COL_TOPIC_ID => 1, PuzzleTopicTableMap::COL_CREATED_AT => 2, PuzzleTopicTableMap::COL_UPDATED_AT => 3, ),
+        self::TYPE_COLNAME       => array(TopicAlertTableMap::COL_PUZZLE_ID => 0, TopicAlertTableMap::COL_TOPIC_ID => 1, TopicAlertTableMap::COL_CREATED_AT => 2, TopicAlertTableMap::COL_UPDATED_AT => 3, ),
         self::TYPE_FIELDNAME     => array('puzzle_id' => 0, 'topic_id' => 1, 'created_at' => 2, 'updated_at' => 3, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
@@ -135,9 +135,9 @@ class PuzzleTopicTableMap extends TableMap
     {
         // attributes
         $this->setName('topic_alert');
-        $this->setPhpName('PuzzleTopic');
+        $this->setPhpName('TopicAlert');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\PuzzleTopic');
+        $this->setClassName('\\TopicAlert');
         $this->setPackage('');
         $this->setUseIdGenerator(false);
         $this->setIsCrossRef(true);
@@ -190,7 +190,7 @@ class PuzzleTopicTableMap extends TableMap
      * to the cache in order to ensure that the same objects are always returned by find*()
      * and findPk*() calls.
      *
-     * @param \PuzzleTopic $obj A \PuzzleTopic object.
+     * @param \TopicAlert $obj A \TopicAlert object.
      * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
@@ -211,12 +211,12 @@ class PuzzleTopicTableMap extends TableMap
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param mixed $value A \PuzzleTopic object or a primary key value.
+     * @param mixed $value A \TopicAlert object or a primary key value.
      */
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && null !== $value) {
-            if (is_object($value) && $value instanceof \PuzzleTopic) {
+            if (is_object($value) && $value instanceof \TopicAlert) {
                 $key = serialize([(null === $value->getPuzzleId() || is_scalar($value->getPuzzleId()) || is_callable([$value->getPuzzleId(), '__toString']) ? (string) $value->getPuzzleId() : $value->getPuzzleId()), (null === $value->getTopicId() || is_scalar($value->getTopicId()) || is_callable([$value->getTopicId(), '__toString']) ? (string) $value->getTopicId() : $value->getTopicId())]);
 
             } elseif (is_array($value) && count($value) === 2) {
@@ -227,7 +227,7 @@ class PuzzleTopicTableMap extends TableMap
 
                 return;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \PuzzleTopic object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \TopicAlert object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
                 throw $e;
             }
 
@@ -301,7 +301,7 @@ class PuzzleTopicTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? PuzzleTopicTableMap::CLASS_DEFAULT : PuzzleTopicTableMap::OM_CLASS;
+        return $withPrefix ? TopicAlertTableMap::CLASS_DEFAULT : TopicAlertTableMap::OM_CLASS;
     }
 
     /**
@@ -315,22 +315,22 @@ class PuzzleTopicTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (PuzzleTopic object, last column rank)
+     * @return array           (TopicAlert object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = PuzzleTopicTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = PuzzleTopicTableMap::getInstanceFromPool($key))) {
+        $key = TopicAlertTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = TopicAlertTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + PuzzleTopicTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + TopicAlertTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = PuzzleTopicTableMap::OM_CLASS;
-            /** @var PuzzleTopic $obj */
+            $cls = TopicAlertTableMap::OM_CLASS;
+            /** @var TopicAlert $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            PuzzleTopicTableMap::addInstanceToPool($obj, $key);
+            TopicAlertTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -353,18 +353,18 @@ class PuzzleTopicTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = PuzzleTopicTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = PuzzleTopicTableMap::getInstanceFromPool($key))) {
+            $key = TopicAlertTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = TopicAlertTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var PuzzleTopic $obj */
+                /** @var TopicAlert $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                PuzzleTopicTableMap::addInstanceToPool($obj, $key);
+                TopicAlertTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -385,10 +385,10 @@ class PuzzleTopicTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(PuzzleTopicTableMap::COL_PUZZLE_ID);
-            $criteria->addSelectColumn(PuzzleTopicTableMap::COL_TOPIC_ID);
-            $criteria->addSelectColumn(PuzzleTopicTableMap::COL_CREATED_AT);
-            $criteria->addSelectColumn(PuzzleTopicTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(TopicAlertTableMap::COL_PUZZLE_ID);
+            $criteria->addSelectColumn(TopicAlertTableMap::COL_TOPIC_ID);
+            $criteria->addSelectColumn(TopicAlertTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(TopicAlertTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.puzzle_id');
             $criteria->addSelectColumn($alias . '.topic_id');
@@ -406,7 +406,7 @@ class PuzzleTopicTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(PuzzleTopicTableMap::DATABASE_NAME)->getTable(PuzzleTopicTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(TopicAlertTableMap::DATABASE_NAME)->getTable(TopicAlertTableMap::TABLE_NAME);
     }
 
     /**
@@ -414,16 +414,16 @@ class PuzzleTopicTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PuzzleTopicTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(PuzzleTopicTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new PuzzleTopicTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TopicAlertTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(TopicAlertTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new TopicAlertTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a PuzzleTopic or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a TopicAlert or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or PuzzleTopic object or primary key or array of primary keys
+     * @param mixed               $values Criteria or TopicAlert object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -434,17 +434,17 @@ class PuzzleTopicTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PuzzleTopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TopicAlertTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \PuzzleTopic) { // it's a model object
+        } elseif ($values instanceof \TopicAlert) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(PuzzleTopicTableMap::DATABASE_NAME);
+            $criteria = new Criteria(TopicAlertTableMap::DATABASE_NAME);
             // primary key is composite; we therefore, expect
             // the primary key passed to be an array of pkey values
             if (count($values) == count($values, COUNT_RECURSIVE)) {
@@ -452,19 +452,19 @@ class PuzzleTopicTableMap extends TableMap
                 $values = array($values);
             }
             foreach ($values as $value) {
-                $criterion = $criteria->getNewCriterion(PuzzleTopicTableMap::COL_PUZZLE_ID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(PuzzleTopicTableMap::COL_TOPIC_ID, $value[1]));
+                $criterion = $criteria->getNewCriterion(TopicAlertTableMap::COL_PUZZLE_ID, $value[0]);
+                $criterion->addAnd($criteria->getNewCriterion(TopicAlertTableMap::COL_TOPIC_ID, $value[1]));
                 $criteria->addOr($criterion);
             }
         }
 
-        $query = PuzzleTopicQuery::create()->mergeWith($criteria);
+        $query = TopicAlertQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            PuzzleTopicTableMap::clearInstancePool();
+            TopicAlertTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                PuzzleTopicTableMap::removeInstanceFromPool($singleval);
+                TopicAlertTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -479,13 +479,13 @@ class PuzzleTopicTableMap extends TableMap
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return PuzzleTopicQuery::create()->doDeleteAll($con);
+        return TopicAlertQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a PuzzleTopic or Criteria object.
+     * Performs an INSERT on the database, given a TopicAlert or Criteria object.
      *
-     * @param mixed               $criteria Criteria or PuzzleTopic object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or TopicAlert object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -494,18 +494,18 @@ class PuzzleTopicTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PuzzleTopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TopicAlertTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from PuzzleTopic object
+            $criteria = $criteria->buildCriteria(); // build Criteria from TopicAlert object
         }
 
 
         // Set the correct dbName
-        $query = PuzzleTopicQuery::create()->mergeWith($criteria);
+        $query = TopicAlertQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -514,7 +514,7 @@ class PuzzleTopicTableMap extends TableMap
         });
     }
 
-} // PuzzleTopicTableMap
+} // TopicAlertTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-PuzzleTopicTableMap::buildTableMap();
+TopicAlertTableMap::buildTableMap();

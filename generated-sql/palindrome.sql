@@ -52,25 +52,25 @@ CREATE TABLE `topic`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- puzzleTopic
+-- topic_alert
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `puzzleTopic`;
+DROP TABLE IF EXISTS `topic_alert`;
 
-CREATE TABLE `puzzleTopic`
+CREATE TABLE `topic_alert`
 (
     `puzzle_id` INTEGER NOT NULL,
     `topic_id` INTEGER NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`puzzle_id`,`topic_id`),
-    UNIQUE INDEX `puzzleTopic_u_b508ba` (`puzzle_id`, `topic_id`),
-    INDEX `puzzleTopic_fi_5f1143` (`topic_id`),
-    CONSTRAINT `puzzleTopic_fk_937852`
+    UNIQUE INDEX `topic_alert_u_b508ba` (`puzzle_id`, `topic_id`),
+    INDEX `topic_alert_fi_5f1143` (`topic_id`),
+    CONSTRAINT `topic_alert_fk_937852`
         FOREIGN KEY (`puzzle_id`)
         REFERENCES `puzzle` (`id`)
         ON DELETE CASCADE,
-    CONSTRAINT `puzzleTopic_fk_5f1143`
+    CONSTRAINT `topic_alert_fk_5f1143`
         FOREIGN KEY (`topic_id`)
         REFERENCES `topic` (`id`)
         ON DELETE CASCADE

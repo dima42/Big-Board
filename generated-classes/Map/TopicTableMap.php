@@ -177,13 +177,13 @@ class TopicTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('PuzzleTopic', '\\PuzzleTopic', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('TopicAlert', '\\TopicAlert', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':topic_id',
     1 => ':id',
   ),
-), 'CASCADE', null, 'PuzzleTopics', false);
+), 'CASCADE', null, 'TopicAlerts', false);
         $this->addRelation('Puzzle', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Puzzles');
     } // buildRelations()
 
@@ -206,7 +206,7 @@ class TopicTableMap extends TableMap
     {
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        PuzzleTopicTableMap::clearInstancePool();
+        TopicAlertTableMap::clearInstancePool();
     }
 
     /**

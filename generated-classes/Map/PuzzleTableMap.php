@@ -207,13 +207,13 @@ class PuzzleTableMap extends TableMap
     1 => ':id',
   ),
 ), 'SET NULL', null, null, false);
-        $this->addRelation('PuzzleTopic', '\\PuzzleTopic', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('TopicAlert', '\\TopicAlert', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), 'CASCADE', null, 'PuzzleTopics', false);
+), 'CASCADE', null, 'TopicAlerts', false);
         $this->addRelation('Note', '\\Note', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -276,7 +276,7 @@ class PuzzleTableMap extends TableMap
     {
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        PuzzleTopicTableMap::clearInstancePool();
+        TopicAlertTableMap::clearInstancePool();
         NoteTableMap::clearInstancePool();
         PuzzleMemberTableMap::clearInstancePool();
         PuzzlePuzzleTableMap::clearInstancePool();

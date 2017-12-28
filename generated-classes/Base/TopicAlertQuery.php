@@ -2,11 +2,11 @@
 
 namespace Base;
 
-use \PuzzleTopic as ChildPuzzleTopic;
-use \PuzzleTopicQuery as ChildPuzzleTopicQuery;
+use \TopicAlert as ChildTopicAlert;
+use \TopicAlertQuery as ChildTopicAlertQuery;
 use \Exception;
 use \PDO;
-use Map\PuzzleTopicTableMap;
+use Map\TopicAlertTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,104 +16,104 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'puzzleTopic' table.
+ * Base class that represents a query for the 'topic_alert' table.
  *
  *
  *
- * @method     ChildPuzzleTopicQuery orderByPuzzleId($order = Criteria::ASC) Order by the puzzle_id column
- * @method     ChildPuzzleTopicQuery orderByTopicId($order = Criteria::ASC) Order by the topic_id column
- * @method     ChildPuzzleTopicQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
- * @method     ChildPuzzleTopicQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
+ * @method     ChildTopicAlertQuery orderByPuzzleId($order = Criteria::ASC) Order by the puzzle_id column
+ * @method     ChildTopicAlertQuery orderByTopicId($order = Criteria::ASC) Order by the topic_id column
+ * @method     ChildTopicAlertQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
+ * @method     ChildTopicAlertQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
- * @method     ChildPuzzleTopicQuery groupByPuzzleId() Group by the puzzle_id column
- * @method     ChildPuzzleTopicQuery groupByTopicId() Group by the topic_id column
- * @method     ChildPuzzleTopicQuery groupByCreatedAt() Group by the created_at column
- * @method     ChildPuzzleTopicQuery groupByUpdatedAt() Group by the updated_at column
+ * @method     ChildTopicAlertQuery groupByPuzzleId() Group by the puzzle_id column
+ * @method     ChildTopicAlertQuery groupByTopicId() Group by the topic_id column
+ * @method     ChildTopicAlertQuery groupByCreatedAt() Group by the created_at column
+ * @method     ChildTopicAlertQuery groupByUpdatedAt() Group by the updated_at column
  *
- * @method     ChildPuzzleTopicQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildPuzzleTopicQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildPuzzleTopicQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildTopicAlertQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildTopicAlertQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildTopicAlertQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildPuzzleTopicQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildPuzzleTopicQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildPuzzleTopicQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildTopicAlertQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildTopicAlertQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildTopicAlertQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildPuzzleTopicQuery leftJoinPuzzle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Puzzle relation
- * @method     ChildPuzzleTopicQuery rightJoinPuzzle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Puzzle relation
- * @method     ChildPuzzleTopicQuery innerJoinPuzzle($relationAlias = null) Adds a INNER JOIN clause to the query using the Puzzle relation
+ * @method     ChildTopicAlertQuery leftJoinPuzzle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Puzzle relation
+ * @method     ChildTopicAlertQuery rightJoinPuzzle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Puzzle relation
+ * @method     ChildTopicAlertQuery innerJoinPuzzle($relationAlias = null) Adds a INNER JOIN clause to the query using the Puzzle relation
  *
- * @method     ChildPuzzleTopicQuery joinWithPuzzle($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Puzzle relation
+ * @method     ChildTopicAlertQuery joinWithPuzzle($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Puzzle relation
  *
- * @method     ChildPuzzleTopicQuery leftJoinWithPuzzle() Adds a LEFT JOIN clause and with to the query using the Puzzle relation
- * @method     ChildPuzzleTopicQuery rightJoinWithPuzzle() Adds a RIGHT JOIN clause and with to the query using the Puzzle relation
- * @method     ChildPuzzleTopicQuery innerJoinWithPuzzle() Adds a INNER JOIN clause and with to the query using the Puzzle relation
+ * @method     ChildTopicAlertQuery leftJoinWithPuzzle() Adds a LEFT JOIN clause and with to the query using the Puzzle relation
+ * @method     ChildTopicAlertQuery rightJoinWithPuzzle() Adds a RIGHT JOIN clause and with to the query using the Puzzle relation
+ * @method     ChildTopicAlertQuery innerJoinWithPuzzle() Adds a INNER JOIN clause and with to the query using the Puzzle relation
  *
- * @method     ChildPuzzleTopicQuery leftJoinTopic($relationAlias = null) Adds a LEFT JOIN clause to the query using the Topic relation
- * @method     ChildPuzzleTopicQuery rightJoinTopic($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Topic relation
- * @method     ChildPuzzleTopicQuery innerJoinTopic($relationAlias = null) Adds a INNER JOIN clause to the query using the Topic relation
+ * @method     ChildTopicAlertQuery leftJoinTopic($relationAlias = null) Adds a LEFT JOIN clause to the query using the Topic relation
+ * @method     ChildTopicAlertQuery rightJoinTopic($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Topic relation
+ * @method     ChildTopicAlertQuery innerJoinTopic($relationAlias = null) Adds a INNER JOIN clause to the query using the Topic relation
  *
- * @method     ChildPuzzleTopicQuery joinWithTopic($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Topic relation
+ * @method     ChildTopicAlertQuery joinWithTopic($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Topic relation
  *
- * @method     ChildPuzzleTopicQuery leftJoinWithTopic() Adds a LEFT JOIN clause and with to the query using the Topic relation
- * @method     ChildPuzzleTopicQuery rightJoinWithTopic() Adds a RIGHT JOIN clause and with to the query using the Topic relation
- * @method     ChildPuzzleTopicQuery innerJoinWithTopic() Adds a INNER JOIN clause and with to the query using the Topic relation
+ * @method     ChildTopicAlertQuery leftJoinWithTopic() Adds a LEFT JOIN clause and with to the query using the Topic relation
+ * @method     ChildTopicAlertQuery rightJoinWithTopic() Adds a RIGHT JOIN clause and with to the query using the Topic relation
+ * @method     ChildTopicAlertQuery innerJoinWithTopic() Adds a INNER JOIN clause and with to the query using the Topic relation
  *
  * @method     \PuzzleQuery|\TopicQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildPuzzleTopic findOne(ConnectionInterface $con = null) Return the first ChildPuzzleTopic matching the query
- * @method     ChildPuzzleTopic findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPuzzleTopic matching the query, or a new ChildPuzzleTopic object populated from the query conditions when no match is found
+ * @method     ChildTopicAlert findOne(ConnectionInterface $con = null) Return the first ChildTopicAlert matching the query
+ * @method     ChildTopicAlert findOneOrCreate(ConnectionInterface $con = null) Return the first ChildTopicAlert matching the query, or a new ChildTopicAlert object populated from the query conditions when no match is found
  *
- * @method     ChildPuzzleTopic findOneByPuzzleId(int $puzzle_id) Return the first ChildPuzzleTopic filtered by the puzzle_id column
- * @method     ChildPuzzleTopic findOneByTopicId(int $topic_id) Return the first ChildPuzzleTopic filtered by the topic_id column
- * @method     ChildPuzzleTopic findOneByCreatedAt(string $created_at) Return the first ChildPuzzleTopic filtered by the created_at column
- * @method     ChildPuzzleTopic findOneByUpdatedAt(string $updated_at) Return the first ChildPuzzleTopic filtered by the updated_at column *
+ * @method     ChildTopicAlert findOneByPuzzleId(int $puzzle_id) Return the first ChildTopicAlert filtered by the puzzle_id column
+ * @method     ChildTopicAlert findOneByTopicId(int $topic_id) Return the first ChildTopicAlert filtered by the topic_id column
+ * @method     ChildTopicAlert findOneByCreatedAt(string $created_at) Return the first ChildTopicAlert filtered by the created_at column
+ * @method     ChildTopicAlert findOneByUpdatedAt(string $updated_at) Return the first ChildTopicAlert filtered by the updated_at column *
 
- * @method     ChildPuzzleTopic requirePk($key, ConnectionInterface $con = null) Return the ChildPuzzleTopic by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPuzzleTopic requireOne(ConnectionInterface $con = null) Return the first ChildPuzzleTopic matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTopicAlert requirePk($key, ConnectionInterface $con = null) Return the ChildTopicAlert by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTopicAlert requireOne(ConnectionInterface $con = null) Return the first ChildTopicAlert matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPuzzleTopic requireOneByPuzzleId(int $puzzle_id) Return the first ChildPuzzleTopic filtered by the puzzle_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPuzzleTopic requireOneByTopicId(int $topic_id) Return the first ChildPuzzleTopic filtered by the topic_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPuzzleTopic requireOneByCreatedAt(string $created_at) Return the first ChildPuzzleTopic filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPuzzleTopic requireOneByUpdatedAt(string $updated_at) Return the first ChildPuzzleTopic filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTopicAlert requireOneByPuzzleId(int $puzzle_id) Return the first ChildTopicAlert filtered by the puzzle_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTopicAlert requireOneByTopicId(int $topic_id) Return the first ChildTopicAlert filtered by the topic_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTopicAlert requireOneByCreatedAt(string $created_at) Return the first ChildTopicAlert filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTopicAlert requireOneByUpdatedAt(string $updated_at) Return the first ChildTopicAlert filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPuzzleTopic[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPuzzleTopic objects based on current ModelCriteria
- * @method     ChildPuzzleTopic[]|ObjectCollection findByPuzzleId(int $puzzle_id) Return ChildPuzzleTopic objects filtered by the puzzle_id column
- * @method     ChildPuzzleTopic[]|ObjectCollection findByTopicId(int $topic_id) Return ChildPuzzleTopic objects filtered by the topic_id column
- * @method     ChildPuzzleTopic[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildPuzzleTopic objects filtered by the created_at column
- * @method     ChildPuzzleTopic[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildPuzzleTopic objects filtered by the updated_at column
- * @method     ChildPuzzleTopic[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildTopicAlert[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTopicAlert objects based on current ModelCriteria
+ * @method     ChildTopicAlert[]|ObjectCollection findByPuzzleId(int $puzzle_id) Return ChildTopicAlert objects filtered by the puzzle_id column
+ * @method     ChildTopicAlert[]|ObjectCollection findByTopicId(int $topic_id) Return ChildTopicAlert objects filtered by the topic_id column
+ * @method     ChildTopicAlert[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildTopicAlert objects filtered by the created_at column
+ * @method     ChildTopicAlert[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildTopicAlert objects filtered by the updated_at column
+ * @method     ChildTopicAlert[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class PuzzleTopicQuery extends ModelCriteria
+abstract class TopicAlertQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Base\PuzzleTopicQuery object.
+     * Initializes internal state of \Base\TopicAlertQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'palindrome', $modelName = '\\PuzzleTopic', $modelAlias = null)
+    public function __construct($dbName = 'palindrome', $modelName = '\\TopicAlert', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildPuzzleTopicQuery object.
+     * Returns a new ChildTopicAlertQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildPuzzleTopicQuery
+     * @return ChildTopicAlertQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildPuzzleTopicQuery) {
+        if ($criteria instanceof ChildTopicAlertQuery) {
             return $criteria;
         }
-        $query = new ChildPuzzleTopicQuery();
+        $query = new ChildTopicAlertQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -136,7 +136,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      * @param array[$puzzle_id, $topic_id] $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildPuzzleTopic|array|mixed the result, formatted by the current formatter
+     * @return ChildTopicAlert|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
@@ -145,7 +145,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(PuzzleTopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(TopicAlertTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -158,7 +158,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = PuzzleTopicTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]))))) {
+        if ((null !== ($obj = TopicAlertTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]))))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -175,11 +175,11 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPuzzleTopic A model object, or null if the key is not found
+     * @return ChildTopicAlert A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT puzzle_id, topic_id, created_at, updated_at FROM puzzleTopic WHERE puzzle_id = :p0 AND topic_id = :p1';
+        $sql = 'SELECT puzzle_id, topic_id, created_at, updated_at FROM topic_alert WHERE puzzle_id = :p0 AND topic_id = :p1';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
@@ -191,10 +191,10 @@ abstract class PuzzleTopicQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildPuzzleTopic $obj */
-            $obj = new ChildPuzzleTopic();
+            /** @var ChildTopicAlert $obj */
+            $obj = new ChildTopicAlert();
             $obj->hydrate($row);
-            PuzzleTopicTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]));
+            TopicAlertTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]));
         }
         $stmt->closeCursor();
 
@@ -207,7 +207,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildPuzzleTopic|array|mixed the result, formatted by the current formatter
+     * @return ChildTopicAlert|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -249,12 +249,12 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(PuzzleTopicTableMap::COL_PUZZLE_ID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(PuzzleTopicTableMap::COL_TOPIC_ID, $key[1], Criteria::EQUAL);
+        $this->addUsingAlias(TopicAlertTableMap::COL_PUZZLE_ID, $key[0], Criteria::EQUAL);
+        $this->addUsingAlias(TopicAlertTableMap::COL_TOPIC_ID, $key[1], Criteria::EQUAL);
 
         return $this;
     }
@@ -264,7 +264,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
@@ -272,8 +272,8 @@ abstract class PuzzleTopicQuery extends ModelCriteria
             return $this->add(null, '1<>1', Criteria::CUSTOM);
         }
         foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(PuzzleTopicTableMap::COL_PUZZLE_ID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(PuzzleTopicTableMap::COL_TOPIC_ID, $key[1], Criteria::EQUAL);
+            $cton0 = $this->getNewCriterion(TopicAlertTableMap::COL_PUZZLE_ID, $key[0], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(TopicAlertTableMap::COL_TOPIC_ID, $key[1], Criteria::EQUAL);
             $cton0->addAnd($cton1);
             $this->addOr($cton0);
         }
@@ -299,18 +299,18 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function filterByPuzzleId($puzzleId = null, $comparison = null)
     {
         if (is_array($puzzleId)) {
             $useMinMax = false;
             if (isset($puzzleId['min'])) {
-                $this->addUsingAlias(PuzzleTopicTableMap::COL_PUZZLE_ID, $puzzleId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(TopicAlertTableMap::COL_PUZZLE_ID, $puzzleId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($puzzleId['max'])) {
-                $this->addUsingAlias(PuzzleTopicTableMap::COL_PUZZLE_ID, $puzzleId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(TopicAlertTableMap::COL_PUZZLE_ID, $puzzleId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -321,7 +321,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PuzzleTopicTableMap::COL_PUZZLE_ID, $puzzleId, $comparison);
+        return $this->addUsingAlias(TopicAlertTableMap::COL_PUZZLE_ID, $puzzleId, $comparison);
     }
 
     /**
@@ -342,18 +342,18 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function filterByTopicId($topicId = null, $comparison = null)
     {
         if (is_array($topicId)) {
             $useMinMax = false;
             if (isset($topicId['min'])) {
-                $this->addUsingAlias(PuzzleTopicTableMap::COL_TOPIC_ID, $topicId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(TopicAlertTableMap::COL_TOPIC_ID, $topicId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($topicId['max'])) {
-                $this->addUsingAlias(PuzzleTopicTableMap::COL_TOPIC_ID, $topicId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(TopicAlertTableMap::COL_TOPIC_ID, $topicId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -364,7 +364,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PuzzleTopicTableMap::COL_TOPIC_ID, $topicId, $comparison);
+        return $this->addUsingAlias(TopicAlertTableMap::COL_TOPIC_ID, $topicId, $comparison);
     }
 
     /**
@@ -385,18 +385,18 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function filterByCreatedAt($createdAt = null, $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
             if (isset($createdAt['min'])) {
-                $this->addUsingAlias(PuzzleTopicTableMap::COL_CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(TopicAlertTableMap::COL_CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($createdAt['max'])) {
-                $this->addUsingAlias(PuzzleTopicTableMap::COL_CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(TopicAlertTableMap::COL_CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -407,7 +407,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PuzzleTopicTableMap::COL_CREATED_AT, $createdAt, $comparison);
+        return $this->addUsingAlias(TopicAlertTableMap::COL_CREATED_AT, $createdAt, $comparison);
     }
 
     /**
@@ -428,18 +428,18 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function filterByUpdatedAt($updatedAt = null, $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
             if (isset($updatedAt['min'])) {
-                $this->addUsingAlias(PuzzleTopicTableMap::COL_UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(TopicAlertTableMap::COL_UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($updatedAt['max'])) {
-                $this->addUsingAlias(PuzzleTopicTableMap::COL_UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(TopicAlertTableMap::COL_UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -450,7 +450,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PuzzleTopicTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
+        return $this->addUsingAlias(TopicAlertTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
     }
 
     /**
@@ -461,20 +461,20 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return ChildTopicAlertQuery The current query, for fluid interface
      */
     public function filterByPuzzle($puzzle, $comparison = null)
     {
         if ($puzzle instanceof \Puzzle) {
             return $this
-                ->addUsingAlias(PuzzleTopicTableMap::COL_PUZZLE_ID, $puzzle->getId(), $comparison);
+                ->addUsingAlias(TopicAlertTableMap::COL_PUZZLE_ID, $puzzle->getId(), $comparison);
         } elseif ($puzzle instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(PuzzleTopicTableMap::COL_PUZZLE_ID, $puzzle->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(TopicAlertTableMap::COL_PUZZLE_ID, $puzzle->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByPuzzle() only accepts arguments of type \Puzzle or Collection');
         }
@@ -486,7 +486,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function joinPuzzle($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -538,20 +538,20 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return ChildTopicAlertQuery The current query, for fluid interface
      */
     public function filterByTopic($topic, $comparison = null)
     {
         if ($topic instanceof \Topic) {
             return $this
-                ->addUsingAlias(PuzzleTopicTableMap::COL_TOPIC_ID, $topic->getId(), $comparison);
+                ->addUsingAlias(TopicAlertTableMap::COL_TOPIC_ID, $topic->getId(), $comparison);
         } elseif ($topic instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(PuzzleTopicTableMap::COL_TOPIC_ID, $topic->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(TopicAlertTableMap::COL_TOPIC_ID, $topic->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByTopic() only accepts arguments of type \Topic or Collection');
         }
@@ -563,7 +563,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function joinTopic($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -610,15 +610,15 @@ abstract class PuzzleTopicQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildPuzzleTopic $puzzleTopic Object to remove from the list of results
+     * @param   ChildTopicAlert $topicAlert Object to remove from the list of results
      *
-     * @return $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return $this|ChildTopicAlertQuery The current query, for fluid interface
      */
-    public function prune($puzzleTopic = null)
+    public function prune($topicAlert = null)
     {
-        if ($puzzleTopic) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(PuzzleTopicTableMap::COL_PUZZLE_ID), $puzzleTopic->getPuzzleId(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(PuzzleTopicTableMap::COL_TOPIC_ID), $puzzleTopic->getTopicId(), Criteria::NOT_EQUAL);
+        if ($topicAlert) {
+            $this->addCond('pruneCond0', $this->getAliasedColName(TopicAlertTableMap::COL_PUZZLE_ID), $topicAlert->getPuzzleId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond1', $this->getAliasedColName(TopicAlertTableMap::COL_TOPIC_ID), $topicAlert->getTopicId(), Criteria::NOT_EQUAL);
             $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
         }
 
@@ -626,7 +626,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
     }
 
     /**
-     * Deletes all rows from the puzzleTopic table.
+     * Deletes all rows from the topic_alert table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -634,7 +634,7 @@ abstract class PuzzleTopicQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PuzzleTopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TopicAlertTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -645,8 +645,8 @@ abstract class PuzzleTopicQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            PuzzleTopicTableMap::clearInstancePool();
-            PuzzleTopicTableMap::clearRelatedInstancePool();
+            TopicAlertTableMap::clearInstancePool();
+            TopicAlertTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -664,23 +664,23 @@ abstract class PuzzleTopicQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PuzzleTopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TopicAlertTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(PuzzleTopicTableMap::DATABASE_NAME);
+        $criteria->setDbName(TopicAlertTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            PuzzleTopicTableMap::removeInstanceFromPool($criteria);
+            TopicAlertTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            PuzzleTopicTableMap::clearRelatedInstancePool();
+            TopicAlertTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -693,41 +693,41 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *
      * @param      int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return     $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(PuzzleTopicTableMap::COL_UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        return $this->addUsingAlias(TopicAlertTableMap::COL_UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return     $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PuzzleTopicTableMap::COL_UPDATED_AT);
+        return $this->addDescendingOrderByColumn(TopicAlertTableMap::COL_UPDATED_AT);
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return     $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PuzzleTopicTableMap::COL_UPDATED_AT);
+        return $this->addAscendingOrderByColumn(TopicAlertTableMap::COL_UPDATED_AT);
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return     $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PuzzleTopicTableMap::COL_CREATED_AT);
+        return $this->addDescendingOrderByColumn(TopicAlertTableMap::COL_CREATED_AT);
     }
 
     /**
@@ -735,21 +735,21 @@ abstract class PuzzleTopicQuery extends ModelCriteria
      *
      * @param      int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return     $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(PuzzleTopicTableMap::COL_CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        return $this->addUsingAlias(TopicAlertTableMap::COL_CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildPuzzleTopicQuery The current query, for fluid interface
+     * @return     $this|ChildTopicAlertQuery The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PuzzleTopicTableMap::COL_CREATED_AT);
+        return $this->addAscendingOrderByColumn(TopicAlertTableMap::COL_CREATED_AT);
     }
 
-} // PuzzleTopicQuery
+} // TopicAlertQuery
