@@ -60,15 +60,15 @@ function inviteToSlackChannel($channel_id, $member_id) {
 
 function postToGeneral($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {
 	$channel = "general";
-	return postToSlack($message, $attachments, $icon, $bot_name, $channel);
+	return postToChannel($message, $attachments, $icon, $bot_name, $channel);
 }
 
 function postToBigBoard($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {
 	$channel = "big-board";
-	return postToSlack($message, $attachments, $icon, $bot_name, $channel);
+	return postToChannel($message, $attachments, $icon, $bot_name, $channel);
 }
 
-function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot", $channel = "sandbox") {
+function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot", $channel = "C860WEABT") {
 	$slack_key = getenv('BIGBOARDBOT_SLACK_KEY');
 
 	$interactor = new CurlInteractor;
@@ -77,7 +77,7 @@ function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = 
 
 	$response = $commander->execute('chat.postMessage', [
 			'no_format'   => true,
-			'channel'     => '#'.$channel,
+			'channel'     => $channel,
 			'icon_emoji'  => $icon,
 			'username'    => $bot_name,
 			'text'        => $message,
@@ -86,6 +86,10 @@ function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = 
 		]);
 
 	return $response;
+}
+
+function postToChannel($message, $attachments, $icon, $bot_name, $channel = "sandbox") {
+	postToSlack($message, $attachments, $icon, $bot_name, '#'.$channel);
 }
 
 function scrapeAvatar($member) {
