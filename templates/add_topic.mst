@@ -1,7 +1,7 @@
 <div class="topic level{{ level }}">
     <form class="" action="/topics/add" method="post">
         <div class="input-group">
-            <input type="text" class="form-control" name="title" placeholder="Topic name">
+            <input type="text" class="form-control" name="title" placeholder="Topic">
             <input type="hidden" name="parent" value="{{ parent }}">
             <span class="input-group-btn">
                 <button class="btn btn-dark" type="submit">Go</button>
