@@ -1,7 +1,8 @@
 {% extends 'loggedin.twig' %}
 
 {% block content %}
-{% for topic in topics if topic.level > 0 %}
+{% for scope in scopes %}
+{% for topic in scope %}
     <div class="topic level{{ topic.level }}" data-level="{{ topic.level }}" data-pk="{{ topic.id }}">
         {{ topic.title }}
         <a class="badge badge-light" href="#" data-behavior="add-topic">+</a>
@@ -19,8 +20,9 @@
         </div>
     </div>
 {% endfor %}
+{% endfor %}
 
-<div class="" data-level="0" data-pk="1">
+<div class="" data-level="-1">
     <br>
     <a class="badge badge-light" href="#" data-behavior="add-topic">Add another topic category</a>
 </div>

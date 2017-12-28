@@ -677,18 +677,27 @@ function addPuzzle($request, $response) {
 // TOPICS
 
 function displayTopics() {
-	$root = TopicQuery::create()
-		->findRoot();
+	$category_root = TopicQuery::create()
+		->findRoot(1);
 
-	$topics = $root
+	$skill_root = TopicQuery::create()
+		->findRoot(2);
+
+	$categories = $category_root
+		->getBranch();
+
+	$skills = $skill_root
 		->getBranch();
 
 	render('topics.twig', 'topics', array(
-			'topics' => $topics,
+			'scopes' => [
+				$categories, $skills
+			],
 		));
 }
 
 function addTopic($request) {
+	// TODO: Special case adding top-level category
 	$parent = TopicQuery::create()
 		->findPk($request->parent);
 
