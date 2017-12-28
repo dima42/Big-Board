@@ -1,0 +1,41 @@
+{% extends 'loggedin.twig' %}
+
+
+{% block content %}
+{% for topic in topics if topic.level > 0 %}
+    <div class="topic level{{ topic.level }}" data-level="{{ topic.level }}" data-pk="{{ topic.id }}">
+        {{ topic.title }}
+        <a class="badge badge-light" href="#" data-behavior="add-topic">+</a>
+        <div class="float-right">
+            {% if topic.hasNextSibling %}
+            <form method="post" class="move-topic" action="/topics/{{ topic.id }}/move_dn">
+                <button class="btn btn-light badge badge-light" href="#">&darr;</button>
+            </form>
+            {% endif %}
+            {% if topic.hasPrevSibling %}
+            <form method="post" class="move-topic" action="/topics/{{ topic.id }}/move_up">
+                <button class="btn btn-light badge badge-light" href="#">&uarr;</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('[data-behavior=add-topic]').click(function(e) {
+        e.preventDefault();
+        var parent = $(this).closest('[data-pk]');
+        $.get('/templates/add_topic.mst', function(template) {
+            var rendered = Mustache.render(template, {
+                'parent': parent.data('pk'),
+                'level': parent.data('level') + 1
+            });
+            parent.after(rendered);
+        });
+    });
+});
+</script>
+{% endblock %}

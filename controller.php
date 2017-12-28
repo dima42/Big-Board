@@ -22,6 +22,8 @@ $this->respond('GET', '/loose', function () {
 		return displayLoosePuzzles();
 	});
 
+// DATA API
+
 $this->with('/puzzles', function () {
 		$this->respond('GET', '/all', function ($request, $response) {
 				return allPuzzles($response);
@@ -77,6 +79,23 @@ $this->with('/puzzle/[:id]', function () {
 			});
 		$this->respond('POST', '/delete-note/[:note_id]/?', function ($request) {
 				return archivePuzzleNote($request->note_id, $request->id);
+			});
+	});
+
+// TOPICS
+
+$this->with('/topics', function () {
+		$this->respond('GET', '/?', function ($request, $response) {
+				return displayTopics();
+			});
+		$this->respond('POST', '/add/?', function ($request, $response) {
+				return addTopic($request);
+			});
+		$this->respond('POST', '/[:id]/move_up/?', function ($request, $response) {
+				return moveTopic($request, $request->id, 'up');
+			});
+		$this->respond('POST', '/[:id]/move_dn/?', function ($request, $response) {
+				return moveTopic($request, $request->id, 'down');
 			});
 	});
 
@@ -648,7 +667,48 @@ function addPuzzle($request, $response) {
 		));
 }
 
-// ROSTER
+// TOPICS
+
+function displayTopics() {
+	$root = TopicQuery::create()
+		->findRoot();
+
+	$topics = $root
+		->getBranch();
+
+	render('topics.twig', 'topics', array(
+			'topics' => $topics,
+		));
+}
+
+function addTopic($request) {
+	$parent = TopicQuery::create()
+		->findPk($request->parent);
+
+	$topic = new Topic();
+	$topic->setTitle($request->title);
+	$topic->insertAsLastChildOf($parent);
+	$topic->save();
+
+	redirect('/topics', $request->title.' added.');
+}
+
+function moveTopic($request, $id, $dir) {
+	$topic = TopicQuery::create()
+		->findPk($id);
+
+	if ($dir == "down") {
+		$nextSib = $topic->getNextSibling();
+		$topic->moveToNextSiblingOf($nextSib);
+	} elseif ($dir == "up") {
+		$prevSib = $topic->getPrevSibling();
+		$topic->moveToPrevSiblingOf($prevSib);
+	}
+
+	redirect('/topics', $topic->getTitle().' moved '.$dir.'.');
+}
+
+// MEMBERS
 
 function displayRoster() {
 	$puzzles_with_members = PuzzleQuery::create()
