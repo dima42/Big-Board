@@ -117,6 +117,13 @@ abstract class Topic implements ActiveRecordInterface
     protected $tree_level;
 
     /**
+     * The value for the tree_scope field.
+     *
+     * @var        int
+     */
+    protected $tree_scope;
+
+    /**
      * @var        ObjectCollection|ChildPuzzleTopic[] Collection to store aggregation of ChildPuzzleTopic objects.
      */
     protected $collPuzzleTopics;
@@ -174,6 +181,11 @@ abstract class Topic implements ActiveRecordInterface
      * Level column for the set
      */
     const LEVEL_COL = 'topic.tree_level';
+
+    /**
+     * Scope column for the set
+     */
+    const SCOPE_COL = 'topic.tree_scope';
 
     /**
      * An array of objects scheduled for deletion.
@@ -483,6 +495,16 @@ abstract class Topic implements ActiveRecordInterface
     }
 
     /**
+     * Get the [tree_scope] column value.
+     *
+     * @return int
+     */
+    public function getTreeScope()
+    {
+        return $this->tree_scope;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param int $v new value
@@ -623,6 +645,26 @@ abstract class Topic implements ActiveRecordInterface
     } // setTreeLevel()
 
     /**
+     * Set the value of [tree_scope] column.
+     *
+     * @param int $v new value
+     * @return $this|\Topic The current object (for fluent API support)
+     */
+    public function setTreeScope($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->tree_scope !== $v) {
+            $this->tree_scope = $v;
+            $this->modifiedColumns[TopicTableMap::COL_TREE_SCOPE] = true;
+        }
+
+        return $this;
+    } // setTreeScope()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -678,6 +720,9 @@ abstract class Topic implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : TopicTableMap::translateFieldName('TreeLevel', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tree_level = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : TopicTableMap::translateFieldName('TreeScope', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->tree_scope = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -686,7 +731,7 @@ abstract class Topic implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = TopicTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = TopicTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Topic'), 0, $e);
@@ -778,7 +823,7 @@ abstract class Topic implements ActiveRecordInterface
             $ret = $this->preDelete($con);
             // nested_set behavior
             if ($this->isRoot()) {
-                throw new PropelException('Deletion of a root node is disabled for nested sets. Use ChildTopicQuery::deleteTree() instead to delete an entire tree');
+                throw new PropelException('Deletion of a root node is disabled for nested sets. Use ChildTopicQuery::deleteTree($scope) instead to delete an entire tree');
             }
 
             if ($this->isInTree()) {
@@ -791,7 +836,7 @@ abstract class Topic implements ActiveRecordInterface
                 // nested_set behavior
                 if ($this->isInTree()) {
                     // fill up the room that was used by the node
-                    ChildTopicQuery::shiftRLValues(-2, $this->getRightValue() + 1, null, $con);
+                    ChildTopicQuery::shiftRLValues(-2, $this->getRightValue() + 1, null, $this->getScopeValue(), $con);
                 }
 
                 $this->setDeleted(true);
@@ -834,9 +879,10 @@ abstract class Topic implements ActiveRecordInterface
                 // check if no other root exist in, the tree
                 $rootExists = ChildTopicQuery::create()
                     ->addUsingAlias(ChildTopic::LEFT_COL, 1, Criteria::EQUAL)
+                    ->addUsingAlias(ChildTopic::SCOPE_COL, $this->getScopeValue(), Criteria::EQUAL)
                     ->exists($con);
                 if ($rootExists) {
-                        throw new PropelException('A root node already exists in this tree. To allow multiple root nodes, add the `use_scope` parameter in the nested_set behavior tag.');
+                        throw new PropelException(sprintf('A root node already exists in this tree with scope "%s".', $this->getScopeValue()));
                 }
             }
             $this->processNestedSetQueries($con);
@@ -983,6 +1029,9 @@ abstract class Topic implements ActiveRecordInterface
         if ($this->isColumnModified(TopicTableMap::COL_TREE_LEVEL)) {
             $modifiedColumns[':p' . $index++]  = 'tree_level';
         }
+        if ($this->isColumnModified(TopicTableMap::COL_TREE_SCOPE)) {
+            $modifiedColumns[':p' . $index++]  = 'tree_scope';
+        }
 
         $sql = sprintf(
             'INSERT INTO topic (%s) VALUES (%s)',
@@ -1014,6 +1063,9 @@ abstract class Topic implements ActiveRecordInterface
                         break;
                     case 'tree_level':
                         $stmt->bindValue($identifier, $this->tree_level, PDO::PARAM_INT);
+                        break;
+                    case 'tree_scope':
+                        $stmt->bindValue($identifier, $this->tree_scope, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1098,6 +1150,9 @@ abstract class Topic implements ActiveRecordInterface
             case 6:
                 return $this->getTreeLevel();
                 break;
+            case 7:
+                return $this->getTreeScope();
+                break;
             default:
                 return null;
                 break;
@@ -1135,6 +1190,7 @@ abstract class Topic implements ActiveRecordInterface
             $keys[4] => $this->getTreeLeft(),
             $keys[5] => $this->getTreeRight(),
             $keys[6] => $this->getTreeLevel(),
+            $keys[7] => $this->getTreeScope(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1212,6 +1268,9 @@ abstract class Topic implements ActiveRecordInterface
             case 6:
                 $this->setTreeLevel($value);
                 break;
+            case 7:
+                $this->setTreeScope($value);
+                break;
         } // switch()
 
         return $this;
@@ -1258,6 +1317,9 @@ abstract class Topic implements ActiveRecordInterface
         }
         if (array_key_exists($keys[6], $arr)) {
             $this->setTreeLevel($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setTreeScope($arr[$keys[7]]);
         }
     }
 
@@ -1320,6 +1382,9 @@ abstract class Topic implements ActiveRecordInterface
         }
         if ($this->isColumnModified(TopicTableMap::COL_TREE_LEVEL)) {
             $criteria->add(TopicTableMap::COL_TREE_LEVEL, $this->tree_level);
+        }
+        if ($this->isColumnModified(TopicTableMap::COL_TREE_SCOPE)) {
+            $criteria->add(TopicTableMap::COL_TREE_SCOPE, $this->tree_scope);
         }
 
         return $criteria;
@@ -1413,6 +1478,7 @@ abstract class Topic implements ActiveRecordInterface
         $copyObj->setTreeLeft($this->getTreeLeft());
         $copyObj->setTreeRight($this->getTreeRight());
         $copyObj->setTreeLevel($this->getTreeLevel());
+        $copyObj->setTreeScope($this->getTreeScope());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1982,6 +2048,7 @@ abstract class Topic implements ActiveRecordInterface
         $this->tree_left = null;
         $this->tree_right = null;
         $this->tree_level = null;
+        $this->tree_scope = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -2079,6 +2146,17 @@ abstract class Topic implements ActiveRecordInterface
     }
 
     /**
+     * Proxy getter method for the scope value of the nested set model.
+     * It provides a generic way to get the value, whatever the actual column name is.
+     *
+     * @return     int The nested set scope value
+     */
+    public function getScopeValue()
+    {
+        return $this->tree_scope;
+    }
+
+    /**
      * Proxy setter method for the left value of the nested set model.
      * It provides a generic way to set the value, whatever the actual column name is.
      *
@@ -2112,6 +2190,18 @@ abstract class Topic implements ActiveRecordInterface
     public function setLevel($v)
     {
         return $this->setTreeLevel($v);
+    }
+
+    /**
+     * Proxy setter method for the scope value of the nested set model.
+     * It provides a generic way to set the value, whatever the actual column name is.
+     *
+     * @param      int $v The nested set scope value
+     * @return     $this|ChildTopic The current object (for fluent API support)
+     */
+    public function setScopeValue($v)
+    {
+        return $this->setTreeScope($v);
     }
 
     /**
@@ -2171,6 +2261,10 @@ abstract class Topic implements ActiveRecordInterface
      */
     public function isDescendantOf(ChildTopic $parent)
     {
+        if ($this->getScopeValue() !== $parent->getScopeValue()) {
+            return false; //since the `this` and $parent are in different scopes, there's no way that `this` is be a descendant of $parent.
+        }
+
         return $this->isInTree() && $this->getLeftValue() > $parent->getLeftValue() && $this->getRightValue() < $parent->getRightValue();
     }
 
@@ -2243,6 +2337,7 @@ abstract class Topic implements ActiveRecordInterface
 
         return ChildTopicQuery::create()
             ->filterByTreeRight($this->getLeftValue() - 1)
+            ->inTree($this->getScopeValue())
             ->exists($con);
     }
 
@@ -2256,6 +2351,7 @@ abstract class Topic implements ActiveRecordInterface
     {
         return ChildTopicQuery::create()
             ->filterByTreeRight($this->getLeftValue() - 1)
+            ->inTree($this->getScopeValue())
             ->findOne($con);
     }
 
@@ -2273,6 +2369,7 @@ abstract class Topic implements ActiveRecordInterface
 
         return ChildTopicQuery::create()
             ->filterByTreeLeft($this->getRightValue() + 1)
+            ->inTree($this->getScopeValue())
             ->exists($con);
     }
 
@@ -2286,6 +2383,7 @@ abstract class Topic implements ActiveRecordInterface
     {
         return ChildTopicQuery::create()
             ->filterByTreeLeft($this->getRightValue() + 1)
+            ->inTree($this->getScopeValue())
             ->findOne($con);
     }
 
@@ -2570,13 +2668,15 @@ abstract class Topic implements ActiveRecordInterface
         $this->setLeftValue($left);
         $this->setRightValue($left + 1);
         $this->setLevel($parent->getLevel() + 1);
+        $scope = $parent->getScopeValue();
+        $this->setScopeValue($scope);
         // update the children collection of the parent
         $parent->addNestedSetChild($this);
 
         // Keep the tree modification query for the save() transaction
         $this->nestedSetQueries[] = array(
             'callable'  => array('\TopicQuery', 'makeRoomForLeaf'),
-            'arguments' => array($left, $this->isNew() ? null : $this)
+            'arguments' => array($left, $scope, $this->isNew() ? null : $this)
         );
 
         return $this;
@@ -2604,13 +2704,16 @@ abstract class Topic implements ActiveRecordInterface
         $this->setRightValue($left + 1);
         $this->setLevel($parent->getLevel() + 1);
 
+        $scope = $parent->getScopeValue();
+        $this->setScopeValue($scope);
+
         // update the children collection of the parent
         $parent->addNestedSetChild($this);
 
         // Keep the tree modification query for the save() transaction
         $this->nestedSetQueries []= array(
             'callable'  => array('\TopicQuery', 'makeRoomForLeaf'),
-            'arguments' => array($left, $this->isNew() ? null : $this)
+            'arguments' => array($left, $scope, $this->isNew() ? null : $this)
         );
 
         return $this;
@@ -2635,10 +2738,12 @@ abstract class Topic implements ActiveRecordInterface
         $this->setLeftValue($left);
         $this->setRightValue($left + 1);
         $this->setLevel($sibling->getLevel());
+        $scope = $sibling->getScopeValue();
+        $this->setScopeValue($scope);
         // Keep the tree modification query for the save() transaction
         $this->nestedSetQueries []= array(
             'callable'  => array('\TopicQuery', 'makeRoomForLeaf'),
-            'arguments' => array($left, $this->isNew() ? null : $this)
+            'arguments' => array($left, $scope, $this->isNew() ? null : $this)
         );
 
         return $this;
@@ -2663,10 +2768,12 @@ abstract class Topic implements ActiveRecordInterface
         $this->setLeftValue($left);
         $this->setRightValue($left + 1);
         $this->setLevel($sibling->getLevel());
+        $scope = $sibling->getScopeValue();
+        $this->setScopeValue($scope);
         // Keep the tree modification query for the save() transaction
         $this->nestedSetQueries []= array(
             'callable'  => array('\TopicQuery', 'makeRoomForLeaf'),
-            'arguments' => array($left, $this->isNew() ? null : $this)
+            'arguments' => array($left, $scope, $this->isNew() ? null : $this)
         );
 
         return $this;
@@ -2690,7 +2797,7 @@ abstract class Topic implements ActiveRecordInterface
             throw new PropelException('Cannot move a node as child of one of its subtree nodes.');
         }
 
-        $this->moveSubtreeTo($parent->getLeftValue() + 1, $parent->getLevel() - $this->getLevel() + 1, $con);
+        $this->moveSubtreeTo($parent->getLeftValue() + 1, $parent->getLevel() - $this->getLevel() + 1, $parent->getScopeValue(), $con);
 
         return $this;
     }
@@ -2713,7 +2820,7 @@ abstract class Topic implements ActiveRecordInterface
             throw new PropelException('Cannot move a node as child of one of its subtree nodes.');
         }
 
-        $this->moveSubtreeTo($parent->getRightValue(), $parent->getLevel() - $this->getLevel() + 1, $con);
+        $this->moveSubtreeTo($parent->getRightValue(), $parent->getLevel() - $this->getLevel() + 1, $parent->getScopeValue(), $con);
 
         return $this;
     }
@@ -2739,7 +2846,7 @@ abstract class Topic implements ActiveRecordInterface
             throw new PropelException('Cannot move a node as sibling of one of its subtree nodes.');
         }
 
-        $this->moveSubtreeTo($sibling->getLeftValue(), $sibling->getLevel() - $this->getLevel(), $con);
+        $this->moveSubtreeTo($sibling->getLeftValue(), $sibling->getLevel() - $this->getLevel(), $sibling->getScopeValue(), $con);
 
         return $this;
     }
@@ -2765,7 +2872,7 @@ abstract class Topic implements ActiveRecordInterface
             throw new PropelException('Cannot move a node as sibling of one of its subtree nodes.');
         }
 
-        $this->moveSubtreeTo($sibling->getRightValue() + 1, $sibling->getLevel() - $this->getLevel(), $con);
+        $this->moveSubtreeTo($sibling->getRightValue() + 1, $sibling->getLevel() - $this->getLevel(), $sibling->getScopeValue(), $con);
 
         return $this;
     }
@@ -2777,10 +2884,15 @@ abstract class Topic implements ActiveRecordInterface
      * @param      int    $levelDelta Delta to add to the levels
      * @param      ConnectionInterface $con        Connection to use.
      */
-    protected function moveSubtreeTo($destLeft, $levelDelta, ConnectionInterface $con = null)
+    protected function moveSubtreeTo($destLeft, $levelDelta, $targetScope = null, ConnectionInterface $con = null)
     {
         $left  = $this->getLeftValue();
         $right = $this->getRightValue();
+        $scope = $this->getScopeValue();
+
+        if ($targetScope === null) {
+            $targetScope = $scope;
+        }
 
         $treeSize = $right - $left +1;
 
@@ -2788,11 +2900,29 @@ abstract class Topic implements ActiveRecordInterface
             $con = Propel::getServiceContainer()->getWriteConnection(TopicTableMap::DATABASE_NAME);
         }
 
-        $con->transaction(function () use ($con, $treeSize, $destLeft, $left, $right, $levelDelta) {
+        $con->transaction(function () use ($con, $treeSize, $destLeft, $left, $right, $levelDelta, $scope, $targetScope) {
             $preventDefault = false;
 
             // make room next to the target for the subtree
-            ChildTopicQuery::shiftRLValues($treeSize, $destLeft, null, $con);
+            ChildTopicQuery::shiftRLValues($treeSize, $destLeft, null, $targetScope, $con);
+
+            if ($targetScope != $scope) {
+
+                //move subtree to < 0, so the items are out of scope.
+                ChildTopicQuery::shiftRLValues(-$right, $left, $right, $scope, $con);
+
+                //update scopes
+                ChildTopicQuery::setNegativeScope($targetScope, $con);
+
+                //update levels
+                ChildTopicQuery::shiftLevel($levelDelta, $left - $right, 0, $targetScope, $con);
+
+                //move the subtree to the target
+                ChildTopicQuery::shiftRLValues(($right - $left) + $destLeft, $left - $right, 0, $targetScope, $con);
+
+
+                $preventDefault = true;
+            }
 
             if (!$preventDefault) {
 
@@ -2803,15 +2933,15 @@ abstract class Topic implements ActiveRecordInterface
 
                 if ($levelDelta) {
                     // update the levels of the subtree
-                    ChildTopicQuery::shiftLevel($levelDelta, $left, $right, $con);
+                    ChildTopicQuery::shiftLevel($levelDelta, $left, $right, $scope, $con);
                 }
 
                 // move the subtree to the target
-                ChildTopicQuery::shiftRLValues($destLeft - $left, $left, $right, $con);
+                ChildTopicQuery::shiftRLValues($destLeft - $left, $left, $right, $scope, $con);
             }
 
             // remove the empty room at the previous location of the subtree
-            ChildTopicQuery::shiftRLValues(-$treeSize, $right + 1, null, $con);
+            ChildTopicQuery::shiftRLValues(-$treeSize, $right + 1, null, $scope, $con);
 
             // update all loaded nodes
             ChildTopicQuery::updateLoadedNodes(null, $con);
@@ -2838,15 +2968,16 @@ abstract class Topic implements ActiveRecordInterface
         }
         $left = $this->getLeftValue();
         $right = $this->getRightValue();
+        $scope = $this->getScopeValue();
 
-        return $con->transaction(function () use ($con, $left, $right) {
+        return $con->transaction(function () use ($con, $left, $right, $scope) {
             // delete descendant nodes (will empty the instance pool)
             $ret = ChildTopicQuery::create()
                 ->descendantsOf($this)
                 ->delete($con);
 
             // fill up the room that was used by descendants
-            ChildTopicQuery::shiftRLValues($left - $right + 1, $right, null, $con);
+            ChildTopicQuery::shiftRLValues($left - $right + 1, $right, null, $scope, $con);
 
             // fix the right value for the current node, which is now a leaf
             $this->setRightValue($left + 1);

@@ -59,7 +59,7 @@ class TopicTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class TopicTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the id field
@@ -107,6 +107,11 @@ class TopicTableMap extends TableMap
     const COL_TREE_LEVEL = 'topic.tree_level';
 
     /**
+     * the column name for the tree_scope field
+     */
+    const COL_TREE_SCOPE = 'topic.tree_scope';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -118,11 +123,11 @@ class TopicTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Title', 'SlackChannel', 'SlackChannelId', 'TreeLeft', 'TreeRight', 'TreeLevel', ),
-        self::TYPE_CAMELNAME     => array('id', 'title', 'slackChannel', 'slackChannelId', 'treeLeft', 'treeRight', 'treeLevel', ),
-        self::TYPE_COLNAME       => array(TopicTableMap::COL_ID, TopicTableMap::COL_TITLE, TopicTableMap::COL_SLACK_CHANNEL, TopicTableMap::COL_SLACK_CHANNEL_ID, TopicTableMap::COL_TREE_LEFT, TopicTableMap::COL_TREE_RIGHT, TopicTableMap::COL_TREE_LEVEL, ),
-        self::TYPE_FIELDNAME     => array('id', 'title', 'slack_channel', 'slack_channel_id', 'tree_left', 'tree_right', 'tree_level', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'Title', 'SlackChannel', 'SlackChannelId', 'TreeLeft', 'TreeRight', 'TreeLevel', 'TreeScope', ),
+        self::TYPE_CAMELNAME     => array('id', 'title', 'slackChannel', 'slackChannelId', 'treeLeft', 'treeRight', 'treeLevel', 'treeScope', ),
+        self::TYPE_COLNAME       => array(TopicTableMap::COL_ID, TopicTableMap::COL_TITLE, TopicTableMap::COL_SLACK_CHANNEL, TopicTableMap::COL_SLACK_CHANNEL_ID, TopicTableMap::COL_TREE_LEFT, TopicTableMap::COL_TREE_RIGHT, TopicTableMap::COL_TREE_LEVEL, TopicTableMap::COL_TREE_SCOPE, ),
+        self::TYPE_FIELDNAME     => array('id', 'title', 'slack_channel', 'slack_channel_id', 'tree_left', 'tree_right', 'tree_level', 'tree_scope', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -132,11 +137,11 @@ class TopicTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'SlackChannel' => 2, 'SlackChannelId' => 3, 'TreeLeft' => 4, 'TreeRight' => 5, 'TreeLevel' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'slackChannel' => 2, 'slackChannelId' => 3, 'treeLeft' => 4, 'treeRight' => 5, 'treeLevel' => 6, ),
-        self::TYPE_COLNAME       => array(TopicTableMap::COL_ID => 0, TopicTableMap::COL_TITLE => 1, TopicTableMap::COL_SLACK_CHANNEL => 2, TopicTableMap::COL_SLACK_CHANNEL_ID => 3, TopicTableMap::COL_TREE_LEFT => 4, TopicTableMap::COL_TREE_RIGHT => 5, TopicTableMap::COL_TREE_LEVEL => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'slack_channel' => 2, 'slack_channel_id' => 3, 'tree_left' => 4, 'tree_right' => 5, 'tree_level' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'SlackChannel' => 2, 'SlackChannelId' => 3, 'TreeLeft' => 4, 'TreeRight' => 5, 'TreeLevel' => 6, 'TreeScope' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'slackChannel' => 2, 'slackChannelId' => 3, 'treeLeft' => 4, 'treeRight' => 5, 'treeLevel' => 6, 'treeScope' => 7, ),
+        self::TYPE_COLNAME       => array(TopicTableMap::COL_ID => 0, TopicTableMap::COL_TITLE => 1, TopicTableMap::COL_SLACK_CHANNEL => 2, TopicTableMap::COL_SLACK_CHANNEL_ID => 3, TopicTableMap::COL_TREE_LEFT => 4, TopicTableMap::COL_TREE_RIGHT => 5, TopicTableMap::COL_TREE_LEVEL => 6, TopicTableMap::COL_TREE_SCOPE => 7, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'slack_channel' => 2, 'slack_channel_id' => 3, 'tree_left' => 4, 'tree_right' => 5, 'tree_level' => 6, 'tree_scope' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -164,6 +169,7 @@ class TopicTableMap extends TableMap
         $this->addColumn('tree_left', 'TreeLeft', 'INTEGER', false, null, null);
         $this->addColumn('tree_right', 'TreeRight', 'INTEGER', false, null, null);
         $this->addColumn('tree_level', 'TreeLevel', 'INTEGER', false, null, null);
+        $this->addColumn('tree_scope', 'TreeScope', 'INTEGER', false, null, null);
     } // initialize()
 
     /**
@@ -190,7 +196,7 @@ class TopicTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'nested_set' => array('left_column' => 'tree_left', 'right_column' => 'tree_right', 'level_column' => 'tree_level', 'use_scope' => 'false', 'scope_column' => 'tree_scope', 'method_proxies' => 'false', ),
+            'nested_set' => array('left_column' => 'tree_left', 'right_column' => 'tree_right', 'level_column' => 'tree_level', 'use_scope' => 'true', 'scope_column' => 'tree_scope', 'method_proxies' => 'false', ),
         );
     } // getBehaviors()
     /**
@@ -351,6 +357,7 @@ class TopicTableMap extends TableMap
             $criteria->addSelectColumn(TopicTableMap::COL_TREE_LEFT);
             $criteria->addSelectColumn(TopicTableMap::COL_TREE_RIGHT);
             $criteria->addSelectColumn(TopicTableMap::COL_TREE_LEVEL);
+            $criteria->addSelectColumn(TopicTableMap::COL_TREE_SCOPE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.title');
@@ -359,6 +366,7 @@ class TopicTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.tree_left');
             $criteria->addSelectColumn($alias . '.tree_right');
             $criteria->addSelectColumn($alias . '.tree_level');
+            $criteria->addSelectColumn($alias . '.tree_scope');
         }
     }
 

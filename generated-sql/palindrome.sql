@@ -47,6 +47,7 @@ CREATE TABLE `topic`
     `tree_left` INTEGER,
     `tree_right` INTEGER,
     `tree_level` INTEGER,
+    `tree_scope` INTEGER,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
