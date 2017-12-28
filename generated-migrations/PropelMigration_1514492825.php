@@ -7,40 +7,35 @@ use Propel\Generator\Manager\MigrationManager;
  * up to version 1514492825.
  * Generated on 2017-12-28 20:27:05 by sandor
  */
-class PropelMigration_1514492825
-{
-    public $comment = '';
 
-    public function preUp(MigrationManager $manager)
-    {
-        // add the pre-migration code here
-    }
+class PropelMigration_1514492825 {
+	public $comment = '';
 
-    public function postUp(MigrationManager $manager)
-    {
-        // add the post-migration code here
-    }
+	public function preUp(MigrationManager $manager) {
+		// add the pre-migration code here
+	}
 
-    public function preDown(MigrationManager $manager)
-    {
-        // add the pre-migration code here
-    }
+	public function postUp(MigrationManager $manager) {
+		// add the post-migration code here
+	}
 
-    public function postDown(MigrationManager $manager)
-    {
-        // add the post-migration code here
-    }
+	public function preDown(MigrationManager $manager) {
+		// add the pre-migration code here
+	}
 
-    /**
-     * Get the SQL statements for the Up migration
-     *
-     * @return array list of the SQL strings to execute for the Up migration
-     *               the keys being the datasources
-     */
-    public function getUpSQL()
-    {
-        return array (
-  'palindrome' => '
+	public function postDown(MigrationManager $manager) {
+		// add the post-migration code here
+	}
+
+	/**
+	 * Get the SQL statements for the Up migration
+	 *
+	 * @return array list of the SQL strings to execute for the Up migration
+	 *               the keys being the datasources
+	 */
+	public function getUpSQL() {
+		return array(
+			'palindrome' => '
 # This is a fix for InnoDB in MySQL >= 4.1.x
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
@@ -57,6 +52,11 @@ CREATE TABLE `topic`
     `tree_scope` INTEGER,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+INSERT INTO `topic` (`id`, `title`, `slack_channel`, `slack_channel_id`, `tree_left`, `tree_right`, `tree_level`, `tree_scope`)
+VALUES
+    (1, "Category", NULL, NULL, 1, 2, 0, 1),
+    (2, "Skill", NULL, NULL, 1, 2, 0, 2);
 
 CREATE TABLE `topic_alert`
 (
@@ -80,19 +80,18 @@ CREATE TABLE `topic_alert`
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
 ',
-);
-    }
+		);
+	}
 
-    /**
-     * Get the SQL statements for the Down migration
-     *
-     * @return array list of the SQL strings to execute for the Down migration
-     *               the keys being the datasources
-     */
-    public function getDownSQL()
-    {
-        return array (
-  'palindrome' => '
+	/**
+	 * Get the SQL statements for the Down migration
+	 *
+	 * @return array list of the SQL strings to execute for the Down migration
+	 *               the keys being the datasources
+	 */
+	public function getDownSQL() {
+		return array(
+			'palindrome' => '
 # This is a fix for InnoDB in MySQL >= 4.1.x
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
@@ -104,7 +103,7 @@ DROP TABLE IF EXISTS `topic_alert`;
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
 ',
-);
-    }
+		);
+	}
 
 }
