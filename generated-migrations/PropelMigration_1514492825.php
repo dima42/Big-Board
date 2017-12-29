@@ -55,8 +55,9 @@ CREATE TABLE `topic`
 
 INSERT INTO `topic` (`id`, `title`, `slack_channel`, `slack_channel_id`, `tree_left`, `tree_right`, `tree_level`, `tree_scope`)
 VALUES
-    (1, "Category", NULL, NULL, 1, 2, 0, 1),
-    (2, "Skill", NULL, NULL, 1, 2, 0, 2);
+    (1, "Puzzle Types", NULL, NULL, 1, 2, 0, 1),
+    (2, "Topics", NULL, NULL, 1, 2, 0, 2),
+    (3, "Skills", NULL, NULL, 1, 2, 0, 3);
 
 CREATE TABLE `topic_alert`
 (
