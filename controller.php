@@ -206,18 +206,10 @@ function displayError($error) {
 function displayTest($response) {
 	$member = $_SESSION['user'];
 
-	$commander = getSlackCommander();
+	$roots = TagQuery::create()
+		->findRoots();
 
-	$answer = $commander->execute('users.info', [
-			'user' => $member->getSlackId()
-		]);
-
-	// Avatar options: image_24, 32, 48, 72, 192, 512, 1024
-	$avatar = $answer->getBody()['user']['profile']['image_192'];
-	$member->setAvatar($avatar);
-	$member->save();
-
-	preprint($avatar);
+	preprint($roots);
 	return;
 
 	render('test.twig', '', array(
@@ -409,16 +401,13 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	}
 
 	$puzzles = TagQuery::create()
-		->findRoot(1)
-		->getBranch();
+		->findTree(1);
 
 	$topics = TagQuery::create()
-		->findRoot(2)
-		->getBranch();
+		->findTree(2);
 
 	$skills = TagQuery::create()
-		->findRoot(3)
-		->getBranch();
+		->findTree(3);
 
 	$tag_alerts = TagAlertQuery::create()
 		->filterByPuzzle($puzzle)
