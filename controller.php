@@ -690,21 +690,23 @@ function addPuzzle($request, $response) {
 // TOPICS
 
 function displayTopics() {
-	$category_root = TopicQuery::create()
-		->findRoot(1);
-
-	$skill_root = TopicQuery::create()
-		->findRoot(2);
-
-	$categories = $category_root
+	$puzzles = TopicQuery::create()
+		->findRoot(1)
 		->getBranch();
 
-	$skills = $skill_root
+	$topics = TopicQuery::create()
+		->findRoot(2)
+		->getBranch();
+
+	$skills = TopicQuery::create()
+		->findRoot(3)
 		->getBranch();
 
 	render('topics.twig', 'topics', array(
 			'scopes' => [
-				$categories, $skills
+				$puzzles,
+				$topics,
+				$skills,
 			],
 		));
 }
@@ -744,7 +746,6 @@ function alertTopic($request, $response, $puzzle_id) {
 	$puzzle = PuzzleQuery::create()
 		->findPk($puzzle_id);
 
-	// TODO: Send alert to Slack.
 	// TODO: Don't allow if link has .alerted class
 
 	$ta = new TopicAlert();
