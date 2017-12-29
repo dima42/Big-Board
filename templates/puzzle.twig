@@ -161,10 +161,12 @@ $(function() {
         };
         var link = $(this);
 
+        if (link.hasClass('alerted')) {
+            return;
+        }
+
         $.post('/topics/alert/{{ puzzle.id }}', data, function(response) {
-            console.log(response, response['ok']);
-            if(response['ok']) {
-                console.log($(this));
+            if (response['ok']) {
                 link.addClass('alerted');
             }
         });
