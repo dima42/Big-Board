@@ -408,12 +408,16 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			->find();
 	}
 
-	$categories = Tag::create()
+	$puzzles = TagQuery::create()
 		->findRoot(1)
 		->getBranch();
 
-	$skills = Tag::create()
+	$topics = TagQuery::create()
 		->findRoot(2)
+		->getBranch();
+
+	$skills = TagQuery::create()
+		->findRoot(3)
 		->getBranch();
 
 	$tag_alerts = TagAlertQuery::create()
@@ -432,7 +436,8 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'puzzles_metas' => $puzzles_metas,
 			'is_meta'       => $is_meta,
 			'all_members'   => $full_roster,
-			'categories'    => $categories,
+			'puzzles'       => $puzzles,
+			'topics'        => $topics,
 			'skills'        => $skills,
 			'tag_alerts'    => $tag_alerts,
 		));
@@ -713,7 +718,7 @@ function displayTags() {
 
 function addTag($request) {
 	// TODO: Special case adding top-level category
-	$parent = Tag::create()
+	$parent = TagQuery::create()
 		->findPk($request->parent);
 
 	$tag = new Tag();
@@ -725,7 +730,7 @@ function addTag($request) {
 }
 
 function moveTag($request, $id, $dir) {
-	$tag = Tag::create()
+	$tag = TagQuery::create()
 		->findPk($id);
 
 	if ($dir == "down") {
@@ -740,7 +745,7 @@ function moveTag($request, $id, $dir) {
 }
 
 function alertTag($request, $response, $puzzle_id) {
-	$tag = Tag::create()
+	$tag = TagQuery::create()
 		->findPk($request->tag_id);
 
 	$puzzle = PuzzleQuery::create()

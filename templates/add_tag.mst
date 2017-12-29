@@ -1,5 +1,5 @@
 <div class="tag level{{ level }}">
-    <form class="" action="/topics/add" method="post">
+    <form class="" action="/tags/add" method="post">
         <div class="input-group">
             <input type="text" class="form-control" name="title" placeholder="Tag">
             <input type="hidden" name="parent" value="{{ parent }}">
