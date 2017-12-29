@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \TopicAlert;
-use \TopicAlertQuery;
+use \TagAlert;
+use \TagAlertQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'topic_alert' table.
+ * This class defines the structure of the 'tag_alert' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class TopicAlertTableMap extends TableMap
+class TagAlertTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class TopicAlertTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.TopicAlertTableMap';
+    const CLASS_NAME = '.Map.TagAlertTableMap';
 
     /**
      * The default database name for this class
@@ -44,17 +44,17 @@ class TopicAlertTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'topic_alert';
+    const TABLE_NAME = 'tag_alert';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\TopicAlert';
+    const OM_CLASS = '\\TagAlert';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'TopicAlert';
+    const CLASS_DEFAULT = 'TagAlert';
 
     /**
      * The total number of columns
@@ -74,22 +74,22 @@ class TopicAlertTableMap extends TableMap
     /**
      * the column name for the puzzle_id field
      */
-    const COL_PUZZLE_ID = 'topic_alert.puzzle_id';
+    const COL_PUZZLE_ID = 'tag_alert.puzzle_id';
 
     /**
-     * the column name for the topic_id field
+     * the column name for the tag_id field
      */
-    const COL_TOPIC_ID = 'topic_alert.topic_id';
+    const COL_TAG_ID = 'tag_alert.tag_id';
 
     /**
      * the column name for the created_at field
      */
-    const COL_CREATED_AT = 'topic_alert.created_at';
+    const COL_CREATED_AT = 'tag_alert.created_at';
 
     /**
      * the column name for the updated_at field
      */
-    const COL_UPDATED_AT = 'topic_alert.updated_at';
+    const COL_UPDATED_AT = 'tag_alert.updated_at';
 
     /**
      * The default string format for model objects of the related table
@@ -103,10 +103,10 @@ class TopicAlertTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('PuzzleId', 'TopicId', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('puzzleId', 'topicId', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(TopicAlertTableMap::COL_PUZZLE_ID, TopicAlertTableMap::COL_TOPIC_ID, TopicAlertTableMap::COL_CREATED_AT, TopicAlertTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('puzzle_id', 'topic_id', 'created_at', 'updated_at', ),
+        self::TYPE_PHPNAME       => array('PuzzleId', 'TagId', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('puzzleId', 'tagId', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(TagAlertTableMap::COL_PUZZLE_ID, TagAlertTableMap::COL_TAG_ID, TagAlertTableMap::COL_CREATED_AT, TagAlertTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('puzzle_id', 'tag_id', 'created_at', 'updated_at', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
@@ -117,10 +117,10 @@ class TopicAlertTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('PuzzleId' => 0, 'TopicId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, ),
-        self::TYPE_CAMELNAME     => array('puzzleId' => 0, 'topicId' => 1, 'createdAt' => 2, 'updatedAt' => 3, ),
-        self::TYPE_COLNAME       => array(TopicAlertTableMap::COL_PUZZLE_ID => 0, TopicAlertTableMap::COL_TOPIC_ID => 1, TopicAlertTableMap::COL_CREATED_AT => 2, TopicAlertTableMap::COL_UPDATED_AT => 3, ),
-        self::TYPE_FIELDNAME     => array('puzzle_id' => 0, 'topic_id' => 1, 'created_at' => 2, 'updated_at' => 3, ),
+        self::TYPE_PHPNAME       => array('PuzzleId' => 0, 'TagId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, ),
+        self::TYPE_CAMELNAME     => array('puzzleId' => 0, 'tagId' => 1, 'createdAt' => 2, 'updatedAt' => 3, ),
+        self::TYPE_COLNAME       => array(TagAlertTableMap::COL_PUZZLE_ID => 0, TagAlertTableMap::COL_TAG_ID => 1, TagAlertTableMap::COL_CREATED_AT => 2, TagAlertTableMap::COL_UPDATED_AT => 3, ),
+        self::TYPE_FIELDNAME     => array('puzzle_id' => 0, 'tag_id' => 1, 'created_at' => 2, 'updated_at' => 3, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
@@ -134,16 +134,16 @@ class TopicAlertTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('topic_alert');
-        $this->setPhpName('TopicAlert');
+        $this->setName('tag_alert');
+        $this->setPhpName('TagAlert');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\TopicAlert');
+        $this->setClassName('\\TagAlert');
         $this->setPackage('');
         $this->setUseIdGenerator(false);
         $this->setIsCrossRef(true);
         // columns
         $this->addForeignPrimaryKey('puzzle_id', 'PuzzleId', 'INTEGER' , 'puzzle', 'id', true, null, null);
-        $this->addForeignPrimaryKey('topic_id', 'TopicId', 'INTEGER' , 'topic', 'id', true, null, null);
+        $this->addForeignPrimaryKey('tag_id', 'TagId', 'INTEGER' , 'tag', 'id', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
@@ -160,10 +160,10 @@ class TopicAlertTableMap extends TableMap
     1 => ':id',
   ),
 ), 'CASCADE', null, null, false);
-        $this->addRelation('Topic', '\\Topic', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('Tag', '\\Tag', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':topic_id',
+    0 => ':tag_id',
     1 => ':id',
   ),
 ), 'CASCADE', null, null, false);
@@ -190,14 +190,14 @@ class TopicAlertTableMap extends TableMap
      * to the cache in order to ensure that the same objects are always returned by find*()
      * and findPk*() calls.
      *
-     * @param \TopicAlert $obj A \TopicAlert object.
+     * @param \TagAlert $obj A \TagAlert object.
      * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             if (null === $key) {
-                $key = serialize([(null === $obj->getPuzzleId() || is_scalar($obj->getPuzzleId()) || is_callable([$obj->getPuzzleId(), '__toString']) ? (string) $obj->getPuzzleId() : $obj->getPuzzleId()), (null === $obj->getTopicId() || is_scalar($obj->getTopicId()) || is_callable([$obj->getTopicId(), '__toString']) ? (string) $obj->getTopicId() : $obj->getTopicId())]);
+                $key = serialize([(null === $obj->getPuzzleId() || is_scalar($obj->getPuzzleId()) || is_callable([$obj->getPuzzleId(), '__toString']) ? (string) $obj->getPuzzleId() : $obj->getPuzzleId()), (null === $obj->getTagId() || is_scalar($obj->getTagId()) || is_callable([$obj->getTagId(), '__toString']) ? (string) $obj->getTagId() : $obj->getTagId())]);
             } // if key === null
             self::$instances[$key] = $obj;
         }
@@ -211,13 +211,13 @@ class TopicAlertTableMap extends TableMap
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param mixed $value A \TopicAlert object or a primary key value.
+     * @param mixed $value A \TagAlert object or a primary key value.
      */
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && null !== $value) {
-            if (is_object($value) && $value instanceof \TopicAlert) {
-                $key = serialize([(null === $value->getPuzzleId() || is_scalar($value->getPuzzleId()) || is_callable([$value->getPuzzleId(), '__toString']) ? (string) $value->getPuzzleId() : $value->getPuzzleId()), (null === $value->getTopicId() || is_scalar($value->getTopicId()) || is_callable([$value->getTopicId(), '__toString']) ? (string) $value->getTopicId() : $value->getTopicId())]);
+            if (is_object($value) && $value instanceof \TagAlert) {
+                $key = serialize([(null === $value->getPuzzleId() || is_scalar($value->getPuzzleId()) || is_callable([$value->getPuzzleId(), '__toString']) ? (string) $value->getPuzzleId() : $value->getPuzzleId()), (null === $value->getTagId() || is_scalar($value->getTagId()) || is_callable([$value->getTagId(), '__toString']) ? (string) $value->getTagId() : $value->getTagId())]);
 
             } elseif (is_array($value) && count($value) === 2) {
                 // assume we've been passed a primary key";
@@ -227,7 +227,7 @@ class TopicAlertTableMap extends TableMap
 
                 return;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \TopicAlert object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \TagAlert object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
                 throw $e;
             }
 
@@ -251,11 +251,11 @@ class TopicAlertTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TopicId', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TagId', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TopicId', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TopicId', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TopicId', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TopicId', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TopicId', TableMap::TYPE_PHPNAME, $indexType)])]);
+        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TagId', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TagId', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TagId', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TagId', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('TagId', TableMap::TYPE_PHPNAME, $indexType)])]);
     }
 
     /**
@@ -282,7 +282,7 @@ class TopicAlertTableMap extends TableMap
         $pks[] = (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 1 + $offset
-                : self::translateFieldName('TopicId', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('TagId', TableMap::TYPE_PHPNAME, $indexType)
         ];
 
         return $pks;
@@ -301,7 +301,7 @@ class TopicAlertTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? TopicAlertTableMap::CLASS_DEFAULT : TopicAlertTableMap::OM_CLASS;
+        return $withPrefix ? TagAlertTableMap::CLASS_DEFAULT : TagAlertTableMap::OM_CLASS;
     }
 
     /**
@@ -315,22 +315,22 @@ class TopicAlertTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (TopicAlert object, last column rank)
+     * @return array           (TagAlert object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = TopicAlertTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = TopicAlertTableMap::getInstanceFromPool($key))) {
+        $key = TagAlertTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = TagAlertTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + TopicAlertTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + TagAlertTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = TopicAlertTableMap::OM_CLASS;
-            /** @var TopicAlert $obj */
+            $cls = TagAlertTableMap::OM_CLASS;
+            /** @var TagAlert $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            TopicAlertTableMap::addInstanceToPool($obj, $key);
+            TagAlertTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -353,18 +353,18 @@ class TopicAlertTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = TopicAlertTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = TopicAlertTableMap::getInstanceFromPool($key))) {
+            $key = TagAlertTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = TagAlertTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var TopicAlert $obj */
+                /** @var TagAlert $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                TopicAlertTableMap::addInstanceToPool($obj, $key);
+                TagAlertTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -385,13 +385,13 @@ class TopicAlertTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(TopicAlertTableMap::COL_PUZZLE_ID);
-            $criteria->addSelectColumn(TopicAlertTableMap::COL_TOPIC_ID);
-            $criteria->addSelectColumn(TopicAlertTableMap::COL_CREATED_AT);
-            $criteria->addSelectColumn(TopicAlertTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(TagAlertTableMap::COL_PUZZLE_ID);
+            $criteria->addSelectColumn(TagAlertTableMap::COL_TAG_ID);
+            $criteria->addSelectColumn(TagAlertTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(TagAlertTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.puzzle_id');
-            $criteria->addSelectColumn($alias . '.topic_id');
+            $criteria->addSelectColumn($alias . '.tag_id');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }
@@ -406,7 +406,7 @@ class TopicAlertTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(TopicAlertTableMap::DATABASE_NAME)->getTable(TopicAlertTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(TagAlertTableMap::DATABASE_NAME)->getTable(TagAlertTableMap::TABLE_NAME);
     }
 
     /**
@@ -414,16 +414,16 @@ class TopicAlertTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TopicAlertTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(TopicAlertTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new TopicAlertTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TagAlertTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(TagAlertTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new TagAlertTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a TopicAlert or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a TagAlert or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or TopicAlert object or primary key or array of primary keys
+     * @param mixed               $values Criteria or TagAlert object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -434,17 +434,17 @@ class TopicAlertTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicAlertTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagAlertTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \TopicAlert) { // it's a model object
+        } elseif ($values instanceof \TagAlert) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(TopicAlertTableMap::DATABASE_NAME);
+            $criteria = new Criteria(TagAlertTableMap::DATABASE_NAME);
             // primary key is composite; we therefore, expect
             // the primary key passed to be an array of pkey values
             if (count($values) == count($values, COUNT_RECURSIVE)) {
@@ -452,19 +452,19 @@ class TopicAlertTableMap extends TableMap
                 $values = array($values);
             }
             foreach ($values as $value) {
-                $criterion = $criteria->getNewCriterion(TopicAlertTableMap::COL_PUZZLE_ID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(TopicAlertTableMap::COL_TOPIC_ID, $value[1]));
+                $criterion = $criteria->getNewCriterion(TagAlertTableMap::COL_PUZZLE_ID, $value[0]);
+                $criterion->addAnd($criteria->getNewCriterion(TagAlertTableMap::COL_TAG_ID, $value[1]));
                 $criteria->addOr($criterion);
             }
         }
 
-        $query = TopicAlertQuery::create()->mergeWith($criteria);
+        $query = TagAlertQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            TopicAlertTableMap::clearInstancePool();
+            TagAlertTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                TopicAlertTableMap::removeInstanceFromPool($singleval);
+                TagAlertTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -472,20 +472,20 @@ class TopicAlertTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the topic_alert table.
+     * Deletes all rows from the tag_alert table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return TopicAlertQuery::create()->doDeleteAll($con);
+        return TagAlertQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a TopicAlert or Criteria object.
+     * Performs an INSERT on the database, given a TagAlert or Criteria object.
      *
-     * @param mixed               $criteria Criteria or TopicAlert object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or TagAlert object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -494,18 +494,18 @@ class TopicAlertTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicAlertTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagAlertTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from TopicAlert object
+            $criteria = $criteria->buildCriteria(); // build Criteria from TagAlert object
         }
 
 
         // Set the correct dbName
-        $query = TopicAlertQuery::create()->mergeWith($criteria);
+        $query = TagAlertQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -514,7 +514,7 @@ class TopicAlertTableMap extends TableMap
         });
     }
 
-} // TopicAlertTableMap
+} // TagAlertTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-TopicAlertTableMap::buildTableMap();
+TagAlertTableMap::buildTableMap();

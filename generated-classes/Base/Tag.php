@@ -4,14 +4,14 @@ namespace Base;
 
 use \Puzzle as ChildPuzzle;
 use \PuzzleQuery as ChildPuzzleQuery;
-use \Topic as ChildTopic;
-use \TopicAlert as ChildTopicAlert;
-use \TopicAlertQuery as ChildTopicAlertQuery;
-use \TopicQuery as ChildTopicQuery;
+use \Tag as ChildTag;
+use \TagAlert as ChildTagAlert;
+use \TagAlertQuery as ChildTagAlertQuery;
+use \TagQuery as ChildTagQuery;
 use \Exception;
 use \PDO;
-use Map\TopicAlertTableMap;
-use Map\TopicTableMap;
+use Map\TagAlertTableMap;
+use Map\TagTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -27,18 +27,18 @@ use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 
 /**
- * Base class that represents a row from the 'topic' table.
+ * Base class that represents a row from the 'tag' table.
  *
  *
  *
  * @package    propel.generator..Base
  */
-abstract class Topic implements ActiveRecordInterface
+abstract class Tag implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\TopicTableMap';
+    const TABLE_MAP = '\\Map\\TagTableMap';
 
 
     /**
@@ -124,10 +124,10 @@ abstract class Topic implements ActiveRecordInterface
     protected $tree_scope;
 
     /**
-     * @var        ObjectCollection|ChildTopicAlert[] Collection to store aggregation of ChildTopicAlert objects.
+     * @var        ObjectCollection|ChildTagAlert[] Collection to store aggregation of ChildTagAlert objects.
      */
-    protected $collTopicAlerts;
-    protected $collTopicAlertsPartial;
+    protected $collTagAlerts;
+    protected $collTagAlertsPartial;
 
     /**
      * @var        ObjectCollection|ChildPuzzle[] Cross Collection to store aggregation of ChildPuzzle objects.
@@ -163,29 +163,29 @@ abstract class Topic implements ActiveRecordInterface
 
     /**
      * Internal cache for parent node
-     * @var        null|ChildTopic
+     * @var        null|ChildTag
      */
     protected $aNestedSetParent = null;
 
     /**
      * Left column for the set
      */
-    const LEFT_COL = 'topic.tree_left';
+    const LEFT_COL = 'tag.tree_left';
 
     /**
      * Right column for the set
      */
-    const RIGHT_COL = 'topic.tree_right';
+    const RIGHT_COL = 'tag.tree_right';
 
     /**
      * Level column for the set
      */
-    const LEVEL_COL = 'topic.tree_level';
+    const LEVEL_COL = 'tag.tree_level';
 
     /**
      * Scope column for the set
      */
-    const SCOPE_COL = 'topic.tree_scope';
+    const SCOPE_COL = 'tag.tree_scope';
 
     /**
      * An array of objects scheduled for deletion.
@@ -195,12 +195,12 @@ abstract class Topic implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildTopicAlert[]
+     * @var ObjectCollection|ChildTagAlert[]
      */
-    protected $topicAlertsScheduledForDeletion = null;
+    protected $tagAlertsScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of Base\Topic object.
+     * Initializes internal state of Base\Tag object.
      */
     public function __construct()
     {
@@ -295,9 +295,9 @@ abstract class Topic implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Topic</code> instance.  If
-     * <code>obj</code> is an instance of <code>Topic</code>, delegates to
-     * <code>equals(Topic)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Tag</code> instance.  If
+     * <code>obj</code> is an instance of <code>Tag</code>, delegates to
+     * <code>equals(Tag)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -363,7 +363,7 @@ abstract class Topic implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Topic The current object, for fluid interface
+     * @return $this|Tag The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -508,7 +508,7 @@ abstract class Topic implements ActiveRecordInterface
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return $this|\Topic The current object (for fluent API support)
+     * @return $this|\Tag The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -518,7 +518,7 @@ abstract class Topic implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[TopicTableMap::COL_ID] = true;
+            $this->modifiedColumns[TagTableMap::COL_ID] = true;
         }
 
         return $this;
@@ -528,7 +528,7 @@ abstract class Topic implements ActiveRecordInterface
      * Set the value of [title] column.
      *
      * @param string $v new value
-     * @return $this|\Topic The current object (for fluent API support)
+     * @return $this|\Tag The current object (for fluent API support)
      */
     public function setTitle($v)
     {
@@ -538,7 +538,7 @@ abstract class Topic implements ActiveRecordInterface
 
         if ($this->title !== $v) {
             $this->title = $v;
-            $this->modifiedColumns[TopicTableMap::COL_TITLE] = true;
+            $this->modifiedColumns[TagTableMap::COL_TITLE] = true;
         }
 
         return $this;
@@ -548,7 +548,7 @@ abstract class Topic implements ActiveRecordInterface
      * Set the value of [slack_channel] column.
      *
      * @param string $v new value
-     * @return $this|\Topic The current object (for fluent API support)
+     * @return $this|\Tag The current object (for fluent API support)
      */
     public function setSlackChannel($v)
     {
@@ -558,7 +558,7 @@ abstract class Topic implements ActiveRecordInterface
 
         if ($this->slack_channel !== $v) {
             $this->slack_channel = $v;
-            $this->modifiedColumns[TopicTableMap::COL_SLACK_CHANNEL] = true;
+            $this->modifiedColumns[TagTableMap::COL_SLACK_CHANNEL] = true;
         }
 
         return $this;
@@ -568,7 +568,7 @@ abstract class Topic implements ActiveRecordInterface
      * Set the value of [slack_channel_id] column.
      *
      * @param string $v new value
-     * @return $this|\Topic The current object (for fluent API support)
+     * @return $this|\Tag The current object (for fluent API support)
      */
     public function setSlackChannelId($v)
     {
@@ -578,7 +578,7 @@ abstract class Topic implements ActiveRecordInterface
 
         if ($this->slack_channel_id !== $v) {
             $this->slack_channel_id = $v;
-            $this->modifiedColumns[TopicTableMap::COL_SLACK_CHANNEL_ID] = true;
+            $this->modifiedColumns[TagTableMap::COL_SLACK_CHANNEL_ID] = true;
         }
 
         return $this;
@@ -588,7 +588,7 @@ abstract class Topic implements ActiveRecordInterface
      * Set the value of [tree_left] column.
      *
      * @param int $v new value
-     * @return $this|\Topic The current object (for fluent API support)
+     * @return $this|\Tag The current object (for fluent API support)
      */
     public function setTreeLeft($v)
     {
@@ -598,7 +598,7 @@ abstract class Topic implements ActiveRecordInterface
 
         if ($this->tree_left !== $v) {
             $this->tree_left = $v;
-            $this->modifiedColumns[TopicTableMap::COL_TREE_LEFT] = true;
+            $this->modifiedColumns[TagTableMap::COL_TREE_LEFT] = true;
         }
 
         return $this;
@@ -608,7 +608,7 @@ abstract class Topic implements ActiveRecordInterface
      * Set the value of [tree_right] column.
      *
      * @param int $v new value
-     * @return $this|\Topic The current object (for fluent API support)
+     * @return $this|\Tag The current object (for fluent API support)
      */
     public function setTreeRight($v)
     {
@@ -618,7 +618,7 @@ abstract class Topic implements ActiveRecordInterface
 
         if ($this->tree_right !== $v) {
             $this->tree_right = $v;
-            $this->modifiedColumns[TopicTableMap::COL_TREE_RIGHT] = true;
+            $this->modifiedColumns[TagTableMap::COL_TREE_RIGHT] = true;
         }
 
         return $this;
@@ -628,7 +628,7 @@ abstract class Topic implements ActiveRecordInterface
      * Set the value of [tree_level] column.
      *
      * @param int $v new value
-     * @return $this|\Topic The current object (for fluent API support)
+     * @return $this|\Tag The current object (for fluent API support)
      */
     public function setTreeLevel($v)
     {
@@ -638,7 +638,7 @@ abstract class Topic implements ActiveRecordInterface
 
         if ($this->tree_level !== $v) {
             $this->tree_level = $v;
-            $this->modifiedColumns[TopicTableMap::COL_TREE_LEVEL] = true;
+            $this->modifiedColumns[TagTableMap::COL_TREE_LEVEL] = true;
         }
 
         return $this;
@@ -648,7 +648,7 @@ abstract class Topic implements ActiveRecordInterface
      * Set the value of [tree_scope] column.
      *
      * @param int $v new value
-     * @return $this|\Topic The current object (for fluent API support)
+     * @return $this|\Tag The current object (for fluent API support)
      */
     public function setTreeScope($v)
     {
@@ -658,7 +658,7 @@ abstract class Topic implements ActiveRecordInterface
 
         if ($this->tree_scope !== $v) {
             $this->tree_scope = $v;
-            $this->modifiedColumns[TopicTableMap::COL_TREE_SCOPE] = true;
+            $this->modifiedColumns[TagTableMap::COL_TREE_SCOPE] = true;
         }
 
         return $this;
@@ -700,28 +700,28 @@ abstract class Topic implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : TopicTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : TagTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : TopicTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : TagTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : TopicTableMap::translateFieldName('SlackChannel', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : TagTableMap::translateFieldName('SlackChannel', TableMap::TYPE_PHPNAME, $indexType)];
             $this->slack_channel = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : TopicTableMap::translateFieldName('SlackChannelId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : TagTableMap::translateFieldName('SlackChannelId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->slack_channel_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : TopicTableMap::translateFieldName('TreeLeft', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : TagTableMap::translateFieldName('TreeLeft', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tree_left = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : TopicTableMap::translateFieldName('TreeRight', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : TagTableMap::translateFieldName('TreeRight', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tree_right = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : TopicTableMap::translateFieldName('TreeLevel', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : TagTableMap::translateFieldName('TreeLevel', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tree_level = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : TopicTableMap::translateFieldName('TreeScope', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : TagTableMap::translateFieldName('TreeScope', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tree_scope = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -731,10 +731,10 @@ abstract class Topic implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = TopicTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = TagTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Topic'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Tag'), 0, $e);
         }
     }
 
@@ -776,13 +776,13 @@ abstract class Topic implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(TopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(TagTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildTopicQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildTagQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -792,7 +792,7 @@ abstract class Topic implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collTopicAlerts = null;
+            $this->collTagAlerts = null;
 
             $this->collPuzzles = null;
         } // if (deep)
@@ -804,8 +804,8 @@ abstract class Topic implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Topic::setDeleted()
-     * @see Topic::isDeleted()
+     * @see Tag::setDeleted()
+     * @see Tag::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -814,16 +814,16 @@ abstract class Topic implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildTopicQuery::create()
+            $deleteQuery = ChildTagQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             // nested_set behavior
             if ($this->isRoot()) {
-                throw new PropelException('Deletion of a root node is disabled for nested sets. Use ChildTopicQuery::deleteTree($scope) instead to delete an entire tree');
+                throw new PropelException('Deletion of a root node is disabled for nested sets. Use ChildTagQuery::deleteTree($scope) instead to delete an entire tree');
             }
 
             if ($this->isInTree()) {
@@ -836,7 +836,7 @@ abstract class Topic implements ActiveRecordInterface
                 // nested_set behavior
                 if ($this->isInTree()) {
                     // fill up the room that was used by the node
-                    ChildTopicQuery::shiftRLValues(-2, $this->getRightValue() + 1, null, $this->getScopeValue(), $con);
+                    ChildTagQuery::shiftRLValues(-2, $this->getRightValue() + 1, null, $this->getScopeValue(), $con);
                 }
 
                 $this->setDeleted(true);
@@ -868,7 +868,7 @@ abstract class Topic implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -877,9 +877,9 @@ abstract class Topic implements ActiveRecordInterface
             // nested_set behavior
             if ($this->isNew() && $this->isRoot()) {
                 // check if no other root exist in, the tree
-                $rootExists = ChildTopicQuery::create()
-                    ->addUsingAlias(ChildTopic::LEFT_COL, 1, Criteria::EQUAL)
-                    ->addUsingAlias(ChildTopic::SCOPE_COL, $this->getScopeValue(), Criteria::EQUAL)
+                $rootExists = ChildTagQuery::create()
+                    ->addUsingAlias(ChildTag::LEFT_COL, 1, Criteria::EQUAL)
+                    ->addUsingAlias(ChildTag::SCOPE_COL, $this->getScopeValue(), Criteria::EQUAL)
                     ->exists($con);
                 if ($rootExists) {
                         throw new PropelException(sprintf('A root node already exists in this tree with scope "%s".', $this->getScopeValue()));
@@ -899,7 +899,7 @@ abstract class Topic implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                TopicTableMap::addInstanceToPool($this);
+                TagTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -947,7 +947,7 @@ abstract class Topic implements ActiveRecordInterface
                         $pks[] = $entryPk;
                     }
 
-                    \TopicAlertQuery::create()
+                    \TagAlertQuery::create()
                         ->filterByPrimaryKeys($pks)
                         ->delete($con);
 
@@ -965,17 +965,17 @@ abstract class Topic implements ActiveRecordInterface
             }
 
 
-            if ($this->topicAlertsScheduledForDeletion !== null) {
-                if (!$this->topicAlertsScheduledForDeletion->isEmpty()) {
-                    \TopicAlertQuery::create()
-                        ->filterByPrimaryKeys($this->topicAlertsScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->tagAlertsScheduledForDeletion !== null) {
+                if (!$this->tagAlertsScheduledForDeletion->isEmpty()) {
+                    \TagAlertQuery::create()
+                        ->filterByPrimaryKeys($this->tagAlertsScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->topicAlertsScheduledForDeletion = null;
+                    $this->tagAlertsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collTopicAlerts !== null) {
-                foreach ($this->collTopicAlerts as $referrerFK) {
+            if ($this->collTagAlerts !== null) {
+                foreach ($this->collTagAlerts as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1002,39 +1002,39 @@ abstract class Topic implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[TopicTableMap::COL_ID] = true;
+        $this->modifiedColumns[TagTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . TopicTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . TagTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(TopicTableMap::COL_ID)) {
+        if ($this->isColumnModified(TagTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(TopicTableMap::COL_TITLE)) {
+        if ($this->isColumnModified(TagTableMap::COL_TITLE)) {
             $modifiedColumns[':p' . $index++]  = 'title';
         }
-        if ($this->isColumnModified(TopicTableMap::COL_SLACK_CHANNEL)) {
+        if ($this->isColumnModified(TagTableMap::COL_SLACK_CHANNEL)) {
             $modifiedColumns[':p' . $index++]  = 'slack_channel';
         }
-        if ($this->isColumnModified(TopicTableMap::COL_SLACK_CHANNEL_ID)) {
+        if ($this->isColumnModified(TagTableMap::COL_SLACK_CHANNEL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'slack_channel_id';
         }
-        if ($this->isColumnModified(TopicTableMap::COL_TREE_LEFT)) {
+        if ($this->isColumnModified(TagTableMap::COL_TREE_LEFT)) {
             $modifiedColumns[':p' . $index++]  = 'tree_left';
         }
-        if ($this->isColumnModified(TopicTableMap::COL_TREE_RIGHT)) {
+        if ($this->isColumnModified(TagTableMap::COL_TREE_RIGHT)) {
             $modifiedColumns[':p' . $index++]  = 'tree_right';
         }
-        if ($this->isColumnModified(TopicTableMap::COL_TREE_LEVEL)) {
+        if ($this->isColumnModified(TagTableMap::COL_TREE_LEVEL)) {
             $modifiedColumns[':p' . $index++]  = 'tree_level';
         }
-        if ($this->isColumnModified(TopicTableMap::COL_TREE_SCOPE)) {
+        if ($this->isColumnModified(TagTableMap::COL_TREE_SCOPE)) {
             $modifiedColumns[':p' . $index++]  = 'tree_scope';
         }
 
         $sql = sprintf(
-            'INSERT INTO topic (%s) VALUES (%s)',
+            'INSERT INTO tag (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1113,7 +1113,7 @@ abstract class Topic implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = TopicTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = TagTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1177,11 +1177,11 @@ abstract class Topic implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Topic'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Tag'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Topic'][$this->hashCode()] = true;
-        $keys = TopicTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Tag'][$this->hashCode()] = true;
+        $keys = TagTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getTitle(),
@@ -1198,20 +1198,20 @@ abstract class Topic implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collTopicAlerts) {
+            if (null !== $this->collTagAlerts) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'topicAlerts';
+                        $key = 'tagAlerts';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'topic_alerts';
+                        $key = 'tag_alerts';
                         break;
                     default:
-                        $key = 'TopicAlerts';
+                        $key = 'TagAlerts';
                 }
 
-                $result[$key] = $this->collTopicAlerts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collTagAlerts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1227,11 +1227,11 @@ abstract class Topic implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Topic
+     * @return $this|\Tag
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = TopicTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = TagTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1242,7 +1242,7 @@ abstract class Topic implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Topic
+     * @return $this|\Tag
      */
     public function setByPosition($pos, $value)
     {
@@ -1295,7 +1295,7 @@ abstract class Topic implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = TopicTableMap::getFieldNames($keyType);
+        $keys = TagTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
@@ -1340,7 +1340,7 @@ abstract class Topic implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Topic The current object, for fluid interface
+     * @return $this|\Tag The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1360,31 +1360,31 @@ abstract class Topic implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(TopicTableMap::DATABASE_NAME);
+        $criteria = new Criteria(TagTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(TopicTableMap::COL_ID)) {
-            $criteria->add(TopicTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(TagTableMap::COL_ID)) {
+            $criteria->add(TagTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(TopicTableMap::COL_TITLE)) {
-            $criteria->add(TopicTableMap::COL_TITLE, $this->title);
+        if ($this->isColumnModified(TagTableMap::COL_TITLE)) {
+            $criteria->add(TagTableMap::COL_TITLE, $this->title);
         }
-        if ($this->isColumnModified(TopicTableMap::COL_SLACK_CHANNEL)) {
-            $criteria->add(TopicTableMap::COL_SLACK_CHANNEL, $this->slack_channel);
+        if ($this->isColumnModified(TagTableMap::COL_SLACK_CHANNEL)) {
+            $criteria->add(TagTableMap::COL_SLACK_CHANNEL, $this->slack_channel);
         }
-        if ($this->isColumnModified(TopicTableMap::COL_SLACK_CHANNEL_ID)) {
-            $criteria->add(TopicTableMap::COL_SLACK_CHANNEL_ID, $this->slack_channel_id);
+        if ($this->isColumnModified(TagTableMap::COL_SLACK_CHANNEL_ID)) {
+            $criteria->add(TagTableMap::COL_SLACK_CHANNEL_ID, $this->slack_channel_id);
         }
-        if ($this->isColumnModified(TopicTableMap::COL_TREE_LEFT)) {
-            $criteria->add(TopicTableMap::COL_TREE_LEFT, $this->tree_left);
+        if ($this->isColumnModified(TagTableMap::COL_TREE_LEFT)) {
+            $criteria->add(TagTableMap::COL_TREE_LEFT, $this->tree_left);
         }
-        if ($this->isColumnModified(TopicTableMap::COL_TREE_RIGHT)) {
-            $criteria->add(TopicTableMap::COL_TREE_RIGHT, $this->tree_right);
+        if ($this->isColumnModified(TagTableMap::COL_TREE_RIGHT)) {
+            $criteria->add(TagTableMap::COL_TREE_RIGHT, $this->tree_right);
         }
-        if ($this->isColumnModified(TopicTableMap::COL_TREE_LEVEL)) {
-            $criteria->add(TopicTableMap::COL_TREE_LEVEL, $this->tree_level);
+        if ($this->isColumnModified(TagTableMap::COL_TREE_LEVEL)) {
+            $criteria->add(TagTableMap::COL_TREE_LEVEL, $this->tree_level);
         }
-        if ($this->isColumnModified(TopicTableMap::COL_TREE_SCOPE)) {
-            $criteria->add(TopicTableMap::COL_TREE_SCOPE, $this->tree_scope);
+        if ($this->isColumnModified(TagTableMap::COL_TREE_SCOPE)) {
+            $criteria->add(TagTableMap::COL_TREE_SCOPE, $this->tree_scope);
         }
 
         return $criteria;
@@ -1402,8 +1402,8 @@ abstract class Topic implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildTopicQuery::create();
-        $criteria->add(TopicTableMap::COL_ID, $this->id);
+        $criteria = ChildTagQuery::create();
+        $criteria->add(TagTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1465,7 +1465,7 @@ abstract class Topic implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Topic (or compatible) type.
+     * @param      object $copyObj An object of \Tag (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1485,9 +1485,9 @@ abstract class Topic implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getTopicAlerts() as $relObj) {
+            foreach ($this->getTagAlerts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addTopicAlert($relObj->copy($deepCopy));
+                    $copyObj->addTagAlert($relObj->copy($deepCopy));
                 }
             }
 
@@ -1508,7 +1508,7 @@ abstract class Topic implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Topic Clone of current object.
+     * @return \Tag Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1532,38 +1532,38 @@ abstract class Topic implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('TopicAlert' == $relationName) {
-            $this->initTopicAlerts();
+        if ('TagAlert' == $relationName) {
+            $this->initTagAlerts();
             return;
         }
     }
 
     /**
-     * Clears out the collTopicAlerts collection
+     * Clears out the collTagAlerts collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addTopicAlerts()
+     * @see        addTagAlerts()
      */
-    public function clearTopicAlerts()
+    public function clearTagAlerts()
     {
-        $this->collTopicAlerts = null; // important to set this to NULL since that means it is uninitialized
+        $this->collTagAlerts = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collTopicAlerts collection loaded partially.
+     * Reset is the collTagAlerts collection loaded partially.
      */
-    public function resetPartialTopicAlerts($v = true)
+    public function resetPartialTagAlerts($v = true)
     {
-        $this->collTopicAlertsPartial = $v;
+        $this->collTagAlertsPartial = $v;
     }
 
     /**
-     * Initializes the collTopicAlerts collection.
+     * Initializes the collTagAlerts collection.
      *
-     * By default this just sets the collTopicAlerts collection to an empty array (like clearcollTopicAlerts());
+     * By default this just sets the collTagAlerts collection to an empty array (like clearcollTagAlerts());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1572,165 +1572,165 @@ abstract class Topic implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initTopicAlerts($overrideExisting = true)
+    public function initTagAlerts($overrideExisting = true)
     {
-        if (null !== $this->collTopicAlerts && !$overrideExisting) {
+        if (null !== $this->collTagAlerts && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = TopicAlertTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = TagAlertTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collTopicAlerts = new $collectionClassName;
-        $this->collTopicAlerts->setModel('\TopicAlert');
+        $this->collTagAlerts = new $collectionClassName;
+        $this->collTagAlerts->setModel('\TagAlert');
     }
 
     /**
-     * Gets an array of ChildTopicAlert objects which contain a foreign key that references this object.
+     * Gets an array of ChildTagAlert objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildTopic is new, it will return
+     * If this ChildTag is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildTopicAlert[] List of ChildTopicAlert objects
+     * @return ObjectCollection|ChildTagAlert[] List of ChildTagAlert objects
      * @throws PropelException
      */
-    public function getTopicAlerts(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getTagAlerts(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collTopicAlertsPartial && !$this->isNew();
-        if (null === $this->collTopicAlerts || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collTopicAlerts) {
+        $partial = $this->collTagAlertsPartial && !$this->isNew();
+        if (null === $this->collTagAlerts || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collTagAlerts) {
                 // return empty collection
-                $this->initTopicAlerts();
+                $this->initTagAlerts();
             } else {
-                $collTopicAlerts = ChildTopicAlertQuery::create(null, $criteria)
-                    ->filterByTopic($this)
+                $collTagAlerts = ChildTagAlertQuery::create(null, $criteria)
+                    ->filterByTag($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collTopicAlertsPartial && count($collTopicAlerts)) {
-                        $this->initTopicAlerts(false);
+                    if (false !== $this->collTagAlertsPartial && count($collTagAlerts)) {
+                        $this->initTagAlerts(false);
 
-                        foreach ($collTopicAlerts as $obj) {
-                            if (false == $this->collTopicAlerts->contains($obj)) {
-                                $this->collTopicAlerts->append($obj);
+                        foreach ($collTagAlerts as $obj) {
+                            if (false == $this->collTagAlerts->contains($obj)) {
+                                $this->collTagAlerts->append($obj);
                             }
                         }
 
-                        $this->collTopicAlertsPartial = true;
+                        $this->collTagAlertsPartial = true;
                     }
 
-                    return $collTopicAlerts;
+                    return $collTagAlerts;
                 }
 
-                if ($partial && $this->collTopicAlerts) {
-                    foreach ($this->collTopicAlerts as $obj) {
+                if ($partial && $this->collTagAlerts) {
+                    foreach ($this->collTagAlerts as $obj) {
                         if ($obj->isNew()) {
-                            $collTopicAlerts[] = $obj;
+                            $collTagAlerts[] = $obj;
                         }
                     }
                 }
 
-                $this->collTopicAlerts = $collTopicAlerts;
-                $this->collTopicAlertsPartial = false;
+                $this->collTagAlerts = $collTagAlerts;
+                $this->collTagAlertsPartial = false;
             }
         }
 
-        return $this->collTopicAlerts;
+        return $this->collTagAlerts;
     }
 
     /**
-     * Sets a collection of ChildTopicAlert objects related by a one-to-many relationship
+     * Sets a collection of ChildTagAlert objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $topicAlerts A Propel collection.
+     * @param      Collection $tagAlerts A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildTopic The current object (for fluent API support)
+     * @return $this|ChildTag The current object (for fluent API support)
      */
-    public function setTopicAlerts(Collection $topicAlerts, ConnectionInterface $con = null)
+    public function setTagAlerts(Collection $tagAlerts, ConnectionInterface $con = null)
     {
-        /** @var ChildTopicAlert[] $topicAlertsToDelete */
-        $topicAlertsToDelete = $this->getTopicAlerts(new Criteria(), $con)->diff($topicAlerts);
+        /** @var ChildTagAlert[] $tagAlertsToDelete */
+        $tagAlertsToDelete = $this->getTagAlerts(new Criteria(), $con)->diff($tagAlerts);
 
 
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->topicAlertsScheduledForDeletion = clone $topicAlertsToDelete;
+        $this->tagAlertsScheduledForDeletion = clone $tagAlertsToDelete;
 
-        foreach ($topicAlertsToDelete as $topicAlertRemoved) {
-            $topicAlertRemoved->setTopic(null);
+        foreach ($tagAlertsToDelete as $tagAlertRemoved) {
+            $tagAlertRemoved->setTag(null);
         }
 
-        $this->collTopicAlerts = null;
-        foreach ($topicAlerts as $topicAlert) {
-            $this->addTopicAlert($topicAlert);
+        $this->collTagAlerts = null;
+        foreach ($tagAlerts as $tagAlert) {
+            $this->addTagAlert($tagAlert);
         }
 
-        $this->collTopicAlerts = $topicAlerts;
-        $this->collTopicAlertsPartial = false;
+        $this->collTagAlerts = $tagAlerts;
+        $this->collTagAlertsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related TopicAlert objects.
+     * Returns the number of related TagAlert objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related TopicAlert objects.
+     * @return int             Count of related TagAlert objects.
      * @throws PropelException
      */
-    public function countTopicAlerts(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countTagAlerts(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collTopicAlertsPartial && !$this->isNew();
-        if (null === $this->collTopicAlerts || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collTopicAlerts) {
+        $partial = $this->collTagAlertsPartial && !$this->isNew();
+        if (null === $this->collTagAlerts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTagAlerts) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getTopicAlerts());
+                return count($this->getTagAlerts());
             }
 
-            $query = ChildTopicAlertQuery::create(null, $criteria);
+            $query = ChildTagAlertQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
 
             return $query
-                ->filterByTopic($this)
+                ->filterByTag($this)
                 ->count($con);
         }
 
-        return count($this->collTopicAlerts);
+        return count($this->collTagAlerts);
     }
 
     /**
-     * Method called to associate a ChildTopicAlert object to this object
-     * through the ChildTopicAlert foreign key attribute.
+     * Method called to associate a ChildTagAlert object to this object
+     * through the ChildTagAlert foreign key attribute.
      *
-     * @param  ChildTopicAlert $l ChildTopicAlert
-     * @return $this|\Topic The current object (for fluent API support)
+     * @param  ChildTagAlert $l ChildTagAlert
+     * @return $this|\Tag The current object (for fluent API support)
      */
-    public function addTopicAlert(ChildTopicAlert $l)
+    public function addTagAlert(ChildTagAlert $l)
     {
-        if ($this->collTopicAlerts === null) {
-            $this->initTopicAlerts();
-            $this->collTopicAlertsPartial = true;
+        if ($this->collTagAlerts === null) {
+            $this->initTagAlerts();
+            $this->collTagAlertsPartial = true;
         }
 
-        if (!$this->collTopicAlerts->contains($l)) {
-            $this->doAddTopicAlert($l);
+        if (!$this->collTagAlerts->contains($l)) {
+            $this->doAddTagAlert($l);
 
-            if ($this->topicAlertsScheduledForDeletion and $this->topicAlertsScheduledForDeletion->contains($l)) {
-                $this->topicAlertsScheduledForDeletion->remove($this->topicAlertsScheduledForDeletion->search($l));
+            if ($this->tagAlertsScheduledForDeletion and $this->tagAlertsScheduledForDeletion->contains($l)) {
+                $this->tagAlertsScheduledForDeletion->remove($this->tagAlertsScheduledForDeletion->search($l));
             }
         }
 
@@ -1738,29 +1738,29 @@ abstract class Topic implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildTopicAlert $topicAlert The ChildTopicAlert object to add.
+     * @param ChildTagAlert $tagAlert The ChildTagAlert object to add.
      */
-    protected function doAddTopicAlert(ChildTopicAlert $topicAlert)
+    protected function doAddTagAlert(ChildTagAlert $tagAlert)
     {
-        $this->collTopicAlerts[]= $topicAlert;
-        $topicAlert->setTopic($this);
+        $this->collTagAlerts[]= $tagAlert;
+        $tagAlert->setTag($this);
     }
 
     /**
-     * @param  ChildTopicAlert $topicAlert The ChildTopicAlert object to remove.
-     * @return $this|ChildTopic The current object (for fluent API support)
+     * @param  ChildTagAlert $tagAlert The ChildTagAlert object to remove.
+     * @return $this|ChildTag The current object (for fluent API support)
      */
-    public function removeTopicAlert(ChildTopicAlert $topicAlert)
+    public function removeTagAlert(ChildTagAlert $tagAlert)
     {
-        if ($this->getTopicAlerts()->contains($topicAlert)) {
-            $pos = $this->collTopicAlerts->search($topicAlert);
-            $this->collTopicAlerts->remove($pos);
-            if (null === $this->topicAlertsScheduledForDeletion) {
-                $this->topicAlertsScheduledForDeletion = clone $this->collTopicAlerts;
-                $this->topicAlertsScheduledForDeletion->clear();
+        if ($this->getTagAlerts()->contains($tagAlert)) {
+            $pos = $this->collTagAlerts->search($tagAlert);
+            $this->collTagAlerts->remove($pos);
+            if (null === $this->tagAlertsScheduledForDeletion) {
+                $this->tagAlertsScheduledForDeletion = clone $this->collTagAlerts;
+                $this->tagAlertsScheduledForDeletion->clear();
             }
-            $this->topicAlertsScheduledForDeletion[]= clone $topicAlert;
-            $topicAlert->setTopic(null);
+            $this->tagAlertsScheduledForDeletion[]= clone $tagAlert;
+            $tagAlert->setTag(null);
         }
 
         return $this;
@@ -1770,25 +1770,25 @@ abstract class Topic implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Topic is new, it will return
-     * an empty collection; or if this Topic has previously
-     * been saved, it will retrieve related TopicAlerts from storage.
+     * Otherwise if this Tag is new, it will return
+     * an empty collection; or if this Tag has previously
+     * been saved, it will retrieve related TagAlerts from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Topic.
+     * actually need in Tag.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildTopicAlert[] List of ChildTopicAlert objects
+     * @return ObjectCollection|ChildTagAlert[] List of ChildTagAlert objects
      */
-    public function getTopicAlertsJoinPuzzle(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getTagAlertsJoinPuzzle(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildTopicAlertQuery::create(null, $criteria);
+        $query = ChildTagAlertQuery::create(null, $criteria);
         $query->joinWith('Puzzle', $joinBehavior);
 
-        return $this->getTopicAlerts($query, $con);
+        return $this->getTagAlerts($query, $con);
     }
 
     /**
@@ -1816,7 +1816,7 @@ abstract class Topic implements ActiveRecordInterface
      */
     public function initPuzzles()
     {
-        $collectionClassName = TopicAlertTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = TagAlertTableMap::getTableMap()->getCollectionClassName();
 
         $this->collPuzzles = new $collectionClassName;
         $this->collPuzzlesPartial = true;
@@ -1835,12 +1835,12 @@ abstract class Topic implements ActiveRecordInterface
 
     /**
      * Gets a collection of ChildPuzzle objects related by a many-to-many relationship
-     * to the current object by way of the topic_alert cross-reference table.
+     * to the current object by way of the tag_alert cross-reference table.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildTopic is new, it will return
+     * If this ChildTag is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria Optional query object to filter the query
@@ -1860,7 +1860,7 @@ abstract class Topic implements ActiveRecordInterface
             } else {
 
                 $query = ChildPuzzleQuery::create(null, $criteria)
-                    ->filterByTopic($this);
+                    ->filterByTag($this);
                 $collPuzzles = $query->find($con);
                 if (null !== $criteria) {
                     return $collPuzzles;
@@ -1885,13 +1885,13 @@ abstract class Topic implements ActiveRecordInterface
 
     /**
      * Sets a collection of Puzzle objects related by a many-to-many relationship
-     * to the current object by way of the topic_alert cross-reference table.
+     * to the current object by way of the tag_alert cross-reference table.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
      * @param  Collection $puzzles A Propel collection.
      * @param  ConnectionInterface $con Optional connection object
-     * @return $this|ChildTopic The current object (for fluent API support)
+     * @return $this|ChildTag The current object (for fluent API support)
      */
     public function setPuzzles(Collection $puzzles, ConnectionInterface $con = null)
     {
@@ -1918,7 +1918,7 @@ abstract class Topic implements ActiveRecordInterface
 
     /**
      * Gets the number of Puzzle objects related by a many-to-many relationship
-     * to the current object by way of the topic_alert cross-reference table.
+     * to the current object by way of the tag_alert cross-reference table.
      *
      * @param      Criteria $criteria Optional query object to filter the query
      * @param      boolean $distinct Set to true to force count distinct
@@ -1944,7 +1944,7 @@ abstract class Topic implements ActiveRecordInterface
                 }
 
                 return $query
-                    ->filterByTopic($this)
+                    ->filterByTag($this)
                     ->count($con);
             }
         } else {
@@ -1954,10 +1954,10 @@ abstract class Topic implements ActiveRecordInterface
 
     /**
      * Associate a ChildPuzzle to this object
-     * through the topic_alert cross reference table.
+     * through the tag_alert cross reference table.
      *
      * @param ChildPuzzle $puzzle
-     * @return ChildTopic The current object (for fluent API support)
+     * @return ChildTag The current object (for fluent API support)
      */
     public function addPuzzle(ChildPuzzle $puzzle)
     {
@@ -1980,45 +1980,45 @@ abstract class Topic implements ActiveRecordInterface
      */
     protected function doAddPuzzle(ChildPuzzle $puzzle)
     {
-        $topicAlert = new ChildTopicAlert();
+        $tagAlert = new ChildTagAlert();
 
-        $topicAlert->setPuzzle($puzzle);
+        $tagAlert->setPuzzle($puzzle);
 
-        $topicAlert->setTopic($this);
+        $tagAlert->setTag($this);
 
-        $this->addTopicAlert($topicAlert);
+        $this->addTagAlert($tagAlert);
 
         // set the back reference to this object directly as using provided method either results
         // in endless loop or in multiple relations
-        if (!$puzzle->isTopicsLoaded()) {
-            $puzzle->initTopics();
-            $puzzle->getTopics()->push($this);
-        } elseif (!$puzzle->getTopics()->contains($this)) {
-            $puzzle->getTopics()->push($this);
+        if (!$puzzle->isTagsLoaded()) {
+            $puzzle->initTags();
+            $puzzle->getTags()->push($this);
+        } elseif (!$puzzle->getTags()->contains($this)) {
+            $puzzle->getTags()->push($this);
         }
 
     }
 
     /**
      * Remove puzzle of this object
-     * through the topic_alert cross reference table.
+     * through the tag_alert cross reference table.
      *
      * @param ChildPuzzle $puzzle
-     * @return ChildTopic The current object (for fluent API support)
+     * @return ChildTag The current object (for fluent API support)
      */
     public function removePuzzle(ChildPuzzle $puzzle)
     {
         if ($this->getPuzzles()->contains($puzzle)) {
-            $topicAlert = new ChildTopicAlert();
-            $topicAlert->setPuzzle($puzzle);
-            if ($puzzle->isTopicsLoaded()) {
+            $tagAlert = new ChildTagAlert();
+            $tagAlert->setPuzzle($puzzle);
+            if ($puzzle->isTagsLoaded()) {
                 //remove the back reference if available
-                $puzzle->getTopics()->removeObject($this);
+                $puzzle->getTags()->removeObject($this);
             }
 
-            $topicAlert->setTopic($this);
-            $this->removeTopicAlert(clone $topicAlert);
-            $topicAlert->clear();
+            $tagAlert->setTag($this);
+            $this->removeTagAlert(clone $tagAlert);
+            $tagAlert->clear();
 
             $this->collPuzzles->remove($this->collPuzzles->search($puzzle));
 
@@ -2067,8 +2067,8 @@ abstract class Topic implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collTopicAlerts) {
-                foreach ($this->collTopicAlerts as $o) {
+            if ($this->collTagAlerts) {
+                foreach ($this->collTagAlerts as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -2082,7 +2082,7 @@ abstract class Topic implements ActiveRecordInterface
         // nested_set behavior
         $this->collNestedSetChildren = null;
         $this->aNestedSetParent = null;
-        $this->collTopicAlerts = null;
+        $this->collTagAlerts = null;
         $this->collPuzzles = null;
     }
 
@@ -2161,7 +2161,7 @@ abstract class Topic implements ActiveRecordInterface
      * It provides a generic way to set the value, whatever the actual column name is.
      *
      * @param  int $v The nested set left value
-     * @return $this|ChildTopic The current object (for fluent API support)
+     * @return $this|ChildTag The current object (for fluent API support)
      */
     public function setLeftValue($v)
     {
@@ -2173,7 +2173,7 @@ abstract class Topic implements ActiveRecordInterface
      * It provides a generic way to set the value, whatever the actual column name is.
      *
      * @param      int $v The nested set right value
-     * @return     $this|ChildTopic The current object (for fluent API support)
+     * @return     $this|ChildTag The current object (for fluent API support)
      */
     public function setRightValue($v)
     {
@@ -2185,7 +2185,7 @@ abstract class Topic implements ActiveRecordInterface
      * It provides a generic way to set the value, whatever the actual column name is.
      *
      * @param      int $v The nested set level value
-     * @return     $this|ChildTopic The current object (for fluent API support)
+     * @return     $this|ChildTag The current object (for fluent API support)
      */
     public function setLevel($v)
     {
@@ -2197,7 +2197,7 @@ abstract class Topic implements ActiveRecordInterface
      * It provides a generic way to set the value, whatever the actual column name is.
      *
      * @param      int $v The nested set scope value
-     * @return     $this|ChildTopic The current object (for fluent API support)
+     * @return     $this|ChildTag The current object (for fluent API support)
      */
     public function setScopeValue($v)
     {
@@ -2207,7 +2207,7 @@ abstract class Topic implements ActiveRecordInterface
     /**
      * Creates the supplied node as the root node.
      *
-     * @return     $this|ChildTopic The current object (for fluent API support)
+     * @return     $this|ChildTag The current object (for fluent API support)
      * @throws     PropelException
      */
     public function makeRoot()
@@ -2256,10 +2256,10 @@ abstract class Topic implements ActiveRecordInterface
     /**
      * Tests if node is a descendant of another node
      *
-     * @param      ChildTopic $parent Propel node object
+     * @param      ChildTag $parent Propel node object
      * @return     bool
      */
-    public function isDescendantOf(ChildTopic $parent)
+    public function isDescendantOf(ChildTag $parent)
     {
         if ($this->getScopeValue() !== $parent->getScopeValue()) {
             return false; //since the `this` and $parent are in different scopes, there's no way that `this` is be a descendant of $parent.
@@ -2271,10 +2271,10 @@ abstract class Topic implements ActiveRecordInterface
     /**
      * Tests if node is a ancestor of another node
      *
-     * @param      ChildTopic $child Propel node object
+     * @param      ChildTag $child Propel node object
      * @return     bool
      */
-    public function isAncestorOf(ChildTopic $child)
+    public function isAncestorOf(ChildTag $child)
     {
         return $child->isDescendantOf($this);
     }
@@ -2294,10 +2294,10 @@ abstract class Topic implements ActiveRecordInterface
      * Warning: this does not move the current object in the tree.
      * Use moveTofirstChildOf() or moveToLastChildOf() for that purpose
      *
-     * @param      ChildTopic $parent
-     * @return     $this|ChildTopic The current object, for fluid interface
+     * @param      ChildTag $parent
+     * @return     $this|ChildTag The current object, for fluid interface
      */
-    public function setParent(ChildTopic $parent = null)
+    public function setParent(ChildTag $parent = null)
     {
         $this->aNestedSetParent = $parent;
 
@@ -2309,12 +2309,12 @@ abstract class Topic implements ActiveRecordInterface
      * The result is cached so further calls to the same method don't issue any queries
      *
      * @param  ConnectionInterface $con Connection to use.
-     * @return ChildTopic|null Propel object if exists else null
+     * @return ChildTag|null Propel object if exists else null
      */
     public function getParent(ConnectionInterface $con = null)
     {
         if (null === $this->aNestedSetParent && $this->hasParent()) {
-            $this->aNestedSetParent = ChildTopicQuery::create()
+            $this->aNestedSetParent = ChildTagQuery::create()
                 ->ancestorsOf($this)
                 ->orderByLevel(true)
                 ->findOne($con);
@@ -2331,11 +2331,11 @@ abstract class Topic implements ActiveRecordInterface
      */
     public function hasPrevSibling(ConnectionInterface $con = null)
     {
-        if (!ChildTopicQuery::isValid($this)) {
+        if (!ChildTagQuery::isValid($this)) {
             return false;
         }
 
-        return ChildTopicQuery::create()
+        return ChildTagQuery::create()
             ->filterByTreeRight($this->getLeftValue() - 1)
             ->inTree($this->getScopeValue())
             ->exists($con);
@@ -2345,11 +2345,11 @@ abstract class Topic implements ActiveRecordInterface
      * Gets previous sibling for the given node if it exists
      *
      * @param      ConnectionInterface $con Connection to use.
-     * @return     ChildTopic|null         Propel object if exists else null
+     * @return     ChildTag|null         Propel object if exists else null
      */
     public function getPrevSibling(ConnectionInterface $con = null)
     {
-        return ChildTopicQuery::create()
+        return ChildTagQuery::create()
             ->filterByTreeRight($this->getLeftValue() - 1)
             ->inTree($this->getScopeValue())
             ->findOne($con);
@@ -2363,11 +2363,11 @@ abstract class Topic implements ActiveRecordInterface
      */
     public function hasNextSibling(ConnectionInterface $con = null)
     {
-        if (!ChildTopicQuery::isValid($this)) {
+        if (!ChildTagQuery::isValid($this)) {
             return false;
         }
 
-        return ChildTopicQuery::create()
+        return ChildTagQuery::create()
             ->filterByTreeLeft($this->getRightValue() + 1)
             ->inTree($this->getScopeValue())
             ->exists($con);
@@ -2377,11 +2377,11 @@ abstract class Topic implements ActiveRecordInterface
      * Gets next sibling for the given node if it exists
      *
      * @param      ConnectionInterface $con Connection to use.
-     * @return     ChildTopic|null         Propel object if exists else null
+     * @return     ChildTag|null         Propel object if exists else null
      */
     public function getNextSibling(ConnectionInterface $con = null)
     {
-        return ChildTopicQuery::create()
+        return ChildTagQuery::create()
             ->filterByTreeLeft($this->getRightValue() + 1)
             ->inTree($this->getScopeValue())
             ->findOne($con);
@@ -2407,10 +2407,10 @@ abstract class Topic implements ActiveRecordInterface
      */
     public function initNestedSetChildren()
     {
-        $collectionClassName = \Map\TopicTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = \Map\TagTableMap::getTableMap()->getCollectionClassName();
 
         $this->collNestedSetChildren = new $collectionClassName;
-        $this->collNestedSetChildren->setModel('\Topic');
+        $this->collNestedSetChildren->setModel('\Tag');
     }
 
     /**
@@ -2418,18 +2418,18 @@ abstract class Topic implements ActiveRecordInterface
      * Beware that this doesn't insert a node in the tree.
      * This method is only used to facilitate children hydration.
      *
-     * @param      ChildTopic $topic
+     * @param      ChildTag $tag
      *
      * @return     void
      */
-    public function addNestedSetChild(ChildTopic $topic)
+    public function addNestedSetChild(ChildTag $tag)
     {
         if (null === $this->collNestedSetChildren) {
             $this->initNestedSetChildren();
         }
-        if (!in_array($topic, $this->collNestedSetChildren->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->collNestedSetChildren[]= $topic;
-            $topic->setParent($this);
+        if (!in_array($tag, $this->collNestedSetChildren->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->collNestedSetChildren[]= $tag;
+            $tag->setParent($this);
         }
     }
 
@@ -2448,7 +2448,7 @@ abstract class Topic implements ActiveRecordInterface
      *
      * @param      Criteria  $criteria Criteria to filter results.
      * @param      ConnectionInterface $con Connection to use.
-     * @return     ObjectCollection|ChildTopic[] List of ChildTopic objects
+     * @return     ObjectCollection|ChildTag[] List of ChildTag objects
      */
     public function getChildren(Criteria $criteria = null, ConnectionInterface $con = null)
     {
@@ -2457,7 +2457,7 @@ abstract class Topic implements ActiveRecordInterface
                 // return empty collection
                 $this->initNestedSetChildren();
             } else {
-                $collNestedSetChildren = ChildTopicQuery::create(null, $criteria)
+                $collNestedSetChildren = ChildTagQuery::create(null, $criteria)
                     ->childrenOf($this)
                     ->orderByBranch()
                     ->find($con);
@@ -2484,7 +2484,7 @@ abstract class Topic implements ActiveRecordInterface
             if ($this->isLeaf() || ($this->isNew() && null === $this->collNestedSetChildren)) {
                 return 0;
             } else {
-                return ChildTopicQuery::create(null, $criteria)
+                return ChildTagQuery::create(null, $criteria)
                     ->childrenOf($this)
                     ->count($con);
             }
@@ -2498,14 +2498,14 @@ abstract class Topic implements ActiveRecordInterface
      *
      * @param      Criteria $criteria Criteria to filter results.
      * @param      ConnectionInterface $con Connection to use.
-     * @return     ChildTopic|null First child or null if this is a leaf
+     * @return     ChildTag|null First child or null if this is a leaf
      */
     public function getFirstChild(Criteria $criteria = null, ConnectionInterface $con = null)
     {
         if ($this->isLeaf()) {
             return null;
         } else {
-            return ChildTopicQuery::create(null, $criteria)
+            return ChildTagQuery::create(null, $criteria)
                 ->childrenOf($this)
                 ->orderByBranch()
                 ->findOne($con);
@@ -2517,14 +2517,14 @@ abstract class Topic implements ActiveRecordInterface
      *
      * @param      Criteria $criteria Criteria to filter results.
      * @param      ConnectionInterface $con Connection to use.
-     * @return     ChildTopic|null Last child or null if this is a leaf
+     * @return     ChildTag|null Last child or null if this is a leaf
      */
     public function getLastChild(Criteria $criteria = null, ConnectionInterface $con = null)
     {
         if ($this->isLeaf()) {
             return null;
         } else {
-            return ChildTopicQuery::create(null, $criteria)
+            return ChildTagQuery::create(null, $criteria)
                 ->childrenOf($this)
                 ->orderByBranch(true)
                 ->findOne($con);
@@ -2538,14 +2538,14 @@ abstract class Topic implements ActiveRecordInterface
      * @param Criteria            $criteria Criteria to filter results.
      * @param ConnectionInterface $con Connection to use.
      *
-     * @return ObjectCollection|ChildTopic[] List of ChildTopic objects
+     * @return ObjectCollection|ChildTag[] List of ChildTag objects
      */
     public function getSiblings($includeNode = false, Criteria $criteria = null, ConnectionInterface $con = null)
     {
         if ($this->isRoot()) {
             return array();
         } else {
-            $query = ChildTopicQuery::create(null, $criteria)
+            $query = ChildTagQuery::create(null, $criteria)
                 ->childrenOf($this->getParent($con))
                 ->orderByBranch();
             if (!$includeNode) {
@@ -2561,14 +2561,14 @@ abstract class Topic implements ActiveRecordInterface
      *
      * @param      Criteria $criteria Criteria to filter results.
      * @param      ConnectionInterface $con Connection to use.
-     * @return     ObjectCollection|ChildTopic[] List of ChildTopic objects
+     * @return     ObjectCollection|ChildTag[] List of ChildTag objects
      */
     public function getDescendants(Criteria $criteria = null, ConnectionInterface $con = null)
     {
         if ($this->isLeaf()) {
             return array();
         } else {
-            return ChildTopicQuery::create(null, $criteria)
+            return ChildTagQuery::create(null, $criteria)
                 ->descendantsOf($this)
                 ->orderByBranch()
                 ->find($con);
@@ -2588,7 +2588,7 @@ abstract class Topic implements ActiveRecordInterface
             // save one query
             return 0;
         } else {
-            return ChildTopicQuery::create(null, $criteria)
+            return ChildTagQuery::create(null, $criteria)
                 ->descendantsOf($this)
                 ->count($con);
         }
@@ -2599,11 +2599,11 @@ abstract class Topic implements ActiveRecordInterface
      *
      * @param      Criteria $criteria Criteria to filter results.
      * @param      ConnectionInterface $con Connection to use.
-     * @return     ObjectCollection|ChildTopic[] List of ChildTopic objects
+     * @return     ObjectCollection|ChildTag[] List of ChildTag objects
      */
     public function getBranch(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        return ChildTopicQuery::create(null, $criteria)
+        return ChildTagQuery::create(null, $criteria)
             ->branchOf($this)
             ->orderByBranch()
             ->find($con);
@@ -2615,7 +2615,7 @@ abstract class Topic implements ActiveRecordInterface
      *
      * @param      Criteria $criteria Criteria to filter results.
      * @param      ConnectionInterface $con Connection to use.
-     * @return     ObjectCollection|ChildTopic[] List of ChildTopic objects
+     * @return     ObjectCollection|ChildTag[] List of ChildTag objects
      */
     public function getAncestors(Criteria $criteria = null, ConnectionInterface $con = null)
     {
@@ -2623,7 +2623,7 @@ abstract class Topic implements ActiveRecordInterface
             // save one query
             return array();
         } else {
-            return ChildTopicQuery::create(null, $criteria)
+            return ChildTagQuery::create(null, $criteria)
                 ->ancestorsOf($this)
                 ->orderByBranch()
                 ->find($con);
@@ -2635,14 +2635,14 @@ abstract class Topic implements ActiveRecordInterface
      * The modifications in the current object and the tree
      * are not persisted until the child object is saved.
      *
-     * @param      ChildTopic $child    Propel object for child node
+     * @param      ChildTag $child    Propel object for child node
      *
-     * @return     $this|ChildTopic The current Propel object
+     * @return     $this|ChildTag The current Propel object
      */
-    public function addChild(ChildTopic $child)
+    public function addChild(ChildTag $child)
     {
         if ($this->isNew()) {
-            throw new PropelException('A ChildTopic object must not be new to accept children.');
+            throw new PropelException('A ChildTag object must not be new to accept children.');
         }
         $child->insertAsFirstChildOf($this);
 
@@ -2654,14 +2654,14 @@ abstract class Topic implements ActiveRecordInterface
      * The modifications in the current object and the tree
      * are not persisted until the current object is saved.
      *
-     * @param      ChildTopic $parent    Propel object for parent node
+     * @param      ChildTag $parent    Propel object for parent node
      *
-     * @return     $this|ChildTopic The current Propel object
+     * @return     $this|ChildTag The current Propel object
      */
-    public function insertAsFirstChildOf(ChildTopic $parent)
+    public function insertAsFirstChildOf(ChildTag $parent)
     {
         if ($this->isInTree()) {
-            throw new PropelException('A ChildTopic object must not already be in the tree to be inserted. Use the moveToFirstChildOf() instead.');
+            throw new PropelException('A ChildTag object must not already be in the tree to be inserted. Use the moveToFirstChildOf() instead.');
         }
         $left = $parent->getLeftValue() + 1;
         // Update node properties
@@ -2675,7 +2675,7 @@ abstract class Topic implements ActiveRecordInterface
 
         // Keep the tree modification query for the save() transaction
         $this->nestedSetQueries[] = array(
-            'callable'  => array('\TopicQuery', 'makeRoomForLeaf'),
+            'callable'  => array('\TagQuery', 'makeRoomForLeaf'),
             'arguments' => array($left, $scope, $this->isNew() ? null : $this)
         );
 
@@ -2687,14 +2687,14 @@ abstract class Topic implements ActiveRecordInterface
      * The modifications in the current object and the tree
      * are not persisted until the current object is saved.
      *
-     * @param  ChildTopic $parent Propel object for parent node
-     * @return $this|ChildTopic The current Propel object
+     * @param  ChildTag $parent Propel object for parent node
+     * @return $this|ChildTag The current Propel object
      */
-    public function insertAsLastChildOf(ChildTopic $parent)
+    public function insertAsLastChildOf(ChildTag $parent)
     {
         if ($this->isInTree()) {
             throw new PropelException(
-                'A ChildTopic object must not already be in the tree to be inserted. Use the moveToLastChildOf() instead.'
+                'A ChildTag object must not already be in the tree to be inserted. Use the moveToLastChildOf() instead.'
             );
         }
 
@@ -2712,7 +2712,7 @@ abstract class Topic implements ActiveRecordInterface
 
         // Keep the tree modification query for the save() transaction
         $this->nestedSetQueries []= array(
-            'callable'  => array('\TopicQuery', 'makeRoomForLeaf'),
+            'callable'  => array('\TagQuery', 'makeRoomForLeaf'),
             'arguments' => array($left, $scope, $this->isNew() ? null : $this)
         );
 
@@ -2724,14 +2724,14 @@ abstract class Topic implements ActiveRecordInterface
      * The modifications in the current object and the tree
      * are not persisted until the current object is saved.
      *
-     * @param      ChildTopic $sibling    Propel object for parent node
+     * @param      ChildTag $sibling    Propel object for parent node
      *
-     * @return     $this|ChildTopic The current Propel object
+     * @return     $this|ChildTag The current Propel object
      */
-    public function insertAsPrevSiblingOf(ChildTopic $sibling)
+    public function insertAsPrevSiblingOf(ChildTag $sibling)
     {
         if ($this->isInTree()) {
-            throw new PropelException('A ChildTopic object must not already be in the tree to be inserted. Use the moveToPrevSiblingOf() instead.');
+            throw new PropelException('A ChildTag object must not already be in the tree to be inserted. Use the moveToPrevSiblingOf() instead.');
         }
         $left = $sibling->getLeftValue();
         // Update node properties
@@ -2742,7 +2742,7 @@ abstract class Topic implements ActiveRecordInterface
         $this->setScopeValue($scope);
         // Keep the tree modification query for the save() transaction
         $this->nestedSetQueries []= array(
-            'callable'  => array('\TopicQuery', 'makeRoomForLeaf'),
+            'callable'  => array('\TagQuery', 'makeRoomForLeaf'),
             'arguments' => array($left, $scope, $this->isNew() ? null : $this)
         );
 
@@ -2754,14 +2754,14 @@ abstract class Topic implements ActiveRecordInterface
      * The modifications in the current object and the tree
      * are not persisted until the current object is saved.
      *
-     * @param      ChildTopic $sibling    Propel object for parent node
+     * @param      ChildTag $sibling    Propel object for parent node
      *
-     * @return     $this|ChildTopic The current Propel object
+     * @return     $this|ChildTag The current Propel object
      */
-    public function insertAsNextSiblingOf(ChildTopic $sibling)
+    public function insertAsNextSiblingOf(ChildTag $sibling)
     {
         if ($this->isInTree()) {
-            throw new PropelException('A ChildTopic object must not already be in the tree to be inserted. Use the moveToNextSiblingOf() instead.');
+            throw new PropelException('A ChildTag object must not already be in the tree to be inserted. Use the moveToNextSiblingOf() instead.');
         }
         $left = $sibling->getRightValue() + 1;
         // Update node properties
@@ -2772,7 +2772,7 @@ abstract class Topic implements ActiveRecordInterface
         $this->setScopeValue($scope);
         // Keep the tree modification query for the save() transaction
         $this->nestedSetQueries []= array(
-            'callable'  => array('\TopicQuery', 'makeRoomForLeaf'),
+            'callable'  => array('\TagQuery', 'makeRoomForLeaf'),
             'arguments' => array($left, $scope, $this->isNew() ? null : $this)
         );
 
@@ -2783,15 +2783,15 @@ abstract class Topic implements ActiveRecordInterface
      * Moves current node and its subtree to be the first child of $parent
      * The modifications in the current object and the tree are immediate
      *
-     * @param      ChildTopic $parent    Propel object for parent node
+     * @param      ChildTag $parent    Propel object for parent node
      * @param      ConnectionInterface $con    Connection to use.
      *
-     * @return     $this|ChildTopic The current Propel object
+     * @return     $this|ChildTag The current Propel object
      */
-    public function moveToFirstChildOf(ChildTopic $parent, ConnectionInterface $con = null)
+    public function moveToFirstChildOf(ChildTag $parent, ConnectionInterface $con = null)
     {
         if (!$this->isInTree()) {
-            throw new PropelException('A ChildTopic object must be already in the tree to be moved. Use the insertAsFirstChildOf() instead.');
+            throw new PropelException('A ChildTag object must be already in the tree to be moved. Use the insertAsFirstChildOf() instead.');
         }
         if ($parent->isDescendantOf($this)) {
             throw new PropelException('Cannot move a node as child of one of its subtree nodes.');
@@ -2806,15 +2806,15 @@ abstract class Topic implements ActiveRecordInterface
      * Moves current node and its subtree to be the last child of $parent
      * The modifications in the current object and the tree are immediate
      *
-     * @param      ChildTopic $parent    Propel object for parent node
+     * @param      ChildTag $parent    Propel object for parent node
      * @param      ConnectionInterface $con    Connection to use.
      *
-     * @return     $this|ChildTopic The current Propel object
+     * @return     $this|ChildTag The current Propel object
      */
-    public function moveToLastChildOf(ChildTopic $parent, ConnectionInterface $con = null)
+    public function moveToLastChildOf(ChildTag $parent, ConnectionInterface $con = null)
     {
         if (!$this->isInTree()) {
-            throw new PropelException('A ChildTopic object must be already in the tree to be moved. Use the insertAsLastChildOf() instead.');
+            throw new PropelException('A ChildTag object must be already in the tree to be moved. Use the insertAsLastChildOf() instead.');
         }
         if ($parent->isDescendantOf($this)) {
             throw new PropelException('Cannot move a node as child of one of its subtree nodes.');
@@ -2829,15 +2829,15 @@ abstract class Topic implements ActiveRecordInterface
      * Moves current node and its subtree to be the previous sibling of $sibling
      * The modifications in the current object and the tree are immediate
      *
-     * @param      ChildTopic $sibling    Propel object for sibling node
+     * @param      ChildTag $sibling    Propel object for sibling node
      * @param      ConnectionInterface $con    Connection to use.
      *
-     * @return     $this|ChildTopic The current Propel object
+     * @return     $this|ChildTag The current Propel object
      */
-    public function moveToPrevSiblingOf(ChildTopic $sibling, ConnectionInterface $con = null)
+    public function moveToPrevSiblingOf(ChildTag $sibling, ConnectionInterface $con = null)
     {
         if (!$this->isInTree()) {
-            throw new PropelException('A ChildTopic object must be already in the tree to be moved. Use the insertAsPrevSiblingOf() instead.');
+            throw new PropelException('A ChildTag object must be already in the tree to be moved. Use the insertAsPrevSiblingOf() instead.');
         }
         if ($sibling->isRoot()) {
             throw new PropelException('Cannot move to previous sibling of a root node.');
@@ -2855,15 +2855,15 @@ abstract class Topic implements ActiveRecordInterface
      * Moves current node and its subtree to be the next sibling of $sibling
      * The modifications in the current object and the tree are immediate
      *
-     * @param      ChildTopic $sibling    Propel object for sibling node
+     * @param      ChildTag $sibling    Propel object for sibling node
      * @param      ConnectionInterface $con    Connection to use.
      *
-     * @return     $this|ChildTopic The current Propel object
+     * @return     $this|ChildTag The current Propel object
      */
-    public function moveToNextSiblingOf(ChildTopic $sibling, ConnectionInterface $con = null)
+    public function moveToNextSiblingOf(ChildTag $sibling, ConnectionInterface $con = null)
     {
         if (!$this->isInTree()) {
-            throw new PropelException('A ChildTopic object must be already in the tree to be moved. Use the insertAsNextSiblingOf() instead.');
+            throw new PropelException('A ChildTag object must be already in the tree to be moved. Use the insertAsNextSiblingOf() instead.');
         }
         if ($sibling->isRoot()) {
             throw new PropelException('Cannot move to next sibling of a root node.');
@@ -2897,28 +2897,28 @@ abstract class Topic implements ActiveRecordInterface
         $treeSize = $right - $left +1;
 
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con, $treeSize, $destLeft, $left, $right, $levelDelta, $scope, $targetScope) {
             $preventDefault = false;
 
             // make room next to the target for the subtree
-            ChildTopicQuery::shiftRLValues($treeSize, $destLeft, null, $targetScope, $con);
+            ChildTagQuery::shiftRLValues($treeSize, $destLeft, null, $targetScope, $con);
 
             if ($targetScope != $scope) {
 
                 //move subtree to < 0, so the items are out of scope.
-                ChildTopicQuery::shiftRLValues(-$right, $left, $right, $scope, $con);
+                ChildTagQuery::shiftRLValues(-$right, $left, $right, $scope, $con);
 
                 //update scopes
-                ChildTopicQuery::setNegativeScope($targetScope, $con);
+                ChildTagQuery::setNegativeScope($targetScope, $con);
 
                 //update levels
-                ChildTopicQuery::shiftLevel($levelDelta, $left - $right, 0, $targetScope, $con);
+                ChildTagQuery::shiftLevel($levelDelta, $left - $right, 0, $targetScope, $con);
 
                 //move the subtree to the target
-                ChildTopicQuery::shiftRLValues(($right - $left) + $destLeft, $left - $right, 0, $targetScope, $con);
+                ChildTagQuery::shiftRLValues(($right - $left) + $destLeft, $left - $right, 0, $targetScope, $con);
 
 
                 $preventDefault = true;
@@ -2933,25 +2933,25 @@ abstract class Topic implements ActiveRecordInterface
 
                 if ($levelDelta) {
                     // update the levels of the subtree
-                    ChildTopicQuery::shiftLevel($levelDelta, $left, $right, $scope, $con);
+                    ChildTagQuery::shiftLevel($levelDelta, $left, $right, $scope, $con);
                 }
 
                 // move the subtree to the target
-                ChildTopicQuery::shiftRLValues($destLeft - $left, $left, $right, $scope, $con);
+                ChildTagQuery::shiftRLValues($destLeft - $left, $left, $right, $scope, $con);
             }
 
             // remove the empty room at the previous location of the subtree
-            ChildTopicQuery::shiftRLValues(-$treeSize, $right + 1, null, $scope, $con);
+            ChildTagQuery::shiftRLValues(-$treeSize, $right + 1, null, $scope, $con);
 
             // update all loaded nodes
-            ChildTopicQuery::updateLoadedNodes(null, $con);
+            ChildTagQuery::updateLoadedNodes(null, $con);
         });
     }
 
     /**
      * Deletes all descendants for the given node
      * Instance pooling is wiped out by this command,
-     * so existing ChildTopic instances are probably invalid (except for the current one)
+     * so existing ChildTag instances are probably invalid (except for the current one)
      *
      * @param      ConnectionInterface $con Connection to use.
      *
@@ -2964,7 +2964,7 @@ abstract class Topic implements ActiveRecordInterface
             return;
         }
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getReadConnection(TopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(TagTableMap::DATABASE_NAME);
         }
         $left = $this->getLeftValue();
         $right = $this->getRightValue();
@@ -2972,12 +2972,12 @@ abstract class Topic implements ActiveRecordInterface
 
         return $con->transaction(function () use ($con, $left, $right, $scope) {
             // delete descendant nodes (will empty the instance pool)
-            $ret = ChildTopicQuery::create()
+            $ret = ChildTagQuery::create()
                 ->descendantsOf($this)
                 ->delete($con);
 
             // fill up the room that was used by descendants
-            ChildTopicQuery::shiftRLValues($left - $right + 1, $right, null, $scope, $con);
+            ChildTagQuery::shiftRLValues($left - $right + 1, $right, null, $scope, $con);
 
             // fix the right value for the current node, which is now a leaf
             $this->setRightValue($left + 1);

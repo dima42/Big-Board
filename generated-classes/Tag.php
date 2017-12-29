@@ -1,9 +1,9 @@
 <?php
 
-use Base\TopicAlert as BaseTopicAlert;
+use Base\Tag as BaseTag;
 
 /**
- * Skeleton subclass for representing a row from the 'topic_alert' table.
+ * Skeleton subclass for representing a row from the 'tag' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\TopicAlert as BaseTopicAlert;
  * long as it does not already exist in the output directory.
  *
  */
-class TopicAlert extends BaseTopicAlert
+class Tag extends BaseTag
 {
 
 }

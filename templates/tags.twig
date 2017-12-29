@@ -2,18 +2,18 @@
 
 {% block content %}
 {% for scope in scopes %}
-{% for topic in scope %}
-    <div class="topic level{{ topic.level }}" data-level="{{ topic.level }}" data-pk="{{ topic.id }}">
-        {{ topic.title }}
-        <a class="badge badge-light" href="#" data-behavior="add-topic">+ Child</a>
+{% for tag in scope %}
+    <div class="tag level{{ tag.level }}" data-level="{{ tag.level }}" data-pk="{{ tag.id }}">
+        {{ tag.title }}
+        <a class="badge badge-light" href="#" data-behavior="add-tag">+ Child</a>
         <div class="float-right">
-            {% if topic.hasNextSibling %}
-            <form method="post" class="move-topic" action="/topics/{{ topic.id }}/move_dn">
+            {% if tag.hasNextSibling %}
+            <form method="post" class="move-tag" action="/tags/{{ tag.id }}/move_dn">
                 <button class="btn btn-light badge badge-light" href="#">&darr;</button>
             </form>
             {% endif %}
-            {% if topic.hasPrevSibling %}
-            <form method="post" class="move-topic" action="/topics/{{ topic.id }}/move_up">
+            {% if tag.hasPrevSibling %}
+            <form method="post" class="move-tag" action="/tags/{{ tag.id }}/move_up">
                 <button class="btn btn-light badge badge-light" href="#">&uarr;</button>
             </form>
             {% endif %}
@@ -26,15 +26,16 @@
 {% block scripts %}
 <script>
 $(function() {
-    $('[data-behavior=add-topic]').click(function(e) {
+    $('[data-behavior=add-tag]').click(function(e) {
         e.preventDefault();
-        var parent = $(this).closest('.topic');
-        $.get('/templates/add_topic.mst', function(template) {
+        var parent = $(this).closest('.tag');
+        $.get('/templates/add_tag.mst', function(template) {
             var rendered = Mustache.render(template, {
                 'parent': parent.data('pk'),
                 'level': parent.data('level') + 1
             });
             parent.after(rendered);
+            parent.next().find('input').focus();
         });
     });
 });

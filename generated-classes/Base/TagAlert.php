@@ -4,14 +4,14 @@ namespace Base;
 
 use \Puzzle as ChildPuzzle;
 use \PuzzleQuery as ChildPuzzleQuery;
-use \Topic as ChildTopic;
-use \TopicAlert as ChildTopicAlert;
-use \TopicAlertQuery as ChildTopicAlertQuery;
-use \TopicQuery as ChildTopicQuery;
+use \Tag as ChildTag;
+use \TagAlert as ChildTagAlert;
+use \TagAlertQuery as ChildTagAlertQuery;
+use \TagQuery as ChildTagQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Map\TopicAlertTableMap;
+use Map\TagAlertTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -26,18 +26,18 @@ use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'topic_alert' table.
+ * Base class that represents a row from the 'tag_alert' table.
  *
  *
  *
  * @package    propel.generator..Base
  */
-abstract class TopicAlert implements ActiveRecordInterface
+abstract class TagAlert implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\TopicAlertTableMap';
+    const TABLE_MAP = '\\Map\\TagAlertTableMap';
 
 
     /**
@@ -74,11 +74,11 @@ abstract class TopicAlert implements ActiveRecordInterface
     protected $puzzle_id;
 
     /**
-     * The value for the topic_id field.
+     * The value for the tag_id field.
      *
      * @var        int
      */
-    protected $topic_id;
+    protected $tag_id;
 
     /**
      * The value for the created_at field.
@@ -100,9 +100,9 @@ abstract class TopicAlert implements ActiveRecordInterface
     protected $aPuzzle;
 
     /**
-     * @var        ChildTopic
+     * @var        ChildTag
      */
-    protected $aTopic;
+    protected $aTag;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -113,7 +113,7 @@ abstract class TopicAlert implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Base\TopicAlert object.
+     * Initializes internal state of Base\TagAlert object.
      */
     public function __construct()
     {
@@ -208,9 +208,9 @@ abstract class TopicAlert implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>TopicAlert</code> instance.  If
-     * <code>obj</code> is an instance of <code>TopicAlert</code>, delegates to
-     * <code>equals(TopicAlert)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>TagAlert</code> instance.  If
+     * <code>obj</code> is an instance of <code>TagAlert</code>, delegates to
+     * <code>equals(TagAlert)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -276,7 +276,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|TopicAlert The current object, for fluid interface
+     * @return $this|TagAlert The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -348,13 +348,13 @@ abstract class TopicAlert implements ActiveRecordInterface
     }
 
     /**
-     * Get the [topic_id] column value.
+     * Get the [tag_id] column value.
      *
      * @return int
      */
-    public function getTopicId()
+    public function getTagId()
     {
-        return $this->topic_id;
+        return $this->tag_id;
     }
 
     /**
@@ -401,7 +401,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      * Set the value of [puzzle_id] column.
      *
      * @param int $v new value
-     * @return $this|\TopicAlert The current object (for fluent API support)
+     * @return $this|\TagAlert The current object (for fluent API support)
      */
     public function setPuzzleId($v)
     {
@@ -411,7 +411,7 @@ abstract class TopicAlert implements ActiveRecordInterface
 
         if ($this->puzzle_id !== $v) {
             $this->puzzle_id = $v;
-            $this->modifiedColumns[TopicAlertTableMap::COL_PUZZLE_ID] = true;
+            $this->modifiedColumns[TagAlertTableMap::COL_PUZZLE_ID] = true;
         }
 
         if ($this->aPuzzle !== null && $this->aPuzzle->getId() !== $v) {
@@ -422,35 +422,35 @@ abstract class TopicAlert implements ActiveRecordInterface
     } // setPuzzleId()
 
     /**
-     * Set the value of [topic_id] column.
+     * Set the value of [tag_id] column.
      *
      * @param int $v new value
-     * @return $this|\TopicAlert The current object (for fluent API support)
+     * @return $this|\TagAlert The current object (for fluent API support)
      */
-    public function setTopicId($v)
+    public function setTagId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->topic_id !== $v) {
-            $this->topic_id = $v;
-            $this->modifiedColumns[TopicAlertTableMap::COL_TOPIC_ID] = true;
+        if ($this->tag_id !== $v) {
+            $this->tag_id = $v;
+            $this->modifiedColumns[TagAlertTableMap::COL_TAG_ID] = true;
         }
 
-        if ($this->aTopic !== null && $this->aTopic->getId() !== $v) {
-            $this->aTopic = null;
+        if ($this->aTag !== null && $this->aTag->getId() !== $v) {
+            $this->aTag = null;
         }
 
         return $this;
-    } // setTopicId()
+    } // setTagId()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\TopicAlert The current object (for fluent API support)
+     * @return $this|\TagAlert The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -458,7 +458,7 @@ abstract class TopicAlert implements ActiveRecordInterface
         if ($this->created_at !== null || $dt !== null) {
             if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
                 $this->created_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[TopicAlertTableMap::COL_CREATED_AT] = true;
+                $this->modifiedColumns[TagAlertTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
@@ -470,7 +470,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\TopicAlert The current object (for fluent API support)
+     * @return $this|\TagAlert The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
     {
@@ -478,7 +478,7 @@ abstract class TopicAlert implements ActiveRecordInterface
         if ($this->updated_at !== null || $dt !== null) {
             if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
                 $this->updated_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[TopicAlertTableMap::COL_UPDATED_AT] = true;
+                $this->modifiedColumns[TagAlertTableMap::COL_UPDATED_AT] = true;
             }
         } // if either are not null
 
@@ -521,19 +521,19 @@ abstract class TopicAlert implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : TopicAlertTableMap::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : TagAlertTableMap::translateFieldName('PuzzleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->puzzle_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : TopicAlertTableMap::translateFieldName('TopicId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->topic_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : TagAlertTableMap::translateFieldName('TagId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->tag_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : TopicAlertTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : TagAlertTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : TopicAlertTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : TagAlertTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -546,10 +546,10 @@ abstract class TopicAlert implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = TopicAlertTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = TagAlertTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\TopicAlert'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\TagAlert'), 0, $e);
         }
     }
 
@@ -571,8 +571,8 @@ abstract class TopicAlert implements ActiveRecordInterface
         if ($this->aPuzzle !== null && $this->puzzle_id !== $this->aPuzzle->getId()) {
             $this->aPuzzle = null;
         }
-        if ($this->aTopic !== null && $this->topic_id !== $this->aTopic->getId()) {
-            $this->aTopic = null;
+        if ($this->aTag !== null && $this->tag_id !== $this->aTag->getId()) {
+            $this->aTag = null;
         }
     } // ensureConsistency
 
@@ -597,13 +597,13 @@ abstract class TopicAlert implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(TopicAlertTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(TagAlertTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildTopicAlertQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildTagAlertQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -614,7 +614,7 @@ abstract class TopicAlert implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aPuzzle = null;
-            $this->aTopic = null;
+            $this->aTag = null;
         } // if (deep)
     }
 
@@ -624,8 +624,8 @@ abstract class TopicAlert implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see TopicAlert::setDeleted()
-     * @see TopicAlert::isDeleted()
+     * @see TagAlert::setDeleted()
+     * @see TagAlert::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -634,11 +634,11 @@ abstract class TopicAlert implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicAlertTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagAlertTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildTopicAlertQuery::create()
+            $deleteQuery = ChildTagAlertQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -673,7 +673,7 @@ abstract class TopicAlert implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicAlertTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagAlertTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -683,16 +683,16 @@ abstract class TopicAlert implements ActiveRecordInterface
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
 
-                if (!$this->isColumnModified(TopicAlertTableMap::COL_CREATED_AT)) {
+                if (!$this->isColumnModified(TagAlertTableMap::COL_CREATED_AT)) {
                     $this->setCreatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
-                if (!$this->isColumnModified(TopicAlertTableMap::COL_UPDATED_AT)) {
+                if (!$this->isColumnModified(TagAlertTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(TopicAlertTableMap::COL_UPDATED_AT)) {
+                if ($this->isModified() && !$this->isColumnModified(TagAlertTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -704,7 +704,7 @@ abstract class TopicAlert implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                TopicAlertTableMap::addInstanceToPool($this);
+                TagAlertTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -742,11 +742,11 @@ abstract class TopicAlert implements ActiveRecordInterface
                 $this->setPuzzle($this->aPuzzle);
             }
 
-            if ($this->aTopic !== null) {
-                if ($this->aTopic->isModified() || $this->aTopic->isNew()) {
-                    $affectedRows += $this->aTopic->save($con);
+            if ($this->aTag !== null) {
+                if ($this->aTag->isModified() || $this->aTag->isNew()) {
+                    $affectedRows += $this->aTag->save($con);
                 }
-                $this->setTopic($this->aTopic);
+                $this->setTag($this->aTag);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -782,21 +782,21 @@ abstract class TopicAlert implements ActiveRecordInterface
 
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(TopicAlertTableMap::COL_PUZZLE_ID)) {
+        if ($this->isColumnModified(TagAlertTableMap::COL_PUZZLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'puzzle_id';
         }
-        if ($this->isColumnModified(TopicAlertTableMap::COL_TOPIC_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'topic_id';
+        if ($this->isColumnModified(TagAlertTableMap::COL_TAG_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'tag_id';
         }
-        if ($this->isColumnModified(TopicAlertTableMap::COL_CREATED_AT)) {
+        if ($this->isColumnModified(TagAlertTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
         }
-        if ($this->isColumnModified(TopicAlertTableMap::COL_UPDATED_AT)) {
+        if ($this->isColumnModified(TagAlertTableMap::COL_UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO topic_alert (%s) VALUES (%s)',
+            'INSERT INTO tag_alert (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -808,8 +808,8 @@ abstract class TopicAlert implements ActiveRecordInterface
                     case 'puzzle_id':
                         $stmt->bindValue($identifier, $this->puzzle_id, PDO::PARAM_INT);
                         break;
-                    case 'topic_id':
-                        $stmt->bindValue($identifier, $this->topic_id, PDO::PARAM_INT);
+                    case 'tag_id':
+                        $stmt->bindValue($identifier, $this->tag_id, PDO::PARAM_INT);
                         break;
                     case 'created_at':
                         $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -856,7 +856,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = TopicAlertTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = TagAlertTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -876,7 +876,7 @@ abstract class TopicAlert implements ActiveRecordInterface
                 return $this->getPuzzleId();
                 break;
             case 1:
-                return $this->getTopicId();
+                return $this->getTagId();
                 break;
             case 2:
                 return $this->getCreatedAt();
@@ -908,14 +908,14 @@ abstract class TopicAlert implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['TopicAlert'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['TagAlert'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['TopicAlert'][$this->hashCode()] = true;
-        $keys = TopicAlertTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['TagAlert'][$this->hashCode()] = true;
+        $keys = TagAlertTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getPuzzleId(),
-            $keys[1] => $this->getTopicId(),
+            $keys[1] => $this->getTagId(),
             $keys[2] => $this->getCreatedAt(),
             $keys[3] => $this->getUpdatedAt(),
         );
@@ -948,20 +948,20 @@ abstract class TopicAlert implements ActiveRecordInterface
 
                 $result[$key] = $this->aPuzzle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aTopic) {
+            if (null !== $this->aTag) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'topic';
+                        $key = 'tag';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'topic';
+                        $key = 'tag';
                         break;
                     default:
-                        $key = 'Topic';
+                        $key = 'Tag';
                 }
 
-                $result[$key] = $this->aTopic->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aTag->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -977,11 +977,11 @@ abstract class TopicAlert implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\TopicAlert
+     * @return $this|\TagAlert
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = TopicAlertTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = TagAlertTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -992,7 +992,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\TopicAlert
+     * @return $this|\TagAlert
      */
     public function setByPosition($pos, $value)
     {
@@ -1001,7 +1001,7 @@ abstract class TopicAlert implements ActiveRecordInterface
                 $this->setPuzzleId($value);
                 break;
             case 1:
-                $this->setTopicId($value);
+                $this->setTagId($value);
                 break;
             case 2:
                 $this->setCreatedAt($value);
@@ -1033,13 +1033,13 @@ abstract class TopicAlert implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = TopicAlertTableMap::getFieldNames($keyType);
+        $keys = TagAlertTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setPuzzleId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setTopicId($arr[$keys[1]]);
+            $this->setTagId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setCreatedAt($arr[$keys[2]]);
@@ -1066,7 +1066,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\TopicAlert The current object, for fluid interface
+     * @return $this|\TagAlert The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1086,19 +1086,19 @@ abstract class TopicAlert implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(TopicAlertTableMap::DATABASE_NAME);
+        $criteria = new Criteria(TagAlertTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(TopicAlertTableMap::COL_PUZZLE_ID)) {
-            $criteria->add(TopicAlertTableMap::COL_PUZZLE_ID, $this->puzzle_id);
+        if ($this->isColumnModified(TagAlertTableMap::COL_PUZZLE_ID)) {
+            $criteria->add(TagAlertTableMap::COL_PUZZLE_ID, $this->puzzle_id);
         }
-        if ($this->isColumnModified(TopicAlertTableMap::COL_TOPIC_ID)) {
-            $criteria->add(TopicAlertTableMap::COL_TOPIC_ID, $this->topic_id);
+        if ($this->isColumnModified(TagAlertTableMap::COL_TAG_ID)) {
+            $criteria->add(TagAlertTableMap::COL_TAG_ID, $this->tag_id);
         }
-        if ($this->isColumnModified(TopicAlertTableMap::COL_CREATED_AT)) {
-            $criteria->add(TopicAlertTableMap::COL_CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(TagAlertTableMap::COL_CREATED_AT)) {
+            $criteria->add(TagAlertTableMap::COL_CREATED_AT, $this->created_at);
         }
-        if ($this->isColumnModified(TopicAlertTableMap::COL_UPDATED_AT)) {
-            $criteria->add(TopicAlertTableMap::COL_UPDATED_AT, $this->updated_at);
+        if ($this->isColumnModified(TagAlertTableMap::COL_UPDATED_AT)) {
+            $criteria->add(TagAlertTableMap::COL_UPDATED_AT, $this->updated_at);
         }
 
         return $criteria;
@@ -1116,9 +1116,9 @@ abstract class TopicAlert implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildTopicAlertQuery::create();
-        $criteria->add(TopicAlertTableMap::COL_PUZZLE_ID, $this->puzzle_id);
-        $criteria->add(TopicAlertTableMap::COL_TOPIC_ID, $this->topic_id);
+        $criteria = ChildTagAlertQuery::create();
+        $criteria->add(TagAlertTableMap::COL_PUZZLE_ID, $this->puzzle_id);
+        $criteria->add(TagAlertTableMap::COL_TAG_ID, $this->tag_id);
 
         return $criteria;
     }
@@ -1132,20 +1132,20 @@ abstract class TopicAlert implements ActiveRecordInterface
     public function hashCode()
     {
         $validPk = null !== $this->getPuzzleId() &&
-            null !== $this->getTopicId();
+            null !== $this->getTagId();
 
         $validPrimaryKeyFKs = 2;
         $primaryKeyFKs = [];
 
-        //relation topic_alert_fk_937852 to table puzzle
+        //relation tag_alert_fk_937852 to table puzzle
         if ($this->aPuzzle && $hash = spl_object_hash($this->aPuzzle)) {
             $primaryKeyFKs[] = $hash;
         } else {
             $validPrimaryKeyFKs = false;
         }
 
-        //relation topic_alert_fk_5f1143 to table topic
-        if ($this->aTopic && $hash = spl_object_hash($this->aTopic)) {
+        //relation tag_alert_fk_022a95 to table tag
+        if ($this->aTag && $hash = spl_object_hash($this->aTag)) {
             $primaryKeyFKs[] = $hash;
         } else {
             $validPrimaryKeyFKs = false;
@@ -1169,7 +1169,7 @@ abstract class TopicAlert implements ActiveRecordInterface
     {
         $pks = array();
         $pks[0] = $this->getPuzzleId();
-        $pks[1] = $this->getTopicId();
+        $pks[1] = $this->getTagId();
 
         return $pks;
     }
@@ -1183,7 +1183,7 @@ abstract class TopicAlert implements ActiveRecordInterface
     public function setPrimaryKey($keys)
     {
         $this->setPuzzleId($keys[0]);
-        $this->setTopicId($keys[1]);
+        $this->setTagId($keys[1]);
     }
 
     /**
@@ -1192,7 +1192,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getPuzzleId()) && (null === $this->getTopicId());
+        return (null === $this->getPuzzleId()) && (null === $this->getTagId());
     }
 
     /**
@@ -1201,7 +1201,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \TopicAlert (or compatible) type.
+     * @param      object $copyObj An object of \TagAlert (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1209,7 +1209,7 @@ abstract class TopicAlert implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setPuzzleId($this->getPuzzleId());
-        $copyObj->setTopicId($this->getTopicId());
+        $copyObj->setTagId($this->getTagId());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
@@ -1226,7 +1226,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \TopicAlert Clone of current object.
+     * @return \TagAlert Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1243,7 +1243,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      * Declares an association between this object and a ChildPuzzle object.
      *
      * @param  ChildPuzzle $v
-     * @return $this|\TopicAlert The current object (for fluent API support)
+     * @return $this|\TagAlert The current object (for fluent API support)
      * @throws PropelException
      */
     public function setPuzzle(ChildPuzzle $v = null)
@@ -1259,7 +1259,7 @@ abstract class TopicAlert implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildPuzzle object, it will not be re-added.
         if ($v !== null) {
-            $v->addTopicAlert($this);
+            $v->addTagAlert($this);
         }
 
 
@@ -1283,7 +1283,7 @@ abstract class TopicAlert implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aPuzzle->addTopicAlerts($this);
+                $this->aPuzzle->addTagAlerts($this);
              */
         }
 
@@ -1291,26 +1291,26 @@ abstract class TopicAlert implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildTopic object.
+     * Declares an association between this object and a ChildTag object.
      *
-     * @param  ChildTopic $v
-     * @return $this|\TopicAlert The current object (for fluent API support)
+     * @param  ChildTag $v
+     * @return $this|\TagAlert The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setTopic(ChildTopic $v = null)
+    public function setTag(ChildTag $v = null)
     {
         if ($v === null) {
-            $this->setTopicId(NULL);
+            $this->setTagId(NULL);
         } else {
-            $this->setTopicId($v->getId());
+            $this->setTagId($v->getId());
         }
 
-        $this->aTopic = $v;
+        $this->aTag = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildTopic object, it will not be re-added.
+        // If this object has already been added to the ChildTag object, it will not be re-added.
         if ($v !== null) {
-            $v->addTopicAlert($this);
+            $v->addTagAlert($this);
         }
 
 
@@ -1319,26 +1319,26 @@ abstract class TopicAlert implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildTopic object
+     * Get the associated ChildTag object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildTopic The associated ChildTopic object.
+     * @return ChildTag The associated ChildTag object.
      * @throws PropelException
      */
-    public function getTopic(ConnectionInterface $con = null)
+    public function getTag(ConnectionInterface $con = null)
     {
-        if ($this->aTopic === null && ($this->topic_id != 0)) {
-            $this->aTopic = ChildTopicQuery::create()->findPk($this->topic_id, $con);
+        if ($this->aTag === null && ($this->tag_id != 0)) {
+            $this->aTag = ChildTagQuery::create()->findPk($this->tag_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aTopic->addTopicAlerts($this);
+                $this->aTag->addTagAlerts($this);
              */
         }
 
-        return $this->aTopic;
+        return $this->aTag;
     }
 
     /**
@@ -1349,13 +1349,13 @@ abstract class TopicAlert implements ActiveRecordInterface
     public function clear()
     {
         if (null !== $this->aPuzzle) {
-            $this->aPuzzle->removeTopicAlert($this);
+            $this->aPuzzle->removeTagAlert($this);
         }
-        if (null !== $this->aTopic) {
-            $this->aTopic->removeTopicAlert($this);
+        if (null !== $this->aTag) {
+            $this->aTag->removeTagAlert($this);
         }
         $this->puzzle_id = null;
-        $this->topic_id = null;
+        $this->tag_id = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;
@@ -1379,7 +1379,7 @@ abstract class TopicAlert implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aPuzzle = null;
-        $this->aTopic = null;
+        $this->aTag = null;
     }
 
     /**
@@ -1389,7 +1389,7 @@ abstract class TopicAlert implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(TopicAlertTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(TagAlertTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -1397,11 +1397,11 @@ abstract class TopicAlert implements ActiveRecordInterface
     /**
      * Mark the current object so that the update date doesn't get updated during next save
      *
-     * @return     $this|ChildTopicAlert The current object (for fluent API support)
+     * @return     $this|ChildTagAlert The current object (for fluent API support)
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[TopicAlertTableMap::COL_UPDATED_AT] = true;
+        $this->modifiedColumns[TagAlertTableMap::COL_UPDATED_AT] = true;
 
         return $this;
     }

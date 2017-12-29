@@ -33,12 +33,12 @@ CREATE TABLE `puzzle`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- topic
+-- tag
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `topic`;
+DROP TABLE IF EXISTS `tag`;
 
-CREATE TABLE `topic`
+CREATE TABLE `tag`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255) NOT NULL,
@@ -52,27 +52,27 @@ CREATE TABLE `topic`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- topic_alert
+-- tag_alert
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `topic_alert`;
+DROP TABLE IF EXISTS `tag_alert`;
 
-CREATE TABLE `topic_alert`
+CREATE TABLE `tag_alert`
 (
     `puzzle_id` INTEGER NOT NULL,
-    `topic_id` INTEGER NOT NULL,
+    `tag_id` INTEGER NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
-    PRIMARY KEY (`puzzle_id`,`topic_id`),
-    UNIQUE INDEX `topic_alert_u_b508ba` (`puzzle_id`, `topic_id`),
-    INDEX `topic_alert_fi_5f1143` (`topic_id`),
-    CONSTRAINT `topic_alert_fk_937852`
+    PRIMARY KEY (`puzzle_id`,`tag_id`),
+    UNIQUE INDEX `tag_alert_u_878027` (`puzzle_id`, `tag_id`),
+    INDEX `tag_alert_fi_022a95` (`tag_id`),
+    CONSTRAINT `tag_alert_fk_937852`
         FOREIGN KEY (`puzzle_id`)
         REFERENCES `puzzle` (`id`)
         ON DELETE CASCADE,
-    CONSTRAINT `topic_alert_fk_5f1143`
-        FOREIGN KEY (`topic_id`)
-        REFERENCES `topic` (`id`)
+    CONSTRAINT `tag_alert_fk_022a95`
+        FOREIGN KEY (`tag_id`)
+        REFERENCES `tag` (`id`)
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
 

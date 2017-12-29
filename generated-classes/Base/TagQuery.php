@@ -2,11 +2,11 @@
 
 namespace Base;
 
-use \Topic as ChildTopic;
-use \TopicQuery as ChildTopicQuery;
+use \Tag as ChildTag;
+use \TagQuery as ChildTagQuery;
 use \Exception;
 use \PDO;
-use Map\TopicTableMap;
+use Map\TagTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -17,114 +17,114 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 
 /**
- * Base class that represents a query for the 'topic' table.
+ * Base class that represents a query for the 'tag' table.
  *
  *
  *
- * @method     ChildTopicQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildTopicQuery orderByTitle($order = Criteria::ASC) Order by the title column
- * @method     ChildTopicQuery orderBySlackChannel($order = Criteria::ASC) Order by the slack_channel column
- * @method     ChildTopicQuery orderBySlackChannelId($order = Criteria::ASC) Order by the slack_channel_id column
- * @method     ChildTopicQuery orderByTreeLeft($order = Criteria::ASC) Order by the tree_left column
- * @method     ChildTopicQuery orderByTreeRight($order = Criteria::ASC) Order by the tree_right column
- * @method     ChildTopicQuery orderByTreeLevel($order = Criteria::ASC) Order by the tree_level column
- * @method     ChildTopicQuery orderByTreeScope($order = Criteria::ASC) Order by the tree_scope column
+ * @method     ChildTagQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildTagQuery orderByTitle($order = Criteria::ASC) Order by the title column
+ * @method     ChildTagQuery orderBySlackChannel($order = Criteria::ASC) Order by the slack_channel column
+ * @method     ChildTagQuery orderBySlackChannelId($order = Criteria::ASC) Order by the slack_channel_id column
+ * @method     ChildTagQuery orderByTreeLeft($order = Criteria::ASC) Order by the tree_left column
+ * @method     ChildTagQuery orderByTreeRight($order = Criteria::ASC) Order by the tree_right column
+ * @method     ChildTagQuery orderByTreeLevel($order = Criteria::ASC) Order by the tree_level column
+ * @method     ChildTagQuery orderByTreeScope($order = Criteria::ASC) Order by the tree_scope column
  *
- * @method     ChildTopicQuery groupById() Group by the id column
- * @method     ChildTopicQuery groupByTitle() Group by the title column
- * @method     ChildTopicQuery groupBySlackChannel() Group by the slack_channel column
- * @method     ChildTopicQuery groupBySlackChannelId() Group by the slack_channel_id column
- * @method     ChildTopicQuery groupByTreeLeft() Group by the tree_left column
- * @method     ChildTopicQuery groupByTreeRight() Group by the tree_right column
- * @method     ChildTopicQuery groupByTreeLevel() Group by the tree_level column
- * @method     ChildTopicQuery groupByTreeScope() Group by the tree_scope column
+ * @method     ChildTagQuery groupById() Group by the id column
+ * @method     ChildTagQuery groupByTitle() Group by the title column
+ * @method     ChildTagQuery groupBySlackChannel() Group by the slack_channel column
+ * @method     ChildTagQuery groupBySlackChannelId() Group by the slack_channel_id column
+ * @method     ChildTagQuery groupByTreeLeft() Group by the tree_left column
+ * @method     ChildTagQuery groupByTreeRight() Group by the tree_right column
+ * @method     ChildTagQuery groupByTreeLevel() Group by the tree_level column
+ * @method     ChildTagQuery groupByTreeScope() Group by the tree_scope column
  *
- * @method     ChildTopicQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildTopicQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildTopicQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildTagQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildTagQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildTagQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildTopicQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildTopicQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildTopicQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildTagQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildTagQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildTagQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildTopicQuery leftJoinTopicAlert($relationAlias = null) Adds a LEFT JOIN clause to the query using the TopicAlert relation
- * @method     ChildTopicQuery rightJoinTopicAlert($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TopicAlert relation
- * @method     ChildTopicQuery innerJoinTopicAlert($relationAlias = null) Adds a INNER JOIN clause to the query using the TopicAlert relation
+ * @method     ChildTagQuery leftJoinTagAlert($relationAlias = null) Adds a LEFT JOIN clause to the query using the TagAlert relation
+ * @method     ChildTagQuery rightJoinTagAlert($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TagAlert relation
+ * @method     ChildTagQuery innerJoinTagAlert($relationAlias = null) Adds a INNER JOIN clause to the query using the TagAlert relation
  *
- * @method     ChildTopicQuery joinWithTopicAlert($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the TopicAlert relation
+ * @method     ChildTagQuery joinWithTagAlert($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the TagAlert relation
  *
- * @method     ChildTopicQuery leftJoinWithTopicAlert() Adds a LEFT JOIN clause and with to the query using the TopicAlert relation
- * @method     ChildTopicQuery rightJoinWithTopicAlert() Adds a RIGHT JOIN clause and with to the query using the TopicAlert relation
- * @method     ChildTopicQuery innerJoinWithTopicAlert() Adds a INNER JOIN clause and with to the query using the TopicAlert relation
+ * @method     ChildTagQuery leftJoinWithTagAlert() Adds a LEFT JOIN clause and with to the query using the TagAlert relation
+ * @method     ChildTagQuery rightJoinWithTagAlert() Adds a RIGHT JOIN clause and with to the query using the TagAlert relation
+ * @method     ChildTagQuery innerJoinWithTagAlert() Adds a INNER JOIN clause and with to the query using the TagAlert relation
  *
- * @method     \TopicAlertQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \TagAlertQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildTopic findOne(ConnectionInterface $con = null) Return the first ChildTopic matching the query
- * @method     ChildTopic findOneOrCreate(ConnectionInterface $con = null) Return the first ChildTopic matching the query, or a new ChildTopic object populated from the query conditions when no match is found
+ * @method     ChildTag findOne(ConnectionInterface $con = null) Return the first ChildTag matching the query
+ * @method     ChildTag findOneOrCreate(ConnectionInterface $con = null) Return the first ChildTag matching the query, or a new ChildTag object populated from the query conditions when no match is found
  *
- * @method     ChildTopic findOneById(int $id) Return the first ChildTopic filtered by the id column
- * @method     ChildTopic findOneByTitle(string $title) Return the first ChildTopic filtered by the title column
- * @method     ChildTopic findOneBySlackChannel(string $slack_channel) Return the first ChildTopic filtered by the slack_channel column
- * @method     ChildTopic findOneBySlackChannelId(string $slack_channel_id) Return the first ChildTopic filtered by the slack_channel_id column
- * @method     ChildTopic findOneByTreeLeft(int $tree_left) Return the first ChildTopic filtered by the tree_left column
- * @method     ChildTopic findOneByTreeRight(int $tree_right) Return the first ChildTopic filtered by the tree_right column
- * @method     ChildTopic findOneByTreeLevel(int $tree_level) Return the first ChildTopic filtered by the tree_level column
- * @method     ChildTopic findOneByTreeScope(int $tree_scope) Return the first ChildTopic filtered by the tree_scope column *
+ * @method     ChildTag findOneById(int $id) Return the first ChildTag filtered by the id column
+ * @method     ChildTag findOneByTitle(string $title) Return the first ChildTag filtered by the title column
+ * @method     ChildTag findOneBySlackChannel(string $slack_channel) Return the first ChildTag filtered by the slack_channel column
+ * @method     ChildTag findOneBySlackChannelId(string $slack_channel_id) Return the first ChildTag filtered by the slack_channel_id column
+ * @method     ChildTag findOneByTreeLeft(int $tree_left) Return the first ChildTag filtered by the tree_left column
+ * @method     ChildTag findOneByTreeRight(int $tree_right) Return the first ChildTag filtered by the tree_right column
+ * @method     ChildTag findOneByTreeLevel(int $tree_level) Return the first ChildTag filtered by the tree_level column
+ * @method     ChildTag findOneByTreeScope(int $tree_scope) Return the first ChildTag filtered by the tree_scope column *
 
- * @method     ChildTopic requirePk($key, ConnectionInterface $con = null) Return the ChildTopic by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTopic requireOne(ConnectionInterface $con = null) Return the first ChildTopic matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requirePk($key, ConnectionInterface $con = null) Return the ChildTag by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOne(ConnectionInterface $con = null) Return the first ChildTag matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildTopic requireOneById(int $id) Return the first ChildTopic filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTopic requireOneByTitle(string $title) Return the first ChildTopic filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTopic requireOneBySlackChannel(string $slack_channel) Return the first ChildTopic filtered by the slack_channel column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTopic requireOneBySlackChannelId(string $slack_channel_id) Return the first ChildTopic filtered by the slack_channel_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTopic requireOneByTreeLeft(int $tree_left) Return the first ChildTopic filtered by the tree_left column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTopic requireOneByTreeRight(int $tree_right) Return the first ChildTopic filtered by the tree_right column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTopic requireOneByTreeLevel(int $tree_level) Return the first ChildTopic filtered by the tree_level column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTopic requireOneByTreeScope(int $tree_scope) Return the first ChildTopic filtered by the tree_scope column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOneById(int $id) Return the first ChildTag filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOneByTitle(string $title) Return the first ChildTag filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOneBySlackChannel(string $slack_channel) Return the first ChildTag filtered by the slack_channel column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOneBySlackChannelId(string $slack_channel_id) Return the first ChildTag filtered by the slack_channel_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOneByTreeLeft(int $tree_left) Return the first ChildTag filtered by the tree_left column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOneByTreeRight(int $tree_right) Return the first ChildTag filtered by the tree_right column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOneByTreeLevel(int $tree_level) Return the first ChildTag filtered by the tree_level column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOneByTreeScope(int $tree_scope) Return the first ChildTag filtered by the tree_scope column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildTopic[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTopic objects based on current ModelCriteria
- * @method     ChildTopic[]|ObjectCollection findById(int $id) Return ChildTopic objects filtered by the id column
- * @method     ChildTopic[]|ObjectCollection findByTitle(string $title) Return ChildTopic objects filtered by the title column
- * @method     ChildTopic[]|ObjectCollection findBySlackChannel(string $slack_channel) Return ChildTopic objects filtered by the slack_channel column
- * @method     ChildTopic[]|ObjectCollection findBySlackChannelId(string $slack_channel_id) Return ChildTopic objects filtered by the slack_channel_id column
- * @method     ChildTopic[]|ObjectCollection findByTreeLeft(int $tree_left) Return ChildTopic objects filtered by the tree_left column
- * @method     ChildTopic[]|ObjectCollection findByTreeRight(int $tree_right) Return ChildTopic objects filtered by the tree_right column
- * @method     ChildTopic[]|ObjectCollection findByTreeLevel(int $tree_level) Return ChildTopic objects filtered by the tree_level column
- * @method     ChildTopic[]|ObjectCollection findByTreeScope(int $tree_scope) Return ChildTopic objects filtered by the tree_scope column
- * @method     ChildTopic[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildTag[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTag objects based on current ModelCriteria
+ * @method     ChildTag[]|ObjectCollection findById(int $id) Return ChildTag objects filtered by the id column
+ * @method     ChildTag[]|ObjectCollection findByTitle(string $title) Return ChildTag objects filtered by the title column
+ * @method     ChildTag[]|ObjectCollection findBySlackChannel(string $slack_channel) Return ChildTag objects filtered by the slack_channel column
+ * @method     ChildTag[]|ObjectCollection findBySlackChannelId(string $slack_channel_id) Return ChildTag objects filtered by the slack_channel_id column
+ * @method     ChildTag[]|ObjectCollection findByTreeLeft(int $tree_left) Return ChildTag objects filtered by the tree_left column
+ * @method     ChildTag[]|ObjectCollection findByTreeRight(int $tree_right) Return ChildTag objects filtered by the tree_right column
+ * @method     ChildTag[]|ObjectCollection findByTreeLevel(int $tree_level) Return ChildTag objects filtered by the tree_level column
+ * @method     ChildTag[]|ObjectCollection findByTreeScope(int $tree_scope) Return ChildTag objects filtered by the tree_scope column
+ * @method     ChildTag[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class TopicQuery extends ModelCriteria
+abstract class TagQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Base\TopicQuery object.
+     * Initializes internal state of \Base\TagQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'palindrome', $modelName = '\\Topic', $modelAlias = null)
+    public function __construct($dbName = 'palindrome', $modelName = '\\Tag', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildTopicQuery object.
+     * Returns a new ChildTagQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildTopicQuery
+     * @return ChildTagQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildTopicQuery) {
+        if ($criteria instanceof ChildTagQuery) {
             return $criteria;
         }
-        $query = new ChildTopicQuery();
+        $query = new ChildTagQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -147,7 +147,7 @@ abstract class TopicQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildTopic|array|mixed the result, formatted by the current formatter
+     * @return ChildTag|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
@@ -156,7 +156,7 @@ abstract class TopicQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(TopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(TagTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -169,7 +169,7 @@ abstract class TopicQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = TopicTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = TagTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -186,11 +186,11 @@ abstract class TopicQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildTopic A model object, or null if the key is not found
+     * @return ChildTag A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, title, slack_channel, slack_channel_id, tree_left, tree_right, tree_level, tree_scope FROM topic WHERE id = :p0';
+        $sql = 'SELECT id, title, slack_channel, slack_channel_id, tree_left, tree_right, tree_level, tree_scope FROM tag WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -201,10 +201,10 @@ abstract class TopicQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildTopic $obj */
-            $obj = new ChildTopic();
+            /** @var ChildTag $obj */
+            $obj = new ChildTag();
             $obj->hydrate($row);
-            TopicTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            TagTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -217,7 +217,7 @@ abstract class TopicQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildTopic|array|mixed the result, formatted by the current formatter
+     * @return ChildTag|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -259,12 +259,12 @@ abstract class TopicQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(TopicTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(TagTableMap::COL_ID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -272,12 +272,12 @@ abstract class TopicQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(TopicTableMap::COL_ID, $keys, Criteria::IN);
+        return $this->addUsingAlias(TagTableMap::COL_ID, $keys, Criteria::IN);
     }
 
     /**
@@ -296,18 +296,18 @@ abstract class TopicQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
     public function filterById($id = null, $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(TopicTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(TagTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(TopicTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(TagTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -318,7 +318,7 @@ abstract class TopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TopicTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(TagTableMap::COL_ID, $id, $comparison);
     }
 
     /**
@@ -333,7 +333,7 @@ abstract class TopicQuery extends ModelCriteria
      * @param     string $title The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
     public function filterByTitle($title = null, $comparison = null)
     {
@@ -343,7 +343,7 @@ abstract class TopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TopicTableMap::COL_TITLE, $title, $comparison);
+        return $this->addUsingAlias(TagTableMap::COL_TITLE, $title, $comparison);
     }
 
     /**
@@ -358,7 +358,7 @@ abstract class TopicQuery extends ModelCriteria
      * @param     string $slackChannel The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
     public function filterBySlackChannel($slackChannel = null, $comparison = null)
     {
@@ -368,7 +368,7 @@ abstract class TopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TopicTableMap::COL_SLACK_CHANNEL, $slackChannel, $comparison);
+        return $this->addUsingAlias(TagTableMap::COL_SLACK_CHANNEL, $slackChannel, $comparison);
     }
 
     /**
@@ -383,7 +383,7 @@ abstract class TopicQuery extends ModelCriteria
      * @param     string $slackChannelId The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
     public function filterBySlackChannelId($slackChannelId = null, $comparison = null)
     {
@@ -393,7 +393,7 @@ abstract class TopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TopicTableMap::COL_SLACK_CHANNEL_ID, $slackChannelId, $comparison);
+        return $this->addUsingAlias(TagTableMap::COL_SLACK_CHANNEL_ID, $slackChannelId, $comparison);
     }
 
     /**
@@ -412,18 +412,18 @@ abstract class TopicQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
     public function filterByTreeLeft($treeLeft = null, $comparison = null)
     {
         if (is_array($treeLeft)) {
             $useMinMax = false;
             if (isset($treeLeft['min'])) {
-                $this->addUsingAlias(TopicTableMap::COL_TREE_LEFT, $treeLeft['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(TagTableMap::COL_TREE_LEFT, $treeLeft['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($treeLeft['max'])) {
-                $this->addUsingAlias(TopicTableMap::COL_TREE_LEFT, $treeLeft['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(TagTableMap::COL_TREE_LEFT, $treeLeft['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -434,7 +434,7 @@ abstract class TopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TopicTableMap::COL_TREE_LEFT, $treeLeft, $comparison);
+        return $this->addUsingAlias(TagTableMap::COL_TREE_LEFT, $treeLeft, $comparison);
     }
 
     /**
@@ -453,18 +453,18 @@ abstract class TopicQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
     public function filterByTreeRight($treeRight = null, $comparison = null)
     {
         if (is_array($treeRight)) {
             $useMinMax = false;
             if (isset($treeRight['min'])) {
-                $this->addUsingAlias(TopicTableMap::COL_TREE_RIGHT, $treeRight['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(TagTableMap::COL_TREE_RIGHT, $treeRight['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($treeRight['max'])) {
-                $this->addUsingAlias(TopicTableMap::COL_TREE_RIGHT, $treeRight['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(TagTableMap::COL_TREE_RIGHT, $treeRight['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -475,7 +475,7 @@ abstract class TopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TopicTableMap::COL_TREE_RIGHT, $treeRight, $comparison);
+        return $this->addUsingAlias(TagTableMap::COL_TREE_RIGHT, $treeRight, $comparison);
     }
 
     /**
@@ -494,18 +494,18 @@ abstract class TopicQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
     public function filterByTreeLevel($treeLevel = null, $comparison = null)
     {
         if (is_array($treeLevel)) {
             $useMinMax = false;
             if (isset($treeLevel['min'])) {
-                $this->addUsingAlias(TopicTableMap::COL_TREE_LEVEL, $treeLevel['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(TagTableMap::COL_TREE_LEVEL, $treeLevel['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($treeLevel['max'])) {
-                $this->addUsingAlias(TopicTableMap::COL_TREE_LEVEL, $treeLevel['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(TagTableMap::COL_TREE_LEVEL, $treeLevel['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -516,7 +516,7 @@ abstract class TopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TopicTableMap::COL_TREE_LEVEL, $treeLevel, $comparison);
+        return $this->addUsingAlias(TagTableMap::COL_TREE_LEVEL, $treeLevel, $comparison);
     }
 
     /**
@@ -535,18 +535,18 @@ abstract class TopicQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
     public function filterByTreeScope($treeScope = null, $comparison = null)
     {
         if (is_array($treeScope)) {
             $useMinMax = false;
             if (isset($treeScope['min'])) {
-                $this->addUsingAlias(TopicTableMap::COL_TREE_SCOPE, $treeScope['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(TagTableMap::COL_TREE_SCOPE, $treeScope['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($treeScope['max'])) {
-                $this->addUsingAlias(TopicTableMap::COL_TREE_SCOPE, $treeScope['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(TagTableMap::COL_TREE_SCOPE, $treeScope['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -557,44 +557,44 @@ abstract class TopicQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TopicTableMap::COL_TREE_SCOPE, $treeScope, $comparison);
+        return $this->addUsingAlias(TagTableMap::COL_TREE_SCOPE, $treeScope, $comparison);
     }
 
     /**
-     * Filter the query by a related \TopicAlert object
+     * Filter the query by a related \TagAlert object
      *
-     * @param \TopicAlert|ObjectCollection $topicAlert the related object to use as filter
+     * @param \TagAlert|ObjectCollection $tagAlert the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildTopicQuery The current query, for fluid interface
+     * @return ChildTagQuery The current query, for fluid interface
      */
-    public function filterByTopicAlert($topicAlert, $comparison = null)
+    public function filterByTagAlert($tagAlert, $comparison = null)
     {
-        if ($topicAlert instanceof \TopicAlert) {
+        if ($tagAlert instanceof \TagAlert) {
             return $this
-                ->addUsingAlias(TopicTableMap::COL_ID, $topicAlert->getTopicId(), $comparison);
-        } elseif ($topicAlert instanceof ObjectCollection) {
+                ->addUsingAlias(TagTableMap::COL_ID, $tagAlert->getTagId(), $comparison);
+        } elseif ($tagAlert instanceof ObjectCollection) {
             return $this
-                ->useTopicAlertQuery()
-                ->filterByPrimaryKeys($topicAlert->getPrimaryKeys())
+                ->useTagAlertQuery()
+                ->filterByPrimaryKeys($tagAlert->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByTopicAlert() only accepts arguments of type \TopicAlert or Collection');
+            throw new PropelException('filterByTagAlert() only accepts arguments of type \TagAlert or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the TopicAlert relation
+     * Adds a JOIN clause to the query using the TagAlert relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
-    public function joinTopicAlert($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinTagAlert($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('TopicAlert');
+        $relationMap = $tableMap->getRelation('TagAlert');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -609,14 +609,14 @@ abstract class TopicQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'TopicAlert');
+            $this->addJoinObject($join, 'TagAlert');
         }
 
         return $this;
     }
 
     /**
-     * Use the TopicAlert relation TopicAlert object
+     * Use the TagAlert relation TagAlert object
      *
      * @see useQuery()
      *
@@ -624,28 +624,28 @@ abstract class TopicQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \TopicAlertQuery A secondary query class using the current class as primary query
+     * @return \TagAlertQuery A secondary query class using the current class as primary query
      */
-    public function useTopicAlertQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useTagAlertQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinTopicAlert($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'TopicAlert', '\TopicAlertQuery');
+            ->joinTagAlert($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TagAlert', '\TagAlertQuery');
     }
 
     /**
      * Filter the query by a related Puzzle object
-     * using the topic_alert table as cross reference
+     * using the tag_alert table as cross reference
      *
      * @param Puzzle $puzzle the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildTopicQuery The current query, for fluid interface
+     * @return ChildTagQuery The current query, for fluid interface
      */
     public function filterByPuzzle($puzzle, $comparison = Criteria::EQUAL)
     {
         return $this
-            ->useTopicAlertQuery()
+            ->useTagAlertQuery()
             ->filterByPuzzle($puzzle, $comparison)
             ->endUse();
     }
@@ -653,21 +653,21 @@ abstract class TopicQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildTopic $topic Object to remove from the list of results
+     * @param   ChildTag $tag Object to remove from the list of results
      *
-     * @return $this|ChildTopicQuery The current query, for fluid interface
+     * @return $this|ChildTagQuery The current query, for fluid interface
      */
-    public function prune($topic = null)
+    public function prune($tag = null)
     {
-        if ($topic) {
-            $this->addUsingAlias(TopicTableMap::COL_ID, $topic->getId(), Criteria::NOT_EQUAL);
+        if ($tag) {
+            $this->addUsingAlias(TagTableMap::COL_ID, $tag->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
     /**
-     * Deletes all rows from the topic table.
+     * Deletes all rows from the tag table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -675,7 +675,7 @@ abstract class TopicQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -686,8 +686,8 @@ abstract class TopicQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            TopicTableMap::clearInstancePool();
-            TopicTableMap::clearRelatedInstancePool();
+            TagTableMap::clearInstancePool();
+            TagTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -705,23 +705,23 @@ abstract class TopicQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(TopicTableMap::DATABASE_NAME);
+        $criteria->setDbName(TagTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            TopicTableMap::removeInstanceFromPool($criteria);
+            TagTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            TopicTableMap::clearRelatedInstancePool();
+            TagTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -732,11 +732,11 @@ abstract class TopicQuery extends ModelCriteria
     /**
      * Filter the query to restrict the result to root objects
      *
-     * @return    $this|ChildTopicQuery The current query, for fluid interface
+     * @return    $this|ChildTagQuery The current query, for fluid interface
      */
     public function treeRoots()
     {
-        return $this->addUsingAlias(ChildTopic::LEFT_COL, 1, Criteria::EQUAL);
+        return $this->addUsingAlias(ChildTag::LEFT_COL, 1, Criteria::EQUAL);
     }
 
     /**
@@ -744,108 +744,108 @@ abstract class TopicQuery extends ModelCriteria
      *
      * @param     int $scope        Scope to determine which objects node to return
      *
-     * @return    $this|ChildTopicQuery The current query, for fluid interface
+     * @return    $this|ChildTagQuery The current query, for fluid interface
      */
     public function inTree($scope = null)
     {
-        return $this->addUsingAlias(ChildTopic::SCOPE_COL, $scope, Criteria::EQUAL);
+        return $this->addUsingAlias(ChildTag::SCOPE_COL, $scope, Criteria::EQUAL);
     }
 
     /**
      * Filter the query to restrict the result to descendants of an object
      *
-     * @param     ChildTopic $topic The object to use for descendant search
+     * @param     ChildTag $tag The object to use for descendant search
      *
-     * @return    $this|ChildTopicQuery The current query, for fluid interface
+     * @return    $this|ChildTagQuery The current query, for fluid interface
      */
-    public function descendantsOf(ChildTopic $topic)
+    public function descendantsOf(ChildTag $tag)
     {
         return $this
-            ->inTree($topic->getScopeValue())
-            ->addUsingAlias(ChildTopic::LEFT_COL, $topic->getLeftValue(), Criteria::GREATER_THAN)
-            ->addUsingAlias(ChildTopic::LEFT_COL, $topic->getRightValue(), Criteria::LESS_THAN);
+            ->inTree($tag->getScopeValue())
+            ->addUsingAlias(ChildTag::LEFT_COL, $tag->getLeftValue(), Criteria::GREATER_THAN)
+            ->addUsingAlias(ChildTag::LEFT_COL, $tag->getRightValue(), Criteria::LESS_THAN);
     }
 
     /**
      * Filter the query to restrict the result to the branch of an object.
      * Same as descendantsOf(), except that it includes the object passed as parameter in the result
      *
-     * @param     ChildTopic $topic The object to use for branch search
+     * @param     ChildTag $tag The object to use for branch search
      *
-     * @return    $this|ChildTopicQuery The current query, for fluid interface
+     * @return    $this|ChildTagQuery The current query, for fluid interface
      */
-    public function branchOf(ChildTopic $topic)
+    public function branchOf(ChildTag $tag)
     {
         return $this
-            ->inTree($topic->getScopeValue())
-            ->addUsingAlias(ChildTopic::LEFT_COL, $topic->getLeftValue(), Criteria::GREATER_EQUAL)
-            ->addUsingAlias(ChildTopic::LEFT_COL, $topic->getRightValue(), Criteria::LESS_EQUAL);
+            ->inTree($tag->getScopeValue())
+            ->addUsingAlias(ChildTag::LEFT_COL, $tag->getLeftValue(), Criteria::GREATER_EQUAL)
+            ->addUsingAlias(ChildTag::LEFT_COL, $tag->getRightValue(), Criteria::LESS_EQUAL);
     }
 
     /**
      * Filter the query to restrict the result to children of an object
      *
-     * @param     ChildTopic $topic The object to use for child search
+     * @param     ChildTag $tag The object to use for child search
      *
-     * @return    $this|ChildTopicQuery The current query, for fluid interface
+     * @return    $this|ChildTagQuery The current query, for fluid interface
      */
-    public function childrenOf(ChildTopic $topic)
+    public function childrenOf(ChildTag $tag)
     {
         return $this
-            ->descendantsOf($topic)
-            ->addUsingAlias(ChildTopic::LEVEL_COL, $topic->getLevel() + 1, Criteria::EQUAL);
+            ->descendantsOf($tag)
+            ->addUsingAlias(ChildTag::LEVEL_COL, $tag->getLevel() + 1, Criteria::EQUAL);
     }
 
     /**
      * Filter the query to restrict the result to siblings of an object.
      * The result does not include the object passed as parameter.
      *
-     * @param     ChildTopic $topic The object to use for sibling search
+     * @param     ChildTag $tag The object to use for sibling search
      * @param      ConnectionInterface $con Connection to use.
      *
-     * @return    $this|ChildTopicQuery The current query, for fluid interface
+     * @return    $this|ChildTagQuery The current query, for fluid interface
      */
-    public function siblingsOf(ChildTopic $topic, ConnectionInterface $con = null)
+    public function siblingsOf(ChildTag $tag, ConnectionInterface $con = null)
     {
-        if ($topic->isRoot()) {
+        if ($tag->isRoot()) {
             return $this->
-                add(ChildTopic::LEVEL_COL, '1<>1', Criteria::CUSTOM);
+                add(ChildTag::LEVEL_COL, '1<>1', Criteria::CUSTOM);
         } else {
             return $this
-                ->childrenOf($topic->getParent($con))
-                ->prune($topic);
+                ->childrenOf($tag->getParent($con))
+                ->prune($tag);
         }
     }
 
     /**
      * Filter the query to restrict the result to ancestors of an object
      *
-     * @param     ChildTopic $topic The object to use for ancestors search
+     * @param     ChildTag $tag The object to use for ancestors search
      *
-     * @return    $this|ChildTopicQuery The current query, for fluid interface
+     * @return    $this|ChildTagQuery The current query, for fluid interface
      */
-    public function ancestorsOf(ChildTopic $topic)
+    public function ancestorsOf(ChildTag $tag)
     {
         return $this
-            ->inTree($topic->getScopeValue())
-            ->addUsingAlias(ChildTopic::LEFT_COL, $topic->getLeftValue(), Criteria::LESS_THAN)
-            ->addUsingAlias(ChildTopic::RIGHT_COL, $topic->getRightValue(), Criteria::GREATER_THAN);
+            ->inTree($tag->getScopeValue())
+            ->addUsingAlias(ChildTag::LEFT_COL, $tag->getLeftValue(), Criteria::LESS_THAN)
+            ->addUsingAlias(ChildTag::RIGHT_COL, $tag->getRightValue(), Criteria::GREATER_THAN);
     }
 
     /**
      * Filter the query to restrict the result to roots of an object.
      * Same as ancestorsOf(), except that it includes the object passed as parameter in the result
      *
-     * @param     ChildTopic $topic The object to use for roots search
+     * @param     ChildTag $tag The object to use for roots search
      *
-     * @return    $this|ChildTopicQuery The current query, for fluid interface
+     * @return    $this|ChildTagQuery The current query, for fluid interface
      */
-    public function rootsOf(ChildTopic $topic)
+    public function rootsOf(ChildTag $tag)
     {
         return $this
-            ->inTree($topic->getScopeValue())
-            ->addUsingAlias(ChildTopic::LEFT_COL, $topic->getLeftValue(), Criteria::LESS_EQUAL)
-            ->addUsingAlias(ChildTopic::RIGHT_COL, $topic->getRightValue(), Criteria::GREATER_EQUAL);
+            ->inTree($tag->getScopeValue())
+            ->addUsingAlias(ChildTag::LEFT_COL, $tag->getLeftValue(), Criteria::LESS_EQUAL)
+            ->addUsingAlias(ChildTag::RIGHT_COL, $tag->getRightValue(), Criteria::GREATER_EQUAL);
     }
 
     /**
@@ -853,16 +853,16 @@ abstract class TopicQuery extends ModelCriteria
      *
      * @param     bool $reverse if true, reverses the order
      *
-     * @return    $this|ChildTopicQuery The current query, for fluid interface
+     * @return    $this|ChildTagQuery The current query, for fluid interface
      */
     public function orderByBranch($reverse = false)
     {
         if ($reverse) {
             return $this
-                ->addDescendingOrderByColumn(ChildTopic::LEFT_COL);
+                ->addDescendingOrderByColumn(ChildTag::LEFT_COL);
         } else {
             return $this
-                ->addAscendingOrderByColumn(ChildTopic::LEFT_COL);
+                ->addAscendingOrderByColumn(ChildTag::LEFT_COL);
         }
     }
 
@@ -871,18 +871,18 @@ abstract class TopicQuery extends ModelCriteria
      *
      * @param     bool $reverse if true, reverses the order
      *
-     * @return    $this|ChildTopicQuery The current query, for fluid interface
+     * @return    $this|ChildTagQuery The current query, for fluid interface
      */
     public function orderByLevel($reverse = false)
     {
         if ($reverse) {
             return $this
-                ->addDescendingOrderByColumn(ChildTopic::LEVEL_COL)
-                ->addDescendingOrderByColumn(ChildTopic::LEFT_COL);
+                ->addDescendingOrderByColumn(ChildTag::LEVEL_COL)
+                ->addDescendingOrderByColumn(ChildTag::LEFT_COL);
         } else {
             return $this
-                ->addAscendingOrderByColumn(ChildTopic::LEVEL_COL)
-                ->addAscendingOrderByColumn(ChildTopic::LEFT_COL);
+                ->addAscendingOrderByColumn(ChildTag::LEVEL_COL)
+                ->addAscendingOrderByColumn(ChildTag::LEFT_COL);
         }
     }
 
@@ -892,12 +892,12 @@ abstract class TopicQuery extends ModelCriteria
      * @param      int $scope        Scope to determine which root node to return
      * @param      ConnectionInterface $con    Connection to use.
      *
-     * @return     ChildTopic The tree root object
+     * @return     ChildTag The tree root object
      */
     public function findRoot($scope = null, ConnectionInterface $con = null)
     {
         return $this
-            ->addUsingAlias(ChildTopic::LEFT_COL, 1, Criteria::EQUAL)
+            ->addUsingAlias(ChildTag::LEFT_COL, 1, Criteria::EQUAL)
             ->inTree($scope)
             ->findOne($con);
     }
@@ -907,7 +907,7 @@ abstract class TopicQuery extends ModelCriteria
      *
      * @param      ConnectionInterface $con    Connection to use.
      *
-     * @return    ChildTopic[]|ObjectCollection|mixed the list of results, formatted by the current formatter
+     * @return    ChildTag[]|ObjectCollection|mixed the list of results, formatted by the current formatter
      */
     public function findRoots(ConnectionInterface $con = null)
     {
@@ -922,7 +922,7 @@ abstract class TopicQuery extends ModelCriteria
      * @param      int $scope        Scope to determine which tree node to return
      * @param      ConnectionInterface $con    Connection to use.
      *
-     * @return     ChildTopic[]|ObjectCollection|mixed the list of results, formatted by the current formatter
+     * @return     ChildTag[]|ObjectCollection|mixed the list of results, formatted by the current formatter
      */
     public function findTree($scope = null, ConnectionInterface $con = null)
     {
@@ -937,16 +937,16 @@ abstract class TopicQuery extends ModelCriteria
      *
      * @param      Criteria $criteria    Optional Criteria to filter the query
      * @param      ConnectionInterface $con    Connection to use.
-     * @return     ChildTopic[]|ObjectCollection|mixed the list of results, formatted by the current formatter
+     * @return     ChildTag[]|ObjectCollection|mixed the list of results, formatted by the current formatter
      */
     static public function retrieveRoots(Criteria $criteria = null, ConnectionInterface $con = null)
     {
         if (null === $criteria) {
-            $criteria = new Criteria(TopicTableMap::DATABASE_NAME);
+            $criteria = new Criteria(TagTableMap::DATABASE_NAME);
         }
-        $criteria->add(ChildTopic::LEFT_COL, 1, Criteria::EQUAL);
+        $criteria->add(ChildTag::LEFT_COL, 1, Criteria::EQUAL);
 
-        return ChildTopicQuery::create(null, $criteria)->find($con);
+        return ChildTagQuery::create(null, $criteria)->find($con);
     }
 
     /**
@@ -954,15 +954,15 @@ abstract class TopicQuery extends ModelCriteria
      *
      * @param      int $scope        Scope to determine which root node to return
      * @param      ConnectionInterface $con    Connection to use.
-     * @return     ChildTopic            Propel object for root node
+     * @return     ChildTag            Propel object for root node
      */
     static public function retrieveRoot($scope = null, ConnectionInterface $con = null)
     {
-        $c = new Criteria(TopicTableMap::DATABASE_NAME);
-        $c->add(ChildTopic::LEFT_COL, 1, Criteria::EQUAL);
-        $c->add(ChildTopic::SCOPE_COL, $scope, Criteria::EQUAL);
+        $c = new Criteria(TagTableMap::DATABASE_NAME);
+        $c->add(ChildTag::LEFT_COL, 1, Criteria::EQUAL);
+        $c->add(ChildTag::SCOPE_COL, $scope, Criteria::EQUAL);
 
-        return ChildTopicQuery::create(null, $c)->findOne($con);
+        return ChildTagQuery::create(null, $c)->findOne($con);
     }
 
     /**
@@ -971,26 +971,26 @@ abstract class TopicQuery extends ModelCriteria
      * @param      int $scope        Scope to determine which root node to return
      * @param      Criteria $criteria    Optional Criteria to filter the query
      * @param      ConnectionInterface $con    Connection to use.
-     * @return     ChildTopic[]|ObjectCollection|mixed the list of results, formatted by the current formatter
+     * @return     ChildTag[]|ObjectCollection|mixed the list of results, formatted by the current formatter
      */
     static public function retrieveTree($scope = null, Criteria $criteria = null, ConnectionInterface $con = null)
     {
         if (null === $criteria) {
-            $criteria = new Criteria(TopicTableMap::DATABASE_NAME);
+            $criteria = new Criteria(TagTableMap::DATABASE_NAME);
         }
-        $criteria->addAscendingOrderByColumn(ChildTopic::LEFT_COL);
-        $criteria->add(ChildTopic::SCOPE_COL, $scope, Criteria::EQUAL);
+        $criteria->addAscendingOrderByColumn(ChildTag::LEFT_COL);
+        $criteria->add(ChildTag::SCOPE_COL, $scope, Criteria::EQUAL);
 
-        return ChildTopicQuery::create(null, $criteria)->find($con);
+        return ChildTagQuery::create(null, $criteria)->find($con);
     }
 
     /**
      * Tests if node is valid
      *
-     * @param      ChildTopic $node    Propel object for src node
+     * @param      ChildTag $node    Propel object for src node
      * @return     bool
      */
-    static public function isValid(ChildTopic $node = null)
+    static public function isValid(ChildTag $node = null)
     {
         if (is_object($node) && $node->getRightValue() > $node->getLeftValue()) {
             return true;
@@ -1009,10 +1009,10 @@ abstract class TopicQuery extends ModelCriteria
      */
     static public function deleteTree($scope = null, ConnectionInterface $con = null)
     {
-        $c = new Criteria(TopicTableMap::DATABASE_NAME);
-        $c->add(ChildTopic::SCOPE_COL, $scope, Criteria::EQUAL);
+        $c = new Criteria(TagTableMap::DATABASE_NAME);
+        $c->add(ChildTag::SCOPE_COL, $scope, Criteria::EQUAL);
 
-        return TopicTableMap::doDelete($c, $con);
+        return TagTableMap::doDelete($c, $con);
     }
 
     /**
@@ -1028,34 +1028,34 @@ abstract class TopicQuery extends ModelCriteria
     static public function shiftRLValues($delta, $first, $last = null, $scope = null, ConnectionInterface $con = null)
     {
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
         }
 
         // Shift left column values
-        $whereCriteria = new Criteria(TopicTableMap::DATABASE_NAME);
-        $criterion = $whereCriteria->getNewCriterion(ChildTopic::LEFT_COL, $first, Criteria::GREATER_EQUAL);
+        $whereCriteria = new Criteria(TagTableMap::DATABASE_NAME);
+        $criterion = $whereCriteria->getNewCriterion(ChildTag::LEFT_COL, $first, Criteria::GREATER_EQUAL);
         if (null !== $last) {
-            $criterion->addAnd($whereCriteria->getNewCriterion(ChildTopic::LEFT_COL, $last, Criteria::LESS_EQUAL));
+            $criterion->addAnd($whereCriteria->getNewCriterion(ChildTag::LEFT_COL, $last, Criteria::LESS_EQUAL));
         }
         $whereCriteria->add($criterion);
-        $whereCriteria->add(ChildTopic::SCOPE_COL, $scope, Criteria::EQUAL);
+        $whereCriteria->add(ChildTag::SCOPE_COL, $scope, Criteria::EQUAL);
 
-        $valuesCriteria = new Criteria(TopicTableMap::DATABASE_NAME);
-        $valuesCriteria->add(ChildTopic::LEFT_COL, array('raw' => ChildTopic::LEFT_COL . ' + ?', 'value' => $delta), Criteria::CUSTOM_EQUAL);
+        $valuesCriteria = new Criteria(TagTableMap::DATABASE_NAME);
+        $valuesCriteria->add(ChildTag::LEFT_COL, array('raw' => ChildTag::LEFT_COL . ' + ?', 'value' => $delta), Criteria::CUSTOM_EQUAL);
 
         $whereCriteria->doUpdate($valuesCriteria, $con);
 
         // Shift right column values
-        $whereCriteria = new Criteria(TopicTableMap::DATABASE_NAME);
-        $criterion = $whereCriteria->getNewCriterion(ChildTopic::RIGHT_COL, $first, Criteria::GREATER_EQUAL);
+        $whereCriteria = new Criteria(TagTableMap::DATABASE_NAME);
+        $criterion = $whereCriteria->getNewCriterion(ChildTag::RIGHT_COL, $first, Criteria::GREATER_EQUAL);
         if (null !== $last) {
-            $criterion->addAnd($whereCriteria->getNewCriterion(ChildTopic::RIGHT_COL, $last, Criteria::LESS_EQUAL));
+            $criterion->addAnd($whereCriteria->getNewCriterion(ChildTag::RIGHT_COL, $last, Criteria::LESS_EQUAL));
         }
         $whereCriteria->add($criterion);
-        $whereCriteria->add(ChildTopic::SCOPE_COL, $scope, Criteria::EQUAL);
+        $whereCriteria->add(ChildTag::SCOPE_COL, $scope, Criteria::EQUAL);
 
-        $valuesCriteria = new Criteria(TopicTableMap::DATABASE_NAME);
-        $valuesCriteria->add(ChildTopic::RIGHT_COL, array('raw' => ChildTopic::RIGHT_COL . ' + ?', 'value' => $delta), Criteria::CUSTOM_EQUAL);
+        $valuesCriteria = new Criteria(TagTableMap::DATABASE_NAME);
+        $valuesCriteria->add(ChildTag::RIGHT_COL, array('raw' => ChildTag::RIGHT_COL . ' + ?', 'value' => $delta), Criteria::CUSTOM_EQUAL);
 
         $whereCriteria->doUpdate($valuesCriteria, $con);
     }
@@ -1073,16 +1073,16 @@ abstract class TopicQuery extends ModelCriteria
     static public function shiftLevel($delta, $first, $last, $scope = null, ConnectionInterface $con = null)
     {
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TopicTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
         }
 
-        $whereCriteria = new Criteria(TopicTableMap::DATABASE_NAME);
-        $whereCriteria->add(ChildTopic::LEFT_COL, $first, Criteria::GREATER_EQUAL);
-        $whereCriteria->add(ChildTopic::RIGHT_COL, $last, Criteria::LESS_EQUAL);
-        $whereCriteria->add(ChildTopic::SCOPE_COL, $scope, Criteria::EQUAL);
+        $whereCriteria = new Criteria(TagTableMap::DATABASE_NAME);
+        $whereCriteria->add(ChildTag::LEFT_COL, $first, Criteria::GREATER_EQUAL);
+        $whereCriteria->add(ChildTag::RIGHT_COL, $last, Criteria::LESS_EQUAL);
+        $whereCriteria->add(ChildTag::SCOPE_COL, $scope, Criteria::EQUAL);
 
-        $valuesCriteria = new Criteria(TopicTableMap::DATABASE_NAME);
-        $valuesCriteria->add(ChildTopic::LEVEL_COL, array('raw' => ChildTopic::LEVEL_COL . ' + ?', 'value' => $delta), Criteria::CUSTOM_EQUAL);
+        $valuesCriteria = new Criteria(TagTableMap::DATABASE_NAME);
+        $valuesCriteria->add(ChildTag::LEVEL_COL, array('raw' => ChildTag::LEVEL_COL . ' + ?', 'value' => $delta), Criteria::CUSTOM_EQUAL);
 
         $whereCriteria->doUpdate($valuesCriteria, $con);
     }
@@ -1090,15 +1090,15 @@ abstract class TopicQuery extends ModelCriteria
     /**
      * Reload all already loaded nodes to sync them with updated db
      *
-     * @param      ChildTopic $prune        Object to prune from the update
+     * @param      ChildTag $prune        Object to prune from the update
      * @param      ConnectionInterface $con        Connection to use.
      */
     static public function updateLoadedNodes($prune = null, ConnectionInterface $con = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             $keys = array();
-            /** @var $obj ChildTopic */
-            foreach (TopicTableMap::$instances as $obj) {
+            /** @var $obj ChildTag */
+            foreach (TagTableMap::$instances as $obj) {
                 if (!$prune || !$prune->equals($obj)) {
                     $keys[] = $obj->getPrimaryKey();
                 }
@@ -1107,13 +1107,13 @@ abstract class TopicQuery extends ModelCriteria
             if (!empty($keys)) {
                 // We don't need to alter the object instance pool; we're just modifying these ones
                 // already in the pool.
-                $criteria = new Criteria(TopicTableMap::DATABASE_NAME);
-                $criteria->add(TopicTableMap::COL_ID, $keys, Criteria::IN);
-                $dataFetcher = ChildTopicQuery::create(null, $criteria)->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+                $criteria = new Criteria(TagTableMap::DATABASE_NAME);
+                $criteria->add(TagTableMap::COL_ID, $keys, Criteria::IN);
+                $dataFetcher = ChildTagQuery::create(null, $criteria)->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
                 while ($row = $dataFetcher->fetch()) {
-                    $key = TopicTableMap::getPrimaryKeyHashFromRow($row, 0);
-                    /** @var $object ChildTopic */
-                    if (null !== ($object = TopicTableMap::getInstanceFromPool($key))) {
+                    $key = TagTableMap::getPrimaryKeyHashFromRow($row, 0);
+                    /** @var $object ChildTag */
+                    if (null !== ($object = TagTableMap::getInstanceFromPool($key))) {
                         $object->setLeftValue($row[4]);
                         $object->setRightValue($row[5]);
                         $object->setLevel($row[6]);
@@ -1137,10 +1137,10 @@ abstract class TopicQuery extends ModelCriteria
     static public function makeRoomForLeaf($left, $scope, $prune = null, ConnectionInterface $con = null)
     {
         // Update database nodes
-        ChildTopicQuery::shiftRLValues(2, $left, null, $scope, $con);
+        ChildTagQuery::shiftRLValues(2, $left, null, $scope, $con);
 
         // Update all loaded nodes
-        ChildTopicQuery::updateLoadedNodes($prune, $con);
+        ChildTagQuery::updateLoadedNodes($prune, $con);
     }
 
     /**
@@ -1152,23 +1152,23 @@ abstract class TopicQuery extends ModelCriteria
     static public function fixLevels($scope, ConnectionInterface $con = null)
     {
         $c = new Criteria();
-        $c->add(ChildTopic::SCOPE_COL, $scope, Criteria::EQUAL);
-        $c->addAscendingOrderByColumn(ChildTopic::LEFT_COL);
-        $dataFetcher = ChildTopicQuery::create(null, $c)->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $c->add(ChildTag::SCOPE_COL, $scope, Criteria::EQUAL);
+        $c->addAscendingOrderByColumn(ChildTag::LEFT_COL);
+        $dataFetcher = ChildTagQuery::create(null, $c)->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
 
         // set the class once to avoid overhead in the loop
-        $cls = TopicTableMap::getOMClass(false);
+        $cls = TagTableMap::getOMClass(false);
         $level = null;
         // iterate over the statement
         while ($row = $dataFetcher->fetch()) {
 
             // hydrate object
-            $key = TopicTableMap::getPrimaryKeyHashFromRow($row, 0);
-            /** @var $obj ChildTopic */
-            if (null === ($obj = TopicTableMap::getInstanceFromPool($key))) {
+            $key = TagTableMap::getPrimaryKeyHashFromRow($row, 0);
+            /** @var $obj ChildTag */
+            if (null === ($obj = TagTableMap::getInstanceFromPool($key))) {
                 $obj = new $cls();
                 $obj->hydrate($row);
-                TopicTableMap::addInstanceToPool($obj, $key);
+                TagTableMap::addInstanceToPool($obj, $key);
             }
 
             // compute level
@@ -1204,13 +1204,13 @@ abstract class TopicQuery extends ModelCriteria
     public static function setNegativeScope($scope, ConnectionInterface $con = null)
     {
         //adjust scope value to $scope
-        $whereCriteria = new Criteria(TopicTableMap::DATABASE_NAME);
-        $whereCriteria->add(ChildTopic::LEFT_COL, 0, Criteria::LESS_EQUAL);
+        $whereCriteria = new Criteria(TagTableMap::DATABASE_NAME);
+        $whereCriteria->add(ChildTag::LEFT_COL, 0, Criteria::LESS_EQUAL);
 
-        $valuesCriteria = new Criteria(TopicTableMap::DATABASE_NAME);
-        $valuesCriteria->add(ChildTopic::SCOPE_COL, $scope, Criteria::EQUAL);
+        $valuesCriteria = new Criteria(TagTableMap::DATABASE_NAME);
+        $valuesCriteria->add(ChildTag::SCOPE_COL, $scope, Criteria::EQUAL);
 
         $whereCriteria->doUpdate($valuesCriteria, $con);
     }
 
-} // TopicQuery
+} // TagQuery

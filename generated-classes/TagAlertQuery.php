@@ -1,9 +1,9 @@
 <?php
 
-use Base\TopicAlertQuery as BaseTopicAlertQuery;
+use Base\TagAlertQuery as BaseTagAlertQuery;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'topic_alert' table.
+ * Skeleton subclass for performing query and update operations on the 'tag_alert' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\TopicAlertQuery as BaseTopicAlertQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class TopicAlertQuery extends BaseTopicAlertQuery
+class TagAlertQuery extends BaseTagAlertQuery
 {
 
 }

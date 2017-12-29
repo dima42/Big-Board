@@ -82,23 +82,23 @@ $this->with('/puzzle/[:id]', function () {
 			});
 	});
 
-// TOPICS
+// TAGS
 
-$this->with('/topics', function () {
+$this->with('/tags', function () {
 		$this->respond('GET', '/?', function ($request, $response) {
-				return displayTopics();
+				return displayTags();
 			});
 		$this->respond('POST', '/add/?', function ($request, $response) {
-				return addTopic($request);
+				return addTag($request);
 			});
 		$this->respond('POST', '/[:id]/move_up/?', function ($request, $response) {
-				return moveTopic($request, $request->id, 'up');
+				return moveTag($request, $request->id, 'up');
 			});
 		$this->respond('POST', '/[:id]/move_dn/?', function ($request, $response) {
-				return moveTopic($request, $request->id, 'down');
+				return moveTag($request, $request->id, 'down');
 			});
 		$this->respond('POST', '/alert/[:id]/?', function ($request, $response) {
-				return alertTopic($request, $response, $request->id);
+				return alertTag($request, $response, $request->id);
 			});
 	});
 
@@ -408,17 +408,17 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			->find();
 	}
 
-	$categories = TopicQuery::create()
+	$categories = Tag::create()
 		->findRoot(1)
 		->getBranch();
 
-	$skills = TopicQuery::create()
+	$skills = Tag::create()
 		->findRoot(2)
 		->getBranch();
 
-	$topic_alerts = TopicAlertQuery::create()
+	$tag_alerts = TagAlertQuery::create()
 		->filterByPuzzle($puzzle)
-		->select('TopicId')
+		->select('TagId')
 		->find()
 		->toArray();
 
@@ -434,7 +434,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'all_members'   => $full_roster,
 			'categories'    => $categories,
 			'skills'        => $skills,
-			'topic_alerts'  => $topic_alerts,
+			'tag_alerts'    => $tag_alerts,
 		));
 }
 
@@ -687,22 +687,22 @@ function addPuzzle($request, $response) {
 		));
 }
 
-// TOPICS
+// TAGS
 
-function displayTopics() {
-	$puzzles = TopicQuery::create()
+function displayTags() {
+	$puzzles = TagQuery::create()
 		->findRoot(1)
 		->getBranch();
 
-	$topics = TopicQuery::create()
+	$topics = TagQuery::create()
 		->findRoot(2)
 		->getBranch();
 
-	$skills = TopicQuery::create()
+	$skills = TagQuery::create()
 		->findRoot(3)
 		->getBranch();
 
-	render('topics.twig', 'topics', array(
+	render('tags.twig', 'tags', array(
 			'scopes' => [
 				$puzzles,
 				$topics,
@@ -711,54 +711,54 @@ function displayTopics() {
 		));
 }
 
-function addTopic($request) {
+function addTag($request) {
 	// TODO: Special case adding top-level category
-	$parent = TopicQuery::create()
+	$parent = Tag::create()
 		->findPk($request->parent);
 
-	$topic = new Topic();
-	$topic->setTitle($request->title);
-	$topic->insertAsLastChildOf($parent);
-	$topic->save();
+	$tag = new Tag();
+	$tag->setTitle($request->title);
+	$tag->insertAsLastChildOf($parent);
+	$tag->save();
 
-	redirect('/topics', $request->title.' added.');
+	redirect('/tags', $request->title.' added.');
 }
 
-function moveTopic($request, $id, $dir) {
-	$topic = TopicQuery::create()
+function moveTag($request, $id, $dir) {
+	$tag = Tag::create()
 		->findPk($id);
 
 	if ($dir == "down") {
-		$nextSib = $topic->getNextSibling();
-		$topic->moveToNextSiblingOf($nextSib);
+		$nextSib = $tag->getNextSibling();
+		$tag->moveToNextSiblingOf($nextSib);
 	} elseif ($dir == "up") {
-		$prevSib = $topic->getPrevSibling();
-		$topic->moveToPrevSiblingOf($prevSib);
+		$prevSib = $tag->getPrevSibling();
+		$tag->moveToPrevSiblingOf($prevSib);
 	}
 
-	redirect('/topics', $topic->getTitle().' moved '.$dir.'.');
+	redirect('/tags', $tag->getTitle().' moved '.$dir.'.');
 }
 
-function alertTopic($request, $response, $puzzle_id) {
-	$topic = TopicQuery::create()
-		->findPk($request->topic_id);
+function alertTag($request, $response, $puzzle_id) {
+	$tag = Tag::create()
+		->findPk($request->tag_id);
 
 	$puzzle = PuzzleQuery::create()
 		->findPk($puzzle_id);
 
 	// TODO: Don't allow if link has .alerted class
 
-	$ta = new TopicAlert();
+	$ta = new TagAlert();
 	$ta->setPuzzle($puzzle);
-	$ta->setTopic($topic);
+	$ta->setTag($tag);
 	$ta->save();
 
-	postToSlack("*".$puzzle->getTitle()."* has been tagged ".$topic->getTitle(), $puzzle->getSlackAttachmentMedium(), ":label:", "TagBot", $topic->getSlackChannelId());
+	postToSlack("*".$puzzle->getTitle()."* has been tagged ".$tag->getTitle(), $puzzle->getSlackAttachmentMedium(), ":label:", "TagBot", $tag->getSlackChannelId());
 
 	$json = [
 		'ok'     => 1,
 		'puzzle' => $puzzle_id,
-		'topic'  => $topic->getId(),
+		'tag'    => $tag->getId(),
 	];
 
 	return $response->json($json);

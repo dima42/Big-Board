@@ -2735,28 +2735,28 @@ aside {
   visibility: hidden;
   pointer-events: none; }
 
-.topics .topic {
+.tags .tag {
   padding: .5em .6em;
   border: 1px solid #eee;
   margin-top: -1px;
   border-left: 5px solid #f3f3f3; }
 
-.topics .level0 {
+.tags .level0 {
   margin-top: 1em; }
 
-.topics .level1 {
+.tags .level1 {
   border-left-color: #e7e7e7;
   margin-left: 1em; }
 
-.topics .level2 {
+.tags .level2 {
   border-left-color: #c7c7c7;
   margin-left: 2em; }
 
-.topics .level3 {
+.tags .level3 {
   border-left-color: #aaa;
   margin-left: 3em; }
 
-.topics .move-topic {
+.tags .move-tag {
   display: inline-block; }
 
 .puzzle-metas {

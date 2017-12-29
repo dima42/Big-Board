@@ -1,9 +1,9 @@
 <?php
 
-use Base\TopicQuery as BaseTopicQuery;
+use Base\TagQuery as BaseTagQuery;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'topic' table.
+ * Skeleton subclass for performing query and update operations on the 'tag' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\TopicQuery as BaseTopicQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class TopicQuery extends BaseTopicQuery
+class TagQuery extends BaseTagQuery
 {
 
 }

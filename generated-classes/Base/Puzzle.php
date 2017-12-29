@@ -16,10 +16,10 @@ use \PuzzleMemberQuery as ChildPuzzleMemberQuery;
 use \PuzzlePuzzle as ChildPuzzlePuzzle;
 use \PuzzlePuzzleQuery as ChildPuzzlePuzzleQuery;
 use \PuzzleQuery as ChildPuzzleQuery;
-use \Topic as ChildTopic;
-use \TopicAlert as ChildTopicAlert;
-use \TopicAlertQuery as ChildTopicAlertQuery;
-use \TopicQuery as ChildTopicQuery;
+use \Tag as ChildTag;
+use \TagAlert as ChildTagAlert;
+use \TagAlertQuery as ChildTagAlertQuery;
+use \TagQuery as ChildTagQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
@@ -28,7 +28,7 @@ use Map\NoteTableMap;
 use Map\PuzzleMemberTableMap;
 use Map\PuzzlePuzzleTableMap;
 use Map\PuzzleTableMap;
-use Map\TopicAlertTableMap;
+use Map\TagAlertTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -174,10 +174,10 @@ abstract class Puzzle implements ActiveRecordInterface
     protected $aWrangler;
 
     /**
-     * @var        ObjectCollection|ChildTopicAlert[] Collection to store aggregation of ChildTopicAlert objects.
+     * @var        ObjectCollection|ChildTagAlert[] Collection to store aggregation of ChildTagAlert objects.
      */
-    protected $collTopicAlerts;
-    protected $collTopicAlertsPartial;
+    protected $collTagAlerts;
+    protected $collTagAlertsPartial;
 
     /**
      * @var        ObjectCollection|ChildNote[] Collection to store aggregation of ChildNote objects.
@@ -210,14 +210,14 @@ abstract class Puzzle implements ActiveRecordInterface
     protected $collNewsPartial;
 
     /**
-     * @var        ObjectCollection|ChildTopic[] Cross Collection to store aggregation of ChildTopic objects.
+     * @var        ObjectCollection|ChildTag[] Cross Collection to store aggregation of ChildTag objects.
      */
-    protected $collTopics;
+    protected $collTags;
 
     /**
      * @var bool
      */
-    protected $collTopicsPartial;
+    protected $collTagsPartial;
 
     /**
      * @var        ObjectCollection|ChildMember[] Cross Collection to store aggregation of ChildMember objects.
@@ -262,9 +262,9 @@ abstract class Puzzle implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildTopic[]
+     * @var ObjectCollection|ChildTag[]
      */
-    protected $topicsScheduledForDeletion = null;
+    protected $tagsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -286,9 +286,9 @@ abstract class Puzzle implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildTopicAlert[]
+     * @var ObjectCollection|ChildTagAlert[]
      */
-    protected $topicAlertsScheduledForDeletion = null;
+    protected $tagAlertsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1079,7 +1079,7 @@ abstract class Puzzle implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aWrangler = null;
-            $this->collTopicAlerts = null;
+            $this->collTagAlerts = null;
 
             $this->collNotes = null;
 
@@ -1091,7 +1091,7 @@ abstract class Puzzle implements ActiveRecordInterface
 
             $this->collNews = null;
 
-            $this->collTopics = null;
+            $this->collTags = null;
             $this->collMembers = null;
             $this->collParents = null;
             $this->collChildren = null;
@@ -1243,10 +1243,10 @@ abstract class Puzzle implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->topicsScheduledForDeletion !== null) {
-                if (!$this->topicsScheduledForDeletion->isEmpty()) {
+            if ($this->tagsScheduledForDeletion !== null) {
+                if (!$this->tagsScheduledForDeletion->isEmpty()) {
                     $pks = array();
-                    foreach ($this->topicsScheduledForDeletion as $entry) {
+                    foreach ($this->tagsScheduledForDeletion as $entry) {
                         $entryPk = [];
 
                         $entryPk[0] = $this->getId();
@@ -1254,19 +1254,19 @@ abstract class Puzzle implements ActiveRecordInterface
                         $pks[] = $entryPk;
                     }
 
-                    \TopicAlertQuery::create()
+                    \TagAlertQuery::create()
                         ->filterByPrimaryKeys($pks)
                         ->delete($con);
 
-                    $this->topicsScheduledForDeletion = null;
+                    $this->tagsScheduledForDeletion = null;
                 }
 
             }
 
-            if ($this->collTopics) {
-                foreach ($this->collTopics as $topic) {
-                    if (!$topic->isDeleted() && ($topic->isNew() || $topic->isModified())) {
-                        $topic->save($con);
+            if ($this->collTags) {
+                foreach ($this->collTags as $tag) {
+                    if (!$tag->isDeleted() && ($tag->isNew() || $tag->isModified())) {
+                        $tag->save($con);
                     }
                 }
             }
@@ -1359,17 +1359,17 @@ abstract class Puzzle implements ActiveRecordInterface
             }
 
 
-            if ($this->topicAlertsScheduledForDeletion !== null) {
-                if (!$this->topicAlertsScheduledForDeletion->isEmpty()) {
-                    \TopicAlertQuery::create()
-                        ->filterByPrimaryKeys($this->topicAlertsScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->tagAlertsScheduledForDeletion !== null) {
+                if (!$this->tagAlertsScheduledForDeletion->isEmpty()) {
+                    \TagAlertQuery::create()
+                        ->filterByPrimaryKeys($this->tagAlertsScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->topicAlertsScheduledForDeletion = null;
+                    $this->tagAlertsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collTopicAlerts !== null) {
-                foreach ($this->collTopicAlerts as $referrerFK) {
+            if ($this->collTagAlerts !== null) {
+                foreach ($this->collTagAlerts as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1742,20 +1742,20 @@ abstract class Puzzle implements ActiveRecordInterface
 
                 $result[$key] = $this->aWrangler->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->collTopicAlerts) {
+            if (null !== $this->collTagAlerts) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'topicAlerts';
+                        $key = 'tagAlerts';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'topic_alerts';
+                        $key = 'tag_alerts';
                         break;
                     default:
-                        $key = 'TopicAlerts';
+                        $key = 'TagAlerts';
                 }
 
-                $result[$key] = $this->collTopicAlerts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collTagAlerts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collNotes) {
 
@@ -2144,9 +2144,9 @@ abstract class Puzzle implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getTopicAlerts() as $relObj) {
+            foreach ($this->getTagAlerts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addTopicAlert($relObj->copy($deepCopy));
+                    $copyObj->addTagAlert($relObj->copy($deepCopy));
                 }
             }
 
@@ -2272,8 +2272,8 @@ abstract class Puzzle implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('TopicAlert' == $relationName) {
-            $this->initTopicAlerts();
+        if ('TagAlert' == $relationName) {
+            $this->initTagAlerts();
             return;
         }
         if ('Note' == $relationName) {
@@ -2299,31 +2299,31 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collTopicAlerts collection
+     * Clears out the collTagAlerts collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addTopicAlerts()
+     * @see        addTagAlerts()
      */
-    public function clearTopicAlerts()
+    public function clearTagAlerts()
     {
-        $this->collTopicAlerts = null; // important to set this to NULL since that means it is uninitialized
+        $this->collTagAlerts = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collTopicAlerts collection loaded partially.
+     * Reset is the collTagAlerts collection loaded partially.
      */
-    public function resetPartialTopicAlerts($v = true)
+    public function resetPartialTagAlerts($v = true)
     {
-        $this->collTopicAlertsPartial = $v;
+        $this->collTagAlertsPartial = $v;
     }
 
     /**
-     * Initializes the collTopicAlerts collection.
+     * Initializes the collTagAlerts collection.
      *
-     * By default this just sets the collTopicAlerts collection to an empty array (like clearcollTopicAlerts());
+     * By default this just sets the collTagAlerts collection to an empty array (like clearcollTagAlerts());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -2332,20 +2332,20 @@ abstract class Puzzle implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initTopicAlerts($overrideExisting = true)
+    public function initTagAlerts($overrideExisting = true)
     {
-        if (null !== $this->collTopicAlerts && !$overrideExisting) {
+        if (null !== $this->collTagAlerts && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = TopicAlertTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = TagAlertTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collTopicAlerts = new $collectionClassName;
-        $this->collTopicAlerts->setModel('\TopicAlert');
+        $this->collTagAlerts = new $collectionClassName;
+        $this->collTagAlerts->setModel('\TagAlert');
     }
 
     /**
-     * Gets an array of ChildTopicAlert objects which contain a foreign key that references this object.
+     * Gets an array of ChildTagAlert objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -2355,111 +2355,111 @@ abstract class Puzzle implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildTopicAlert[] List of ChildTopicAlert objects
+     * @return ObjectCollection|ChildTagAlert[] List of ChildTagAlert objects
      * @throws PropelException
      */
-    public function getTopicAlerts(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getTagAlerts(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collTopicAlertsPartial && !$this->isNew();
-        if (null === $this->collTopicAlerts || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collTopicAlerts) {
+        $partial = $this->collTagAlertsPartial && !$this->isNew();
+        if (null === $this->collTagAlerts || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collTagAlerts) {
                 // return empty collection
-                $this->initTopicAlerts();
+                $this->initTagAlerts();
             } else {
-                $collTopicAlerts = ChildTopicAlertQuery::create(null, $criteria)
+                $collTagAlerts = ChildTagAlertQuery::create(null, $criteria)
                     ->filterByPuzzle($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collTopicAlertsPartial && count($collTopicAlerts)) {
-                        $this->initTopicAlerts(false);
+                    if (false !== $this->collTagAlertsPartial && count($collTagAlerts)) {
+                        $this->initTagAlerts(false);
 
-                        foreach ($collTopicAlerts as $obj) {
-                            if (false == $this->collTopicAlerts->contains($obj)) {
-                                $this->collTopicAlerts->append($obj);
+                        foreach ($collTagAlerts as $obj) {
+                            if (false == $this->collTagAlerts->contains($obj)) {
+                                $this->collTagAlerts->append($obj);
                             }
                         }
 
-                        $this->collTopicAlertsPartial = true;
+                        $this->collTagAlertsPartial = true;
                     }
 
-                    return $collTopicAlerts;
+                    return $collTagAlerts;
                 }
 
-                if ($partial && $this->collTopicAlerts) {
-                    foreach ($this->collTopicAlerts as $obj) {
+                if ($partial && $this->collTagAlerts) {
+                    foreach ($this->collTagAlerts as $obj) {
                         if ($obj->isNew()) {
-                            $collTopicAlerts[] = $obj;
+                            $collTagAlerts[] = $obj;
                         }
                     }
                 }
 
-                $this->collTopicAlerts = $collTopicAlerts;
-                $this->collTopicAlertsPartial = false;
+                $this->collTagAlerts = $collTagAlerts;
+                $this->collTagAlertsPartial = false;
             }
         }
 
-        return $this->collTopicAlerts;
+        return $this->collTagAlerts;
     }
 
     /**
-     * Sets a collection of ChildTopicAlert objects related by a one-to-many relationship
+     * Sets a collection of ChildTagAlert objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $topicAlerts A Propel collection.
+     * @param      Collection $tagAlerts A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildPuzzle The current object (for fluent API support)
      */
-    public function setTopicAlerts(Collection $topicAlerts, ConnectionInterface $con = null)
+    public function setTagAlerts(Collection $tagAlerts, ConnectionInterface $con = null)
     {
-        /** @var ChildTopicAlert[] $topicAlertsToDelete */
-        $topicAlertsToDelete = $this->getTopicAlerts(new Criteria(), $con)->diff($topicAlerts);
+        /** @var ChildTagAlert[] $tagAlertsToDelete */
+        $tagAlertsToDelete = $this->getTagAlerts(new Criteria(), $con)->diff($tagAlerts);
 
 
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->topicAlertsScheduledForDeletion = clone $topicAlertsToDelete;
+        $this->tagAlertsScheduledForDeletion = clone $tagAlertsToDelete;
 
-        foreach ($topicAlertsToDelete as $topicAlertRemoved) {
-            $topicAlertRemoved->setPuzzle(null);
+        foreach ($tagAlertsToDelete as $tagAlertRemoved) {
+            $tagAlertRemoved->setPuzzle(null);
         }
 
-        $this->collTopicAlerts = null;
-        foreach ($topicAlerts as $topicAlert) {
-            $this->addTopicAlert($topicAlert);
+        $this->collTagAlerts = null;
+        foreach ($tagAlerts as $tagAlert) {
+            $this->addTagAlert($tagAlert);
         }
 
-        $this->collTopicAlerts = $topicAlerts;
-        $this->collTopicAlertsPartial = false;
+        $this->collTagAlerts = $tagAlerts;
+        $this->collTagAlertsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related TopicAlert objects.
+     * Returns the number of related TagAlert objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related TopicAlert objects.
+     * @return int             Count of related TagAlert objects.
      * @throws PropelException
      */
-    public function countTopicAlerts(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countTagAlerts(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collTopicAlertsPartial && !$this->isNew();
-        if (null === $this->collTopicAlerts || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collTopicAlerts) {
+        $partial = $this->collTagAlertsPartial && !$this->isNew();
+        if (null === $this->collTagAlerts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTagAlerts) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getTopicAlerts());
+                return count($this->getTagAlerts());
             }
 
-            $query = ChildTopicAlertQuery::create(null, $criteria);
+            $query = ChildTagAlertQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -2469,28 +2469,28 @@ abstract class Puzzle implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collTopicAlerts);
+        return count($this->collTagAlerts);
     }
 
     /**
-     * Method called to associate a ChildTopicAlert object to this object
-     * through the ChildTopicAlert foreign key attribute.
+     * Method called to associate a ChildTagAlert object to this object
+     * through the ChildTagAlert foreign key attribute.
      *
-     * @param  ChildTopicAlert $l ChildTopicAlert
+     * @param  ChildTagAlert $l ChildTagAlert
      * @return $this|\Puzzle The current object (for fluent API support)
      */
-    public function addTopicAlert(ChildTopicAlert $l)
+    public function addTagAlert(ChildTagAlert $l)
     {
-        if ($this->collTopicAlerts === null) {
-            $this->initTopicAlerts();
-            $this->collTopicAlertsPartial = true;
+        if ($this->collTagAlerts === null) {
+            $this->initTagAlerts();
+            $this->collTagAlertsPartial = true;
         }
 
-        if (!$this->collTopicAlerts->contains($l)) {
-            $this->doAddTopicAlert($l);
+        if (!$this->collTagAlerts->contains($l)) {
+            $this->doAddTagAlert($l);
 
-            if ($this->topicAlertsScheduledForDeletion and $this->topicAlertsScheduledForDeletion->contains($l)) {
-                $this->topicAlertsScheduledForDeletion->remove($this->topicAlertsScheduledForDeletion->search($l));
+            if ($this->tagAlertsScheduledForDeletion and $this->tagAlertsScheduledForDeletion->contains($l)) {
+                $this->tagAlertsScheduledForDeletion->remove($this->tagAlertsScheduledForDeletion->search($l));
             }
         }
 
@@ -2498,29 +2498,29 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildTopicAlert $topicAlert The ChildTopicAlert object to add.
+     * @param ChildTagAlert $tagAlert The ChildTagAlert object to add.
      */
-    protected function doAddTopicAlert(ChildTopicAlert $topicAlert)
+    protected function doAddTagAlert(ChildTagAlert $tagAlert)
     {
-        $this->collTopicAlerts[]= $topicAlert;
-        $topicAlert->setPuzzle($this);
+        $this->collTagAlerts[]= $tagAlert;
+        $tagAlert->setPuzzle($this);
     }
 
     /**
-     * @param  ChildTopicAlert $topicAlert The ChildTopicAlert object to remove.
+     * @param  ChildTagAlert $tagAlert The ChildTagAlert object to remove.
      * @return $this|ChildPuzzle The current object (for fluent API support)
      */
-    public function removeTopicAlert(ChildTopicAlert $topicAlert)
+    public function removeTagAlert(ChildTagAlert $tagAlert)
     {
-        if ($this->getTopicAlerts()->contains($topicAlert)) {
-            $pos = $this->collTopicAlerts->search($topicAlert);
-            $this->collTopicAlerts->remove($pos);
-            if (null === $this->topicAlertsScheduledForDeletion) {
-                $this->topicAlertsScheduledForDeletion = clone $this->collTopicAlerts;
-                $this->topicAlertsScheduledForDeletion->clear();
+        if ($this->getTagAlerts()->contains($tagAlert)) {
+            $pos = $this->collTagAlerts->search($tagAlert);
+            $this->collTagAlerts->remove($pos);
+            if (null === $this->tagAlertsScheduledForDeletion) {
+                $this->tagAlertsScheduledForDeletion = clone $this->collTagAlerts;
+                $this->tagAlertsScheduledForDeletion->clear();
             }
-            $this->topicAlertsScheduledForDeletion[]= clone $topicAlert;
-            $topicAlert->setPuzzle(null);
+            $this->tagAlertsScheduledForDeletion[]= clone $tagAlert;
+            $tagAlert->setPuzzle(null);
         }
 
         return $this;
@@ -2532,7 +2532,7 @@ abstract class Puzzle implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this Puzzle is new, it will return
      * an empty collection; or if this Puzzle has previously
-     * been saved, it will retrieve related TopicAlerts from storage.
+     * been saved, it will retrieve related TagAlerts from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2541,14 +2541,14 @@ abstract class Puzzle implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildTopicAlert[] List of ChildTopicAlert objects
+     * @return ObjectCollection|ChildTagAlert[] List of ChildTagAlert objects
      */
-    public function getTopicAlertsJoinTopic(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getTagAlertsJoinTag(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildTopicAlertQuery::create(null, $criteria);
-        $query->joinWith('Topic', $joinBehavior);
+        $query = ChildTagAlertQuery::create(null, $criteria);
+        $query->joinWith('Tag', $joinBehavior);
 
-        return $this->getTopicAlerts($query, $con);
+        return $this->getTagAlerts($query, $con);
     }
 
     /**
@@ -3761,50 +3761,50 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collTopics collection
+     * Clears out the collTags collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addTopics()
+     * @see        addTags()
      */
-    public function clearTopics()
+    public function clearTags()
     {
-        $this->collTopics = null; // important to set this to NULL since that means it is uninitialized
+        $this->collTags = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Initializes the collTopics crossRef collection.
+     * Initializes the collTags crossRef collection.
      *
-     * By default this just sets the collTopics collection to an empty collection (like clearTopics());
+     * By default this just sets the collTags collection to an empty collection (like clearTags());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
      * @return void
      */
-    public function initTopics()
+    public function initTags()
     {
-        $collectionClassName = TopicAlertTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = TagAlertTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collTopics = new $collectionClassName;
-        $this->collTopicsPartial = true;
-        $this->collTopics->setModel('\Topic');
+        $this->collTags = new $collectionClassName;
+        $this->collTagsPartial = true;
+        $this->collTags->setModel('\Tag');
     }
 
     /**
-     * Checks if the collTopics collection is loaded.
+     * Checks if the collTags collection is loaded.
      *
      * @return bool
      */
-    public function isTopicsLoaded()
+    public function isTagsLoaded()
     {
-        return null !== $this->collTopics;
+        return null !== $this->collTags;
     }
 
     /**
-     * Gets a collection of ChildTopic objects related by a many-to-many relationship
-     * to the current object by way of the topic_alert cross-reference table.
+     * Gets a collection of ChildTag objects related by a many-to-many relationship
+     * to the current object by way of the tag_alert cross-reference table.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -3815,99 +3815,99 @@ abstract class Puzzle implements ActiveRecordInterface
      * @param      Criteria $criteria Optional query object to filter the query
      * @param      ConnectionInterface $con Optional connection object
      *
-     * @return ObjectCollection|ChildTopic[] List of ChildTopic objects
+     * @return ObjectCollection|ChildTag[] List of ChildTag objects
      */
-    public function getTopics(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getTags(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collTopicsPartial && !$this->isNew();
-        if (null === $this->collTopics || null !== $criteria || $partial) {
+        $partial = $this->collTagsPartial && !$this->isNew();
+        if (null === $this->collTags || null !== $criteria || $partial) {
             if ($this->isNew()) {
                 // return empty collection
-                if (null === $this->collTopics) {
-                    $this->initTopics();
+                if (null === $this->collTags) {
+                    $this->initTags();
                 }
             } else {
 
-                $query = ChildTopicQuery::create(null, $criteria)
+                $query = ChildTagQuery::create(null, $criteria)
                     ->filterByPuzzle($this);
-                $collTopics = $query->find($con);
+                $collTags = $query->find($con);
                 if (null !== $criteria) {
-                    return $collTopics;
+                    return $collTags;
                 }
 
-                if ($partial && $this->collTopics) {
+                if ($partial && $this->collTags) {
                     //make sure that already added objects gets added to the list of the database.
-                    foreach ($this->collTopics as $obj) {
-                        if (!$collTopics->contains($obj)) {
-                            $collTopics[] = $obj;
+                    foreach ($this->collTags as $obj) {
+                        if (!$collTags->contains($obj)) {
+                            $collTags[] = $obj;
                         }
                     }
                 }
 
-                $this->collTopics = $collTopics;
-                $this->collTopicsPartial = false;
+                $this->collTags = $collTags;
+                $this->collTagsPartial = false;
             }
         }
 
-        return $this->collTopics;
+        return $this->collTags;
     }
 
     /**
-     * Sets a collection of Topic objects related by a many-to-many relationship
-     * to the current object by way of the topic_alert cross-reference table.
+     * Sets a collection of Tag objects related by a many-to-many relationship
+     * to the current object by way of the tag_alert cross-reference table.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param  Collection $topics A Propel collection.
+     * @param  Collection $tags A Propel collection.
      * @param  ConnectionInterface $con Optional connection object
      * @return $this|ChildPuzzle The current object (for fluent API support)
      */
-    public function setTopics(Collection $topics, ConnectionInterface $con = null)
+    public function setTags(Collection $tags, ConnectionInterface $con = null)
     {
-        $this->clearTopics();
-        $currentTopics = $this->getTopics();
+        $this->clearTags();
+        $currentTags = $this->getTags();
 
-        $topicsScheduledForDeletion = $currentTopics->diff($topics);
+        $tagsScheduledForDeletion = $currentTags->diff($tags);
 
-        foreach ($topicsScheduledForDeletion as $toDelete) {
-            $this->removeTopic($toDelete);
+        foreach ($tagsScheduledForDeletion as $toDelete) {
+            $this->removeTag($toDelete);
         }
 
-        foreach ($topics as $topic) {
-            if (!$currentTopics->contains($topic)) {
-                $this->doAddTopic($topic);
+        foreach ($tags as $tag) {
+            if (!$currentTags->contains($tag)) {
+                $this->doAddTag($tag);
             }
         }
 
-        $this->collTopicsPartial = false;
-        $this->collTopics = $topics;
+        $this->collTagsPartial = false;
+        $this->collTags = $tags;
 
         return $this;
     }
 
     /**
-     * Gets the number of Topic objects related by a many-to-many relationship
-     * to the current object by way of the topic_alert cross-reference table.
+     * Gets the number of Tag objects related by a many-to-many relationship
+     * to the current object by way of the tag_alert cross-reference table.
      *
      * @param      Criteria $criteria Optional query object to filter the query
      * @param      boolean $distinct Set to true to force count distinct
      * @param      ConnectionInterface $con Optional connection object
      *
-     * @return int the number of related Topic objects
+     * @return int the number of related Tag objects
      */
-    public function countTopics(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countTags(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collTopicsPartial && !$this->isNew();
-        if (null === $this->collTopics || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collTopics) {
+        $partial = $this->collTagsPartial && !$this->isNew();
+        if (null === $this->collTags || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTags) {
                 return 0;
             } else {
 
                 if ($partial && !$criteria) {
-                    return count($this->getTopics());
+                    return count($this->getTags());
                 }
 
-                $query = ChildTopicQuery::create(null, $criteria);
+                $query = ChildTagQuery::create(null, $criteria);
                 if ($distinct) {
                     $query->distinct();
                 }
@@ -3917,27 +3917,27 @@ abstract class Puzzle implements ActiveRecordInterface
                     ->count($con);
             }
         } else {
-            return count($this->collTopics);
+            return count($this->collTags);
         }
     }
 
     /**
-     * Associate a ChildTopic to this object
-     * through the topic_alert cross reference table.
+     * Associate a ChildTag to this object
+     * through the tag_alert cross reference table.
      *
-     * @param ChildTopic $topic
+     * @param ChildTag $tag
      * @return ChildPuzzle The current object (for fluent API support)
      */
-    public function addTopic(ChildTopic $topic)
+    public function addTag(ChildTag $tag)
     {
-        if ($this->collTopics === null) {
-            $this->initTopics();
+        if ($this->collTags === null) {
+            $this->initTags();
         }
 
-        if (!$this->getTopics()->contains($topic)) {
+        if (!$this->getTags()->contains($tag)) {
             // only add it if the **same** object is not already associated
-            $this->collTopics->push($topic);
-            $this->doAddTopic($topic);
+            $this->collTags->push($tag);
+            $this->doAddTag($tag);
         }
 
         return $this;
@@ -3945,58 +3945,58 @@ abstract class Puzzle implements ActiveRecordInterface
 
     /**
      *
-     * @param ChildTopic $topic
+     * @param ChildTag $tag
      */
-    protected function doAddTopic(ChildTopic $topic)
+    protected function doAddTag(ChildTag $tag)
     {
-        $topicAlert = new ChildTopicAlert();
+        $tagAlert = new ChildTagAlert();
 
-        $topicAlert->setTopic($topic);
+        $tagAlert->setTag($tag);
 
-        $topicAlert->setPuzzle($this);
+        $tagAlert->setPuzzle($this);
 
-        $this->addTopicAlert($topicAlert);
+        $this->addTagAlert($tagAlert);
 
         // set the back reference to this object directly as using provided method either results
         // in endless loop or in multiple relations
-        if (!$topic->isPuzzlesLoaded()) {
-            $topic->initPuzzles();
-            $topic->getPuzzles()->push($this);
-        } elseif (!$topic->getPuzzles()->contains($this)) {
-            $topic->getPuzzles()->push($this);
+        if (!$tag->isPuzzlesLoaded()) {
+            $tag->initPuzzles();
+            $tag->getPuzzles()->push($this);
+        } elseif (!$tag->getPuzzles()->contains($this)) {
+            $tag->getPuzzles()->push($this);
         }
 
     }
 
     /**
-     * Remove topic of this object
-     * through the topic_alert cross reference table.
+     * Remove tag of this object
+     * through the tag_alert cross reference table.
      *
-     * @param ChildTopic $topic
+     * @param ChildTag $tag
      * @return ChildPuzzle The current object (for fluent API support)
      */
-    public function removeTopic(ChildTopic $topic)
+    public function removeTag(ChildTag $tag)
     {
-        if ($this->getTopics()->contains($topic)) {
-            $topicAlert = new ChildTopicAlert();
-            $topicAlert->setTopic($topic);
-            if ($topic->isPuzzlesLoaded()) {
+        if ($this->getTags()->contains($tag)) {
+            $tagAlert = new ChildTagAlert();
+            $tagAlert->setTag($tag);
+            if ($tag->isPuzzlesLoaded()) {
                 //remove the back reference if available
-                $topic->getPuzzles()->removeObject($this);
+                $tag->getPuzzles()->removeObject($this);
             }
 
-            $topicAlert->setPuzzle($this);
-            $this->removeTopicAlert(clone $topicAlert);
-            $topicAlert->clear();
+            $tagAlert->setPuzzle($this);
+            $this->removeTagAlert(clone $tagAlert);
+            $tagAlert->clear();
 
-            $this->collTopics->remove($this->collTopics->search($topic));
+            $this->collTags->remove($this->collTags->search($tag));
 
-            if (null === $this->topicsScheduledForDeletion) {
-                $this->topicsScheduledForDeletion = clone $this->collTopics;
-                $this->topicsScheduledForDeletion->clear();
+            if (null === $this->tagsScheduledForDeletion) {
+                $this->tagsScheduledForDeletion = clone $this->collTags;
+                $this->tagsScheduledForDeletion->clear();
             }
 
-            $this->topicsScheduledForDeletion->push($topic);
+            $this->tagsScheduledForDeletion->push($tag);
         }
 
 
@@ -4772,8 +4772,8 @@ abstract class Puzzle implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collTopicAlerts) {
-                foreach ($this->collTopicAlerts as $o) {
+            if ($this->collTagAlerts) {
+                foreach ($this->collTagAlerts as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -4802,8 +4802,8 @@ abstract class Puzzle implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collTopics) {
-                foreach ($this->collTopics as $o) {
+            if ($this->collTags) {
+                foreach ($this->collTags as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -4824,13 +4824,13 @@ abstract class Puzzle implements ActiveRecordInterface
             }
         } // if ($deep)
 
-        $this->collTopicAlerts = null;
+        $this->collTagAlerts = null;
         $this->collNotes = null;
         $this->collPuzzleMembers = null;
         $this->collPuzzleParents = null;
         $this->collPuzzlechildren = null;
         $this->collNews = null;
-        $this->collTopics = null;
+        $this->collTags = null;
         $this->collMembers = null;
         $this->collParents = null;
         $this->collChildren = null;

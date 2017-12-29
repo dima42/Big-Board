@@ -324,10 +324,10 @@ aside {
     pointer-events: none;
 }
 
-// TOPICS
+// TAGS
 
-.topics {
-    .topic {
+.tags  {
+    .tag {
         padding: .5em .6em;
         border: 1px solid #eee;
         margin-top: -1px;
@@ -353,7 +353,7 @@ aside {
         margin-left: 3em;
     }
 
-    .move-topic {
+    .move-tag {
         display: inline-block;
     }
 }

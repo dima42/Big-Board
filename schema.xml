@@ -24,7 +24,7 @@
         <behavior name="timestampable" />
         <behavior name="archivable" />
     </table>
-    <table name="topic" phpName="Topic">
+    <table name="tag" phpName="Tag">
         <column name="id" required="true" primaryKey="true" autoIncrement="true" type="integer" />
         <column name="title" type="varchar" required="true" primaryString="true" />
         <column name="slack_channel" type="varchar" size="48" required="false" />
@@ -33,18 +33,18 @@
             <parameter name="use_scope" value="true" />
         </behavior>
     </table>
-    <table name="topic_alert" phpName="TopicAlert" isCrossRef="true">
+    <table name="tag_alert" phpName="TagAlert" isCrossRef="true">
         <column name="puzzle_id" type="integer" primaryKey="true" />
-        <column name="topic_id" type="integer" primaryKey="true" />
+        <column name="tag_id" type="integer" primaryKey="true" />
         <foreign-key foreignTable="puzzle" phpName="Puzzle" onDelete="CASCADE">
             <reference local="puzzle_id" foreign="id"/>
         </foreign-key>
-        <foreign-key foreignTable="topic" phpName="Topic" onDelete="CASCADE">
-            <reference local="topic_id" foreign="id"/>
+        <foreign-key foreignTable="tag" phpName="Tag" onDelete="CASCADE">
+            <reference local="tag_id" foreign="id"/>
         </foreign-key>
         <unique>
             <unique-column name="puzzle_id" />
-            <unique-column name="topic_id" />
+            <unique-column name="tag_id" />
         </unique>
         <behavior name="timestampable" />
     </table>
