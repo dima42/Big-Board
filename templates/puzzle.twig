@@ -134,13 +134,13 @@
     </div>
 
     <div class="list-group mb-3">
-        {% for tag in puzzles if tag.level > 0 %}
+        {% for tag in puzzles if tag.level == 1 %}
             <a data-behavior="tag-alert" data-id="{{ tag.id }}" class="{% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }} list-group-item list-group-item-action" href='#'>{{ tag.title }}</a>
         {% endfor %}
     </div>
 
     <div class="list-group mb-3">
-        {% for tag in topics if tag.level > 0 %}
+        {% for tag in topics if tag.level == 1 %}
             <a data-behavior="tag-alert" data-id="{{ tag.id }}" class="{% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }} list-group-item list-group-item-action" href='#'>{{ tag.title }}</a>
         {% endfor %}
     </div>
