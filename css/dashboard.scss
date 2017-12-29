@@ -418,12 +418,27 @@ aside {
             padding-right: 28px;
         }
     }
+}
+
+.tag-list {
+    a {
+        display: block;
+        font-size: .8rem;
+        background: #f7f7f7;
+        padding: .3em .5em;
+        margin-bottom: 3px;
+        color: #333;
+        border: 1px solid #eee;
+        border-radius: 4px;
+    }
 
     .alerted {
         font-weight: bold;
+        color: white;
+        background:#444;
 
         &:hover {
-            background:none;
+            // background:none;
         }
     }
 }

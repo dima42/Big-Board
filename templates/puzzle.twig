@@ -133,15 +133,21 @@
         <a class="list-group-item list-group-item-action" href='{{ puzzle.getSlackURL() }}'><img src="/img/slack.png" width="15px" alt=""> Slack</a>
     </div>
 
-    <div class="list-group mb-3">
+    <div class="tag-list mb-3">
         {% for tag in puzzles if tag.level == 1 %}
-            <a data-behavior="tag-alert" data-id="{{ tag.id }}" class="{% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }} list-group-item list-group-item-action" href='#'>{{ tag.title }}</a>
+            <a data-id="{{ tag.id }}" class="{% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }}" href='#' title="Explanation">{{ tag.title }}</a>
         {% endfor %}
     </div>
 
-    <div class="list-group mb-3">
+    <div class="tag-list mb-3">
         {% for tag in topics if tag.level == 1 %}
-            <a data-behavior="tag-alert" data-id="{{ tag.id }}" class="{% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }} list-group-item list-group-item-action" href='#'>{{ tag.title }}</a>
+            <a data-id="{{ tag.id }}" class="{% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }}" href='#' title="Explanation">{{ tag.title }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="tag-list mb-3">
+        {% for tag in skills if tag.level == 1 %}
+            <a data-id="{{ tag.id }}" class="{% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }}" href='#' title="Explanation">{{ tag.title }}</a>
         {% endfor %}
     </div>
 
@@ -155,7 +161,9 @@
 {% block scripts %}
 <script>
 $(function() {
-    $('[data-behavior=tag-alert]').click(function(e) {
+    $('.tag-list a').tooltip();
+
+    $('.tag-list a').click(function(e) {
         e.preventDefault();
 
         var data = {
