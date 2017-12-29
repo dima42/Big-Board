@@ -21,13 +21,6 @@
     </div>
 {% endfor %}
 {% endfor %}
-
-<div class="" data-level="-1">
-    <br>
-    <a class="badge badge-light" href="#" data-behavior="add-topic">Add another topic category</a>
-</div>
-
-
 {% endblock %}
 
 {% block scripts %}
@@ -35,7 +28,7 @@
 $(function() {
     $('[data-behavior=add-topic]').click(function(e) {
         e.preventDefault();
-        var parent = $(this).closest('[data-pk]');
+        var parent = $(this).closest('.topic');
         $.get('/templates/add_topic.mst', function(template) {
             var rendered = Mustache.render(template, {
                 'parent': parent.data('pk'),
