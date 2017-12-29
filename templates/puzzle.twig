@@ -153,11 +153,11 @@
 {% block scripts %}
 <script>
 $(function() {
-    $('[data-behavior=topic-alert]').click(function(e) {
+    $('[data-behavior=tag-alert]').click(function(e) {
         e.preventDefault();
 
         var data = {
-            'topic_id': $(this).data('id')
+            'tag_id': $(this).data('id')
         };
         var link = $(this);
 
@@ -165,7 +165,7 @@ $(function() {
             return;
         }
 
-        $.post('/topics/alert/{{ puzzle.id }}', data, function(response) {
+        $.post('/tags/alert/{{ puzzle.id }}', data, function(response) {
             if (response['ok']) {
                 link.addClass('alerted');
             }
