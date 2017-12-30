@@ -1,5 +1,6 @@
 <div id="puzzleGroup{{ i }}" class="puzzleInputGroup form-group">
-    <h4>New puzzle #{{ i }} <a class="small removePuzzle" href="#">Remove?</a></h4>
+    <h4 class="float-left">New puzzle #{{ i }}</h4>
+    <a class="float-right btn btn-light removePuzzle" href="#"><i class="icon-x"></i> Remove this form</a>
     <div class="input-group newPuzzleTitle mb-2">
         <span class="input-group-addon">Title</span>
         <input type="text" class="form-control title-field" name="newPuzzles[{{i}}][title]" value="{{ title }}" required>

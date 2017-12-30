@@ -18,10 +18,6 @@ $this->respond('GET', '/bymeta', function () {
 		return displayAllByMeta();
 	});
 
-$this->respond('GET', '/loose', function () {
-		return displayLoosePuzzles();
-	});
-
 // DATA API
 
 $this->with('/puzzles', function () {
@@ -30,9 +26,6 @@ $this->with('/puzzles', function () {
 			});
 		$this->respond('GET', '/bymeta', function ($request, $response) {
 				return allPuzzlesByMeta($response);
-			});
-		$this->respond('GET', '/loose', function ($request, $response) {
-				return loosePuzzles($response);
 			});
 		$this->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
 				return metaPuzzles($request->meta_id, $response);
@@ -230,24 +223,10 @@ function allPuzzles($response) {
 
 function allPuzzlesByMeta($response) {
 	$puzzles = PuzzleQuery::create()
-		->joinWithPuzzleParent()
-		->orderByTitle()
-		->find()
-		->toArray();
-
-	return $response->json($puzzles);
-}
-
-function loosePuzzles($response) {
-	$all_puzzles = PuzzleQuery::create()
 		->leftJoinWithPuzzleParent()
 		->orderByTitle()
 		->find()
 		->toArray();
-
-	$puzzles = array_filter($all_puzzles, function ($puzzle) {
-			return ($puzzle['PuzzleParents'] == []);
-		});
 
 	return $response->json($puzzles);
 }
@@ -321,20 +300,25 @@ function displayAll() {
 }
 
 function displayAllByMeta() {
-	$metas = PuzzlePuzzleQuery::create()
-		->joinWith('PuzzlePuzzle.Parent')
-		->leftJoinWith('PuzzlePuzzle.Parent.Wrangler')
-		->where('puzzle_id = parent_id')
-		->orderBy('Parent.title')
-		->find();
+	$metas = PuzzleQuery::create()
+		->joinWith('PuzzleChild')
+		->leftJoinWith('Wrangler')
+		->where('Puzzle.id = PuzzleChild.parent_id')
+		->where('Puzzle.id = PuzzleChild.puzzle_id')
+		->orderBy('title')
+		->select(['Id', 'Title'])
+		->withColumn('Wrangler.Id', 'WranglerId')
+		->withColumn('Wrangler.FullName', 'Wrangler')
+		->find()
+		->toArray();
+
+	array_unshift($metas, [
+			"Id"    => "0",
+			"Title" => "(Loose)",
+		]);
 
 	render('bymeta.twig', 'bymeta', array(
 			'metas' => $metas,
-		));
-}
-
-function displayLoosePuzzles() {
-	render('loose.twig', 'loose', array(
 		));
 }
 
