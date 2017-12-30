@@ -17,7 +17,10 @@
     {% for tag in scope %}
         <div class="tag level{{ tag.level }}" data-level="{{ tag.level }}" data-pk="{{ tag.id }}">
             {{ tag.title }}
-            <a class="badge badge-light" href="#" data-behavior="add-tag">+ Child</a>
+            <a class="badge" href="http://{{ slackDomain }}.slack.com/messages/{{ tag.slackChannelId }}"><img src="/img/slack.png" width="12px" alt=""> Slack</a>
+            <div class="float-right">
+                <a class="badge badge-light" href="#" data-behavior="add-tag">+ Child</a>
+            </div>
         </div>
     {% endfor %}
 {% endfor %}

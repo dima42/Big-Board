@@ -2768,6 +2768,8 @@ aside {
   position: relative;
   margin-bottom: .6em;
   border-left: 5px solid #f3f3f3; }
+  .tags .tag:hover {
+    background: #f7f7f7; }
   .tags .tag.tag-form {
     padding-top: 0;
     padding-bottom: 0; }

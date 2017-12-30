@@ -16,12 +16,12 @@
         </form>
         {% if tag.hasNextSibling %}
         <form method="post" class="move-tag move-tag-down" action="/tags/{{ tag.id }}/move_dn">
-            <button class="btn btn-light badge badge-light" href="#">&darr;</button>
+            <button class="btn btn-info badge badge-info" href="#">&darr;</button>
         </form>
         {% endif %}
         {% if tag.hasPrevSibling %}
         <form method="post" class="move-tag move-tag-up" action="/tags/{{ tag.id }}/move_up">
-            <button class="btn btn-light badge badge-light" href="#">&uarr;</button>
+            <button class="btn btn-info badge badge-info" href="#">&uarr;</button>
         </form>
         {% endif %}
     </div>
