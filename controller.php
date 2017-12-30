@@ -690,11 +690,17 @@ function displayTags() {
 }
 
 function addTag($request) {
+	Global $DEBUG;
+
 	$parent = TagQuery::create()
 		->findPk($request->parent);
 
-	$slack_response = createNewSlackChannel($request->title);
-	$response_body  = $slack_response->getBody();
+	if (!$DEBUG) {
+		$slack_response = createNewSlackChannel($request->title);
+		$response_body  = $slack_response->getBody();
+	} else {
+		$response_body = ['ok' => 1];
+	}
 
 	if ($response_body['ok'] != 1 && $response_body['error'] != "cannot_join_app_user") {
 		$alert = "Sorry, something went wrong: [".$response_body['error']."] ".$response_body['detail'];
