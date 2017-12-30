@@ -35,7 +35,7 @@ $(function() {
                 'level': parent.data('level') + 1
             });
             parent.after(rendered);
-            parent.next().find('input').focus();
+            parent.next().find('input').first().focus();
         });
     });
 });

@@ -624,12 +624,12 @@ function addPuzzle($request, $response) {
 			$existingTitles[] = $puzzleId;
 		}
 
-		if ($puzzleTitleExists) {
+		if ($slackNameExists) {
 			$existingSlacks[] = $puzzleId;
 		}
 
-		if (!$puzzleURLExists && !$puzzleTitleExists) {
-			$newChannelID = createNewSlackChannel($puzzleContent['slack']);
+		if (!$puzzleURLExists && !$puzzleTitleExists && !$slackNameExists) {
+			$newChannelID = createPuzzleChannel($puzzleContent['slack']);
 
 			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
 
@@ -706,16 +706,26 @@ function displayTags() {
 }
 
 function addTag($request) {
-	// TODO: Special case adding top-level category
 	$parent = TagQuery::create()
 		->findPk($request->parent);
 
-	$tag = new Tag();
-	$tag->setTitle($request->title);
-	$tag->insertAsLastChildOf($parent);
-	$tag->save();
+	$slack_response = createNewSlackChannel($request->title);
+	$response_body  = $slack_response->getBody();
 
-	redirect('/tags', $request->title.' added.');
+	if ($response_body['ok'] != 1 && $response_body['error'] != "cannot_join_app_user") {
+		$alert = "Sorry, something went wrong: [".$response_body['error']."] ".$response_body['detail'];
+	} else {
+		$tag = new Tag();
+		$tag->setTitle($request->title);
+		$tag->insertAsLastChildOf($parent);
+		$tag->setSlackChannel($response_body['channel']['name']);
+		$tag->setSlackChannelId($response_body['channel']['id']);
+		$tag->save();
+
+		$alert = $request->title.' added.';
+	}
+
+	redirect('/tags', $alert);
 }
 
 function moveTag($request, $id, $dir) {

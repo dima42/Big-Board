@@ -38,13 +38,17 @@ function getSlackChannelID($slug) {
 function createNewSlackChannel($slug) {
 	$commander = getSlackCommander();
 
-	$commander->execute('channels.create', [
+	$slack_response = $commander->execute('channels.create', [
 			'name' => $slug
 		]);
 
-	$response = getSlackChannelID($slug);
+	preprint($slack_response);
+	return $slack_response;
+}
 
-	return $response;
+function createPuzzleChannel($slug) {
+	createNewSlackChannel($slug);
+	return getSlackChannelID($slug);
 }
 
 function inviteToSlackChannel($channel_id, $member_id) {
