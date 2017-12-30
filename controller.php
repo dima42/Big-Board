@@ -81,8 +81,14 @@ $this->with('/tags', function () {
 		$this->respond('GET', '/?', function ($request, $response) {
 				return displayTags();
 			});
+		$this->respond('GET', '/edit/?', function ($request, $response) {
+				return displayTags('edit');
+			});
 		$this->respond('POST', '/add/?', function ($request, $response) {
 				return addTag($request);
+			});
+		$this->respond('POST', '/[:id]/edit/?', function ($request, $response) {
+				return editTag($request);
 			});
 		$this->respond('POST', '/[:id]/move_up/?', function ($request, $response) {
 				return moveTag($request, $request->id, 'up');
@@ -667,20 +673,22 @@ function addPuzzle($request, $response) {
 
 // TAGS
 
-function displayTags() {
+function displayTags($view = 'view') {
 	$puzzles = TagQuery::create()
-		->findRoot(1)
-		->getBranch();
+		->findTree(1);
 
 	$topics = TagQuery::create()
-		->findRoot(2)
-		->getBranch();
+		->findTree(2);
 
 	$skills = TagQuery::create()
-		->findRoot(3)
-		->getBranch();
+		->findTree(3);
 
-	render('tags.twig', 'tags', array(
+	$template = 'tags.twig';
+	if ($view == 'edit') {
+		$template = 'tags-edit.twig';
+	}
+
+	render($template, 'tags', array(
 			'scopes' => [
 				$puzzles,
 				$topics,
@@ -718,6 +726,18 @@ function addTag($request) {
 	redirect('/tags', $alert);
 }
 
+function editTag($request) {
+	$tag = TagQuery::create()
+		->findPk($request->id);
+
+	$tag->setTitle($request->title);
+	$tag->setDescription($request->description);
+	$tag->save();
+
+	$alert = $request->title.' edited.';
+	redirect('/tags/edit', $alert);
+}
+
 function moveTag($request, $id, $dir) {
 	$tag = TagQuery::create()
 		->findPk($id);
@@ -730,7 +750,7 @@ function moveTag($request, $id, $dir) {
 		$tag->moveToPrevSiblingOf($prevSib);
 	}
 
-	redirect('/tags', $tag->getTitle().' moved '.$dir.'.');
+	redirect('/tags/edit', $tag->getTitle().' moved '.$dir.'.');
 }
 
 function alertTag($request, $response, $puzzle_id) {

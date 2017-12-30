@@ -2,6 +2,7 @@
     <form class="" action="/tags/add" method="post">
         <div class="input-group">
             <input type="text" class="form-control" name="title" placeholder="Tag">
+            <input type="text" class="form-control" name="description" placeholder="Description">
             <input type="hidden" name="parent" value="{{ parent }}">
             <span class="input-group-btn">
                 <button class="btn btn-dark" type="submit">Go</button>

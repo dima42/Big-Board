@@ -1,0 +1,30 @@
+{% extends 'tags.twig' %}
+
+{% block content %}
+<h1>Edit tags</h1>
+{% for scope in scopes %}
+{% for tag in scope %}
+    <div class="tag tag-form level{{ tag.level }}">
+        <form class="edit-tag" action="/tags/{{ tag.id }}/edit" method="post">
+            <div class="input-group">
+                <input type="text" class="form-control" name="title" placeholder="Tag" value="{{ tag.title }}">
+                <input type="text" class="form-control" name="description" placeholder="Description" value="{{ tag.description }}">
+                <span class="input-group-btn">
+                    <button class="btn btn-dark" type="submit">Go</button>
+                </span>
+            </div>
+        </form>
+        {% if tag.hasNextSibling %}
+        <form method="post" class="move-tag move-tag-down" action="/tags/{{ tag.id }}/move_dn">
+            <button class="btn btn-light badge badge-light" href="#">&darr;</button>
+        </form>
+        {% endif %}
+        {% if tag.hasPrevSibling %}
+        <form method="post" class="move-tag move-tag-up" action="/tags/{{ tag.id }}/move_up">
+            <button class="btn btn-light badge badge-light" href="#">&uarr;</button>
+        </form>
+        {% endif %}
+    </div>
+{% endfor %}
+{% endfor %}
+{% endblock %}

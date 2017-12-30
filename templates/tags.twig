@@ -1,25 +1,25 @@
 {% extends 'loggedin.twig' %}
 
+{% block filters %}
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="/tags">View</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/tags/edit">Edit</a>
+    </li>
+</ul>
+{% endblock %}
+
 {% block content %}
+<h1>Tags</h1>
 {% for scope in scopes %}
-{% for tag in scope %}
-    <div class="tag level{{ tag.level }}" data-level="{{ tag.level }}" data-pk="{{ tag.id }}">
-        {{ tag.title }}
-        <a class="badge badge-light" href="#" data-behavior="add-tag">+ Child</a>
-        <div class="float-right">
-            {% if tag.hasNextSibling %}
-            <form method="post" class="move-tag" action="/tags/{{ tag.id }}/move_dn">
-                <button class="btn btn-light badge badge-light" href="#">&darr;</button>
-            </form>
-            {% endif %}
-            {% if tag.hasPrevSibling %}
-            <form method="post" class="move-tag" action="/tags/{{ tag.id }}/move_up">
-                <button class="btn btn-light badge badge-light" href="#">&uarr;</button>
-            </form>
-            {% endif %}
+    {% for tag in scope %}
+        <div class="tag level{{ tag.level }}" data-level="{{ tag.level }}" data-pk="{{ tag.id }}">
+            {{ tag.title }}
+            <a class="badge badge-light" href="#" data-behavior="add-tag">+ Child</a>
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
 {% endfor %}
 {% endblock %}
 
