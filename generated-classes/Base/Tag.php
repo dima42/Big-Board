@@ -82,6 +82,14 @@ abstract class Tag implements ActiveRecordInterface
     protected $title;
 
     /**
+     * The value for the alerted field.
+     *
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $alerted;
+
+    /**
      * The value for the slack_channel field.
      *
      * @var        string
@@ -94,6 +102,13 @@ abstract class Tag implements ActiveRecordInterface
      * @var        string
      */
     protected $slack_channel_id;
+
+    /**
+     * The value for the description field.
+     *
+     * @var        string
+     */
+    protected $description;
 
     /**
      * The value for the tree_left field.
@@ -200,10 +215,23 @@ abstract class Tag implements ActiveRecordInterface
     protected $tagAlertsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->alerted = true;
+    }
+
+    /**
      * Initializes internal state of Base\Tag object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -445,6 +473,26 @@ abstract class Tag implements ActiveRecordInterface
     }
 
     /**
+     * Get the [alerted] column value.
+     *
+     * @return boolean
+     */
+    public function getAlerted()
+    {
+        return $this->alerted;
+    }
+
+    /**
+     * Get the [alerted] column value.
+     *
+     * @return boolean
+     */
+    public function isAlerted()
+    {
+        return $this->getAlerted();
+    }
+
+    /**
      * Get the [slack_channel] column value.
      *
      * @return string
@@ -462,6 +510,16 @@ abstract class Tag implements ActiveRecordInterface
     public function getSlackChannelId()
     {
         return $this->slack_channel_id;
+    }
+
+    /**
+     * Get the [description] column value.
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**
@@ -545,6 +603,34 @@ abstract class Tag implements ActiveRecordInterface
     } // setTitle()
 
     /**
+     * Sets the value of the [alerted] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\Tag The current object (for fluent API support)
+     */
+    public function setAlerted($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->alerted !== $v) {
+            $this->alerted = $v;
+            $this->modifiedColumns[TagTableMap::COL_ALERTED] = true;
+        }
+
+        return $this;
+    } // setAlerted()
+
+    /**
      * Set the value of [slack_channel] column.
      *
      * @param string $v new value
@@ -583,6 +669,26 @@ abstract class Tag implements ActiveRecordInterface
 
         return $this;
     } // setSlackChannelId()
+
+    /**
+     * Set the value of [description] column.
+     *
+     * @param string $v new value
+     * @return $this|\Tag The current object (for fluent API support)
+     */
+    public function setDescription($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->description !== $v) {
+            $this->description = $v;
+            $this->modifiedColumns[TagTableMap::COL_DESCRIPTION] = true;
+        }
+
+        return $this;
+    } // setDescription()
 
     /**
      * Set the value of [tree_left] column.
@@ -674,6 +780,10 @@ abstract class Tag implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->alerted !== true) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -706,22 +816,28 @@ abstract class Tag implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : TagTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : TagTableMap::translateFieldName('SlackChannel', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : TagTableMap::translateFieldName('Alerted', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->alerted = (null !== $col) ? (boolean) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : TagTableMap::translateFieldName('SlackChannel', TableMap::TYPE_PHPNAME, $indexType)];
             $this->slack_channel = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : TagTableMap::translateFieldName('SlackChannelId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : TagTableMap::translateFieldName('SlackChannelId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->slack_channel_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : TagTableMap::translateFieldName('TreeLeft', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : TagTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->description = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : TagTableMap::translateFieldName('TreeLeft', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tree_left = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : TagTableMap::translateFieldName('TreeRight', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : TagTableMap::translateFieldName('TreeRight', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tree_right = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : TagTableMap::translateFieldName('TreeLevel', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : TagTableMap::translateFieldName('TreeLevel', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tree_level = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : TagTableMap::translateFieldName('TreeScope', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : TagTableMap::translateFieldName('TreeScope', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tree_scope = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -731,7 +847,7 @@ abstract class Tag implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = TagTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = TagTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Tag'), 0, $e);
@@ -1014,11 +1130,17 @@ abstract class Tag implements ActiveRecordInterface
         if ($this->isColumnModified(TagTableMap::COL_TITLE)) {
             $modifiedColumns[':p' . $index++]  = 'title';
         }
+        if ($this->isColumnModified(TagTableMap::COL_ALERTED)) {
+            $modifiedColumns[':p' . $index++]  = 'alerted';
+        }
         if ($this->isColumnModified(TagTableMap::COL_SLACK_CHANNEL)) {
             $modifiedColumns[':p' . $index++]  = 'slack_channel';
         }
         if ($this->isColumnModified(TagTableMap::COL_SLACK_CHANNEL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'slack_channel_id';
+        }
+        if ($this->isColumnModified(TagTableMap::COL_DESCRIPTION)) {
+            $modifiedColumns[':p' . $index++]  = 'description';
         }
         if ($this->isColumnModified(TagTableMap::COL_TREE_LEFT)) {
             $modifiedColumns[':p' . $index++]  = 'tree_left';
@@ -1049,11 +1171,17 @@ abstract class Tag implements ActiveRecordInterface
                     case 'title':
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
+                    case 'alerted':
+                        $stmt->bindValue($identifier, (int) $this->alerted, PDO::PARAM_INT);
+                        break;
                     case 'slack_channel':
                         $stmt->bindValue($identifier, $this->slack_channel, PDO::PARAM_STR);
                         break;
                     case 'slack_channel_id':
                         $stmt->bindValue($identifier, $this->slack_channel_id, PDO::PARAM_STR);
+                        break;
+                    case 'description':
+                        $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
                     case 'tree_left':
                         $stmt->bindValue($identifier, $this->tree_left, PDO::PARAM_INT);
@@ -1136,21 +1264,27 @@ abstract class Tag implements ActiveRecordInterface
                 return $this->getTitle();
                 break;
             case 2:
-                return $this->getSlackChannel();
+                return $this->getAlerted();
                 break;
             case 3:
-                return $this->getSlackChannelId();
+                return $this->getSlackChannel();
                 break;
             case 4:
-                return $this->getTreeLeft();
+                return $this->getSlackChannelId();
                 break;
             case 5:
-                return $this->getTreeRight();
+                return $this->getDescription();
                 break;
             case 6:
-                return $this->getTreeLevel();
+                return $this->getTreeLeft();
                 break;
             case 7:
+                return $this->getTreeRight();
+                break;
+            case 8:
+                return $this->getTreeLevel();
+                break;
+            case 9:
                 return $this->getTreeScope();
                 break;
             default:
@@ -1185,12 +1319,14 @@ abstract class Tag implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getTitle(),
-            $keys[2] => $this->getSlackChannel(),
-            $keys[3] => $this->getSlackChannelId(),
-            $keys[4] => $this->getTreeLeft(),
-            $keys[5] => $this->getTreeRight(),
-            $keys[6] => $this->getTreeLevel(),
-            $keys[7] => $this->getTreeScope(),
+            $keys[2] => $this->getAlerted(),
+            $keys[3] => $this->getSlackChannel(),
+            $keys[4] => $this->getSlackChannelId(),
+            $keys[5] => $this->getDescription(),
+            $keys[6] => $this->getTreeLeft(),
+            $keys[7] => $this->getTreeRight(),
+            $keys[8] => $this->getTreeLevel(),
+            $keys[9] => $this->getTreeScope(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1254,21 +1390,27 @@ abstract class Tag implements ActiveRecordInterface
                 $this->setTitle($value);
                 break;
             case 2:
-                $this->setSlackChannel($value);
+                $this->setAlerted($value);
                 break;
             case 3:
-                $this->setSlackChannelId($value);
+                $this->setSlackChannel($value);
                 break;
             case 4:
-                $this->setTreeLeft($value);
+                $this->setSlackChannelId($value);
                 break;
             case 5:
-                $this->setTreeRight($value);
+                $this->setDescription($value);
                 break;
             case 6:
-                $this->setTreeLevel($value);
+                $this->setTreeLeft($value);
                 break;
             case 7:
+                $this->setTreeRight($value);
+                break;
+            case 8:
+                $this->setTreeLevel($value);
+                break;
+            case 9:
                 $this->setTreeScope($value);
                 break;
         } // switch()
@@ -1304,22 +1446,28 @@ abstract class Tag implements ActiveRecordInterface
             $this->setTitle($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setSlackChannel($arr[$keys[2]]);
+            $this->setAlerted($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setSlackChannelId($arr[$keys[3]]);
+            $this->setSlackChannel($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setTreeLeft($arr[$keys[4]]);
+            $this->setSlackChannelId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setTreeRight($arr[$keys[5]]);
+            $this->setDescription($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setTreeLevel($arr[$keys[6]]);
+            $this->setTreeLeft($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setTreeScope($arr[$keys[7]]);
+            $this->setTreeRight($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setTreeLevel($arr[$keys[8]]);
+        }
+        if (array_key_exists($keys[9], $arr)) {
+            $this->setTreeScope($arr[$keys[9]]);
         }
     }
 
@@ -1368,11 +1516,17 @@ abstract class Tag implements ActiveRecordInterface
         if ($this->isColumnModified(TagTableMap::COL_TITLE)) {
             $criteria->add(TagTableMap::COL_TITLE, $this->title);
         }
+        if ($this->isColumnModified(TagTableMap::COL_ALERTED)) {
+            $criteria->add(TagTableMap::COL_ALERTED, $this->alerted);
+        }
         if ($this->isColumnModified(TagTableMap::COL_SLACK_CHANNEL)) {
             $criteria->add(TagTableMap::COL_SLACK_CHANNEL, $this->slack_channel);
         }
         if ($this->isColumnModified(TagTableMap::COL_SLACK_CHANNEL_ID)) {
             $criteria->add(TagTableMap::COL_SLACK_CHANNEL_ID, $this->slack_channel_id);
+        }
+        if ($this->isColumnModified(TagTableMap::COL_DESCRIPTION)) {
+            $criteria->add(TagTableMap::COL_DESCRIPTION, $this->description);
         }
         if ($this->isColumnModified(TagTableMap::COL_TREE_LEFT)) {
             $criteria->add(TagTableMap::COL_TREE_LEFT, $this->tree_left);
@@ -1473,8 +1627,10 @@ abstract class Tag implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setTitle($this->getTitle());
+        $copyObj->setAlerted($this->getAlerted());
         $copyObj->setSlackChannel($this->getSlackChannel());
         $copyObj->setSlackChannelId($this->getSlackChannelId());
+        $copyObj->setDescription($this->getDescription());
         $copyObj->setTreeLeft($this->getTreeLeft());
         $copyObj->setTreeRight($this->getTreeRight());
         $copyObj->setTreeLevel($this->getTreeLevel());
@@ -2043,14 +2199,17 @@ abstract class Tag implements ActiveRecordInterface
     {
         $this->id = null;
         $this->title = null;
+        $this->alerted = null;
         $this->slack_channel = null;
         $this->slack_channel_id = null;
+        $this->description = null;
         $this->tree_left = null;
         $this->tree_right = null;
         $this->tree_level = null;
         $this->tree_scope = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

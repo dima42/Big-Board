@@ -59,7 +59,7 @@ class TagTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class TagTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the id field
@@ -82,6 +82,11 @@ class TagTableMap extends TableMap
     const COL_TITLE = 'tag.title';
 
     /**
+     * the column name for the alerted field
+     */
+    const COL_ALERTED = 'tag.alerted';
+
+    /**
      * the column name for the slack_channel field
      */
     const COL_SLACK_CHANNEL = 'tag.slack_channel';
@@ -90,6 +95,11 @@ class TagTableMap extends TableMap
      * the column name for the slack_channel_id field
      */
     const COL_SLACK_CHANNEL_ID = 'tag.slack_channel_id';
+
+    /**
+     * the column name for the description field
+     */
+    const COL_DESCRIPTION = 'tag.description';
 
     /**
      * the column name for the tree_left field
@@ -123,11 +133,11 @@ class TagTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Title', 'SlackChannel', 'SlackChannelId', 'TreeLeft', 'TreeRight', 'TreeLevel', 'TreeScope', ),
-        self::TYPE_CAMELNAME     => array('id', 'title', 'slackChannel', 'slackChannelId', 'treeLeft', 'treeRight', 'treeLevel', 'treeScope', ),
-        self::TYPE_COLNAME       => array(TagTableMap::COL_ID, TagTableMap::COL_TITLE, TagTableMap::COL_SLACK_CHANNEL, TagTableMap::COL_SLACK_CHANNEL_ID, TagTableMap::COL_TREE_LEFT, TagTableMap::COL_TREE_RIGHT, TagTableMap::COL_TREE_LEVEL, TagTableMap::COL_TREE_SCOPE, ),
-        self::TYPE_FIELDNAME     => array('id', 'title', 'slack_channel', 'slack_channel_id', 'tree_left', 'tree_right', 'tree_level', 'tree_scope', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id', 'Title', 'Alerted', 'SlackChannel', 'SlackChannelId', 'Description', 'TreeLeft', 'TreeRight', 'TreeLevel', 'TreeScope', ),
+        self::TYPE_CAMELNAME     => array('id', 'title', 'alerted', 'slackChannel', 'slackChannelId', 'description', 'treeLeft', 'treeRight', 'treeLevel', 'treeScope', ),
+        self::TYPE_COLNAME       => array(TagTableMap::COL_ID, TagTableMap::COL_TITLE, TagTableMap::COL_ALERTED, TagTableMap::COL_SLACK_CHANNEL, TagTableMap::COL_SLACK_CHANNEL_ID, TagTableMap::COL_DESCRIPTION, TagTableMap::COL_TREE_LEFT, TagTableMap::COL_TREE_RIGHT, TagTableMap::COL_TREE_LEVEL, TagTableMap::COL_TREE_SCOPE, ),
+        self::TYPE_FIELDNAME     => array('id', 'title', 'alerted', 'slack_channel', 'slack_channel_id', 'description', 'tree_left', 'tree_right', 'tree_level', 'tree_scope', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -137,11 +147,11 @@ class TagTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'SlackChannel' => 2, 'SlackChannelId' => 3, 'TreeLeft' => 4, 'TreeRight' => 5, 'TreeLevel' => 6, 'TreeScope' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'slackChannel' => 2, 'slackChannelId' => 3, 'treeLeft' => 4, 'treeRight' => 5, 'treeLevel' => 6, 'treeScope' => 7, ),
-        self::TYPE_COLNAME       => array(TagTableMap::COL_ID => 0, TagTableMap::COL_TITLE => 1, TagTableMap::COL_SLACK_CHANNEL => 2, TagTableMap::COL_SLACK_CHANNEL_ID => 3, TagTableMap::COL_TREE_LEFT => 4, TagTableMap::COL_TREE_RIGHT => 5, TagTableMap::COL_TREE_LEVEL => 6, TagTableMap::COL_TREE_SCOPE => 7, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'slack_channel' => 2, 'slack_channel_id' => 3, 'tree_left' => 4, 'tree_right' => 5, 'tree_level' => 6, 'tree_scope' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Alerted' => 2, 'SlackChannel' => 3, 'SlackChannelId' => 4, 'Description' => 5, 'TreeLeft' => 6, 'TreeRight' => 7, 'TreeLevel' => 8, 'TreeScope' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'alerted' => 2, 'slackChannel' => 3, 'slackChannelId' => 4, 'description' => 5, 'treeLeft' => 6, 'treeRight' => 7, 'treeLevel' => 8, 'treeScope' => 9, ),
+        self::TYPE_COLNAME       => array(TagTableMap::COL_ID => 0, TagTableMap::COL_TITLE => 1, TagTableMap::COL_ALERTED => 2, TagTableMap::COL_SLACK_CHANNEL => 3, TagTableMap::COL_SLACK_CHANNEL_ID => 4, TagTableMap::COL_DESCRIPTION => 5, TagTableMap::COL_TREE_LEFT => 6, TagTableMap::COL_TREE_RIGHT => 7, TagTableMap::COL_TREE_LEVEL => 8, TagTableMap::COL_TREE_SCOPE => 9, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'alerted' => 2, 'slack_channel' => 3, 'slack_channel_id' => 4, 'description' => 5, 'tree_left' => 6, 'tree_right' => 7, 'tree_level' => 8, 'tree_scope' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -164,8 +174,10 @@ class TagTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('title', 'Title', 'VARCHAR', true, 255, null);
         $this->getColumn('title')->setPrimaryString(true);
+        $this->addColumn('alerted', 'Alerted', 'BOOLEAN', true, 1, true);
         $this->addColumn('slack_channel', 'SlackChannel', 'VARCHAR', false, 48, null);
         $this->addColumn('slack_channel_id', 'SlackChannelId', 'VARCHAR', false, 24, null);
+        $this->addColumn('description', 'Description', 'VARCHAR', false, 48, null);
         $this->addColumn('tree_left', 'TreeLeft', 'INTEGER', false, null, null);
         $this->addColumn('tree_right', 'TreeRight', 'INTEGER', false, null, null);
         $this->addColumn('tree_level', 'TreeLevel', 'INTEGER', false, null, null);
@@ -352,8 +364,10 @@ class TagTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(TagTableMap::COL_ID);
             $criteria->addSelectColumn(TagTableMap::COL_TITLE);
+            $criteria->addSelectColumn(TagTableMap::COL_ALERTED);
             $criteria->addSelectColumn(TagTableMap::COL_SLACK_CHANNEL);
             $criteria->addSelectColumn(TagTableMap::COL_SLACK_CHANNEL_ID);
+            $criteria->addSelectColumn(TagTableMap::COL_DESCRIPTION);
             $criteria->addSelectColumn(TagTableMap::COL_TREE_LEFT);
             $criteria->addSelectColumn(TagTableMap::COL_TREE_RIGHT);
             $criteria->addSelectColumn(TagTableMap::COL_TREE_LEVEL);
@@ -361,8 +375,10 @@ class TagTableMap extends TableMap
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.title');
+            $criteria->addSelectColumn($alias . '.alerted');
             $criteria->addSelectColumn($alias . '.slack_channel');
             $criteria->addSelectColumn($alias . '.slack_channel_id');
+            $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.tree_left');
             $criteria->addSelectColumn($alias . '.tree_right');
             $criteria->addSelectColumn($alias . '.tree_level');

@@ -42,8 +42,10 @@ CREATE TABLE `tag`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255) NOT NULL,
+    `alerted` TINYINT(1) DEFAULT 1 NOT NULL,
     `slack_channel` VARCHAR(48),
     `slack_channel_id` VARCHAR(24),
+    `description` VARCHAR(48),
     `tree_left` INTEGER,
     `tree_right` INTEGER,
     `tree_level` INTEGER,

@@ -23,8 +23,10 @@ use Propel\Runtime\Map\TableMap;
  *
  * @method     ChildTagQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildTagQuery orderByTitle($order = Criteria::ASC) Order by the title column
+ * @method     ChildTagQuery orderByAlerted($order = Criteria::ASC) Order by the alerted column
  * @method     ChildTagQuery orderBySlackChannel($order = Criteria::ASC) Order by the slack_channel column
  * @method     ChildTagQuery orderBySlackChannelId($order = Criteria::ASC) Order by the slack_channel_id column
+ * @method     ChildTagQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method     ChildTagQuery orderByTreeLeft($order = Criteria::ASC) Order by the tree_left column
  * @method     ChildTagQuery orderByTreeRight($order = Criteria::ASC) Order by the tree_right column
  * @method     ChildTagQuery orderByTreeLevel($order = Criteria::ASC) Order by the tree_level column
@@ -32,8 +34,10 @@ use Propel\Runtime\Map\TableMap;
  *
  * @method     ChildTagQuery groupById() Group by the id column
  * @method     ChildTagQuery groupByTitle() Group by the title column
+ * @method     ChildTagQuery groupByAlerted() Group by the alerted column
  * @method     ChildTagQuery groupBySlackChannel() Group by the slack_channel column
  * @method     ChildTagQuery groupBySlackChannelId() Group by the slack_channel_id column
+ * @method     ChildTagQuery groupByDescription() Group by the description column
  * @method     ChildTagQuery groupByTreeLeft() Group by the tree_left column
  * @method     ChildTagQuery groupByTreeRight() Group by the tree_right column
  * @method     ChildTagQuery groupByTreeLevel() Group by the tree_level column
@@ -64,8 +68,10 @@ use Propel\Runtime\Map\TableMap;
  *
  * @method     ChildTag findOneById(int $id) Return the first ChildTag filtered by the id column
  * @method     ChildTag findOneByTitle(string $title) Return the first ChildTag filtered by the title column
+ * @method     ChildTag findOneByAlerted(boolean $alerted) Return the first ChildTag filtered by the alerted column
  * @method     ChildTag findOneBySlackChannel(string $slack_channel) Return the first ChildTag filtered by the slack_channel column
  * @method     ChildTag findOneBySlackChannelId(string $slack_channel_id) Return the first ChildTag filtered by the slack_channel_id column
+ * @method     ChildTag findOneByDescription(string $description) Return the first ChildTag filtered by the description column
  * @method     ChildTag findOneByTreeLeft(int $tree_left) Return the first ChildTag filtered by the tree_left column
  * @method     ChildTag findOneByTreeRight(int $tree_right) Return the first ChildTag filtered by the tree_right column
  * @method     ChildTag findOneByTreeLevel(int $tree_level) Return the first ChildTag filtered by the tree_level column
@@ -76,8 +82,10 @@ use Propel\Runtime\Map\TableMap;
  *
  * @method     ChildTag requireOneById(int $id) Return the first ChildTag filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOneByTitle(string $title) Return the first ChildTag filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOneByAlerted(boolean $alerted) Return the first ChildTag filtered by the alerted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOneBySlackChannel(string $slack_channel) Return the first ChildTag filtered by the slack_channel column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOneBySlackChannelId(string $slack_channel_id) Return the first ChildTag filtered by the slack_channel_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOneByDescription(string $description) Return the first ChildTag filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOneByTreeLeft(int $tree_left) Return the first ChildTag filtered by the tree_left column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOneByTreeRight(int $tree_right) Return the first ChildTag filtered by the tree_right column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOneByTreeLevel(int $tree_level) Return the first ChildTag filtered by the tree_level column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -86,8 +94,10 @@ use Propel\Runtime\Map\TableMap;
  * @method     ChildTag[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTag objects based on current ModelCriteria
  * @method     ChildTag[]|ObjectCollection findById(int $id) Return ChildTag objects filtered by the id column
  * @method     ChildTag[]|ObjectCollection findByTitle(string $title) Return ChildTag objects filtered by the title column
+ * @method     ChildTag[]|ObjectCollection findByAlerted(boolean $alerted) Return ChildTag objects filtered by the alerted column
  * @method     ChildTag[]|ObjectCollection findBySlackChannel(string $slack_channel) Return ChildTag objects filtered by the slack_channel column
  * @method     ChildTag[]|ObjectCollection findBySlackChannelId(string $slack_channel_id) Return ChildTag objects filtered by the slack_channel_id column
+ * @method     ChildTag[]|ObjectCollection findByDescription(string $description) Return ChildTag objects filtered by the description column
  * @method     ChildTag[]|ObjectCollection findByTreeLeft(int $tree_left) Return ChildTag objects filtered by the tree_left column
  * @method     ChildTag[]|ObjectCollection findByTreeRight(int $tree_right) Return ChildTag objects filtered by the tree_right column
  * @method     ChildTag[]|ObjectCollection findByTreeLevel(int $tree_level) Return ChildTag objects filtered by the tree_level column
@@ -190,7 +200,7 @@ abstract class TagQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, title, slack_channel, slack_channel_id, tree_left, tree_right, tree_level, tree_scope FROM tag WHERE id = :p0';
+        $sql = 'SELECT id, title, alerted, slack_channel, slack_channel_id, description, tree_left, tree_right, tree_level, tree_scope FROM tag WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -347,6 +357,33 @@ abstract class TagQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the alerted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAlerted(true); // WHERE alerted = true
+     * $query->filterByAlerted('yes'); // WHERE alerted = true
+     * </code>
+     *
+     * @param     boolean|string $alerted The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildTagQuery The current query, for fluid interface
+     */
+    public function filterByAlerted($alerted = null, $comparison = null)
+    {
+        if (is_string($alerted)) {
+            $alerted = in_array(strtolower($alerted), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(TagTableMap::COL_ALERTED, $alerted, $comparison);
+    }
+
+    /**
      * Filter the query on the slack_channel column
      *
      * Example usage:
@@ -394,6 +431,31 @@ abstract class TagQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(TagTableMap::COL_SLACK_CHANNEL_ID, $slackChannelId, $comparison);
+    }
+
+    /**
+     * Filter the query on the description column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDescription('fooValue');   // WHERE description = 'fooValue'
+     * $query->filterByDescription('%fooValue%', Criteria::LIKE); // WHERE description LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $description The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildTagQuery The current query, for fluid interface
+     */
+    public function filterByDescription($description = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($description)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(TagTableMap::COL_DESCRIPTION, $description, $comparison);
     }
 
     /**
@@ -1114,11 +1176,11 @@ abstract class TagQuery extends ModelCriteria
                     $key = TagTableMap::getPrimaryKeyHashFromRow($row, 0);
                     /** @var $object ChildTag */
                     if (null !== ($object = TagTableMap::getInstanceFromPool($key))) {
-                        $object->setLeftValue($row[4]);
-                        $object->setRightValue($row[5]);
-                        $object->setLevel($row[6]);
+                        $object->setLeftValue($row[6]);
+                        $object->setRightValue($row[7]);
+                        $object->setLevel($row[8]);
                         $object->clearNestedSetChildren();
-                        $object->setScopeValue($row[7]);
+                        $object->setScopeValue($row[9]);
                     }
                 }
                 $dataFetcher->close();
