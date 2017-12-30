@@ -30,7 +30,7 @@
         <column name="alerted" type="boolean" required="true" defaultValue="true" />
         <column name="slack_channel" type="varchar" size="48" required="false" />
         <column name="slack_channel_id" type="varchar" size="24" required="false" />
-        <column name="description" type="varchar" size="48" required="false" />
+        <column name="description" type="varchar" size="128" required="false" />
         <behavior name="nested_set">
             <parameter name="use_scope" value="true" />
         </behavior>

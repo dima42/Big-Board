@@ -177,7 +177,7 @@ class TagTableMap extends TableMap
         $this->addColumn('alerted', 'Alerted', 'BOOLEAN', true, 1, true);
         $this->addColumn('slack_channel', 'SlackChannel', 'VARCHAR', false, 48, null);
         $this->addColumn('slack_channel_id', 'SlackChannelId', 'VARCHAR', false, 24, null);
-        $this->addColumn('description', 'Description', 'VARCHAR', false, 48, null);
+        $this->addColumn('description', 'Description', 'VARCHAR', false, 128, null);
         $this->addColumn('tree_left', 'TreeLeft', 'INTEGER', false, null, null);
         $this->addColumn('tree_right', 'TreeRight', 'INTEGER', false, null, null);
         $this->addColumn('tree_level', 'TreeLevel', 'INTEGER', false, null, null);

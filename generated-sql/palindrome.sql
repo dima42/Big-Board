@@ -45,7 +45,7 @@ CREATE TABLE `tag`
     `alerted` TINYINT(1) DEFAULT 1 NOT NULL,
     `slack_channel` VARCHAR(48),
     `slack_channel_id` VARCHAR(24),
-    `description` VARCHAR(48),
+    `description` VARCHAR(128),
     `tree_left` INTEGER,
     `tree_right` INTEGER,
     `tree_level` INTEGER,
