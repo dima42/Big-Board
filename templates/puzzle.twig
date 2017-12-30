@@ -30,7 +30,7 @@
         </form>
         {% else %}
         <form class="join-leave" action="/puzzle/{{ puzzle.id }}/leave" method="post">
-            <button type="submit" class="btn btn-primary">Leave this</button>
+            <button type="submit" class="btn btn-dark">Leave this</button>
         </form>
         {% endif %}
     </div>
@@ -166,18 +166,15 @@ $(function() {
     $('.tag-list a').click(function(e) {
         e.preventDefault();
 
-        var data = {
-            'tag_id': $(this).data('id')
-        };
         var link = $(this);
-
-        if (link.hasClass('alerted')) {
-            return;
-        }
+        var data = {
+            'tag_id': $(this).data('id'),
+            'alerted': link.hasClass('alerted')
+        };
 
         $.post('/tags/alert/{{ puzzle.id }}', data, function(response) {
             if (response['ok']) {
-                link.addClass('alerted');
+                link.toggleClass('alerted');
             }
         });
     });

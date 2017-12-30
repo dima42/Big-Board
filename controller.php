@@ -734,26 +734,38 @@ function moveTag($request, $id, $dir) {
 }
 
 function alertTag($request, $response, $puzzle_id) {
+	$tag_id = $request->tag_id;
+
 	$tag = TagQuery::create()
-		->findPk($request->tag_id);
+		->findPk($tag_id);
 
 	$puzzle = PuzzleQuery::create()
 		->findPk($puzzle_id);
 
 	// TODO: Don't allow if link has .alerted class
 
-	$ta = new TagAlert();
-	$ta->setPuzzle($puzzle);
-	$ta->setTag($tag);
-	$ta->save();
+	if ($request->alerted == "true") {
+		$ta = TagAlertQuery::create()
+			->filterByPuzzleId($puzzle_id)
+			->filterByTagId($tag_id)
+			->findOne()
+			->delete();
 
-	postToSlack("*".$puzzle->getTitle()."* has been tagged ".$tag->getTitle(), $puzzle->getSlackAttachmentMedium(), ":label:", "TagBot", $tag->getSlackChannelId());
+		$json = [
+			'ok' => 1
+		];
+	} else {
+		$ta = new TagAlert();
+		$ta->setPuzzle($puzzle);
+		$ta->setTag($tag);
+		$ta->save();
 
-	$json = [
-		'ok'     => 1,
-		'puzzle' => $puzzle_id,
-		'tag'    => $tag->getId(),
-	];
+		postToSlack("*".$puzzle->getTitle()."* has been tagged ".$tag->getTitle(), $puzzle->getSlackAttachmentMedium(), ":label:", "TagBot", $tag->getSlackChannelId());
+
+		$json = [
+			'ok' => 1
+		];
+	}
 
 	return $response->json($json);
 }
