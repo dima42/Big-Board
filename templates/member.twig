@@ -40,6 +40,21 @@
 
 {% from 'macros.twig' import puzzle_table %}
 {{ puzzle_table() }}
+
+{% for scope in scopes %}
+    {% for tag in scope %}
+        <a href="http://{{ slackDomain }}.slack.com/messages/{{ tag.slackChannelId }}">{{ tag.title }}</a>
+            <a href="#" class="badge badge-dark">
+                {% if tag.slackChannelId in member_channels %}
+                    member
+                {% else %}
+                    join
+                {% endif %}
+            </a>
+        <br>
+    {% endfor %}
+
+{% endfor %}
 {% endblock %}
 
 {% block aside %}

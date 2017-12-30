@@ -819,6 +819,8 @@ function displayMember($member_id) {
 	$skills = TagQuery::create()
 		->findTree(3);
 
+	$member_channels = [];
+
 	// If it's the logged-in user, take this chance to refresh the session object in case member data has changed
 	if ($member_id == $_SESSION['user']->getId()) {
 		$is_user          = true;
@@ -834,12 +836,15 @@ function displayMember($member_id) {
 			}, $member_of);
 	}
 
-	preprint($member_channels);
-	return;
-
 	render('member.twig', 'member', array(
-			'member'  => $member,
-			'is_user' => $is_user,
+			'member'          => $member,
+			'is_user'         => $is_user,
+			'member_channels' => $member_channels,
+			'scopes'          => [
+				$puzzles,
+				$topics,
+				$skills,
+			],
 		));
 }
 
