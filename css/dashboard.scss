@@ -423,23 +423,24 @@ aside {
 .tag-list {
     a {
         display: block;
-        font-size: .8rem;
-        background: #f7f7f7;
+        font-size: .9rem;
+        // background: #f7f7f7;
         padding: .3em .5em;
-        margin-bottom: 3px;
+        margin-bottom: 4px;
         color: #333;
-        border: 1px solid #eee;
-        border-radius: 4px;
+        border-left: 4px solid #eee;
+        // border-radius: 4px;
+    }
+
+    a:hover, .alerted {
+        background: lighten(#007BFF,45%);
+        border-left-color: darken(#007BFF,20%);
+        color: black;
+        text-decoration: none;
     }
 
     .alerted {
         font-weight: bold;
-        color: white;
-        background:#444;
-
-        &:hover {
-            // background:none;
-        }
     }
 }
 
