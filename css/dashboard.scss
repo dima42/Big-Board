@@ -47,6 +47,11 @@
     color: #DC3545;
 }
 
+.icon-x {
+    @include icon('window-close');
+    color: #444;
+}
+
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
@@ -449,6 +454,17 @@ aside {
 
     .input-group-addon {
         width: 5em;
+    }
+
+    h4 {
+        font-weight: bold;
+    }
+
+    .removePuzzle {
+        text-transform: uppercase;
+        font-size: .75rem;
+        padding: .3em .5em;
+        font-weight: normal;
     }
 }
 

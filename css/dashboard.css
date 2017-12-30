@@ -6,6 +6,7 @@
 .icon-solved,
 .icon-edit,
 .icon-archive,
+.icon-x,
 .far,
 .fal,
 .fab {
@@ -58,7 +59,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x {
   text-align: center;
   width: 1.25em; }
 
@@ -95,6 +96,7 @@
 .fa-pull-left.icon-solved,
 .fa-pull-left.icon-edit,
 .fa-pull-left.icon-archive,
+.fa-pull-left.icon-x,
 .far.fa-pull-left,
 .fal.fa-pull-left,
 .fab.fa-pull-left {
@@ -108,6 +110,7 @@
 .fa-pull-right.icon-solved,
 .fa-pull-right.icon-edit,
 .fa-pull-right.icon-archive,
+.fa-pull-right.icon-x,
 .far.fa-pull-right,
 .fal.fa-pull-right,
 .fab.fa-pull-right {
@@ -2465,7 +2468,7 @@ readers do not read off random characters that represent icons */
 .fa-wikipedia-w:before {
   content: "\f266"; }
 
-.fa-window-close:before {
+.fa-window-close:before, .icon-x:before {
   content: "\f410"; }
 
 .fa-window-maximize:before {
@@ -2584,6 +2587,12 @@ readers do not read off random characters that represent icons */
   font-weight: 900;
   color: #FF6600;
   color: #DC3545; }
+
+.icon-x {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #444; }
 
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
@@ -2822,6 +2831,13 @@ aside {
   margin-bottom: 2.5em; }
   .puzzleInputGroup .input-group-addon {
     width: 5em; }
+  .puzzleInputGroup h4 {
+    font-weight: bold; }
+  .puzzleInputGroup .removePuzzle {
+    text-transform: uppercase;
+    font-size: .75rem;
+    padding: .3em .5em;
+    font-weight: normal; }
 
 body.add .working {
   display: none; }
