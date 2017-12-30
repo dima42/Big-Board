@@ -13,6 +13,14 @@ function getSlackCommander() {
 	return new Commander($slack_key, $interactor);
 }
 
+function getAllSlackChannels() {
+	$commander = getSlackCommander();
+
+	return $commander->execute('channels.list', [
+			'exclude_archived' => true
+		])->getBody();
+}
+
 function getSlackChannelID($slug) {
 	$commander = getSlackCommander();
 

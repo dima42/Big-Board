@@ -810,11 +810,32 @@ function displayMember($member_id) {
 		->filterById($member_id)
 		->findOne();
 
-	// If it's the logged in use, take this chance to refresh the session object in case member data has changed
+	$puzzles = TagQuery::create()
+		->findTree(1);
+
+	$topics = TagQuery::create()
+		->findTree(2);
+
+	$skills = TagQuery::create()
+		->findTree(3);
+
+	// If it's the logged-in user, take this chance to refresh the session object in case member data has changed
 	if ($member_id == $_SESSION['user']->getId()) {
 		$is_user          = true;
 		$_SESSION['user'] = $member;
+
+		$slack_id     = $member->getSlackId();
+		$all_channels = getAllSlackChannels()['channels'];
+		$member_of    = array_filter($all_channels, function ($channel) use ($slack_id) {
+				return in_array($slack_id, $channel['members']);
+			});
+		$member_channels = array_map(function ($channel) {
+				return $channel['id'];
+			}, $member_of);
 	}
+
+	preprint($member_channels);
+	return;
 
 	render('member.twig', 'member', array(
 			'member'  => $member,
