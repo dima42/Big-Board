@@ -88,9 +88,8 @@ function render($template, $context = "", $vars = array()) {
 
 	$member = $_SESSION['user']??null;
 	if ($member) {
-		$vars['user']         = $member;
-		$vars['user_id']      = $_SESSION['user_id'];
-		$vars['user_puzzles'] = $member->getPuzzles();
+		$vars['user']    = $member;
+		$vars['user_id'] = $_SESSION['user_id'];
 	}
 	$vars['alert']         = $_SESSION['alert_message']??null;
 	$vars['statuses']      = ['open', 'stuck', 'priority', 'solved'];

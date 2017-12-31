@@ -99,6 +99,9 @@ $this->with('/tags', function () {
 		$this->respond('POST', '/alert/[:id]/?', function ($request, $response) {
 				return alertTag($request, $response, $request->id);
 			});
+		$this->respond('POST', '/invite/?', function ($request, $response) {
+				return inviteToTag($request, $response);
+			});
 	});
 
 // MEMBER
@@ -296,12 +299,16 @@ function displayAll() {
 		];
 	}
 
+	$member         = $_SESSION['user'];
+	$member_puzzles = $member->getPuzzles();
+
 	$solved_percentage = ($total_puzzle_count == 0)?0:($total_puzzle_count-$unsolved_count)/$total_puzzle_count;
 	render('all.twig', 'puzzles', array(
 			'statusCounts'       => $statusCounts,
 			'unsolved_count'     => $unsolved_count,
 			'solved_percentage'  => $solved_percentage,
 			'total_puzzle_count' => $total_puzzle_count,
+			'member_puzzles'     => $member_puzzles,
 		));
 }
 
@@ -789,6 +796,15 @@ function alertTag($request, $response, $puzzle_id) {
 
 	return $response->json($json);
 }
+
+function inviteToTag($request, $response) {
+	$channel = $request->channel;
+	$member  = $_SESSION['user'];
+
+	$slack_response = inviteToSlackChannel($channel, $member->getSlackId());
+	return $response->json($slack_response);
+}
+
 // MEMBERS
 
 function displayRoster() {
@@ -841,9 +857,9 @@ function displayMember($member_id) {
 			'is_user'         => $is_user,
 			'member_channels' => $member_channels,
 			'scopes'          => [
-				$puzzles,
-				$topics,
-				$skills,
+				'Puzzle Types'   => $puzzles,
+				'Topics'         => $topics,
+				'Skills'         => $skills,
 			],
 		));
 }

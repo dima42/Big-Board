@@ -7,6 +7,8 @@
 .icon-edit,
 .icon-archive,
 .icon-x,
+.icon-tag,
+.icon-tags,
 .far,
 .fal,
 .fab {
@@ -59,7 +61,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags {
   text-align: center;
   width: 1.25em; }
 
@@ -97,6 +99,8 @@
 .fa-pull-left.icon-edit,
 .fa-pull-left.icon-archive,
 .fa-pull-left.icon-x,
+.fa-pull-left.icon-tag,
+.fa-pull-left.icon-tags,
 .far.fa-pull-left,
 .fal.fa-pull-left,
 .fab.fa-pull-left {
@@ -111,6 +115,8 @@
 .fa-pull-right.icon-edit,
 .fa-pull-right.icon-archive,
 .fa-pull-right.icon-x,
+.fa-pull-right.icon-tag,
+.fa-pull-right.icon-tags,
 .far.fa-pull-right,
 .fal.fa-pull-right,
 .fab.fa-pull-right {
@@ -2171,10 +2177,10 @@ readers do not read off random characters that represent icons */
 .fa-tachometer-alt:before {
   content: "\f3fd"; }
 
-.fa-tag:before {
+.fa-tag:before, .icon-tag:before {
   content: "\f02b"; }
 
-.fa-tags:before {
+.fa-tags:before, .icon-tags:before {
   content: "\f02c"; }
 
 .fa-tasks:before {
@@ -2594,6 +2600,18 @@ readers do not read off random characters that represent icons */
   color: #FF6600;
   color: #444; }
 
+.icon-tag {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #444; }
+
+.icon-tags {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #444; }
+
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
   padding-top: 3.5rem;
@@ -2832,7 +2850,7 @@ aside .puzzle-links a {
   background-image: linear-gradient(transparent, transparent), url("data:image/svg+xml,%3C%3Fxml version=%221.0%22 encoding=%22UTF-8%22%3F%3E%0A%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22%3E%0A%09%3Cpath fill=%22%23fff%22 stroke=%22%2336c%22 d=%22M1.5 4.518h5.982V10.5H1.5z%22/%3E%0A%09%3Cpath fill=%22%2336c%22 d=%22M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z%22/%3E%0A%09%3Cpath fill=%22%23fff%22 d=%22M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z%22/%3E%0A%3C/svg%3E%0A");
   padding-right: 28px; }
 
-.tag-list a {
+.tag-list .tag {
   display: block;
   font-size: .9rem;
   padding: .3em .5em;
@@ -2840,14 +2858,26 @@ aside .puzzle-links a {
   color: #333;
   border-left: 4px solid #eee; }
 
-.tag-list a:hover, .tag-list .alerted {
+.tag-list .tag:hover, .tag-list .alerted, .tag-list .member {
   background: #e6f2ff;
   border-left-color: #004a99;
   color: black;
   text-decoration: none; }
 
-.tag-list .alerted {
+.tag-list .alerted, .tag-list .member {
   font-weight: bold; }
+
+.tag-list .join-link, .tag-list .member-link {
+  float: right; }
+
+.tag-list .member-link {
+  display: none; }
+
+.tag-list .member .join-link {
+  display: none; }
+
+.tag-list .member .member-link {
+  display: inline-block; }
 
 .avatar {
   border-radius: 50%;
@@ -2922,13 +2952,24 @@ body.add.trippy {
 .member-table td {
   padding: .5rem; }
 
-.slack-link {
+.roster .slack-link {
   width: 2.5em;
   padding-left: 0;
   padding-right: 0; }
 
 .by-puzzle .strengths, .by-puzzle .working-on {
   display: none; }
+
+body.member .puzzle-list {
+  margin-bottom: 1em; }
+
+body.member .scope-header {
+  font-weight: bold;
+  font-size: .9rem;
+  margin-top: 1em;
+  margin-bottom: 4px;
+  background: #f7f7f7;
+  padding: .3em .5em; }
 
 .news-row[data-filter=important] {
   background: #ffff99; }

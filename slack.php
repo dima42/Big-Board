@@ -67,7 +67,7 @@ function inviteToSlackChannel($channel_id, $member_id) {
 			'user'    => $member_id,
 		]);
 
-	return $response;
+	return $response->getBody();
 }
 
 function postToGeneral($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {

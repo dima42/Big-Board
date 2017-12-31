@@ -41,41 +41,46 @@
 {% from 'macros.twig' import puzzle_table %}
 {{ puzzle_table() }}
 
-{% for scope in scopes %}
-    {% for tag in scope %}
-        <a href="http://{{ slackDomain }}.slack.com/messages/{{ tag.slackChannelId }}">{{ tag.title }}</a>
-            <a href="#" class="badge badge-dark">
-                {% if tag.slackChannelId in member_channels %}
-                    member
-                {% else %}
-                    join
-                {% endif %}
-            </a>
-        <br>
+<div class="tag-list">
+{% for scope_name, scope_tags in scopes %}
+    <div class="scope-header"><i class="icon-tags"></i> {{ scope_name }}</div>
+    {% for tag in scope_tags %}
+        <div data-channel="{{ tag.slackChannelId }}" class="tag level{{ tag.level }} {% if tag.slackChannelId in member_channels %}member{% endif %}">
+            {{ tag.title }}
+            <a class="member-link" href="http://{{ slackDomain }}.slack.com/messages/{{ tag.slackChannelId }}"><img src="/img/slack.png" width="12px" alt=""> Member</a>
+            <a class="join-link" href="#"><img src="/img/slack.png" width="12px" alt=""> Join</a>
+        </div>
     {% endfor %}
-
 {% endfor %}
+</div>
 {% endblock %}
 
 {% block aside %}
 {% if is_user %}
 <div class="mb-3">
-    <a class="btn btn-dark border border-dark" href="/member/edit">✏️  &nbsp; Edit your profile</a>
+    <a class="btn btn-light border border-dark" href="/member/edit"><i class="icon-edit"></i> Edit your profile</a>
 </div>
 {% endif %}
 {% endblock %}
 
-{% block aside_footer %}
-<div class="mb-3">
-    <form action="/logout" method="get">
-        <button type="submit" class="btn border border-dark text-dark" href="">✌ &nbsp; Log out of BB</button>
-    </form>
-</div>
-{% endblock %}
+{% block latest_news %}{% endblock %}
 
 {% block scripts %}
 <script>
 $(function() {
+    $('.join-link').click(function(e) {
+        e.preventDefault();
+        var tag = $(this).closest('.tag');
+        var data = {
+            'channel': tag.data('channel')
+        };
+        $.post('/tags/invite', data, function(response) {
+            if (response['ok'] == 1) {
+                tag.addClass('member');
+            }
+        });
+    });
+
     loadPuzzleData('/puzzles/member/{{ member.id }}');
 });
 </script>

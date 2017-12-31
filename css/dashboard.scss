@@ -52,6 +52,16 @@
     color: #444;
 }
 
+.icon-tag {
+    @include icon('tag');
+    color: #444;
+}
+
+.icon-tags {
+    @include icon('tags');
+    color: #444;
+}
+
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
@@ -341,7 +351,7 @@ aside {
 
 // TAGS
 
-.tags  {
+.tags {
     .tag {
         padding: .3em 0;
         padding-left: .6em;
@@ -446,26 +456,47 @@ aside {
 }
 
 .tag-list {
-    a {
+    .tag {
         display: block;
         font-size: .9rem;
-        // background: #f7f7f7;
         padding: .3em .5em;
         margin-bottom: 4px;
         color: #333;
         border-left: 4px solid #eee;
-        // border-radius: 4px;
     }
 
-    a:hover, .alerted {
+    %on {
         background: lighten(#007BFF,45%);
         border-left-color: darken(#007BFF,20%);
         color: black;
         text-decoration: none;
     }
 
-    .alerted {
+    .tag:hover {
+        @extend %on;
+    }
+
+    .alerted, .member {
+        @extend %on;
         font-weight: bold;
+    }
+
+    .join-link, .member-link {
+        float: right;
+    }
+
+    .member-link {
+        display: none;
+    }
+
+    .member {
+        .join-link {
+            display: none;
+        }
+
+        .member-link {
+            display: inline-block;
+        }
     }
 }
 
@@ -602,10 +633,12 @@ body.add {
     }
 }
 
-.slack-link {
-    width: 2.5em;
-    padding-left: 0;
-    padding-right: 0;
+.roster {
+    .slack-link {
+        width: 2.5em;
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 .by-puzzle {
@@ -616,6 +649,23 @@ body.add {
 
 .by-alpha {
 
+}
+
+// MEMBER
+
+body.member {
+    .puzzle-list {
+        margin-bottom: 1em;
+    }
+
+    .scope-header {
+        font-weight: bold;
+        font-size: .9rem;
+        margin-top: 1em;
+        margin-bottom: 4px;
+        background:#f7f7f7;
+        padding: .3em .5em;
+    }
 }
 
 // NEWS
