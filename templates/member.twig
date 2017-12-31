@@ -44,7 +44,7 @@
 <div class="tag-list">
 {% for scope_name, scope_tags in scopes %}
     <div class="scope-header"><i class="icon-tags"></i> {{ scope_name }}</div>
-    {% for tag in scope_tags %}
+    {% for tag in scope_tags if tag.level > 0 %}
         <div data-channel="{{ tag.slackChannelId }}" class="tag level{{ tag.level }} {% if tag.slackChannelId in member_channels %}member{% endif %}">
             {{ tag.title }}
             <a class="member-link" href="http://{{ slackDomain }}.slack.com/messages/{{ tag.slackChannelId }}"><img src="/img/slack.png" width="12px" alt=""> Member</a>

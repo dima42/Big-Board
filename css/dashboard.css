@@ -2879,6 +2879,9 @@ aside .puzzle-links a {
 .tag-list .member .member-link {
   display: inline-block; }
 
+.tag-list .level2 {
+  margin-left: 1em; }
+
 .avatar {
   border-radius: 50%;
   width: 50px;
