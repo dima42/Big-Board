@@ -4,10 +4,10 @@ use Propel\Generator\Manager\MigrationManager;
 
 /**
  * Data object containing the SQL and PHP code to migrate the database
- * up to version 1514659611.
- * Generated on 2017-12-30 18:46:51 by sandor
+ * up to version 1514688280.
+ * Generated on 2017-12-31 02:44:40 by sandor
  */
-class PropelMigration_1514659611
+class PropelMigration_1514688280
 {
     public $comment = '';
 
@@ -47,7 +47,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 ALTER TABLE `tag`
 
-  CHANGE `description` `description` VARCHAR(128);
+  ADD `alerted` TINYINT(1) DEFAULT 1 NOT NULL AFTER `title`,
+
+  ADD `description` VARCHAR(128) AFTER `slack_channel_id`;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
@@ -71,7 +73,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 ALTER TABLE `tag`
 
-  CHANGE `description` `description` VARCHAR(48);
+  DROP `alerted`,
+
+  DROP `description`;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
