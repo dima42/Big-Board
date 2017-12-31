@@ -41,6 +41,7 @@
 {% from 'macros.twig' import puzzle_table %}
 {{ puzzle_table() }}
 
+{% if is_user %}
 <div class="tag-list">
 {% for scope_name, scope_tags in scopes %}
     <div class="scope-header"><i class="icon-tags"></i> {{ scope_name }}</div>
@@ -53,6 +54,7 @@
     {% endfor %}
 {% endfor %}
 </div>
+{% endif %}
 {% endblock %}
 
 {% block aside %}

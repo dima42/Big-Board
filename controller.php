@@ -826,16 +826,8 @@ function displayMember($member_id) {
 		->filterById($member_id)
 		->findOne();
 
-	$puzzles = TagQuery::create()
-		->findTree(1);
-
-	$topics = TagQuery::create()
-		->findTree(2);
-
-	$skills = TagQuery::create()
-		->findTree(3);
-
 	$member_channels = [];
+	$scopes          = [];
 
 	// If it's the logged-in user, take this chance to refresh the session object in case member data has changed
 	if ($member_id == $_SESSION['user']->getId()) {
@@ -850,17 +842,28 @@ function displayMember($member_id) {
 		$member_channels = array_map(function ($channel) {
 				return $channel['id'];
 			}, $member_of);
+
+		$puzzles = TagQuery::create()
+			->findTree(1);
+
+		$topics = TagQuery::create()
+			->findTree(2);
+
+		$skills = TagQuery::create()
+			->findTree(3);
+
+		$scopes = [
+			'Puzzle Types' => $puzzles,
+			'Topics'       => $topics,
+			'Skills'       => $skills,
+		];
 	}
 
 	render('member.twig', 'member', array(
 			'member'          => $member,
 			'is_user'         => $is_user,
 			'member_channels' => $member_channels,
-			'scopes'          => [
-				'Puzzle Types'   => $puzzles,
-				'Topics'         => $topics,
-				'Skills'         => $skills,
-			],
+			'scopes'          => $scopes,
 		));
 }
 
