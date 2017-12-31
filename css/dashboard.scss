@@ -406,8 +406,8 @@ aside {
 // PUZZLE PAGE
 
 .puzzle-metas {
-    background:#f7f7f7;
-    margin-bottom: .75em;
+    background:#eee;
+    margin-bottom: .5rem;
     padding: .3em .5em;
     color: #444;
 
@@ -438,19 +438,64 @@ aside {
     }
 }
 
-aside {
-    .list-group {
-        a {
-            padding: .5rem 1rem;
+.puzzle-links {
+    // border: 1px solid #ddd;
+    border-radius: 4px;
+    // background:#f9f9f9;
+
+    li {
+        // border-left: 1px solid #ddd;
+        padding-right: 6px;
+
+        &:last-child {
+            padding-right: 0;
         }
     }
 
-    .puzzle-links {
-        a {
-            background-position: right 12px center;
+    a {
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+        background-image: linear-gradient(transparent,transparent),url("data:image/svg+xml,%3C%3Fxml version=%221.0%22 encoding=%22UTF-8%22%3F%3E%0A%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22%3E%0A%09%3Cpath fill=%22%23fff%22 stroke=%22%2336c%22 d=%22M1.5 4.518h5.982V10.5H1.5z%22/%3E%0A%09%3Cpath fill=%22%2336c%22 d=%22M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z%22/%3E%0A%09%3Cpath fill=%22%23fff%22 d=%22M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z%22/%3E%0A%3C/svg%3E%0A");
+        padding: 5px 0 5px 30px;
+        text-align: left;
+        font-size: .8rem;
+        text-transform: uppercase;
+        position: relative;
+        background-color:#f8f8f8;
+        color: #666;
+
+        &:hover {
+            background-color:#f1f1f1;
+        }
+
+        &::before {
+            content: "";
+            width: 15px;
+            height: 15px;
+            background-size: 100%;
             background-repeat: no-repeat;
-            background-image: linear-gradient(transparent,transparent),url("data:image/svg+xml,%3C%3Fxml version=%221.0%22 encoding=%22UTF-8%22%3F%3E%0A%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22%3E%0A%09%3Cpath fill=%22%23fff%22 stroke=%22%2336c%22 d=%22M1.5 4.518h5.982V10.5H1.5z%22/%3E%0A%09%3Cpath fill=%22%2336c%22 d=%22M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z%22/%3E%0A%09%3Cpath fill=%22%23fff%22 d=%22M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z%22/%3E%0A%3C/svg%3E%0A");
-            padding-right: 28px;
+            background-position: center center;
+            position: absolute;
+            top: 7px;
+            left: 9px;
+        }
+    }
+
+    .link-puzzle {
+        &::before {
+            background-image :url('/img/mit.png');
+        }
+    }
+
+    .link-drive {
+        &::before {
+            background-image :url('/img/drive.png');
+        }
+    }
+
+    .link-slack {
+        &::before {
+            background-image :url('/img/slack.png');
         }
     }
 }

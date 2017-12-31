@@ -39,6 +39,11 @@
 
 {% block content %}
     <div class="puzzle-header">
+        <h1 class="mb-3">
+            <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
+            <i class="icon-{{ puzzle.status }}"></i>
+        </h1>
+
         <div class="puzzle-metas small">
             {% if is_meta %}
                 <span class="badge badge-pill badge-secondary">META</span>
@@ -51,10 +56,11 @@
             {% endfor %}
         </div>
 
-        <h1>
-            <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
-            <i class="icon-{{ puzzle.status }}"></i>
-        </h1>
+        <ul class="nav nav-fill puzzle-links mb-3">
+            <li class="nav-item"><a class="nav-link link-puzzle" href='{{ puzzle.url }}'>Puzzle page</a></li>
+            <li class="nav-item"><a class="nav-link link-drive" href='{{ puzzle.getSpreadsheetURL() }}'>Google Sheet</a></li>
+            <li class="nav-item"><a class="nav-link link-slack" href='{{ puzzle.getSlackURL() }}'>Slack</a></li>
+        </ul>
     </div>
 
     {% block content_main %}
@@ -127,12 +133,6 @@
 {% endblock %}
 
 {% block aside %}
-    <div class="puzzle-links list-group mb-3">
-        <a class="list-group-item list-group-item-action" href='{{ puzzle.url }}'><img src="/img/mit.png" width="15px" alt=""> Puzzle page</a>
-        <a class="list-group-item list-group-item-action" href='{{ puzzle.getSpreadsheetURL() }}'><img src="/img/drive.png" width="15px" alt=""> Google Sheet</a>
-        <a class="list-group-item list-group-item-action" href='{{ puzzle.getSlackURL() }}'><img src="/img/slack.png" width="15px" alt=""> Slack</a>
-    </div>
-
     <div class="tag-list mb-3">
         {% for tag in puzzles if tag.level > 0 %}
             <a data-id="{{ tag.id }}" class="tag {% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }}" href='#' title="{{ tag.description }}">{{ tag.title }}</a>
