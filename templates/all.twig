@@ -59,13 +59,13 @@
 {% endblock %}
 
 {% block aside %}
-    {% if user_puzzles|length > 0 %}
+    {% if member_puzzles|length > 0 %}
     <div class="card mb-3">
         <div class="card-header">
             <small class="subhead">You are working on</small>
         </div>
         <div class="card-body">
-            {% for user_puzzle in user_puzzles %}
+            {% for user_puzzle in member_puzzles %}
                 <h4><a href="/puzzle/{{ user_puzzle.id }}">{{ user_puzzle.title }}</a></h4>
             {% endfor %}
         </div>
