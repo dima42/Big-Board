@@ -33,6 +33,9 @@ $this->with('/puzzles', function () {
 		$this->respond('GET', '/member/[:member_id]', function ($request, $response) {
 				return memberPuzzles($request->member_id, $response);
 			});
+		$this->respond('GET', '/withtags', function ($request, $response) {
+				return unsolvedWithTags($response);
+			});
 	});
 
 $this->respond('GET', '/members', function ($request, $response) {
@@ -273,6 +276,16 @@ function allMembers($response) {
 		->toArray();
 
 	return $response->json($members);
+}
+
+function unsolvedWithTags($response) {
+	$puzzles = PuzzleQuery::create()
+		->filterByStatus('solved', Criteria::NOT_EQUAL)
+		->joinWithTagAlert()
+		->find()
+		->toArray();
+
+	return $response->json($puzzles);
 }
 
 // PUZZLE LISTS
