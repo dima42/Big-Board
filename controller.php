@@ -81,8 +81,11 @@ $this->with('/tags', function () {
 		$this->respond('GET', '/?', function ($request, $response) {
 				return displayTags();
 			});
+		$this->respond('GET', '/admin/?', function ($request, $response) {
+				return displayTagAdmin();
+			});
 		$this->respond('GET', '/edit/?', function ($request, $response) {
-				return displayTags('edit');
+				return displayTagAdmin('edit');
 			});
 		$this->respond('POST', '/add/?', function ($request, $response) {
 				return addTag($request);
@@ -682,7 +685,7 @@ function addPuzzle($request, $response) {
 
 // TAGS
 
-function displayTags($view = 'view') {
+function displayTags() {
 	$puzzles = TagQuery::create()
 		->findTree(1);
 
@@ -693,6 +696,27 @@ function displayTags($view = 'view') {
 		->findTree(3);
 
 	$template = 'tags.twig';
+
+	render($template, 'tags', array(
+			'scopes' => [
+				$puzzles,
+				$topics,
+				$skills,
+			],
+		));
+}
+
+function displayTagAdmin($view = 'view') {
+	$puzzles = TagQuery::create()
+		->findTree(1);
+
+	$topics = TagQuery::create()
+		->findTree(2);
+
+	$skills = TagQuery::create()
+		->findTree(3);
+
+	$template = 'tags-admin.twig';
 	if ($view == 'edit') {
 		$template = 'tags-edit.twig';
 	}
@@ -732,7 +756,7 @@ function addTag($request) {
 		$alert = $request->title.' added.';
 	}
 
-	redirect('/tags', $alert);
+	redirect('/tags/admin', $alert);
 }
 
 function editTag($request) {
