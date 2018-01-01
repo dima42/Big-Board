@@ -42,9 +42,9 @@
 {{ puzzle_table() }}
 
 {% if is_user %}
-<div class="tag-list">
 {% for scope_name, scope_tags in scopes %}
-    <div class="scope-header"><i class="icon-tags"></i> {{ scope_name }}</div>
+<div class="scope-header"><i class="icon-tags"></i> {{ scope_name }}</div>
+<div class="tag-list">
     {% for tag in scope_tags if tag.level > 0 %}
         <div data-channel="{{ tag.slackChannelId }}" class="tag level{{ tag.level }} {% if tag.slackChannelId in member_channels %}member{% endif %}">
             {{ tag.title }}
@@ -52,8 +52,8 @@
             <a class="join-link" href="#"><img src="/img/slack.png" width="12px" alt=""> Join</a>
         </div>
     {% endfor %}
-{% endfor %}
 </div>
+{% endfor %}
 {% endif %}
 {% endblock %}
 

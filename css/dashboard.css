@@ -2877,37 +2877,40 @@ aside {
   .puzzle-links .link-slack::before {
     background-image: url("/img/slack.png"); }
 
-.tag-list .tag {
-  display: block;
-  font-size: .9rem;
-  padding: .3em .5em;
-  margin-bottom: 4px;
-  color: #333;
-  border-left: 4px solid #eee; }
+.tag-list {
+  margin-bottom: 1em; }
+  .tag-list .tag {
+    display: block;
+    font-size: .9rem;
+    padding: .3em .5em;
+    margin-bottom: 4px;
+    color: #333;
+    border-left: 4px solid #eee; }
+  .tag-list .tag:hover, .tag-list .alerted, .tag-list .member {
+    background: #e6f2ff;
+    border-left-color: #004a99;
+    color: black;
+    text-decoration: none; }
+  .tag-list .alerted, .tag-list .member {
+    font-weight: bold; }
+  .tag-list .join-link, .tag-list .member-link {
+    float: right; }
+  .tag-list .member-link {
+    display: none; }
+  .tag-list .member .join-link {
+    display: none; }
+  .tag-list .member .member-link {
+    display: inline-block; }
+  .tag-list .level2 {
+    margin-left: 1em; }
 
-.tag-list .tag:hover, .tag-list .alerted, .tag-list .member {
-  background: #e6f2ff;
-  border-left-color: #004a99;
-  color: black;
-  text-decoration: none; }
-
-.tag-list .alerted, .tag-list .member {
-  font-weight: bold; }
-
-.tag-list .join-link, .tag-list .member-link {
-  float: right; }
-
-.tag-list .member-link {
-  display: none; }
-
-.tag-list .member .join-link {
-  display: none; }
-
-.tag-list .member .member-link {
-  display: inline-block; }
-
-.tag-list .level2 {
-  margin-left: 1em; }
+.scope-header {
+  font-size: 1rem;
+  margin-bottom: .5em;
+  padding: .3em 0;
+  border-bottom: 1px dashed #ccc; }
+  .scope-header:first-child {
+    margin-top: 0; }
 
 .avatar {
   border-radius: 50%;
@@ -2992,14 +2995,6 @@ body.add.trippy {
 
 body.member .puzzle-list {
   margin-bottom: 1em; }
-
-body.member .scope-header {
-  font-weight: bold;
-  font-size: .9rem;
-  margin-top: 1em;
-  margin-bottom: 4px;
-  background: #f7f7f7;
-  padding: .3em .5em; }
 
 .news-row[data-filter=important] {
   background: #ffff99; }

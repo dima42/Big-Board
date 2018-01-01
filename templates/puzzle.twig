@@ -133,23 +133,14 @@
 {% endblock %}
 
 {% block aside %}
+    {% for scope_name, scope_tags in scopes %}
+    <h5 class="scope-header"><i class="icon-tags"></i> {{ scope_name }}</h5>
     <div class="tag-list mb-3">
-        {% for tag in puzzles if tag.level > 0 %}
+        {% for tag in scope_tags if tag.level > 0 %}
             <a data-id="{{ tag.id }}" class="tag {% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }}" href='#' title="{{ tag.description }}">{{ tag.title }}</a>
         {% endfor %}
     </div>
-
-    <div class="tag-list mb-3">
-        {% for tag in topics if tag.level > 0 %}
-            <a data-id="{{ tag.id }}" class="tag {% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }}" href='#' title="{{ tag.description }}">{{ tag.title }}</a>
-        {% endfor %}
-    </div>
-
-    <div class="tag-list mb-3">
-        {% for tag in skills if tag.level > 0 %}
-            <a data-id="{{ tag.id }}" class="tag {% if tag.id in tag_alerts %}alerted{% endif %} level{{ tag.level }}" href='#' title="{{ tag.description }}">{{ tag.title }}</a>
-        {% endfor %}
-    </div>
+    {% endfor %}
 
     <div class="mb-3">
         <a class="btn btn-light border border-dark" href="/puzzle/{{ puzzle.id }}/edit"><i class="icon-edit"></i> Edit this puzzle</a>

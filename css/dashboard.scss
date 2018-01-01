@@ -501,6 +501,8 @@ aside {
 }
 
 .tag-list {
+    margin-bottom: 1em;
+
     .tag {
         display: block;
         font-size: .9rem;
@@ -546,6 +548,17 @@ aside {
 
     .level2 {
         margin-left: 1em;
+    }
+}
+
+.scope-header {
+    font-size: 1rem;
+    margin-bottom: .5em;
+    padding: .3em 0;
+    border-bottom: 1px dashed #ccc;
+
+    &:first-child {
+        margin-top: 0;
     }
 }
 
@@ -707,14 +720,6 @@ body.member {
         margin-bottom: 1em;
     }
 
-    .scope-header {
-        font-weight: bold;
-        font-size: .9rem;
-        margin-top: 1em;
-        margin-bottom: 4px;
-        background:#f7f7f7;
-        padding: .3em .5em;
-    }
 }
 
 // NEWS

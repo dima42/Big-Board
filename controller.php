@@ -422,10 +422,12 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'puzzles_metas' => $puzzles_metas,
 			'is_meta'       => $is_meta,
 			'all_members'   => $full_roster,
-			'puzzles'       => $puzzles,
-			'topics'        => $topics,
-			'skills'        => $skills,
-			'tag_alerts'    => $tag_alerts,
+			'scopes'        => [
+				'Puzzle Types' => $puzzles,
+				'Topics'       => $topics,
+				'Skills'       => $skills,
+			],
+			'tag_alerts' => $tag_alerts,
 		));
 }
 
@@ -787,7 +789,7 @@ function alertTag($request, $response, $puzzle_id) {
 		$ta->setTag($tag);
 		$ta->save();
 
-		postToSlack("*".$puzzle->getTitle()."* has been tagged ".$tag->getTitle(), $puzzle->getSlackAttachmentMedium(), ":label:", "TagBot", $tag->getSlackChannelId());
+		postToSlack("*".$puzzle->getTitle()."* has been tagged `".strtoupper($tag->getTitle())."`", $puzzle->getSlackAttachmentMedium(), ":label:", "TagBot", $tag->getSlackChannelId());
 
 		$json = [
 			'ok' => 1
