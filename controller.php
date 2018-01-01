@@ -695,13 +695,11 @@ function displayTags() {
 	$skills = TagQuery::create()
 		->findTree(3);
 
-	$template = 'tags.twig';
-
-	render($template, 'tags', array(
-			'scopes' => [
-				$puzzles,
-				$topics,
-				$skills,
+	render('tags.twig', 'tags', array(
+			'scopes'        => [
+				'Puzzle Types' => $puzzles,
+				'Topics'       => $topics,
+				'Skills'       => $skills,
 			],
 		));
 }
