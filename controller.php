@@ -606,7 +606,7 @@ function puzzleScrape($request, $response) {
 			$json[] = array(
 				"url"   => $url,
 				"title" => $title,
-				"slack" => substr($slugify->slugify($title), 0, 21)
+				"slack" => substr($slugify->slugify($title), 0, 19)
 			);
 		}
 	}
@@ -644,7 +644,8 @@ function addPuzzle($request, $response) {
 		}
 
 		if (!$puzzleURLExists && !$puzzleTitleExists && !$slackNameExists) {
-			$newChannelID = createPuzzleChannel($puzzleContent['slack']);
+			$slack_channel_name = "ρ_".$puzzleContent['slack'];
+			$newChannelID       = createPuzzleChannel($slack_channel_name);
 
 			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
 
@@ -652,7 +653,7 @@ function addPuzzle($request, $response) {
 			$newPuzzle->setTitle($puzzleContent['title']);
 			$newPuzzle->setUrl($puzzleContent['url']);
 			$newPuzzle->setSpreadsheetId($spreadsheet_id);
-			$newPuzzle->setSlackChannel($puzzleContent['slack']);
+			$newPuzzle->setSlackChannel($slack_channel_name);
 			$newPuzzle->setSlackChannelId($newChannelID);
 			$newPuzzle->setStatus('open');
 			$newPuzzle->save();
