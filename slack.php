@@ -334,4 +334,28 @@ class Bot {
 
 		return $channel_response;
 	}
+
+	private function nmatic($request, $response) {
+		$query = $request->text;
+		$request_url = "https://nutrimatic.org/?q={$query}";
+		$response = file_get_contents($request_url);
+
+		// The response from Nutrimatic holds the results in span tags.
+		$regex_query = "/<span style='font-size: .*em'>(.*)<\/span>/";
+		preg_match_all($regex_query, $response, $regex_results, PREG_SET_ORDER);
+
+		$response_text = "Nutrimatic results for \"{$query}\": ";
+
+		foreach ($regex_results as $regex_result) {
+			$response_text .= $regex_result[1] . ", ";
+		}
+		$response_text = substr($response_text, 0, -2);
+
+		$channel_response = [
+			"text" => $response_text,
+			"response_type" => "in_channel",
+		];
+
+		return $channel_response;
+	}
 }
