@@ -407,6 +407,18 @@ aside {
     .edit-tag {
         margin-right: 65px;
     }
+
+    h2 {
+        .slack-link {
+            background: #f7f7f7 url('/img/slack.png') no-repeat 5px 4px;
+            background-size: 15px;
+            padding-left: 25px;
+            float: right;
+            font-weight: normal;
+            font-size: 1rem;
+            margin-top: 2px;
+        }
+    }
 }
 
 // PUZZLE PAGE

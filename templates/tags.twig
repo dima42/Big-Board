@@ -20,7 +20,10 @@
 {% for tag in scope_tags if tag.level > 0 %}
 <section class="tag-section">
     <span class="anchor-target" id="tag-{{ tag.id }}"></span>
-    <h2>{{ tag.title }}</h2>
+    <h2>
+        {{ tag.title }}
+        <a class="slack-link badge badge-light" href="http://{{ slackDomain }}.slack.com/messages/{{ tag.slackChannelId }}">Slack</a>
+    </h2>
     {{ puzzle_table(tag.id) }}
 </section>
 {% endfor %}
