@@ -81,7 +81,7 @@ body {
 
 h1 {
     font-size: 2rem;
-    /*margin-bottom: 0;*/
+    margin-bottom: 1rem;
 }
 
 h2 {
@@ -296,18 +296,16 @@ aside {
         }
     }
 
-    &:hover tbody tr {
-        opacity: .8;
+    tr:last-child {
+        td {
+            border-bottom: 1px solid #e9ecef;
+        }
     }
 
-    tbody tr:hover {
-        opacity: 1;
-        // background:white;
-        // box-shadow: 0 0 2px rgba(0,0,0,.2);
-
+    tr.hover {
         td {
-            border-top: 1px solid #888;
-            border-bottom: 1px solid #888;
+            border-top: 1px solid #888 !important;
+            border-bottom: 1px solid #888 !important;
         }
     }
 
@@ -321,6 +319,14 @@ aside {
         &:hover {
             text-decoration: none;
         }
+    }
+
+    .status {
+        width: 22px;
+    }
+
+    .icon-link {
+        width: 22px;
     }
 }
 

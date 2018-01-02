@@ -2620,7 +2620,7 @@ body {
 
 h1 {
   font-size: 2rem;
-  /*margin-bottom: 0;*/ }
+  margin-bottom: 1rem; }
 
 h2 {
   font-size: 1.5rem;
@@ -2748,19 +2748,21 @@ aside {
     background: #eee; }
     .puzzle-list thead tr th {
       border-bottom: 1px solid #aaa; }
-  .puzzle-list:hover tbody tr {
-    opacity: .8; }
-  .puzzle-list tbody tr:hover {
-    opacity: 1; }
-    .puzzle-list tbody tr:hover td {
-      border-top: 1px solid #888;
-      border-bottom: 1px solid #888; }
+  .puzzle-list tr:last-child td {
+    border-bottom: 1px solid #e9ecef; }
+  .puzzle-list tr.hover td {
+    border-top: 1px solid #888 !important;
+    border-bottom: 1px solid #888 !important; }
   .puzzle-list label {
     margin: 0; }
   .puzzle-list a {
     display: block; }
     .puzzle-list a:hover {
       text-decoration: none; }
+  .puzzle-list .status {
+    width: 22px; }
+  .puzzle-list .icon-link {
+    width: 22px; }
 
 [data-filter=solved] {
   background: #f7f7f7;

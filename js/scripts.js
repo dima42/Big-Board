@@ -4,6 +4,15 @@ window.setTimeout(function() {
     });
 }, 5000);
 
+
+$('.puzzle-list').on('mouseenter', 'tr', function(e) {
+    $(this).addClass('hover');
+});
+
+$('.puzzle-list').on('mouseleave', 'tr', function(e) {
+    $(this).removeClass('hover');
+});
+
 var loadPuzzleData = function(url, callback) {
     $.get(url, {}, function(response) {
         loadPuzzleTemplate(response, callback, 'PuzzleParents', 'ParentId');
