@@ -1,4 +1,4 @@
-{% extends 'loggedin.twig' %}
+{% extends 'two-col.twig' %}
 
 {% block content %}
 <a href="/member/{{ user.id }}">&larr; Back to profile</a>
@@ -35,9 +35,18 @@
 
     <div class="form-group row">
         <div class="offset-sm-3 col-sm-9">
-            <button class="btn btn-primary btn-lg">Submit</button>
+            <button class="btn btn-dark btn-lg">Submit</button>
         </div>
     </div>
 </form>
+{% endblock %}
 
+{% block latest_news %}{% endblock %}
+
+{% block aside_footer %}
+<div class="mb-3">
+    <form action="/logout" method="get">
+        <button type="submit" class="btn border border-dark text-dark" href="">✌ &nbsp; Log out of BB</button>
+    </form>
+</div>
 {% endblock %}

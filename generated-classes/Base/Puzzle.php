@@ -16,6 +16,10 @@ use \PuzzleMemberQuery as ChildPuzzleMemberQuery;
 use \PuzzlePuzzle as ChildPuzzlePuzzle;
 use \PuzzlePuzzleQuery as ChildPuzzlePuzzleQuery;
 use \PuzzleQuery as ChildPuzzleQuery;
+use \Tag as ChildTag;
+use \TagAlert as ChildTagAlert;
+use \TagAlertQuery as ChildTagAlertQuery;
+use \TagQuery as ChildTagQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
@@ -24,6 +28,7 @@ use Map\NoteTableMap;
 use Map\PuzzleMemberTableMap;
 use Map\PuzzlePuzzleTableMap;
 use Map\PuzzleTableMap;
+use Map\TagAlertTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -169,6 +174,12 @@ abstract class Puzzle implements ActiveRecordInterface
     protected $aWrangler;
 
     /**
+     * @var        ObjectCollection|ChildTagAlert[] Collection to store aggregation of ChildTagAlert objects.
+     */
+    protected $collTagAlerts;
+    protected $collTagAlertsPartial;
+
+    /**
      * @var        ObjectCollection|ChildNote[] Collection to store aggregation of ChildNote objects.
      */
     protected $collNotes;
@@ -197,6 +208,16 @@ abstract class Puzzle implements ActiveRecordInterface
      */
     protected $collNews;
     protected $collNewsPartial;
+
+    /**
+     * @var        ObjectCollection|ChildTag[] Cross Collection to store aggregation of ChildTag objects.
+     */
+    protected $collTags;
+
+    /**
+     * @var bool
+     */
+    protected $collTagsPartial;
 
     /**
      * @var        ObjectCollection|ChildMember[] Cross Collection to store aggregation of ChildMember objects.
@@ -241,6 +262,12 @@ abstract class Puzzle implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildTag[]
+     */
+    protected $tagsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
      * @var ObjectCollection|ChildMember[]
      */
     protected $membersScheduledForDeletion = null;
@@ -256,6 +283,12 @@ abstract class Puzzle implements ActiveRecordInterface
      * @var ObjectCollection|ChildPuzzle[]
      */
     protected $childrenScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildTagAlert[]
+     */
+    protected $tagAlertsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1046,6 +1079,8 @@ abstract class Puzzle implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aWrangler = null;
+            $this->collTagAlerts = null;
+
             $this->collNotes = null;
 
             $this->collPuzzleMembers = null;
@@ -1056,6 +1091,7 @@ abstract class Puzzle implements ActiveRecordInterface
 
             $this->collNews = null;
 
+            $this->collTags = null;
             $this->collMembers = null;
             $this->collParents = null;
             $this->collChildren = null;
@@ -1207,6 +1243,35 @@ abstract class Puzzle implements ActiveRecordInterface
                 $this->resetModified();
             }
 
+            if ($this->tagsScheduledForDeletion !== null) {
+                if (!$this->tagsScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    foreach ($this->tagsScheduledForDeletion as $entry) {
+                        $entryPk = [];
+
+                        $entryPk[0] = $this->getId();
+                        $entryPk[1] = $entry->getId();
+                        $pks[] = $entryPk;
+                    }
+
+                    \TagAlertQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+
+                    $this->tagsScheduledForDeletion = null;
+                }
+
+            }
+
+            if ($this->collTags) {
+                foreach ($this->collTags as $tag) {
+                    if (!$tag->isDeleted() && ($tag->isNew() || $tag->isModified())) {
+                        $tag->save($con);
+                    }
+                }
+            }
+
+
             if ($this->membersScheduledForDeletion !== null) {
                 if (!$this->membersScheduledForDeletion->isEmpty()) {
                     $pks = array();
@@ -1293,6 +1358,23 @@ abstract class Puzzle implements ActiveRecordInterface
                 }
             }
 
+
+            if ($this->tagAlertsScheduledForDeletion !== null) {
+                if (!$this->tagAlertsScheduledForDeletion->isEmpty()) {
+                    \TagAlertQuery::create()
+                        ->filterByPrimaryKeys($this->tagAlertsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->tagAlertsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collTagAlerts !== null) {
+                foreach ($this->collTagAlerts as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
 
             if ($this->notesScheduledForDeletion !== null) {
                 if (!$this->notesScheduledForDeletion->isEmpty()) {
@@ -1659,6 +1741,21 @@ abstract class Puzzle implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aWrangler->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collTagAlerts) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'tagAlerts';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'tag_alerts';
+                        break;
+                    default:
+                        $key = 'TagAlerts';
+                }
+
+                $result[$key] = $this->collTagAlerts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collNotes) {
 
@@ -2047,6 +2144,12 @@ abstract class Puzzle implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getTagAlerts() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addTagAlert($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getNotes() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addNote($relObj->copy($deepCopy));
@@ -2169,6 +2272,10 @@ abstract class Puzzle implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('TagAlert' == $relationName) {
+            $this->initTagAlerts();
+            return;
+        }
         if ('Note' == $relationName) {
             $this->initNotes();
             return;
@@ -2189,6 +2296,259 @@ abstract class Puzzle implements ActiveRecordInterface
             $this->initNews();
             return;
         }
+    }
+
+    /**
+     * Clears out the collTagAlerts collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addTagAlerts()
+     */
+    public function clearTagAlerts()
+    {
+        $this->collTagAlerts = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collTagAlerts collection loaded partially.
+     */
+    public function resetPartialTagAlerts($v = true)
+    {
+        $this->collTagAlertsPartial = $v;
+    }
+
+    /**
+     * Initializes the collTagAlerts collection.
+     *
+     * By default this just sets the collTagAlerts collection to an empty array (like clearcollTagAlerts());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initTagAlerts($overrideExisting = true)
+    {
+        if (null !== $this->collTagAlerts && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = TagAlertTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collTagAlerts = new $collectionClassName;
+        $this->collTagAlerts->setModel('\TagAlert');
+    }
+
+    /**
+     * Gets an array of ChildTagAlert objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPuzzle is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildTagAlert[] List of ChildTagAlert objects
+     * @throws PropelException
+     */
+    public function getTagAlerts(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collTagAlertsPartial && !$this->isNew();
+        if (null === $this->collTagAlerts || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collTagAlerts) {
+                // return empty collection
+                $this->initTagAlerts();
+            } else {
+                $collTagAlerts = ChildTagAlertQuery::create(null, $criteria)
+                    ->filterByPuzzle($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collTagAlertsPartial && count($collTagAlerts)) {
+                        $this->initTagAlerts(false);
+
+                        foreach ($collTagAlerts as $obj) {
+                            if (false == $this->collTagAlerts->contains($obj)) {
+                                $this->collTagAlerts->append($obj);
+                            }
+                        }
+
+                        $this->collTagAlertsPartial = true;
+                    }
+
+                    return $collTagAlerts;
+                }
+
+                if ($partial && $this->collTagAlerts) {
+                    foreach ($this->collTagAlerts as $obj) {
+                        if ($obj->isNew()) {
+                            $collTagAlerts[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collTagAlerts = $collTagAlerts;
+                $this->collTagAlertsPartial = false;
+            }
+        }
+
+        return $this->collTagAlerts;
+    }
+
+    /**
+     * Sets a collection of ChildTagAlert objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $tagAlerts A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPuzzle The current object (for fluent API support)
+     */
+    public function setTagAlerts(Collection $tagAlerts, ConnectionInterface $con = null)
+    {
+        /** @var ChildTagAlert[] $tagAlertsToDelete */
+        $tagAlertsToDelete = $this->getTagAlerts(new Criteria(), $con)->diff($tagAlerts);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->tagAlertsScheduledForDeletion = clone $tagAlertsToDelete;
+
+        foreach ($tagAlertsToDelete as $tagAlertRemoved) {
+            $tagAlertRemoved->setPuzzle(null);
+        }
+
+        $this->collTagAlerts = null;
+        foreach ($tagAlerts as $tagAlert) {
+            $this->addTagAlert($tagAlert);
+        }
+
+        $this->collTagAlerts = $tagAlerts;
+        $this->collTagAlertsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related TagAlert objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related TagAlert objects.
+     * @throws PropelException
+     */
+    public function countTagAlerts(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collTagAlertsPartial && !$this->isNew();
+        if (null === $this->collTagAlerts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTagAlerts) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getTagAlerts());
+            }
+
+            $query = ChildTagAlertQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPuzzle($this)
+                ->count($con);
+        }
+
+        return count($this->collTagAlerts);
+    }
+
+    /**
+     * Method called to associate a ChildTagAlert object to this object
+     * through the ChildTagAlert foreign key attribute.
+     *
+     * @param  ChildTagAlert $l ChildTagAlert
+     * @return $this|\Puzzle The current object (for fluent API support)
+     */
+    public function addTagAlert(ChildTagAlert $l)
+    {
+        if ($this->collTagAlerts === null) {
+            $this->initTagAlerts();
+            $this->collTagAlertsPartial = true;
+        }
+
+        if (!$this->collTagAlerts->contains($l)) {
+            $this->doAddTagAlert($l);
+
+            if ($this->tagAlertsScheduledForDeletion and $this->tagAlertsScheduledForDeletion->contains($l)) {
+                $this->tagAlertsScheduledForDeletion->remove($this->tagAlertsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildTagAlert $tagAlert The ChildTagAlert object to add.
+     */
+    protected function doAddTagAlert(ChildTagAlert $tagAlert)
+    {
+        $this->collTagAlerts[]= $tagAlert;
+        $tagAlert->setPuzzle($this);
+    }
+
+    /**
+     * @param  ChildTagAlert $tagAlert The ChildTagAlert object to remove.
+     * @return $this|ChildPuzzle The current object (for fluent API support)
+     */
+    public function removeTagAlert(ChildTagAlert $tagAlert)
+    {
+        if ($this->getTagAlerts()->contains($tagAlert)) {
+            $pos = $this->collTagAlerts->search($tagAlert);
+            $this->collTagAlerts->remove($pos);
+            if (null === $this->tagAlertsScheduledForDeletion) {
+                $this->tagAlertsScheduledForDeletion = clone $this->collTagAlerts;
+                $this->tagAlertsScheduledForDeletion->clear();
+            }
+            $this->tagAlertsScheduledForDeletion[]= clone $tagAlert;
+            $tagAlert->setPuzzle(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Puzzle is new, it will return
+     * an empty collection; or if this Puzzle has previously
+     * been saved, it will retrieve related TagAlerts from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Puzzle.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildTagAlert[] List of ChildTagAlert objects
+     */
+    public function getTagAlertsJoinTag(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildTagAlertQuery::create(null, $criteria);
+        $query->joinWith('Tag', $joinBehavior);
+
+        return $this->getTagAlerts($query, $con);
     }
 
     /**
@@ -3401,6 +3761,249 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collTags collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addTags()
+     */
+    public function clearTags()
+    {
+        $this->collTags = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Initializes the collTags crossRef collection.
+     *
+     * By default this just sets the collTags collection to an empty collection (like clearTags());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initTags()
+    {
+        $collectionClassName = TagAlertTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collTags = new $collectionClassName;
+        $this->collTagsPartial = true;
+        $this->collTags->setModel('\Tag');
+    }
+
+    /**
+     * Checks if the collTags collection is loaded.
+     *
+     * @return bool
+     */
+    public function isTagsLoaded()
+    {
+        return null !== $this->collTags;
+    }
+
+    /**
+     * Gets a collection of ChildTag objects related by a many-to-many relationship
+     * to the current object by way of the tag_alert cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPuzzle is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return ObjectCollection|ChildTag[] List of ChildTag objects
+     */
+    public function getTags(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collTagsPartial && !$this->isNew();
+        if (null === $this->collTags || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collTags) {
+                    $this->initTags();
+                }
+            } else {
+
+                $query = ChildTagQuery::create(null, $criteria)
+                    ->filterByPuzzle($this);
+                $collTags = $query->find($con);
+                if (null !== $criteria) {
+                    return $collTags;
+                }
+
+                if ($partial && $this->collTags) {
+                    //make sure that already added objects gets added to the list of the database.
+                    foreach ($this->collTags as $obj) {
+                        if (!$collTags->contains($obj)) {
+                            $collTags[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collTags = $collTags;
+                $this->collTagsPartial = false;
+            }
+        }
+
+        return $this->collTags;
+    }
+
+    /**
+     * Sets a collection of Tag objects related by a many-to-many relationship
+     * to the current object by way of the tag_alert cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param  Collection $tags A Propel collection.
+     * @param  ConnectionInterface $con Optional connection object
+     * @return $this|ChildPuzzle The current object (for fluent API support)
+     */
+    public function setTags(Collection $tags, ConnectionInterface $con = null)
+    {
+        $this->clearTags();
+        $currentTags = $this->getTags();
+
+        $tagsScheduledForDeletion = $currentTags->diff($tags);
+
+        foreach ($tagsScheduledForDeletion as $toDelete) {
+            $this->removeTag($toDelete);
+        }
+
+        foreach ($tags as $tag) {
+            if (!$currentTags->contains($tag)) {
+                $this->doAddTag($tag);
+            }
+        }
+
+        $this->collTagsPartial = false;
+        $this->collTags = $tags;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Tag objects related by a many-to-many relationship
+     * to the current object by way of the tag_alert cross-reference table.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      boolean $distinct Set to true to force count distinct
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return int the number of related Tag objects
+     */
+    public function countTags(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collTagsPartial && !$this->isNew();
+        if (null === $this->collTags || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTags) {
+                return 0;
+            } else {
+
+                if ($partial && !$criteria) {
+                    return count($this->getTags());
+                }
+
+                $query = ChildTagQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByPuzzle($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collTags);
+        }
+    }
+
+    /**
+     * Associate a ChildTag to this object
+     * through the tag_alert cross reference table.
+     *
+     * @param ChildTag $tag
+     * @return ChildPuzzle The current object (for fluent API support)
+     */
+    public function addTag(ChildTag $tag)
+    {
+        if ($this->collTags === null) {
+            $this->initTags();
+        }
+
+        if (!$this->getTags()->contains($tag)) {
+            // only add it if the **same** object is not already associated
+            $this->collTags->push($tag);
+            $this->doAddTag($tag);
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param ChildTag $tag
+     */
+    protected function doAddTag(ChildTag $tag)
+    {
+        $tagAlert = new ChildTagAlert();
+
+        $tagAlert->setTag($tag);
+
+        $tagAlert->setPuzzle($this);
+
+        $this->addTagAlert($tagAlert);
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$tag->isPuzzlesLoaded()) {
+            $tag->initPuzzles();
+            $tag->getPuzzles()->push($this);
+        } elseif (!$tag->getPuzzles()->contains($this)) {
+            $tag->getPuzzles()->push($this);
+        }
+
+    }
+
+    /**
+     * Remove tag of this object
+     * through the tag_alert cross reference table.
+     *
+     * @param ChildTag $tag
+     * @return ChildPuzzle The current object (for fluent API support)
+     */
+    public function removeTag(ChildTag $tag)
+    {
+        if ($this->getTags()->contains($tag)) {
+            $tagAlert = new ChildTagAlert();
+            $tagAlert->setTag($tag);
+            if ($tag->isPuzzlesLoaded()) {
+                //remove the back reference if available
+                $tag->getPuzzles()->removeObject($this);
+            }
+
+            $tagAlert->setPuzzle($this);
+            $this->removeTagAlert(clone $tagAlert);
+            $tagAlert->clear();
+
+            $this->collTags->remove($this->collTags->search($tag));
+
+            if (null === $this->tagsScheduledForDeletion) {
+                $this->tagsScheduledForDeletion = clone $this->collTags;
+                $this->tagsScheduledForDeletion->clear();
+            }
+
+            $this->tagsScheduledForDeletion->push($tag);
+        }
+
+
+        return $this;
+    }
+
+    /**
      * Clears out the collMembers collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -4169,6 +4772,11 @@ abstract class Puzzle implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collTagAlerts) {
+                foreach ($this->collTagAlerts as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collNotes) {
                 foreach ($this->collNotes as $o) {
                     $o->clearAllReferences($deep);
@@ -4194,6 +4802,11 @@ abstract class Puzzle implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collTags) {
+                foreach ($this->collTags as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collMembers) {
                 foreach ($this->collMembers as $o) {
                     $o->clearAllReferences($deep);
@@ -4211,11 +4824,13 @@ abstract class Puzzle implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collTagAlerts = null;
         $this->collNotes = null;
         $this->collPuzzleMembers = null;
         $this->collPuzzleParents = null;
         $this->collPuzzlechildren = null;
         $this->collNews = null;
+        $this->collTags = null;
         $this->collMembers = null;
         $this->collParents = null;
         $this->collChildren = null;

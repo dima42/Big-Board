@@ -42,11 +42,11 @@
 </form>
 
 <select id="metaSelectTemplate" class="form-control meta-select d-none">
-        <option value="">- - -</option>
+        <option value="-1">- - -</option>
     {% for meta in metas %}
         <option value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
     {% endfor %}
-        <option value="">- - -</option>
+        <option value="-1">- - -</option>
         <option value="0">🆕 This is a new meta</option>
 </select>
 {% endblock %}
@@ -75,7 +75,7 @@ function slugify(text) {
         .replace(/\-\-+/g, '-')         // Replace multiple - with single -
         .replace(/^-+/, '')             // Trim - from start of text
         .replace(/-+$/, '');            // Trim - from end of text
-    return t.substr(0, 21);
+    return t.substr(0, 19);
 }
 
 $(function() {
@@ -129,7 +129,7 @@ $(function() {
                 $('.addFormError').html('The values outlined in red are already in use. Please enter something unique and re-submit.').show();
                 $('#submit-button').prop('disabled', false);
             } else {
-                $('#submit-button').hide();
+                $('.addForm button').hide();
             }
 
             $.each(response['newPuzzles'], function(i, puzzleData) {

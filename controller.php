@@ -18,6 +18,8 @@ $this->respond('GET', '/bymeta', function () {
 		return displayAllByMeta();
 	});
 
+// DATA API
+
 $this->with('/puzzles', function () {
 		$this->respond('GET', '/all', function ($request, $response) {
 				return allPuzzles($response);
@@ -30,6 +32,9 @@ $this->with('/puzzles', function () {
 			});
 		$this->respond('GET', '/member/[:member_id]', function ($request, $response) {
 				return memberPuzzles($request->member_id, $response);
+			});
+		$this->respond('GET', '/withtags', function ($request, $response) {
+				return unsolvedWithTags($response);
 			});
 	});
 
@@ -70,6 +75,38 @@ $this->with('/puzzle/[:id]', function () {
 			});
 		$this->respond('POST', '/delete-note/[:note_id]/?', function ($request) {
 				return archivePuzzleNote($request->note_id, $request->id);
+			});
+	});
+
+// TAGS
+
+$this->with('/tags', function () {
+		$this->respond('GET', '/?', function ($request, $response) {
+				return displayTags();
+			});
+		$this->respond('GET', '/admin/?', function ($request, $response) {
+				return displayTagAdmin();
+			});
+		$this->respond('GET', '/edit/?', function ($request, $response) {
+				return displayTagAdmin('edit');
+			});
+		$this->respond('POST', '/add/?', function ($request, $response) {
+				return addTag($request);
+			});
+		$this->respond('POST', '/[:id]/edit/?', function ($request, $response) {
+				return editTag($request);
+			});
+		$this->respond('POST', '/[:id]/move_up/?', function ($request, $response) {
+				return moveTag($request, $request->id, 'up');
+			});
+		$this->respond('POST', '/[:id]/move_dn/?', function ($request, $response) {
+				return moveTag($request, $request->id, 'down');
+			});
+		$this->respond('POST', '/alert/[:id]/?', function ($request, $response) {
+				return alertTag($request, $response, $request->id);
+			});
+		$this->respond('POST', '/invite/?', function ($request, $response) {
+				return inviteToTag($request, $response);
 			});
 	});
 
@@ -177,18 +214,10 @@ function displayError($error) {
 function displayTest($response) {
 	$member = $_SESSION['user'];
 
-	$commander = getSlackCommander();
+	$roots = TagQuery::create()
+		->findRoots();
 
-	$answer = $commander->execute('users.info', [
-			'user' => $member->getSlackId()
-		]);
-
-	// Avatar options: image_24, 32, 48, 72, 192, 512, 1024
-	$avatar = $answer->getBody()['user']['profile']['image_192'];
-	$member->setAvatar($avatar);
-	$member->save();
-
-	preprint($avatar);
+	preprint($roots);
 	return;
 
 	render('test.twig', '', array(
@@ -249,6 +278,16 @@ function allMembers($response) {
 	return $response->json($members);
 }
 
+function unsolvedWithTags($response) {
+	$puzzles = PuzzleQuery::create()
+		->filterByStatus('solved', Criteria::NOT_EQUAL)
+		->joinWithTagAlert()
+		->find()
+		->toArray();
+
+	return $response->json($puzzles);
+}
+
 // PUZZLE LISTS
 
 function displayAll() {
@@ -276,12 +315,16 @@ function displayAll() {
 		];
 	}
 
+	$member         = $_SESSION['user'];
+	$member_puzzles = $member->getPuzzles();
+
 	$solved_percentage = ($total_puzzle_count == 0)?0:($total_puzzle_count-$unsolved_count)/$total_puzzle_count;
 	render('all.twig', 'puzzles', array(
 			'statusCounts'       => $statusCounts,
 			'unsolved_count'     => $unsolved_count,
 			'solved_percentage'  => $solved_percentage,
 			'total_puzzle_count' => $total_puzzle_count,
+			'member_puzzles'     => $member_puzzles,
 		));
 }
 
@@ -370,6 +413,21 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			->find();
 	}
 
+	$puzzles = TagQuery::create()
+		->findTree(1);
+
+	$topics = TagQuery::create()
+		->findTree(2);
+
+	$skills = TagQuery::create()
+		->findTree(3);
+
+	$tag_alerts = TagAlertQuery::create()
+		->filterByPuzzle($puzzle)
+		->select('TagId')
+		->find()
+		->toArray();
+
 	render($template, 'puzzles', array(
 			'puzzle_id'     => $puzzle_id,
 			'puzzle'        => $puzzle,
@@ -380,6 +438,12 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			'puzzles_metas' => $puzzles_metas,
 			'is_meta'       => $is_meta,
 			'all_members'   => $full_roster,
+			'scopes'        => [
+				'Puzzle Types' => $puzzles,
+				'Topics'       => $topics,
+				'Skills'       => $skills,
+			],
+			'tag_alerts' => $tag_alerts,
 		));
 }
 
@@ -542,7 +606,7 @@ function puzzleScrape($request, $response) {
 			$json[] = array(
 				"url"   => $url,
 				"title" => $title,
-				"slack" => substr($slugify->slugify($title), 0, 21)
+				"slack" => substr($slugify->slugify($title), 0, 19)
 			);
 		}
 	}
@@ -575,12 +639,13 @@ function addPuzzle($request, $response) {
 			$existingTitles[] = $puzzleId;
 		}
 
-		if ($puzzleTitleExists) {
+		if ($slackNameExists) {
 			$existingSlacks[] = $puzzleId;
 		}
 
-		if (!$puzzleURLExists && !$puzzleTitleExists) {
-			$newChannelID = createNewSlackChannel($puzzleContent['slack']);
+		if (!$puzzleURLExists && !$puzzleTitleExists && !$slackNameExists) {
+			$slack_channel_name = "ρ_".$puzzleContent['slack'];
+			$newChannelID       = createPuzzleChannel($slack_channel_name);
 
 			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
 
@@ -588,7 +653,7 @@ function addPuzzle($request, $response) {
 			$newPuzzle->setTitle($puzzleContent['title']);
 			$newPuzzle->setUrl($puzzleContent['url']);
 			$newPuzzle->setSpreadsheetId($spreadsheet_id);
-			$newPuzzle->setSlackChannel($puzzleContent['slack']);
+			$newPuzzle->setSlackChannel($slack_channel_name);
 			$newPuzzle->setSlackChannelId($newChannelID);
 			$newPuzzle->setStatus('open');
 			$newPuzzle->save();
@@ -619,7 +684,7 @@ function addPuzzle($request, $response) {
 			addNews($news_text, 'open', $newPuzzle);
 
 			// POST TO SLACK CHANNEL
-			postToSlack('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), ":hatching_chick:", "NewPuzzleBot", $newPuzzle->getSlackChannel());
+			postToChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), ":hatching_chick:", "NewPuzzleBot", $newPuzzle->getSlackChannel());
 			postToGeneral('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentMedium(), ":hatching_chick:", "NewPuzzleBot");
 		}
 	}
@@ -632,7 +697,153 @@ function addPuzzle($request, $response) {
 		));
 }
 
-// ROSTER
+// TAGS
+
+function displayTags() {
+	$puzzles = TagQuery::create()
+		->findTree(1);
+
+	$topics = TagQuery::create()
+		->findTree(2);
+
+	$skills = TagQuery::create()
+		->findTree(3);
+
+	render('tags.twig', 'tags', array(
+			'scopes'        => [
+				'Puzzle Types' => $puzzles,
+				'Topics'       => $topics,
+				'Skills'       => $skills,
+			],
+		));
+}
+
+function displayTagAdmin($view = 'view') {
+	$puzzles = TagQuery::create()
+		->findTree(1);
+
+	$topics = TagQuery::create()
+		->findTree(2);
+
+	$skills = TagQuery::create()
+		->findTree(3);
+
+	$template = 'tags-admin.twig';
+	if ($view == 'edit') {
+		$template = 'tags-edit.twig';
+	}
+
+	render($template, 'tags', array(
+			'scopes' => [
+				$puzzles,
+				$topics,
+				$skills,
+			],
+		));
+}
+
+function addTag($request) {
+	Global $DEBUG;
+
+	$parent = TagQuery::create()
+		->findPk($request->parent);
+
+	if (!$DEBUG) {
+		$slack_response = createNewSlackChannel($request->title);
+		$response_body  = $slack_response->getBody();
+	} else {
+		$response_body = ['ok' => 1];
+	}
+
+	if ($response_body['ok'] != 1 && $response_body['error'] != "cannot_join_app_user") {
+		$alert = "Sorry, something went wrong: [".$response_body['error']."] ".$response_body['detail'];
+	} else {
+		$tag = new Tag();
+		$tag->setTitle($request->title);
+		$tag->insertAsLastChildOf($parent);
+		$tag->setSlackChannel($response_body['channel']['name']);
+		$tag->setSlackChannelId($response_body['channel']['id']);
+		$tag->save();
+
+		$alert = $request->title.' added.';
+	}
+
+	redirect('/tags/admin', $alert);
+}
+
+function editTag($request) {
+	$tag = TagQuery::create()
+		->findPk($request->id);
+
+	$tag->setTitle($request->title);
+	$tag->setDescription($request->description);
+	$tag->save();
+
+	$alert = $request->title.' edited.';
+	redirect('/tags/edit', $alert);
+}
+
+function moveTag($request, $id, $dir) {
+	$tag = TagQuery::create()
+		->findPk($id);
+
+	if ($dir == "down") {
+		$nextSib = $tag->getNextSibling();
+		$tag->moveToNextSiblingOf($nextSib);
+	} elseif ($dir == "up") {
+		$prevSib = $tag->getPrevSibling();
+		$tag->moveToPrevSiblingOf($prevSib);
+	}
+
+	redirect('/tags/edit', $tag->getTitle().' moved '.$dir.'.');
+}
+
+function alertTag($request, $response, $puzzle_id) {
+	$tag_id = $request->tag_id;
+
+	$tag = TagQuery::create()
+		->findPk($tag_id);
+
+	$puzzle = PuzzleQuery::create()
+		->findPk($puzzle_id);
+
+	// TODO: Don't allow if link has .alerted class
+
+	if ($request->alerted == "true") {
+		$ta = TagAlertQuery::create()
+			->filterByPuzzleId($puzzle_id)
+			->filterByTagId($tag_id)
+			->findOne()
+			->delete();
+
+		$json = [
+			'ok' => 1
+		];
+	} else {
+		$ta = new TagAlert();
+		$ta->setPuzzle($puzzle);
+		$ta->setTag($tag);
+		$ta->save();
+
+		postToSlack("*".$puzzle->getTitle()."* has been tagged `".strtoupper($tag->getTitle())."`", $puzzle->getSlackAttachmentMedium(), ":label:", "TagBot", $tag->getSlackChannelId());
+
+		$json = [
+			'ok' => 1
+		];
+	}
+
+	return $response->json($json);
+}
+
+function inviteToTag($request, $response) {
+	$channel = $request->channel;
+	$member  = $_SESSION['user'];
+
+	$slack_response = inviteToSlackChannel($channel, $member->getSlackId());
+	return $response->json($slack_response);
+}
+
+// MEMBERS
 
 function displayRoster() {
 	$puzzles_with_members = PuzzleQuery::create()
@@ -653,15 +864,44 @@ function displayMember($member_id) {
 		->filterById($member_id)
 		->findOne();
 
-	// If it's the logged in use, take this chance to refresh the session object in case member data has changed
+	$member_channels = [];
+	$scopes          = [];
+
+	// If it's the logged-in user, take this chance to refresh the session object in case member data has changed
 	if ($member_id == $_SESSION['user']->getId()) {
 		$is_user          = true;
 		$_SESSION['user'] = $member;
+
+		$slack_id     = $member->getSlackId();
+		$all_channels = getAllSlackChannels()['channels'];
+		$member_of    = array_filter($all_channels, function ($channel) use ($slack_id) {
+				return in_array($slack_id, $channel['members']);
+			});
+		$member_channels = array_map(function ($channel) {
+				return $channel['id'];
+			}, $member_of);
+
+		$puzzles = TagQuery::create()
+			->findTree(1);
+
+		$topics = TagQuery::create()
+			->findTree(2);
+
+		$skills = TagQuery::create()
+			->findTree(3);
+
+		$scopes = [
+			'Puzzle Types' => $puzzles,
+			'Topics'       => $topics,
+			'Skills'       => $skills,
+		];
 	}
 
 	render('member.twig', 'member', array(
-			'member'  => $member,
-			'is_user' => $is_user,
+			'member'          => $member,
+			'is_user'         => $is_user,
+			'member_channels' => $member_channels,
+			'scopes'          => $scopes,
 		));
 }
 

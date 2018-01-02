@@ -1,0 +1,46 @@
+{% extends 'loggedin.twig' %}
+
+{% block filters %}
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="/tags/admin">View</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/tags/edit">Edit</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<h1>Tags</h1>
+{% for scope in scopes %}
+    {% for tag in scope %}
+        <div class="tag level{{ tag.level }}" data-level="{{ tag.level }}" data-pk="{{ tag.id }}">
+            {{ tag.title }}
+            <a class="badge" href="http://{{ slackDomain }}.slack.com/messages/{{ tag.slackChannelId }}"><img src="/img/slack.png" width="12px" alt=""> Slack</a>
+            <div class="float-right">
+                <a class="badge badge-light" href="#" data-behavior="add-tag">+ Child</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('[data-behavior=add-tag]').click(function(e) {
+        e.preventDefault();
+        var parent = $(this).closest('.tag');
+        $.get('/templates/add_tag.mst', function(template) {
+            var rendered = Mustache.render(template, {
+                'parent': parent.data('pk'),
+                'level': parent.data('level') + 1
+            });
+            parent.after(rendered);
+            parent.next().find('input').first().focus();
+        });
+    });
+});
+</script>
+{% endblock %}

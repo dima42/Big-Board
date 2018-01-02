@@ -65,6 +65,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery rightJoinWithWrangler() Adds a RIGHT JOIN clause and with to the query using the Wrangler relation
  * @method     ChildPuzzleQuery innerJoinWithWrangler() Adds a INNER JOIN clause and with to the query using the Wrangler relation
  *
+ * @method     ChildPuzzleQuery leftJoinTagAlert($relationAlias = null) Adds a LEFT JOIN clause to the query using the TagAlert relation
+ * @method     ChildPuzzleQuery rightJoinTagAlert($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TagAlert relation
+ * @method     ChildPuzzleQuery innerJoinTagAlert($relationAlias = null) Adds a INNER JOIN clause to the query using the TagAlert relation
+ *
+ * @method     ChildPuzzleQuery joinWithTagAlert($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the TagAlert relation
+ *
+ * @method     ChildPuzzleQuery leftJoinWithTagAlert() Adds a LEFT JOIN clause and with to the query using the TagAlert relation
+ * @method     ChildPuzzleQuery rightJoinWithTagAlert() Adds a RIGHT JOIN clause and with to the query using the TagAlert relation
+ * @method     ChildPuzzleQuery innerJoinWithTagAlert() Adds a INNER JOIN clause and with to the query using the TagAlert relation
+ *
  * @method     ChildPuzzleQuery leftJoinNote($relationAlias = null) Adds a LEFT JOIN clause to the query using the Note relation
  * @method     ChildPuzzleQuery rightJoinNote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Note relation
  * @method     ChildPuzzleQuery innerJoinNote($relationAlias = null) Adds a INNER JOIN clause to the query using the Note relation
@@ -115,7 +125,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery rightJoinWithNews() Adds a RIGHT JOIN clause and with to the query using the News relation
  * @method     ChildPuzzleQuery innerJoinWithNews() Adds a INNER JOIN clause and with to the query using the News relation
  *
- * @method     \MemberQuery|\NoteQuery|\PuzzleMemberQuery|\PuzzlePuzzleQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \MemberQuery|\TagAlertQuery|\NoteQuery|\PuzzleMemberQuery|\PuzzlePuzzleQuery|\NewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPuzzle findOne(ConnectionInterface $con = null) Return the first ChildPuzzle matching the query
  * @method     ChildPuzzle findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPuzzle matching the query, or a new ChildPuzzle object populated from the query conditions when no match is found
@@ -817,6 +827,79 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     }
 
     /**
+     * Filter the query by a related \TagAlert object
+     *
+     * @param \TagAlert|ObjectCollection $tagAlert the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterByTagAlert($tagAlert, $comparison = null)
+    {
+        if ($tagAlert instanceof \TagAlert) {
+            return $this
+                ->addUsingAlias(PuzzleTableMap::COL_ID, $tagAlert->getPuzzleId(), $comparison);
+        } elseif ($tagAlert instanceof ObjectCollection) {
+            return $this
+                ->useTagAlertQuery()
+                ->filterByPrimaryKeys($tagAlert->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByTagAlert() only accepts arguments of type \TagAlert or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the TagAlert relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function joinTagAlert($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('TagAlert');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'TagAlert');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the TagAlert relation TagAlert object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \TagAlertQuery A secondary query class using the current class as primary query
+     */
+    public function useTagAlertQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinTagAlert($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TagAlert', '\TagAlertQuery');
+    }
+
+    /**
      * Filter the query by a related \Note object
      *
      * @param \Note|ObjectCollection $note the related object to use as filter
@@ -1179,6 +1262,23 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         return $this
             ->joinNews($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'News', '\NewsQuery');
+    }
+
+    /**
+     * Filter the query by a related Tag object
+     * using the tag_alert table as cross reference
+     *
+     * @param Tag $tag the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterByTag($tag, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useTagAlertQuery()
+            ->filterByTag($tag, $comparison)
+            ->endUse();
     }
 
     /**

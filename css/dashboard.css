@@ -7,6 +7,8 @@
 .icon-edit,
 .icon-archive,
 .icon-x,
+.icon-tag,
+.icon-tags,
 .far,
 .fal,
 .fab {
@@ -59,7 +61,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags {
   text-align: center;
   width: 1.25em; }
 
@@ -97,6 +99,8 @@
 .fa-pull-left.icon-edit,
 .fa-pull-left.icon-archive,
 .fa-pull-left.icon-x,
+.fa-pull-left.icon-tag,
+.fa-pull-left.icon-tags,
 .far.fa-pull-left,
 .fal.fa-pull-left,
 .fab.fa-pull-left {
@@ -111,6 +115,8 @@
 .fa-pull-right.icon-edit,
 .fa-pull-right.icon-archive,
 .fa-pull-right.icon-x,
+.fa-pull-right.icon-tag,
+.fa-pull-right.icon-tags,
 .far.fa-pull-right,
 .fal.fa-pull-right,
 .fab.fa-pull-right {
@@ -2171,10 +2177,10 @@ readers do not read off random characters that represent icons */
 .fa-tachometer-alt:before {
   content: "\f3fd"; }
 
-.fa-tag:before {
+.fa-tag:before, .icon-tag:before {
   content: "\f02b"; }
 
-.fa-tags:before {
+.fa-tags:before, .icon-tags:before {
   content: "\f02c"; }
 
 .fa-tasks:before {
@@ -2594,6 +2600,18 @@ readers do not read off random characters that represent icons */
   color: #FF6600;
   color: #444; }
 
+.icon-tag {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #444; }
+
+.icon-tags {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #444; }
+
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
   padding-top: 3.5rem;
@@ -2602,7 +2620,7 @@ body {
 
 h1 {
   font-size: 2rem;
-  /*margin-bottom: 0;*/ }
+  margin-bottom: 1rem; }
 
 h2 {
   font-size: 1.5rem;
@@ -2730,19 +2748,21 @@ aside {
     background: #eee; }
     .puzzle-list thead tr th {
       border-bottom: 1px solid #aaa; }
-  .puzzle-list:hover tbody tr {
-    opacity: .8; }
-  .puzzle-list tbody tr:hover {
-    opacity: 1; }
-    .puzzle-list tbody tr:hover td {
-      border-top: 1px solid #888;
-      border-bottom: 1px solid #888; }
+  .puzzle-list tr:last-child td {
+    border-bottom: 1px solid #e9ecef; }
+  .puzzle-list tr.hover td {
+    border-top: 1px solid #888 !important;
+    border-bottom: 1px solid #888 !important; }
   .puzzle-list label {
     margin: 0; }
   .puzzle-list a {
     display: block; }
     .puzzle-list a:hover {
       text-decoration: none; }
+  .puzzle-list .status {
+    width: 22px; }
+  .puzzle-list .icon-link {
+    width: 22px; }
 
 [data-filter=solved] {
   background: #f7f7f7;
@@ -2762,9 +2782,47 @@ aside {
   visibility: hidden;
   pointer-events: none; }
 
+.tags .tag {
+  padding: .3em 0;
+  padding-left: .6em;
+  position: relative;
+  margin-bottom: .6em;
+  border-left: 5px solid #f3f3f3; }
+  .tags .tag:hover {
+    background: #f7f7f7; }
+  .tags .tag.tag-form {
+    padding-top: 0;
+    padding-bottom: 0; }
+
+.tags .level0 {
+  margin-top: 1em; }
+
+.tags .level1 {
+  border-left-color: #e7e7e7;
+  margin-left: 1em; }
+
+.tags .level2 {
+  border-left-color: #c7c7c7;
+  margin-left: 2em; }
+
+.tags .level3 {
+  border-left-color: #aaa;
+  margin-left: 3em; }
+
+.tags .move-tag {
+  position: absolute;
+  top: 0;
+  right: 0; }
+
+.tags .move-tag-up {
+  right: 25px; }
+
+.tags .edit-tag {
+  margin-right: 65px; }
+
 .puzzle-metas {
-  background: #f7f7f7;
-  margin-bottom: .75em;
+  background: #eee;
+  margin-bottom: .5rem;
   padding: .3em .5em;
   color: #444; }
   .puzzle-metas a {
@@ -2785,11 +2843,76 @@ aside {
 .puzzleEdit .input-group-addon {
   width: 80px; }
 
-.puzzle-links a {
-  background-position: right 12px center;
-  background-repeat: no-repeat;
-  background-image: linear-gradient(transparent, transparent), url("data:image/svg+xml,%3C%3Fxml version=%221.0%22 encoding=%22UTF-8%22%3F%3E%0A%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22%3E%0A%09%3Cpath fill=%22%23fff%22 stroke=%22%2336c%22 d=%22M1.5 4.518h5.982V10.5H1.5z%22/%3E%0A%09%3Cpath fill=%22%2336c%22 d=%22M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z%22/%3E%0A%09%3Cpath fill=%22%23fff%22 d=%22M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z%22/%3E%0A%3C/svg%3E%0A");
-  padding-right: 28px; }
+.puzzle-links {
+  border-radius: 4px; }
+  .puzzle-links li {
+    padding-right: 6px; }
+    .puzzle-links li:last-child {
+      padding-right: 0; }
+  .puzzle-links a {
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(transparent, transparent), url("data:image/svg+xml,%3C%3Fxml version=%221.0%22 encoding=%22UTF-8%22%3F%3E%0A%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22%3E%0A%09%3Cpath fill=%22%23fff%22 stroke=%22%2336c%22 d=%22M1.5 4.518h5.982V10.5H1.5z%22/%3E%0A%09%3Cpath fill=%22%2336c%22 d=%22M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z%22/%3E%0A%09%3Cpath fill=%22%23fff%22 d=%22M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z%22/%3E%0A%3C/svg%3E%0A");
+    padding: 5px 0 5px 30px;
+    text-align: left;
+    font-size: .8rem;
+    text-transform: uppercase;
+    position: relative;
+    background-color: #f8f8f8;
+    color: #666; }
+    .puzzle-links a:hover {
+      background-color: #f1f1f1; }
+    .puzzle-links a::before {
+      content: "";
+      width: 15px;
+      height: 15px;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: center center;
+      position: absolute;
+      top: 7px;
+      left: 9px; }
+  .puzzle-links .link-puzzle::before {
+    background-image: url("/img/mit.png"); }
+  .puzzle-links .link-drive::before {
+    background-image: url("/img/drive.png"); }
+  .puzzle-links .link-slack::before {
+    background-image: url("/img/slack.png"); }
+
+.tag-list {
+  margin-bottom: 1em; }
+  .tag-list .tag {
+    display: block;
+    font-size: .9rem;
+    padding: .3em .5em;
+    margin-bottom: 4px;
+    color: #333;
+    border-left: 4px solid #eee; }
+  .tag-list .tag:hover, .tag-list .alerted, .tag-list .member {
+    background: #e6f2ff;
+    border-left-color: #004a99;
+    color: black;
+    text-decoration: none; }
+  .tag-list .alerted, .tag-list .member {
+    font-weight: bold; }
+  .tag-list .join-link, .tag-list .member-link {
+    float: right; }
+  .tag-list .member-link {
+    display: none; }
+  .tag-list .member .join-link {
+    display: none; }
+  .tag-list .member .member-link {
+    display: inline-block; }
+  .tag-list .level2 {
+    margin-left: 1em; }
+
+.scope-header {
+  font-size: 1rem;
+  margin-bottom: .5em;
+  padding: .3em 0;
+  border-bottom: 1px dashed #ccc; }
+  .scope-header:first-child {
+    margin-top: 0; }
 
 .avatar {
   border-radius: 50%;
@@ -2827,6 +2950,15 @@ aside {
 .new-note-form {
   padding-top: 1em; }
 
+.puzzles .level2 {
+  margin-left: 1.2em; }
+
+.puzzles .level3 {
+  margin-left: 2.4em; }
+
+.puzzles .level4 {
+  margin-left: 3.6em; }
+
 .puzzleInputGroup {
   margin-bottom: 2.5em; }
   .puzzleInputGroup .input-group-addon {
@@ -2855,13 +2987,16 @@ body.add.trippy {
 .member-table td {
   padding: .5rem; }
 
-.slack-link {
+.roster .slack-link {
   width: 2.5em;
   padding-left: 0;
   padding-right: 0; }
 
 .by-puzzle .strengths, .by-puzzle .working-on {
   display: none; }
+
+body.member .puzzle-list {
+  margin-bottom: 1em; }
 
 .news-row[data-filter=important] {
   background: #ffff99; }

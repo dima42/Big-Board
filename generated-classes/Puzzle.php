@@ -90,7 +90,7 @@ class Puzzle extends BasePuzzle {
 
 			// POST TO SLACK
 			$channel = $this->getSlackChannel();
-			postToSlack('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
+			postToChannel('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
 			postToGeneral('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot");
 		} else {
 			$this->setStatus('open');
@@ -193,7 +193,7 @@ class Puzzle extends BasePuzzle {
 		if ($memberCount > 0) {
 			$this->postMembers($member->getNameForSlack()." joined *".$this->getTitle()."*. Current roster:", $channel);
 		} else {
-			postToSlack(
+			postToChannel(
 				'First member of *'.$this->getTitle().'*!',
 				[[
 						'text'  => $member->getNameForSlack(),
@@ -214,7 +214,7 @@ class Puzzle extends BasePuzzle {
 		if ($memberCount > 0) {
 			$this->postMembers($member->getFullName().' left *'.$this->getTitle().'*. Current roster:', $channel);
 		} else {
-			postToSlack(
+			postToChannel(
 				$member->getFullName().' left *'.$this->getTitle().'*. No members remain.',
 				[],
 				":wave:",
@@ -234,7 +234,7 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function postMembers($header_msg = "Current roster:", $channel) {
-		postToSlack(
+		postToChannel(
 			$header_msg,
 			[[
 					'text'  => $this->getMembersForSlack(),
@@ -249,7 +249,7 @@ class Puzzle extends BasePuzzle {
 	public function postNoteToSlack($note) {
 		$channel = $this->getSlackChannel();
 
-		postToSlack(
+		postToChannel(
 			'*'.$note->getAuthor()->getFullName().'* posted a note:',
 			[[
 					'text'  => $note->getBody(),

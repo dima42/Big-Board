@@ -4,13 +4,28 @@ window.setTimeout(function() {
     });
 }, 5000);
 
+
+$('.puzzle-list').on('mouseenter', 'tr', function(e) {
+    $(this).addClass('hover');
+});
+
+$('.puzzle-list').on('mouseleave', 'tr', function(e) {
+    $(this).removeClass('hover');
+});
+
 var loadPuzzleData = function(url, callback) {
     $.get(url, {}, function(response) {
-        loadPuzzleTemplate(response, callback);
+        loadPuzzleTemplate(response, callback, 'PuzzleParents', 'ParentId');
     });
 };
 
-var loadPuzzleTemplate = function(response, callback) {
+var loadPuzzleTagData = function(url, callback) {
+    $.get(url, {}, function(response) {
+        loadPuzzleTemplate(response, callback, 'TagAlerts', 'TagId');
+    });
+};
+
+var loadPuzzleTemplate = function(response, callback, parentListName, parentIDName) {
     var data = response;
     var now = Date.now();
     $.get('/templates/puzzle_row.mst', function(template) {
@@ -24,13 +39,15 @@ var loadPuzzleTemplate = function(response, callback) {
 
             var rendered = Mustache.render(template, puzzleData);
 
-            var parents = puzzleData['PuzzleParents'];
+            var parents = puzzleData[parentListName];
             if (!parents || parents.length == 0) {
-                parents = [{ParentId: 0}];
+                var emptySet = {};
+                emptySet[parentIDName] = 0;
+                parents = [emptySet];
             }
 
             $.each(parents, function(key, parent) {
-                var tableID = parent['ParentId'];
+                var tableID = parent[parentIDName];
                 var tbody = $('#table-' + tableID).find('tbody');
                 if (tableID == puzzleData['Id']) {
                     tbody.prepend(rendered);

@@ -13,6 +13,14 @@ function getSlackCommander() {
 	return new Commander($slack_key, $interactor);
 }
 
+function getAllSlackChannels() {
+	$commander = getSlackCommander();
+
+	return $commander->execute('channels.list', [
+			'exclude_archived' => true
+		])->getBody();
+}
+
 function getSlackChannelID($slug) {
 	$commander = getSlackCommander();
 
@@ -38,13 +46,16 @@ function getSlackChannelID($slug) {
 function createNewSlackChannel($slug) {
 	$commander = getSlackCommander();
 
-	$commander->execute('channels.create', [
+	$slack_response = $commander->execute('channels.create', [
 			'name' => $slug
 		]);
 
-	$response = getSlackChannelID($slug);
+	return $slack_response;
+}
 
-	return $response;
+function createPuzzleChannel($slug) {
+	createNewSlackChannel($slug);
+	return getSlackChannelID($slug);
 }
 
 function inviteToSlackChannel($channel_id, $member_id) {
@@ -55,20 +66,20 @@ function inviteToSlackChannel($channel_id, $member_id) {
 			'user'    => $member_id,
 		]);
 
-	return $response;
+	return $response->getBody();
 }
 
 function postToGeneral($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {
 	$channel = "general";
-	return postToSlack($message, $attachments, $icon, $bot_name, $channel);
+	return postToChannel($message, $attachments, $icon, $bot_name, $channel);
 }
 
 function postToBigBoard($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {
 	$channel = "big-board";
-	return postToSlack($message, $attachments, $icon, $bot_name, $channel);
+	return postToChannel($message, $attachments, $icon, $bot_name, $channel);
 }
 
-function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot", $channel = "sandbox") {
+function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot", $channel = "C860WEABT") {
 	$slack_key = getenv('BIGBOARDBOT_SLACK_KEY');
 
 	$interactor = new CurlInteractor;
@@ -77,7 +88,7 @@ function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = 
 
 	$response = $commander->execute('chat.postMessage', [
 			'no_format'   => true,
-			'channel'     => '#'.$channel,
+			'channel'     => $channel,
 			'icon_emoji'  => $icon,
 			'username'    => $bot_name,
 			'text'        => $message,
@@ -86,6 +97,10 @@ function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = 
 		]);
 
 	return $response;
+}
+
+function postToChannel($message, $attachments, $icon, $bot_name, $channel = "sandbox") {
+	postToSlack($message, $attachments, $icon, $bot_name, '#'.$channel);
 }
 
 function scrapeAvatar($member) {

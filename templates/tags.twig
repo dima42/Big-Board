@@ -1,0 +1,36 @@
+{% extends 'two-col.twig' %}
+
+{% block filters %}
+{% for scope_title, scope_tags in scopes %}
+    <h4 class="nav-header">{{ scope_title }}</h4>
+    <ul class="nav nav-pills flex-column">
+        {% for tag in scope_tags if tag.level > 0 %}
+        <li class="nav-item">
+            <a class="nav-link" href="#tag-{{ tag.id }}">{{ tag.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+{% from 'macros.twig' import puzzle_table %}
+<h1>Tags with unsolved puzzles</h1>
+{% for scope_title, scope_tags in scopes %}
+{% for tag in scope_tags if tag.level > 0 %}
+<section class="tag-section">
+    <span class="anchor-target" id="tag-{{ tag.id }}"></span>
+    <h2>{{ tag.title }}</h2>
+    {{ puzzle_table(tag.id) }}
+</section>
+{% endfor %}
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    loadPuzzleTagData('/puzzles/withtags');
+});
+</script>
+{% endblock %}

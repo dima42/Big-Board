@@ -33,6 +33,52 @@ CREATE TABLE `puzzle`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- tag
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tag`;
+
+CREATE TABLE `tag`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(255) NOT NULL,
+    `alerted` TINYINT(1) DEFAULT 1 NOT NULL,
+    `slack_channel` VARCHAR(48),
+    `slack_channel_id` VARCHAR(24),
+    `description` VARCHAR(128),
+    `tree_left` INTEGER,
+    `tree_right` INTEGER,
+    `tree_level` INTEGER,
+    `tree_scope` INTEGER,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- tag_alert
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tag_alert`;
+
+CREATE TABLE `tag_alert`
+(
+    `puzzle_id` INTEGER NOT NULL,
+    `tag_id` INTEGER NOT NULL,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`puzzle_id`,`tag_id`),
+    UNIQUE INDEX `tag_alert_u_878027` (`puzzle_id`, `tag_id`),
+    INDEX `tag_alert_fi_022a95` (`tag_id`),
+    CONSTRAINT `tag_alert_fk_937852`
+        FOREIGN KEY (`puzzle_id`)
+        REFERENCES `puzzle` (`id`)
+        ON DELETE CASCADE,
+    CONSTRAINT `tag_alert_fk_022a95`
+        FOREIGN KEY (`tag_id`)
+        REFERENCES `tag` (`id`)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- note
 -- ---------------------------------------------------------------------
 

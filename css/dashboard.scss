@@ -52,6 +52,16 @@
     color: #444;
 }
 
+.icon-tag {
+    @include icon('tag');
+    color: #444;
+}
+
+.icon-tags {
+    @include icon('tags');
+    color: #444;
+}
+
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
@@ -71,7 +81,7 @@ body {
 
 h1 {
     font-size: 2rem;
-    /*margin-bottom: 0;*/
+    margin-bottom: 1rem;
 }
 
 h2 {
@@ -286,18 +296,16 @@ aside {
         }
     }
 
-    &:hover tbody tr {
-        opacity: .8;
+    tr:last-child {
+        td {
+            border-bottom: 1px solid #e9ecef;
+        }
     }
 
-    tbody tr:hover {
-        opacity: 1;
-        // background:white;
-        // box-shadow: 0 0 2px rgba(0,0,0,.2);
-
+    tr.hover {
         td {
-            border-top: 1px solid #888;
-            border-bottom: 1px solid #888;
+            border-top: 1px solid #888 !important;
+            border-bottom: 1px solid #888 !important;
         }
     }
 
@@ -311,6 +319,14 @@ aside {
         &:hover {
             text-decoration: none;
         }
+    }
+
+    .status {
+        width: 22px;
+    }
+
+    .icon-link {
+        width: 22px;
     }
 }
 
@@ -339,11 +355,65 @@ aside {
     pointer-events: none;
 }
 
+// TAGS
+
+.tags {
+    .tag {
+        padding: .3em 0;
+        padding-left: .6em;
+        position: relative;
+        margin-bottom: .6em;
+        border-left: 5px solid #f3f3f3;
+
+        &:hover {
+            background:#f7f7f7;
+        }
+
+        &.tag-form {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    }
+
+    .level0 {
+        margin-top: 1em;
+    }
+
+    .level1 {
+        border-left-color: #e7e7e7;
+        margin-left: 1em;
+    }
+
+    .level2 {
+        border-left-color: #c7c7c7;
+        margin-left: 2em;
+    }
+
+    .level3 {
+        border-left-color: #aaa;
+        margin-left: 3em;
+    }
+
+    .move-tag {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .move-tag-up {
+        right: 25px;
+    }
+
+    .edit-tag {
+        margin-right: 65px;
+    }
+}
+
 // PUZZLE PAGE
 
 .puzzle-metas {
-    background:#f7f7f7;
-    margin-bottom: .75em;
+    background:#eee;
+    margin-bottom: .5rem;
     padding: .3em .5em;
     color: #444;
 
@@ -375,11 +445,126 @@ aside {
 }
 
 .puzzle-links {
+    // border: 1px solid #ddd;
+    border-radius: 4px;
+    // background:#f9f9f9;
+
+    li {
+        // border-left: 1px solid #ddd;
+        padding-right: 6px;
+
+        &:last-child {
+            padding-right: 0;
+        }
+    }
+
     a {
         background-position: right 12px center;
         background-repeat: no-repeat;
         background-image: linear-gradient(transparent,transparent),url("data:image/svg+xml,%3C%3Fxml version=%221.0%22 encoding=%22UTF-8%22%3F%3E%0A%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22%3E%0A%09%3Cpath fill=%22%23fff%22 stroke=%22%2336c%22 d=%22M1.5 4.518h5.982V10.5H1.5z%22/%3E%0A%09%3Cpath fill=%22%2336c%22 d=%22M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z%22/%3E%0A%09%3Cpath fill=%22%23fff%22 d=%22M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z%22/%3E%0A%3C/svg%3E%0A");
-        padding-right: 28px;
+        padding: 5px 0 5px 30px;
+        text-align: left;
+        font-size: .8rem;
+        text-transform: uppercase;
+        position: relative;
+        background-color:#f8f8f8;
+        color: #666;
+
+        &:hover {
+            background-color:#f1f1f1;
+        }
+
+        &::before {
+            content: "";
+            width: 15px;
+            height: 15px;
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            position: absolute;
+            top: 7px;
+            left: 9px;
+        }
+    }
+
+    .link-puzzle {
+        &::before {
+            background-image :url('/img/mit.png');
+        }
+    }
+
+    .link-drive {
+        &::before {
+            background-image :url('/img/drive.png');
+        }
+    }
+
+    .link-slack {
+        &::before {
+            background-image :url('/img/slack.png');
+        }
+    }
+}
+
+.tag-list {
+    margin-bottom: 1em;
+
+    .tag {
+        display: block;
+        font-size: .9rem;
+        padding: .3em .5em;
+        margin-bottom: 4px;
+        color: #333;
+        border-left: 4px solid #eee;
+    }
+
+    %on {
+        background: lighten(#007BFF,45%);
+        border-left-color: darken(#007BFF,20%);
+        color: black;
+        text-decoration: none;
+    }
+
+    .tag:hover {
+        @extend %on;
+    }
+
+    .alerted, .member {
+        @extend %on;
+        font-weight: bold;
+    }
+
+    .join-link, .member-link {
+        float: right;
+    }
+
+    .member-link {
+        display: none;
+    }
+
+    .member {
+        .join-link {
+            display: none;
+        }
+
+        .member-link {
+            display: inline-block;
+        }
+    }
+
+    .level2 {
+        margin-left: 1em;
+    }
+}
+
+.scope-header {
+    font-size: 1rem;
+    margin-bottom: .5em;
+    padding: .3em 0;
+    border-bottom: 1px dashed #ccc;
+
+    &:first-child {
+        margin-top: 0;
     }
 }
 
@@ -447,6 +632,20 @@ aside {
     padding-top: 1em
 }
 
+.puzzles {
+    .level2 {
+        margin-left: 1.2em;
+    }
+
+    .level3 {
+        margin-left: 2.4em;
+    }
+
+    .level4 {
+        margin-left: 3.6em;
+    }
+}
+
 // ADD PUZZLE
 
 .puzzleInputGroup {
@@ -502,10 +701,12 @@ body.add {
     }
 }
 
-.slack-link {
-    width: 2.5em;
-    padding-left: 0;
-    padding-right: 0;
+.roster {
+    .slack-link {
+        width: 2.5em;
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 .by-puzzle {
@@ -515,6 +716,15 @@ body.add {
 }
 
 .by-alpha {
+
+}
+
+// MEMBER
+
+body.member {
+    .puzzle-list {
+        margin-bottom: 1em;
+    }
 
 }
 

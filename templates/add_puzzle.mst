@@ -17,6 +17,6 @@
     </div>
     <div class="input-group newPuzzleSlack mb-2">
         <span class="input-group-addon"><img src="/img/slack.png" width="15px" alt=""></span>
-        <input type="text" class="form-control slack-field" name="newPuzzles[{{i}}][slack]" maxlength="21" value="{{ slack }}" required>
+        <input type="text" class="form-control slack-field" name="newPuzzles[{{i}}][slack]" maxlength="19" value="{{ slack }}" required>
     </div>
 </div>

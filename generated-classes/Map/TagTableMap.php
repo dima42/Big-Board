@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \Puzzle;
-use \PuzzleQuery;
+use \Tag;
+use \TagQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'puzzle' table.
+ * This class defines the structure of the 'tag' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class PuzzleTableMap extends TableMap
+class TagTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class PuzzleTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.PuzzleTableMap';
+    const CLASS_NAME = '.Map.TagTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class PuzzleTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'puzzle';
+    const TABLE_NAME = 'tag';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Puzzle';
+    const OM_CLASS = '\\Tag';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Puzzle';
+    const CLASS_DEFAULT = 'Tag';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -69,67 +69,57 @@ class PuzzleTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'puzzle.id';
+    const COL_ID = 'tag.id';
 
     /**
      * the column name for the title field
      */
-    const COL_TITLE = 'puzzle.title';
+    const COL_TITLE = 'tag.title';
 
     /**
-     * the column name for the url field
+     * the column name for the alerted field
      */
-    const COL_URL = 'puzzle.url';
-
-    /**
-     * the column name for the spreadsheet_id field
-     */
-    const COL_SPREADSHEET_ID = 'puzzle.spreadsheet_id';
-
-    /**
-     * the column name for the solution field
-     */
-    const COL_SOLUTION = 'puzzle.solution';
-
-    /**
-     * the column name for the status field
-     */
-    const COL_STATUS = 'puzzle.status';
+    const COL_ALERTED = 'tag.alerted';
 
     /**
      * the column name for the slack_channel field
      */
-    const COL_SLACK_CHANNEL = 'puzzle.slack_channel';
+    const COL_SLACK_CHANNEL = 'tag.slack_channel';
 
     /**
      * the column name for the slack_channel_id field
      */
-    const COL_SLACK_CHANNEL_ID = 'puzzle.slack_channel_id';
+    const COL_SLACK_CHANNEL_ID = 'tag.slack_channel_id';
 
     /**
-     * the column name for the wrangler_id field
+     * the column name for the description field
      */
-    const COL_WRANGLER_ID = 'puzzle.wrangler_id';
+    const COL_DESCRIPTION = 'tag.description';
 
     /**
-     * the column name for the post_count field
+     * the column name for the tree_left field
      */
-    const COL_POST_COUNT = 'puzzle.post_count';
+    const COL_TREE_LEFT = 'tag.tree_left';
 
     /**
-     * the column name for the created_at field
+     * the column name for the tree_right field
      */
-    const COL_CREATED_AT = 'puzzle.created_at';
+    const COL_TREE_RIGHT = 'tag.tree_right';
 
     /**
-     * the column name for the updated_at field
+     * the column name for the tree_level field
      */
-    const COL_UPDATED_AT = 'puzzle.updated_at';
+    const COL_TREE_LEVEL = 'tag.tree_level';
+
+    /**
+     * the column name for the tree_scope field
+     */
+    const COL_TREE_SCOPE = 'tag.tree_scope';
 
     /**
      * The default string format for model objects of the related table
@@ -143,11 +133,11 @@ class PuzzleTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Title', 'Url', 'SpreadsheetId', 'Solution', 'Status', 'SlackChannel', 'SlackChannelId', 'WranglerId', 'PostCount', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'title', 'url', 'spreadsheetId', 'solution', 'status', 'slackChannel', 'slackChannelId', 'wranglerId', 'postCount', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(PuzzleTableMap::COL_ID, PuzzleTableMap::COL_TITLE, PuzzleTableMap::COL_URL, PuzzleTableMap::COL_SPREADSHEET_ID, PuzzleTableMap::COL_SOLUTION, PuzzleTableMap::COL_STATUS, PuzzleTableMap::COL_SLACK_CHANNEL, PuzzleTableMap::COL_SLACK_CHANNEL_ID, PuzzleTableMap::COL_WRANGLER_ID, PuzzleTableMap::COL_POST_COUNT, PuzzleTableMap::COL_CREATED_AT, PuzzleTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'title', 'url', 'spreadsheet_id', 'solution', 'status', 'slack_channel', 'slack_channel_id', 'wrangler_id', 'post_count', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id', 'Title', 'Alerted', 'SlackChannel', 'SlackChannelId', 'Description', 'TreeLeft', 'TreeRight', 'TreeLevel', 'TreeScope', ),
+        self::TYPE_CAMELNAME     => array('id', 'title', 'alerted', 'slackChannel', 'slackChannelId', 'description', 'treeLeft', 'treeRight', 'treeLevel', 'treeScope', ),
+        self::TYPE_COLNAME       => array(TagTableMap::COL_ID, TagTableMap::COL_TITLE, TagTableMap::COL_ALERTED, TagTableMap::COL_SLACK_CHANNEL, TagTableMap::COL_SLACK_CHANNEL_ID, TagTableMap::COL_DESCRIPTION, TagTableMap::COL_TREE_LEFT, TagTableMap::COL_TREE_RIGHT, TagTableMap::COL_TREE_LEVEL, TagTableMap::COL_TREE_SCOPE, ),
+        self::TYPE_FIELDNAME     => array('id', 'title', 'alerted', 'slack_channel', 'slack_channel_id', 'description', 'tree_left', 'tree_right', 'tree_level', 'tree_scope', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -157,11 +147,11 @@ class PuzzleTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Url' => 2, 'SpreadsheetId' => 3, 'Solution' => 4, 'Status' => 5, 'SlackChannel' => 6, 'SlackChannelId' => 7, 'WranglerId' => 8, 'PostCount' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheetId' => 3, 'solution' => 4, 'status' => 5, 'slackChannel' => 6, 'slackChannelId' => 7, 'wranglerId' => 8, 'postCount' => 9, 'createdAt' => 10, 'updatedAt' => 11, ),
-        self::TYPE_COLNAME       => array(PuzzleTableMap::COL_ID => 0, PuzzleTableMap::COL_TITLE => 1, PuzzleTableMap::COL_URL => 2, PuzzleTableMap::COL_SPREADSHEET_ID => 3, PuzzleTableMap::COL_SOLUTION => 4, PuzzleTableMap::COL_STATUS => 5, PuzzleTableMap::COL_SLACK_CHANNEL => 6, PuzzleTableMap::COL_SLACK_CHANNEL_ID => 7, PuzzleTableMap::COL_WRANGLER_ID => 8, PuzzleTableMap::COL_POST_COUNT => 9, PuzzleTableMap::COL_CREATED_AT => 10, PuzzleTableMap::COL_UPDATED_AT => 11, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'url' => 2, 'spreadsheet_id' => 3, 'solution' => 4, 'status' => 5, 'slack_channel' => 6, 'slack_channel_id' => 7, 'wrangler_id' => 8, 'post_count' => 9, 'created_at' => 10, 'updated_at' => 11, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Alerted' => 2, 'SlackChannel' => 3, 'SlackChannelId' => 4, 'Description' => 5, 'TreeLeft' => 6, 'TreeRight' => 7, 'TreeLevel' => 8, 'TreeScope' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'alerted' => 2, 'slackChannel' => 3, 'slackChannelId' => 4, 'description' => 5, 'treeLeft' => 6, 'treeRight' => 7, 'treeLevel' => 8, 'treeScope' => 9, ),
+        self::TYPE_COLNAME       => array(TagTableMap::COL_ID => 0, TagTableMap::COL_TITLE => 1, TagTableMap::COL_ALERTED => 2, TagTableMap::COL_SLACK_CHANNEL => 3, TagTableMap::COL_SLACK_CHANNEL_ID => 4, TagTableMap::COL_DESCRIPTION => 5, TagTableMap::COL_TREE_LEFT => 6, TagTableMap::COL_TREE_RIGHT => 7, TagTableMap::COL_TREE_LEVEL => 8, TagTableMap::COL_TREE_SCOPE => 9, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'alerted' => 2, 'slack_channel' => 3, 'slack_channel_id' => 4, 'description' => 5, 'tree_left' => 6, 'tree_right' => 7, 'tree_level' => 8, 'tree_scope' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -174,25 +164,24 @@ class PuzzleTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('puzzle');
-        $this->setPhpName('Puzzle');
+        $this->setName('tag');
+        $this->setPhpName('Tag');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Puzzle');
+        $this->setClassName('\\Tag');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('title', 'Title', 'VARCHAR', false, 128, null);
-        $this->addColumn('url', 'Url', 'VARCHAR', false, 128, null);
-        $this->addColumn('spreadsheet_id', 'SpreadsheetId', 'VARCHAR', false, 128, null);
-        $this->addColumn('solution', 'Solution', 'VARCHAR', false, 128, null);
-        $this->addColumn('status', 'Status', 'VARCHAR', false, 24, null);
+        $this->addColumn('title', 'Title', 'VARCHAR', true, 255, null);
+        $this->getColumn('title')->setPrimaryString(true);
+        $this->addColumn('alerted', 'Alerted', 'BOOLEAN', true, 1, true);
         $this->addColumn('slack_channel', 'SlackChannel', 'VARCHAR', false, 48, null);
         $this->addColumn('slack_channel_id', 'SlackChannelId', 'VARCHAR', false, 24, null);
-        $this->addForeignKey('wrangler_id', 'WranglerId', 'INTEGER', 'member', 'id', false, null, null);
-        $this->addColumn('post_count', 'PostCount', 'INTEGER', false, null, null);
-        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('description', 'Description', 'VARCHAR', false, 128, null);
+        $this->addColumn('tree_left', 'TreeLeft', 'INTEGER', false, null, null);
+        $this->addColumn('tree_right', 'TreeRight', 'INTEGER', false, null, null);
+        $this->addColumn('tree_level', 'TreeLevel', 'INTEGER', false, null, null);
+        $this->addColumn('tree_scope', 'TreeScope', 'INTEGER', false, null, null);
     } // initialize()
 
     /**
@@ -200,59 +189,14 @@ class PuzzleTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Wrangler', '\\Member', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':wrangler_id',
-    1 => ':id',
-  ),
-), 'SET NULL', null, null, false);
         $this->addRelation('TagAlert', '\\TagAlert', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':puzzle_id',
+    0 => ':tag_id',
     1 => ':id',
   ),
 ), 'CASCADE', null, 'TagAlerts', false);
-        $this->addRelation('Note', '\\Note', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':puzzle_id',
-    1 => ':id',
-  ),
-), 'SET NULL', null, 'Notes', false);
-        $this->addRelation('PuzzleMember', '\\PuzzleMember', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':puzzle_id',
-    1 => ':id',
-  ),
-), 'CASCADE', null, 'PuzzleMembers', false);
-        $this->addRelation('PuzzleParent', '\\PuzzlePuzzle', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':puzzle_id',
-    1 => ':id',
-  ),
-), 'CASCADE', null, 'PuzzleParents', false);
-        $this->addRelation('PuzzleChild', '\\PuzzlePuzzle', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':parent_id',
-    1 => ':id',
-  ),
-), 'CASCADE', null, 'Puzzlechildren', false);
-        $this->addRelation('News', '\\News', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':puzzle_id',
-    1 => ':id',
-  ),
-), 'SET NULL', null, 'News', false);
-        $this->addRelation('Tag', '\\Tag', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Tags');
-        $this->addRelation('Member', '\\Member', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Members');
-        $this->addRelation('Parent', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Parents');
-        $this->addRelation('Child', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Children');
+        $this->addRelation('Puzzle', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Puzzles');
     } // buildRelations()
 
     /**
@@ -264,23 +208,17 @@ class PuzzleTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'aggregate_column' => array('name' => 'post_count', 'expression' => 'COUNT(id)', 'condition' => '', 'foreign_table' => 'note', 'foreign_schema' => '', ),
-            'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
-            'archivable' => array('archive_table' => '', 'archive_phpname' => '', 'archive_class' => '', 'log_archived_at' => 'true', 'archived_at_column' => 'archived_at', 'archive_on_insert' => 'false', 'archive_on_update' => 'false', 'archive_on_delete' => 'true', ),
+            'nested_set' => array('left_column' => 'tree_left', 'right_column' => 'tree_right', 'level_column' => 'tree_level', 'use_scope' => 'true', 'scope_column' => 'tree_scope', 'method_proxies' => 'false', ),
         );
     } // getBehaviors()
     /**
-     * Method to invalidate the instance pool of all tables related to puzzle     * by a foreign key with ON DELETE CASCADE
+     * Method to invalidate the instance pool of all tables related to tag     * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
     {
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         TagAlertTableMap::clearInstancePool();
-        NoteTableMap::clearInstancePool();
-        PuzzleMemberTableMap::clearInstancePool();
-        PuzzlePuzzleTableMap::clearInstancePool();
-        NewsTableMap::clearInstancePool();
     }
 
     /**
@@ -340,7 +278,7 @@ class PuzzleTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? PuzzleTableMap::CLASS_DEFAULT : PuzzleTableMap::OM_CLASS;
+        return $withPrefix ? TagTableMap::CLASS_DEFAULT : TagTableMap::OM_CLASS;
     }
 
     /**
@@ -354,22 +292,22 @@ class PuzzleTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Puzzle object, last column rank)
+     * @return array           (Tag object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = PuzzleTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = PuzzleTableMap::getInstanceFromPool($key))) {
+        $key = TagTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = TagTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + PuzzleTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + TagTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = PuzzleTableMap::OM_CLASS;
-            /** @var Puzzle $obj */
+            $cls = TagTableMap::OM_CLASS;
+            /** @var Tag $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            PuzzleTableMap::addInstanceToPool($obj, $key);
+            TagTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -392,18 +330,18 @@ class PuzzleTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = PuzzleTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = PuzzleTableMap::getInstanceFromPool($key))) {
+            $key = TagTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = TagTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Puzzle $obj */
+                /** @var Tag $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                PuzzleTableMap::addInstanceToPool($obj, $key);
+                TagTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -424,31 +362,27 @@ class PuzzleTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(PuzzleTableMap::COL_ID);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_TITLE);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_URL);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_SPREADSHEET_ID);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_SOLUTION);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_STATUS);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_SLACK_CHANNEL);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_SLACK_CHANNEL_ID);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_WRANGLER_ID);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_POST_COUNT);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_CREATED_AT);
-            $criteria->addSelectColumn(PuzzleTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(TagTableMap::COL_ID);
+            $criteria->addSelectColumn(TagTableMap::COL_TITLE);
+            $criteria->addSelectColumn(TagTableMap::COL_ALERTED);
+            $criteria->addSelectColumn(TagTableMap::COL_SLACK_CHANNEL);
+            $criteria->addSelectColumn(TagTableMap::COL_SLACK_CHANNEL_ID);
+            $criteria->addSelectColumn(TagTableMap::COL_DESCRIPTION);
+            $criteria->addSelectColumn(TagTableMap::COL_TREE_LEFT);
+            $criteria->addSelectColumn(TagTableMap::COL_TREE_RIGHT);
+            $criteria->addSelectColumn(TagTableMap::COL_TREE_LEVEL);
+            $criteria->addSelectColumn(TagTableMap::COL_TREE_SCOPE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.title');
-            $criteria->addSelectColumn($alias . '.url');
-            $criteria->addSelectColumn($alias . '.spreadsheet_id');
-            $criteria->addSelectColumn($alias . '.solution');
-            $criteria->addSelectColumn($alias . '.status');
+            $criteria->addSelectColumn($alias . '.alerted');
             $criteria->addSelectColumn($alias . '.slack_channel');
             $criteria->addSelectColumn($alias . '.slack_channel_id');
-            $criteria->addSelectColumn($alias . '.wrangler_id');
-            $criteria->addSelectColumn($alias . '.post_count');
-            $criteria->addSelectColumn($alias . '.created_at');
-            $criteria->addSelectColumn($alias . '.updated_at');
+            $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.tree_left');
+            $criteria->addSelectColumn($alias . '.tree_right');
+            $criteria->addSelectColumn($alias . '.tree_level');
+            $criteria->addSelectColumn($alias . '.tree_scope');
         }
     }
 
@@ -461,7 +395,7 @@ class PuzzleTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(PuzzleTableMap::DATABASE_NAME)->getTable(PuzzleTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(TagTableMap::DATABASE_NAME)->getTable(TagTableMap::TABLE_NAME);
     }
 
     /**
@@ -469,16 +403,16 @@ class PuzzleTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PuzzleTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(PuzzleTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new PuzzleTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TagTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(TagTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new TagTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Puzzle or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Tag or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Puzzle object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Tag object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -489,27 +423,27 @@ class PuzzleTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PuzzleTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Puzzle) { // it's a model object
+        } elseif ($values instanceof \Tag) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(PuzzleTableMap::DATABASE_NAME);
-            $criteria->add(PuzzleTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(TagTableMap::DATABASE_NAME);
+            $criteria->add(TagTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = PuzzleQuery::create()->mergeWith($criteria);
+        $query = TagQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            PuzzleTableMap::clearInstancePool();
+            TagTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                PuzzleTableMap::removeInstanceFromPool($singleval);
+                TagTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -517,20 +451,20 @@ class PuzzleTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the puzzle table.
+     * Deletes all rows from the tag table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return PuzzleQuery::create()->doDeleteAll($con);
+        return TagQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Puzzle or Criteria object.
+     * Performs an INSERT on the database, given a Tag or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Puzzle object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Tag object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -539,22 +473,22 @@ class PuzzleTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PuzzleTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Puzzle object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Tag object
         }
 
-        if ($criteria->containsKey(PuzzleTableMap::COL_ID) && $criteria->keyContainsValue(PuzzleTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.PuzzleTableMap::COL_ID.')');
+        if ($criteria->containsKey(TagTableMap::COL_ID) && $criteria->keyContainsValue(TagTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.TagTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = PuzzleQuery::create()->mergeWith($criteria);
+        $query = TagQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -563,7 +497,7 @@ class PuzzleTableMap extends TableMap
         });
     }
 
-} // PuzzleTableMap
+} // TagTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-PuzzleTableMap::buildTableMap();
+TagTableMap::buildTableMap();
