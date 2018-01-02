@@ -110,7 +110,7 @@ Locally - Run mysql and create a database and a user.  host is localhost, the re
 
 - `SIDEBAR_TEAM_INFO` - data that goes in Big Board sidebar.  Semicolon separated;  each semicolon starts a new line.
 
-## Set up local app
+## Set up local environment
 
 Run:
 
@@ -124,9 +124,14 @@ At this point, make sure all the installed libraries (which are at `vendor/bin/`
 composer dump-autoload
 propel config:convert
 propel sql:insert
+propel migrate --fake
 ```
 
-You can run the app locally with e.g. `php -S localhost:8888`
+You can run the app locally with e.g. 
+
+```
+php -S localhost:8888
+```
 
 ## Push to Heroku
 
