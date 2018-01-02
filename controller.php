@@ -734,10 +734,10 @@ function displayTagAdmin($view = 'view') {
 	}
 
 	render($template, 'tags', array(
-			'scopes' => [
-				$puzzles,
-				$topics,
-				$skills,
+			'scopes'        => [
+				'Puzzle Types' => $puzzles,
+				'Topics'       => $topics,
+				'Skills'       => $skills,
 			],
 		));
 }

@@ -13,8 +13,9 @@
 
 {% block content %}
 <h1>Tags</h1>
-{% for scope in scopes %}
-    {% for tag in scope %}
+{% for scope_title, scope_tags in scopes %}
+    <h2>{{ scope_title }}</h2>
+    {% for tag in scope_tags if tag.level > 0 %}
         <div class="tag level{{ tag.level }}" data-level="{{ tag.level }}" data-pk="{{ tag.id }}">
             {{ tag.title }}
             <a class="badge" href="http://{{ slackDomain }}.slack.com/messages/{{ tag.slackChannelId }}"><img src="/img/slack.png" width="12px" alt=""> Slack</a>
