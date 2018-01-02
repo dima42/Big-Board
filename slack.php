@@ -50,11 +50,6 @@ function createNewSlackChannel($slug) {
 			'name' => $slug
 		]);
 
-	return $slack_response;
-}
-
-function createPuzzleChannel($slug) {
-	createNewSlackChannel($slug);
 	return getSlackChannelID($slug);
 }
 

@@ -212,12 +212,8 @@ function displayError($error) {
 }
 
 function displayTest($response) {
-	$member = $_SESSION['user'];
-
-	$roots = TagQuery::create()
-		->findRoots();
-
-	preprint($roots);
+	// $stuff = createNewSlackChannel('pizza2');
+	preprint($stuff);
 	return;
 
 	render('test.twig', '', array(
@@ -645,7 +641,7 @@ function addPuzzle($request, $response) {
 
 		if (!$puzzleURLExists && !$puzzleTitleExists && !$slackNameExists) {
 			$slack_channel_name = "ρ_".$puzzleContent['slack'];
-			$newChannelID       = createPuzzleChannel($slack_channel_name);
+			$newChannelID       = createNewSlackChannel($slack_channel_name);
 
 			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
 
@@ -748,21 +744,24 @@ function addTag($request) {
 	$parent = TagQuery::create()
 		->findPk($request->parent);
 
+	$slugify = new Slugify();
+	$slug    = substr($slugify->slugify($request->title), 0, 21);
+
 	if (!$DEBUG) {
-		$slack_response = createNewSlackChannel($request->title);
-		$response_body  = $slack_response->getBody();
+		$newChannelID = createNewSlackChannel($slug);
 	} else {
-		$response_body = ['ok' => 1];
+		$newChannelID = "fake123";
 	}
 
-	if ($response_body['ok'] != 1 && $response_body['error'] != "cannot_join_app_user") {
-		$alert = "Sorry, something went wrong: [".$response_body['error']."] ".$response_body['detail'];
+	if (!$newChannelID) {
+		$alert = "Sorry, something went wrong.";
 	} else {
 		$tag = new Tag();
 		$tag->setTitle($request->title);
+		$tag->setDescription($request->description);
 		$tag->insertAsLastChildOf($parent);
-		$tag->setSlackChannel($response_body['channel']['name']);
-		$tag->setSlackChannelId($response_body['channel']['id']);
+		$tag->setSlackChannel($slug);
+		$tag->setSlackChannelId($newChannelID);
 		$tag->save();
 
 		$alert = $request->title.' added.';
