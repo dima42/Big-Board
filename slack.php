@@ -50,7 +50,6 @@ function createNewSlackChannel($slug) {
 			'name' => $slug
 		]);
 
-	preprint($slack_response);
 	return $slack_response;
 }
 
