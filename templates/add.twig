@@ -42,11 +42,11 @@
 </form>
 
 <select id="metaSelectTemplate" class="form-control meta-select d-none">
-        <option value="">- - -</option>
+        <option value="-1">- - -</option>
     {% for meta in metas %}
         <option value="{{ meta.parent.id }}">{{ meta.parent.title }}</option>
     {% endfor %}
-        <option value="">- - -</option>
+        <option value="-1">- - -</option>
         <option value="0">🆕 This is a new meta</option>
 </select>
 {% endblock %}
