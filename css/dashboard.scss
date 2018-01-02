@@ -93,6 +93,21 @@ a {
     color: darken(#007bff,20%);
 }
 
+.avatar {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    border: 1px solid #444;
+    background-size: 100%;
+    vertical-align: middle;
+    margin: 3px 3px 3px 0;
+}
+
+.icon-link {
+    width: 36px;
+}
+
 // TOPNAV
 
 .navbar-dark .navbar-nav {
@@ -322,10 +337,6 @@ aside {
     }
 
     .status {
-        width: 22px;
-    }
-
-    .icon-link {
         width: 22px;
     }
 }
@@ -584,20 +595,6 @@ aside {
     @extend %card-subhead;
 }
 
-.join-leave {
-}
-
-.avatar {
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: inline-block;
-    border: 1px solid #444;
-    background-size: 100%;
-    vertical-align: middle;
-    margin: 3px 3px 3px 0;
-}
-
 %entry-row {
     padding: .8em 0;
     border-bottom: 1px solid #eee;
@@ -711,13 +708,16 @@ body.add {
     td {
         padding: .5rem;
     }
-}
 
-.roster {
-    .slack-link {
-        width: 2.5em;
-        padding-left: 0;
-        padding-right: 0;
+    .avatar-cell {
+        width: 24px;
+    }
+
+    .avatar {
+        width: 24px;
+        height: 24px;
+        margin: 0;
+        border: none;
     }
 }
 

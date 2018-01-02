@@ -2629,6 +2629,19 @@ h2 {
 a {
   color: #004a99; }
 
+.avatar {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  border: 1px solid #444;
+  background-size: 100%;
+  vertical-align: middle;
+  margin: 3px 3px 3px 0; }
+
+.icon-link {
+  width: 36px; }
+
 .navbar-dark .navbar-nav .add-link {
   color: #ccc; }
 
@@ -2760,8 +2773,6 @@ aside {
     .puzzle-list a:hover {
       text-decoration: none; }
   .puzzle-list .status {
-    width: 22px; }
-  .puzzle-list .icon-link {
     width: 22px; }
 
 [data-filter=solved] {
@@ -2923,16 +2934,6 @@ aside {
   .scope-header:first-child {
     margin-top: 0; }
 
-.avatar {
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: inline-block;
-  border: 1px solid #444;
-  background-size: 100%;
-  vertical-align: middle;
-  margin: 3px 3px 3px 0; }
-
 .note-row, .news-row {
   padding: .8em 0;
   border-bottom: 1px solid #eee; }
@@ -2996,10 +2997,14 @@ body.add.trippy {
 .member-table td {
   padding: .5rem; }
 
-.roster .slack-link {
-  width: 2.5em;
-  padding-left: 0;
-  padding-right: 0; }
+.member-table .avatar-cell {
+  width: 24px; }
+
+.member-table .avatar {
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  border: none; }
 
 .by-puzzle .strengths, .by-puzzle .working-on {
   display: none; }

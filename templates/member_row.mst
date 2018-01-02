@@ -1,7 +1,8 @@
 <tr>
-    <td class="slack-link">
-        {{#SlackId}}<a href="http://{{ slackDomain }}.slack.com/team/{{ SlackId }}"><img src="/img/slack.png" width="15px" alt=""></a>{{/SlackId}}
+    <td class="icon-link">
+        {{#SlackId}}<a href="http://{{ slackDomain }}.slack.com/team/{{ SlackId }}"><img src="/img/slack.png" width="20px" alt=""></a>{{/SlackId}}
     </td>
+    <td class="avatar-cell"><img class="avatar" src="{{ Avatar }}" alt=""></td>
     <td><a href="/member/{{Id}}">{{ FullName }}</a></td>
     <td class="phone-number">{{ PhoneNumber }}</td>
     <td class="strengths">{{ Strengths }}</td>
