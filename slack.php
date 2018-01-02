@@ -74,7 +74,7 @@ function postToBigBoard($message, $attachments = [], $icon = ":boar:", $bot_name
 	return postToChannel($message, $attachments, $icon, $bot_name, $channel);
 }
 
-function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot", $channel = "C860WEABT") {
+function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot", $channel = "big-board") {
 	$slack_key = getenv('BIGBOARDBOT_SLACK_KEY');
 
 	$interactor = new CurlInteractor;
@@ -94,7 +94,7 @@ function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = 
 	return $response;
 }
 
-function postToChannel($message, $attachments, $icon, $bot_name, $channel = "sandbox") {
+function postToChannel($message, $attachments, $icon, $bot_name, $channel = "big-board") {
 	postToSlack($message, $attachments, $icon, $bot_name, '#'.$channel);
 }
 
