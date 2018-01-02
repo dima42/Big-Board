@@ -1,4 +1,4 @@
-{% extends 'loggedin.twig' %}
+{% extends 'two-col.twig' %}
 
 {% block filters %}
 {% for scope_title, scope_tags in scopes %}
@@ -6,7 +6,7 @@
     <ul class="nav nav-pills flex-column">
         {% for tag in scope_tags if tag.level > 0 %}
         <li class="nav-item">
-            <a class="nav-link" href="/tags/admin">{{ tag.title }}</a>
+            <a class="nav-link" href="#tag-{{ tag.id }}">{{ tag.title }}</a>
         </li>
         {% endfor %}
     </ul>
@@ -14,24 +14,23 @@
 {% endblock %}
 
 {% block content %}
-<h1>Tags</h1>
+{% from 'macros.twig' import puzzle_table %}
+<h1>Tags with unsolved puzzles</h1>
+{% for scope_title, scope_tags in scopes %}
+{% for tag in scope_tags if tag.level > 0 %}
+<section class="tag-section">
+    <span class="anchor-target" id="tag-{{ tag.id }}"></span>
+    <h2>{{ tag.title }}</h2>
+    {{ puzzle_table(tag.id) }}
+</section>
+{% endfor %}
+{% endfor %}
 {% endblock %}
 
 {% block scripts %}
 <script>
 $(function() {
-    $('[data-behavior=add-tag]').click(function(e) {
-        e.preventDefault();
-        var parent = $(this).closest('.tag');
-        $.get('/templates/add_tag.mst', function(template) {
-            var rendered = Mustache.render(template, {
-                'parent': parent.data('pk'),
-                'level': parent.data('level') + 1
-            });
-            parent.after(rendered);
-            parent.next().find('input').first().focus();
-        });
-    });
+    loadPuzzleTagData('/puzzles/withtags');
 });
 </script>
 {% endblock %}
