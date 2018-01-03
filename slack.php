@@ -337,7 +337,13 @@ class Bot {
 
 	private function nmatic($request, $response) {
 		$query = $request->text;
-		$request_url = "https://nutrimatic.org/?q={$query}";
+
+		// Slack uses smart quotes, and that breaks Nutrimatic.  Replace them...
+		// ...and encode the query for use in the request URL.
+		$encoded_query = rawurlencode(str_replace(["“", "”"], ["\"", "\""], $query));
+
+		// Get the response from Nutrimatic.
+		$request_url = "https://nutrimatic.org/?q={$encoded_query}";
 		$response = file_get_contents($request_url);
 
 		// The response from Nutrimatic holds the results in span tags.
