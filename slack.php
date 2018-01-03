@@ -344,8 +344,14 @@ class Bot {
 		$regex_query = "/<span style='font-size: .*em'>(.*)<\/span>/";
 		preg_match_all($regex_query, $response, $regex_results, PREG_SET_ORDER);
 
-		$response_text = "Nutrimatic results for \"{$query}\": ";
+		if (count($regex_results) == 0) {
+			return [
+				"text" => "No results for `{$query}`.",
+				"response_type" => "in_channel",
+			];
+		}
 
+		$response_text = "Nutrimatic results for `{$query}`: ";
 		foreach ($regex_results as $regex_result) {
 			$response_text .= $regex_result[1] . ", ";
 		}
