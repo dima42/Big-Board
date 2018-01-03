@@ -57,15 +57,13 @@ Create two bots:
 1. [Go here](https://console.developers.google.com/apis/credentials)
 2. Click "Create credentials". Choose "OAuth client ID".
 3. Add Authorized JavaScript origins
-    - `http://localhost:8888`
-    - `http://[YOURAPP].herokuapp.com`
+    - `https://[YOURAPP].herokuapp.com`
 4. Add Authorized redirect URIs:
-    - `http://localhost:8888`
-    - `http://localhost:8888/oauth`
-    - `http://[YOURAPP].herokuapp.com`
-    - `http://[YOURAPP].herokuapp.com/oauth`
+    - `https://[YOURAPP].herokuapp.com`
+    - `https://[YOURAPP].herokuapp.com/oauth`
 5. Note your Client ID and Client secret.
 6. Add the privacy policy URL (`http://your-domain/privacy`) to your [OAuth consent screen](https://console.cloud.google.com/apis/credentials).  Once your app is live, you'll need to go through the verification process [here](https://support.google.com/cloud/answer/7454865)) to get rid of the "unverified app" screen.
+7. Create a separate credential for testing.  Add `http://localhost:8888` to Authorized JavaScript origins and `http://localhost:8888` and `http://localhost:8888/oauth` to Authorized Redirect URI's for that one
 
 ## Set up Heroku instance
 

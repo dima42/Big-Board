@@ -133,7 +133,7 @@ if (!$pal_client) {
 	$pal_client->setApplicationName(getenv('GOOGLE_APPLICATION_NAME'));
 	$pal_client->setClientId(getenv('GOOGLE_CLIENT_ID').".apps.googleusercontent.com");
 	$pal_client->setClientSecret(getenv('GOOGLE_CLIENT_SECRET'));
-	$pal_client->setRedirectUri('http://'.$_SERVER['HTTP_HOST']."/oauth");
+	$pal_client->setRedirectUri('http'.($DEBUG?'':'s').'://'.$_SERVER['HTTP_HOST']."/oauth");
 
 	$pal_drive = new Google_DriveService($pal_client);
 }
