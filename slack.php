@@ -353,13 +353,13 @@ class Bot {
 		// Handle the case where the query yields no results.
 		if (count($regex_results) == 0) {
 			return [
-				"text"          => "No results for `{$query}`.",
+				"text"          => "<{$request_url}|No results> for `{$query}`.",
 				"response_type" => "in_channel",
 			];
 		}
 
 		// Compile the results into a string.
-		$response_text = "Nutrimatic results for `{$query}`: ";
+		$response_text = "<{$request_url}|Nutrimatic results> for `{$query}`: ";
 		foreach ($regex_results as $regex_result) {
 			$response_text .= "{$regex_result[1]}, ";
 		}
