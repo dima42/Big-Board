@@ -342,7 +342,7 @@ class Bot {
 		// ...and encode the query for use in the request URL.
 		$encoded_query = rawurlencode(str_replace(["“", "”"], ["\"", "\""], $query));
 
-		// Get the response from Nutrimatic.
+		// Build the request URL and get the response from Nutrimatic.
 		$request_url = "https://nutrimatic.org/?q={$encoded_query}";
 		$response = file_get_contents($request_url);
 
@@ -350,6 +350,7 @@ class Bot {
 		$regex_query = "/<span style='font-size: .*em'>(.*)<\/span>/";
 		preg_match_all($regex_query, $response, $regex_results, PREG_SET_ORDER);
 
+		// Handle the case where the query yields no results.
 		if (count($regex_results) == 0) {
 			return [
 				"text" => "No results for `{$query}`.",
@@ -357,12 +358,14 @@ class Bot {
 			];
 		}
 
+		// Compile the results into a string.
 		$response_text = "Nutrimatic results for `{$query}`: ";
 		foreach ($regex_results as $regex_result) {
-			$response_text .= $regex_result[1] . ", ";
+			$response_text .= "{$regex_result[1]}, ";
 		}
 		$response_text = substr($response_text, 0, -2);
 
+		// Send the response back to the channel!
 		$channel_response = [
 			"text" => $response_text,
 			"response_type" => "in_channel",
