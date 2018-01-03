@@ -518,7 +518,7 @@ function changePuzzleStatus($puzzle_id, $request) {
 		addNews($news_text, $newStatus, $puzzle);
 
 		postToGeneral(
-			':priority: *'.$puzzle->getTitle().'* was set to PRIORITY.',
+			':priority: *'.$puzzle->getTitle().'* was set to `PRIORITY`.',
 			$puzzle->getSlackAttachmentMedium(),
 			":bell:",
 			"StatusBot"
