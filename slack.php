@@ -362,17 +362,10 @@ class Bot {
 			];
 		}
 
-		// Take the first 10 results and set up the pretext.
-		$response_text = "";
-		$max_results   = 10;
-		if (count($regex_results) > $max_results) {
-			$regex_results = array_slice($regex_results, 0, $max_results);
-			$response_text .= "First ".$max_results." ";
-		}
-		$response_text .= "<{$request_url}|Nutrimatic results> for `{$query}`:\n";
+		$pretext = "<{$request_url}|Nutrimatic results> for `{$query}`:\n";
 
 		// Compile the results and add them to the string in a code block.
-		$response_text .= "```\n";
+		$response_text = "```\n";
 		foreach ($regex_results as $regex_result) {
 			$response_text .= "{$regex_result[1]}\n";
 		}
@@ -381,8 +374,13 @@ class Bot {
 
 		// Send the response back to the channel!
 		$channel_response = [
-			"text" => $response_text,
-			// "attachments"
+			"text"        => $pretext,
+			"attachments" => [
+				[
+					"text"      => $response_text,
+					"mrkdwn_in" => ['text'],
+				]
+			],
 			"response_type" => "in_channel",
 		];
 
