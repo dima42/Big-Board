@@ -4,8 +4,8 @@ use Frlnc\Slack\Http\CurlInteractor;
 use Frlnc\Slack\Http\SlackResponseFactory;
 use Propel\Runtime\ActiveQuery\Criteria;
 
-function getSlackCommander() {
-	$slack_key = getenv('TOBYBOT_SLACK_KEY');
+function getSlackCommander($slack_key_env_var) {
+	$slack_key = getenv($slack_key_env_var);
 
 	$interactor = new CurlInteractor;
 	$interactor->setResponseFactory(new SlackResponseFactory);
@@ -13,8 +13,16 @@ function getSlackCommander() {
 	return new Commander($slack_key, $interactor);
 }
 
+function getBigBoardBotCommander() {
+	return getSlackCommander('BIGBOARDBOT_SLACK_KEY');
+}
+
+function getTobyBotCommander() {
+	return getSlackCommander('TOBYBOT_SLACK_KEY');
+}
+
 function getAllSlackChannels() {
-	$commander = getSlackCommander();
+	$commander = getTobyBotCommander();
 
 	return $commander->execute('channels.list', [
 			'exclude_archived' => true
@@ -22,7 +30,7 @@ function getAllSlackChannels() {
 }
 
 function getSlackChannelID($slug) {
-	$commander = getSlackCommander();
+	$commander = getTobyBotCommander();
 
 	$response = $commander->execute('channels.list', [
 			'channel' => $slug
@@ -44,7 +52,7 @@ function getSlackChannelID($slug) {
 }
 
 function createNewSlackChannel($slug) {
-	$commander = getSlackCommander();
+	$commander = getTobyBotCommander();
 
 	$slack_response = $commander->execute('channels.create', [
 			'name' => $slug
@@ -54,7 +62,7 @@ function createNewSlackChannel($slug) {
 }
 
 function inviteToSlackChannel($channel_id, $member_id) {
-	$commander = getSlackCommander();
+	$commander = getTobyBotCommander();
 
 	$response = $commander->execute('channels.invite', [
 			'channel' => $channel_id,
@@ -75,11 +83,7 @@ function postToBigBoard($message, $attachments = [], $icon = ":boar:", $bot_name
 }
 
 function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot", $channel = "big-board") {
-	$slack_key = getenv('BIGBOARDBOT_SLACK_KEY');
-
-	$interactor = new CurlInteractor;
-	$interactor->setResponseFactory(new SlackResponseFactory);
-	$commander = new Commander($slack_key, $interactor);
+	$commander = getBigBoardBotCommander();
 
 	$response = $commander->execute('chat.postMessage', [
 			'no_format'   => true,
@@ -99,7 +103,7 @@ function postToChannel($message, $attachments, $icon, $bot_name, $channel = "big
 }
 
 function scrapeAvatar($member) {
-	$commander      = getSlackCommander();
+	$commander      = getTobyBotCommander();
 	$slack_response = $commander->execute('users.info', [
 			'user' => $member->getSlackId()
 		]);
@@ -353,17 +357,26 @@ class Bot {
 		// Handle the case where the query yields no results.
 		if (count($regex_results) == 0) {
 			return [
-				"text"          => "No results for `{$query}`.",
+				"text"          => "<{$request_url}|No results> for `{$query}`.",
 				"response_type" => "in_channel",
 			];
 		}
 
-		// Compile the results into a string.
-		$response_text = "Nutrimatic results for `{$query}`: ";
-		foreach ($regex_results as $regex_result) {
-			$response_text .= "{$regex_result[1]}, ";
+		// Take the first five results and set up the pretext.
+		$response_text = "";
+		if (count($regex_results) > 5) {
+			$regex_results = array_slice($regex_results, 0, 5);
+			$response_text .= "Top five ";
 		}
-		$response_text = substr($response_text, 0, -2);
+		$response_text .= "<{$request_url}|Nutrimatic results> for `{$query}`:\n";
+
+		// Compile the results and add them to the string in a code block.
+		$response_text .= "```\n";
+		foreach ($regex_results as $regex_result) {
+			$response_text .= "{$regex_result[1]}\n";
+		}
+		$response_text = substr($response_text, 0, -1);
+		$response_text .= "```";
 
 		// Send the response back to the channel!
 		$channel_response = [
