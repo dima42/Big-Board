@@ -362,12 +362,21 @@ class Bot {
 			];
 		}
 
-		// Compile the results into a string.
-		$response_text = "<{$request_url}|Nutrimatic results> for `{$query}`: ";
-		foreach ($regex_results as $regex_result) {
-			$response_text .= "{$regex_result[1]}, ";
+		// Take the first five results and set up the pretext.
+		$response_text = "";
+		if (count($regex_results) > 5) {
+			$regex_results = array_slice($regex_results, 0, 5);
+			$response_text .= "Top five ";
 		}
-		$response_text = substr($response_text, 0, -2);
+		$response_text .= "<{$request_url}|Nutrimatic results> for `{$query}`:\n";
+
+		// Compile the results and add them to the string in a code block.
+		$response_text .= "```\n";
+		foreach ($regex_results as $regex_result) {
+			$response_text .= "{$regex_result[1]}\n";
+		}
+		$response_text = substr($response_text, 0, -1);
+		$response_text .= "```";
 
 		// Send the response back to the channel!
 		$channel_response = [
