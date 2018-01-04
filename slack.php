@@ -362,11 +362,12 @@ class Bot {
 			];
 		}
 
-		// Take the first five results and set up the pretext.
+		// Take the first 10 results and set up the pretext.
 		$response_text = "";
-		if (count($regex_results) > 5) {
-			$regex_results = array_slice($regex_results, 0, 5);
-			$response_text .= "Top five ";
+		$max_results   = 10;
+		if (count($regex_results) > $max_results) {
+			$regex_results = array_slice($regex_results, 0, $max_results);
+			$response_text .= "First ".$max_results." ";
 		}
 		$response_text .= "<{$request_url}|Nutrimatic results> for `{$query}`:\n";
 
@@ -380,7 +381,8 @@ class Bot {
 
 		// Send the response back to the channel!
 		$channel_response = [
-			"text"          => $response_text,
+			"text" => $response_text,
+			// "attachments"
 			"response_type" => "in_channel",
 		];
 
