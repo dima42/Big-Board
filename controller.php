@@ -267,7 +267,7 @@ function allMembers($response) {
 		->leftJoin('PuzzleMember')
 		->withColumn('PuzzleMember.PuzzleId', 'PuzzleId')
 		->orderByFullName()
-		->select(array('Id', 'FullName', 'Strengths', 'PhoneNumber', 'SlackId', 'PuzzleId', 'Avatar'))
+		->select(array('Id', 'FullName', 'Strengths', 'PhoneNumber', 'SlackId', 'PuzzleId', 'Avatar', 'Location'))
 		->find()
 		->toArray();
 

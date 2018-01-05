@@ -33,8 +33,13 @@
         {{ member.phoneNumber }}<br>
     {% endif %}
 
+    {% if member.location %}
+        <i class="icon-{{ member.location }}"></i>
+        {{ member.location|capitalize }}<br>
+    {% endif %}
+
     {% if is_user and member.slackId %}
-        <img src="/img/slack.png" width="15px" alt=""> {{ member.slackId }}
+        <a href="{{ member.getSlackURL }}"><img src="/img/slack.png" width="15px" alt=""> {{ member.slackId }}</a>
     {% endif %}
 </p>
 

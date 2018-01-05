@@ -9,6 +9,8 @@
 .icon-x,
 .icon-tag,
 .icon-tags,
+.icon-campus,
+.icon-remote,
 .far,
 .fal,
 .fab {
@@ -61,7 +63,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags, .icon-campus, .icon-remote {
   text-align: center;
   width: 1.25em; }
 
@@ -101,6 +103,8 @@
 .fa-pull-left.icon-x,
 .fa-pull-left.icon-tag,
 .fa-pull-left.icon-tags,
+.fa-pull-left.icon-campus,
+.fa-pull-left.icon-remote,
 .far.fa-pull-left,
 .fal.fa-pull-left,
 .fab.fa-pull-left {
@@ -117,6 +121,8 @@
 .fa-pull-right.icon-x,
 .fa-pull-right.icon-tag,
 .fa-pull-right.icon-tags,
+.fa-pull-right.icon-campus,
+.fa-pull-right.icon-remote,
 .far.fa-pull-right,
 .fal.fa-pull-right,
 .fab.fa-pull-right {
@@ -1262,7 +1268,7 @@ readers do not read off random characters that represent icons */
 .fa-history:before {
   content: "\f1da"; }
 
-.fa-home:before {
+.fa-home:before, .icon-remote:before {
   content: "\f015"; }
 
 .fa-hooli:before {
@@ -2342,7 +2348,7 @@ readers do not read off random characters that represent icons */
 .fa-universal-access:before {
   content: "\f29a"; }
 
-.fa-university:before {
+.fa-university:before, .icon-campus:before {
   content: "\f19c"; }
 
 .fa-unlink:before {
@@ -2612,6 +2618,18 @@ readers do not read off random characters that represent icons */
   color: #FF6600;
   color: #444; }
 
+.icon-campus {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #666; }
+
+.icon-remote {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #666; }
+
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
   padding-top: 3.5rem;
@@ -2689,12 +2707,25 @@ a {
     border-radius: 4px;
     width: 100%;
     border: 1px solid #ccc;
-    margin-bottom: .9em; }
+    margin-bottom: .9em;
+    position: relative; }
     .sidebar .solver:hover {
       background: #eee; }
     .sidebar .solver img {
       border-radius: 4px 4px 0 0;
       width: 100%; }
+    .sidebar .solver .location {
+      position: absolute;
+      left: -9px;
+      top: -9px;
+      background: black;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      color: white; }
+      .sidebar .solver .location::before {
+        display: block;
+        margin-top: 3px; }
   .sidebar .avatar-wrapper {
     display: block;
     height: 124px;
@@ -2999,6 +3030,9 @@ body.add.trippy {
 
 .member-table .avatar-cell {
   width: 24px; }
+
+.member-table .location-cell {
+  width: 36px; }
 
 .member-table .avatar {
   width: 24px;
