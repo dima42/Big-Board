@@ -915,6 +915,7 @@ function saveMember($request) {
 	$member->setFullName($request->full_name);
 	$member->setStrengths($request->strengths);
 	$member->setPhoneNumber($request->phone_number);
+	$member->setLocation($request->location);
 	if (isset($request->slack_id)) {
 		$member->setSlackId($request->slack_id);
 	}
