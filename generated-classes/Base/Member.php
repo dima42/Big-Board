@@ -137,6 +137,13 @@ abstract class Member implements ActiveRecordInterface
     protected $phone_number;
 
     /**
+     * The value for the location field.
+     *
+     * @var        string
+     */
+    protected $location;
+
+    /**
      * @var        ObjectCollection|ChildPuzzle[] Collection to store aggregation of ChildPuzzle objects.
      */
     protected $collWrangledPuzzles;
@@ -524,6 +531,16 @@ abstract class Member implements ActiveRecordInterface
     }
 
     /**
+     * Get the [location] column value.
+     *
+     * @return string
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param int $v new value
@@ -704,6 +721,26 @@ abstract class Member implements ActiveRecordInterface
     } // setPhoneNumber()
 
     /**
+     * Set the value of [location] column.
+     *
+     * @param string $v new value
+     * @return $this|\Member The current object (for fluent API support)
+     */
+    public function setLocation($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->location !== $v) {
+            $this->location = $v;
+            $this->modifiedColumns[MemberTableMap::COL_LOCATION] = true;
+        }
+
+        return $this;
+    } // setLocation()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -765,6 +802,9 @@ abstract class Member implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : MemberTableMap::translateFieldName('PhoneNumber', TableMap::TYPE_PHPNAME, $indexType)];
             $this->phone_number = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : MemberTableMap::translateFieldName('Location', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->location = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -773,7 +813,7 @@ abstract class Member implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 9; // 9 = MemberTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = MemberTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Member'), 0, $e);
@@ -1110,6 +1150,9 @@ abstract class Member implements ActiveRecordInterface
         if ($this->isColumnModified(MemberTableMap::COL_PHONE_NUMBER)) {
             $modifiedColumns[':p' . $index++]  = 'phone_number';
         }
+        if ($this->isColumnModified(MemberTableMap::COL_LOCATION)) {
+            $modifiedColumns[':p' . $index++]  = 'location';
+        }
 
         $sql = sprintf(
             'INSERT INTO member (%s) VALUES (%s)',
@@ -1147,6 +1190,9 @@ abstract class Member implements ActiveRecordInterface
                         break;
                     case 'phone_number':
                         $stmt->bindValue($identifier, $this->phone_number, PDO::PARAM_STR);
+                        break;
+                    case 'location':
+                        $stmt->bindValue($identifier, $this->location, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1237,6 +1283,9 @@ abstract class Member implements ActiveRecordInterface
             case 8:
                 return $this->getPhoneNumber();
                 break;
+            case 9:
+                return $this->getLocation();
+                break;
             default:
                 return null;
                 break;
@@ -1276,6 +1325,7 @@ abstract class Member implements ActiveRecordInterface
             $keys[6] => $this->getStrengths(),
             $keys[7] => $this->getAvatar(),
             $keys[8] => $this->getPhoneNumber(),
+            $keys[9] => $this->getLocation(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1404,6 +1454,9 @@ abstract class Member implements ActiveRecordInterface
             case 8:
                 $this->setPhoneNumber($value);
                 break;
+            case 9:
+                $this->setLocation($value);
+                break;
         } // switch()
 
         return $this;
@@ -1456,6 +1509,9 @@ abstract class Member implements ActiveRecordInterface
         }
         if (array_key_exists($keys[8], $arr)) {
             $this->setPhoneNumber($arr[$keys[8]]);
+        }
+        if (array_key_exists($keys[9], $arr)) {
+            $this->setLocation($arr[$keys[9]]);
         }
     }
 
@@ -1524,6 +1580,9 @@ abstract class Member implements ActiveRecordInterface
         }
         if ($this->isColumnModified(MemberTableMap::COL_PHONE_NUMBER)) {
             $criteria->add(MemberTableMap::COL_PHONE_NUMBER, $this->phone_number);
+        }
+        if ($this->isColumnModified(MemberTableMap::COL_LOCATION)) {
+            $criteria->add(MemberTableMap::COL_LOCATION, $this->location);
         }
 
         return $criteria;
@@ -1619,6 +1678,7 @@ abstract class Member implements ActiveRecordInterface
         $copyObj->setStrengths($this->getStrengths());
         $copyObj->setAvatar($this->getAvatar());
         $copyObj->setPhoneNumber($this->getPhoneNumber());
+        $copyObj->setLocation($this->getLocation());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2945,6 +3005,7 @@ abstract class Member implements ActiveRecordInterface
         $this->strengths = null;
         $this->avatar = null;
         $this->phone_number = null;
+        $this->location = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

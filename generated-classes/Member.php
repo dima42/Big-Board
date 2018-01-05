@@ -24,6 +24,10 @@ class Member extends BaseMember {
 		}
 	}
 
+	public function getSlackURL() {
+		return "http://".getenv('SLACK_DOMAIN').".slack.com/team/".$this->getSlackID();
+	}
+
 	// JOINING & LEAVING
 
 	public function joinPuzzle($puzzle) {

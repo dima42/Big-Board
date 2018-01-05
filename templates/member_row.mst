@@ -1,10 +1,11 @@
-<tr>
-    <td class="icon-link">
-        {{#SlackId}}<a href="http://{{ slackDomain }}.slack.com/team/{{ SlackId }}"><img src="/img/slack.png" width="20px" alt=""></a>{{/SlackId}}
-    </td>
+<tr class="loc-{{ Location }}">
+    <td class="location-cell"><i class="icon-{{ Location }}"></i></td>
     <td class="avatar-cell"><img class="avatar" src="{{ Avatar }}" alt=""></td>
     <td><a href="/member/{{Id}}">{{ FullName }}</a></td>
     <td class="phone-number">{{ PhoneNumber }}</td>
     <td class="strengths">{{ Strengths }}</td>
     <td class="working-on"><a href="/puzzle/{{ PuzzleId }}">{{ PuzzleTitle }}</a></td>
+    <td class="icon-link">
+        {{#SlackId}}<a href="http://{{ slackDomain }}.slack.com/team/{{ SlackId }}"><img src="/img/slack.png" width="20px" alt=""></a>{{/SlackId}}
+    </td>
 </tr>

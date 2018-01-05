@@ -122,6 +122,7 @@ CREATE TABLE `member`
     `strengths` VARCHAR(128),
     `avatar` VARCHAR(128),
     `phone_number` VARCHAR(24),
+    `location` VARCHAR(24),
     PRIMARY KEY (`id`),
     UNIQUE INDEX `member_u_060aec` (`full_name`)
 ) ENGINE=InnoDB;
