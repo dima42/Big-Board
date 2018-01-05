@@ -32,7 +32,7 @@ $klein->respond('GET', '/privacy', function ($request, $response) {
 
 // If user not authorized or not in palindrome do not allow them to get matched to any remaining routes
 $klein->respond(function () use ($klein, $pal_client, $pal_drive) {
-		debug('');
+		debug('');// Add a break to the output to help with debugging
 		if (!is_authorized($pal_client)) {
 			$authUrl = $pal_client->createAuthUrl();
 			render('loggedout.twig', 'loggedout', array(
