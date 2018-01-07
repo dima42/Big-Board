@@ -17,7 +17,7 @@
     color: #FF6600;
     @extend .fas;
     @extend .fa-fw;
-    @extend .fa-#{$name};
+    @extend %fa-#{$name};
 }
 
 .icon-open {
