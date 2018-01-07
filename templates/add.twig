@@ -52,9 +52,17 @@
 {% endblock %}
 
 {% block scripts %}
+<script id="add_puzzle" type="text_html">
+{{ source('add_puzzle.mst') }}
+</script>
+
+<script id="add_complete" type="text_html">
+{{ source('add_complete.mst') }}
+</script>
+
 <script>
-var newPuzzleTemplate;
-var successTemplate;
+var newPuzzleTemplate = $('#add_puzzle').html();
+var successTemplate = $('#add_complete').html();
 var selectedMeta = "";
 
 function addPuzzleForm() {
@@ -79,15 +87,8 @@ function slugify(text) {
 }
 
 $(function() {
-    $.get('/templates/add_puzzle.mst', function(template) {
-        newPuzzleTemplate = template;
-        addPuzzleForm();
-        $('[data-meta={{meta_id}}]').click();
-    });
-
-    $.get('/templates/add_complete.mst', function(template) {
-        successTemplate = template;
-    });
+    addPuzzleForm();
+    $('[data-meta={{meta_id}}]').click();
 
     $('[data-meta]').click(function(e) {
         selectedMeta = $(this).data('meta');

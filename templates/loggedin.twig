@@ -73,5 +73,11 @@
 <script>
 var slackDomain = "{{ slackDomain }}";
 </script>
+<script id="puzzle_row" type="text_html">
+{{ source('puzzle_row.mst') }}
+</script>
+<script id="member_row" type="text_html">
+{{ source('member_row.mst') }}
+</script>
 <script src="/js/scripts.js"></script>
 {% endblock %}

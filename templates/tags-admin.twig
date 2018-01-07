@@ -33,19 +33,21 @@
 {% endblock %}
 
 {% block scripts %}
+<script id="add_tag" type="text_html">
+{{ source('add_tag.mst') }}
+</script>
 <script>
 $(function() {
     $('[data-add-tag]').click(function(e) {
         e.preventDefault();
+        var template = $('#add_tag').html();
         var parent = $(this).closest('[data-tag]');
-        $.get('/templates/add_tag.mst', function(template) {
-            var rendered = Mustache.render(template, {
-                'parent': parent.data('pk'),
-                'level': parent.data('level') + 1
-            });
-            parent.after(rendered);
-            parent.next().find('input').first().focus();
+        var rendered = Mustache.render(template, {
+            'parent': parent.data('pk'),
+            'level': parent.data('level') + 1
         });
+        parent.after(rendered);
+        parent.next().find('input').first().focus();
     });
 });
 </script>
