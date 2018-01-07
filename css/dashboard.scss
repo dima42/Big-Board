@@ -72,6 +72,11 @@
     color: #666;
 }
 
+.icon-join {
+    @include icon('user-plus');
+    color: #666;
+}
+
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
@@ -365,6 +370,12 @@ aside {
 
     .status {
         width: 22px;
+    }
+
+    .work-on button {
+        padding: 0;
+        border: 0;
+        vertical-align: middle;
     }
 }
 

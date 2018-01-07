@@ -56,6 +56,7 @@ var loadPuzzleTemplate = function(response, callback, parentListName, parentIDNa
             }
         });
     });
+    $('[data-tooltip]').tooltip();
     if (callback) {
         callback();
     }
@@ -86,7 +87,6 @@ var loadMemberTemplate = function(response, callback) {
         callback();
     }
 };
-
 
 $(function() {
     $('[data-filter-list] a').click(function() {
