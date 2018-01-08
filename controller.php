@@ -237,6 +237,7 @@ function allPuzzles($orderBy = 'Title', $orderHow = 'asc', $response) {
 	$puzzles = PuzzleQuery::create()
 		->orderBy($orderBy, $orderHow)
 		->orderByTitle($orderHow)
+		->select(['Id', 'Title', 'Url', 'SpreadsheetId', 'Solution', 'Status', 'SlackChannelId'])
 		->find()
 		->toArray();
 
