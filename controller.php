@@ -42,6 +42,10 @@ $this->respond('GET', '/members', function ($request, $response) {
 		return allMembers($response);
 	});
 
+$this->respond('GET', '/scrape_avatars', function ($request, $response) {
+		return scrapeAvatars();
+	});
+
 // PUZZLES
 
 $this->with('/puzzle/[:id]', function () {
@@ -211,9 +215,33 @@ function displayError($error) {
 		));
 }
 
+function scrapeAvatars() {
+	$has_avatars = MemberQuery::create()
+		->filterBySlackId(null, Criteria::NOT_EQUAL)
+		->find();
+
+	foreach ($has_avatars as $member) {
+		$s = scrapeAvatar($member);
+		preprint($member->getFullName()." ".$s['ok']);
+	}
+
+	return;
+}
+
 function displayTest($response) {
+	$has_avatars = MemberQuery::create()
+		->filterBySlackId(null, Criteria::NOT_EQUAL)
+		->find();
+
+	foreach ($has_avatars as $member) {
+		$s = scrapeAvatar($member);
+		preprint($member->getFullName()." ".$s['ok']);
+	}
+
+	return;
+
 	// $puzzles = PuzzleQuery::create()
-	// 	->find();
+	//  ->find();
 
 	// foreach ($puzzles as $puzzle) {
 	// 	if ($puzzle->getCreatedAt()) {
