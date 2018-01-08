@@ -501,7 +501,8 @@ aside {
   .puzzle-list .work-on button {
     padding: 0;
     border: 0;
-    vertical-align: middle; }
+    vertical-align: middle;
+    background: none; }
 
 [data-filter=solved] {
   background: #f7f7f7;
