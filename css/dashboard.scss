@@ -77,6 +77,11 @@
     color: #666;
 }
 
+.icon-copy {
+    @include icon('clipboard');
+    color: #666;
+}
+
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
@@ -357,7 +362,7 @@ aside {
         margin: 0;
     }
 
-    a {
+    tbody a {
         display: block;
 
         &:hover {

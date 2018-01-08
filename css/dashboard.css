@@ -12,6 +12,7 @@
 .icon-campus,
 .icon-remote,
 .icon-join,
+.icon-copy,
 .far,
 .fal,
 .fab {
@@ -64,7 +65,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags, .icon-campus, .icon-remote, .icon-join {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags, .icon-campus, .icon-remote, .icon-join, .icon-copy {
   text-align: center;
   width: 1.25em; }
 
@@ -107,6 +108,7 @@
 .fa-pull-left.icon-campus,
 .fa-pull-left.icon-remote,
 .fa-pull-left.icon-join,
+.fa-pull-left.icon-copy,
 .far.fa-pull-left,
 .fal.fa-pull-left,
 .fab.fa-pull-left {
@@ -126,6 +128,7 @@
 .fa-pull-right.icon-campus,
 .fa-pull-right.icon-remote,
 .fa-pull-right.icon-join,
+.fa-pull-right.icon-copy,
 .far.fa-pull-right,
 .fal.fa-pull-right,
 .fab.fa-pull-right {
@@ -205,6 +208,9 @@ readers do not read off random characters that represent icons */
 
 .icon-open:before {
   content: "\f1ce"; }
+
+.icon-copy:before {
+  content: "\f328"; }
 
 .icon-priority:before {
   content: "\f12a"; }
@@ -318,6 +324,12 @@ readers do not read off random characters that represent icons */
   color: #666; }
 
 .icon-join {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #666; }
+
+.icon-copy {
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
   color: #FF6600;
@@ -491,9 +503,9 @@ aside {
     border-bottom: 1px solid #888 !important; }
   .puzzle-list label {
     margin: 0; }
-  .puzzle-list a {
+  .puzzle-list tbody a {
     display: block; }
-    .puzzle-list a:hover {
+    .puzzle-list tbody a:hover {
       text-decoration: none; }
   .puzzle-list .status {
     width: 22px; }
