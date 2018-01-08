@@ -674,10 +674,14 @@ aside {
 
 .note-row {
     @extend %entry-row;
+
+    &:first-child {
+        border-top: 1px solid #eee;
+    }
 }
 
 .new-note-form {
-    padding-top: 1em
+    margin-bottom: 1em
 }
 
 .puzzles {

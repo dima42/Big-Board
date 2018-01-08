@@ -686,8 +686,11 @@ aside {
     .note-row .entry-body:hover .close, .news-row .entry-body:hover .close {
       display: block; }
 
+.note-row:first-child {
+  border-top: 1px solid #eee; }
+
 .new-note-form {
-  padding-top: 1em; }
+  margin-bottom: 1em; }
 
 .puzzles .level2 {
   margin-left: 1.2em; }

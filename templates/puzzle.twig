@@ -92,7 +92,22 @@
         {{ puzzle_table( puzzle.id ) }}
     {% endif %}
 
+    <form class="new-note-form" action="/puzzle/{{ puzzle.id }}/add-note" method="post">
+        <div class="row">
+            <div class="col-sm-3">
+                <small>Add a note:</small>
+            </div>
+            <div class="col-sm-6">
+                <textarea type="text" class="form-control" name="body" rows="2"></textarea>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-dark" type="submit">Post this note</button>
+            </div>
+        </div>
+    </form>
+
     {% if notes|length %}
+        <div class="notes">
         {% for note in notes %}
             <div class="row note-row">
                 <div class="col-sm-3">
@@ -116,19 +131,8 @@
                 </div>
             </div>
         {% endfor %}
-    {% endif %}
-        <form class="new-note-form" action="/puzzle/{{ puzzle.id }}/add-note" method="post">
-        <div class="row">
-            <div class="col-sm-3">
-                <small>Add a note:</small>
-            </div>
-            <div class="col-sm-9">
-                <textarea type="text" class="form-control" name="body" rows="2"></textarea>
-                <br>
-                <button class="btn btn-dark" type="submit">Submit new note</button>
-            </div>
         </div>
-        </form>
+    {% endif %}
     {% endblock %}
 {% endblock %}
 
