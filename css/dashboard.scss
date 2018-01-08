@@ -196,12 +196,18 @@ a {
         background:#fff;
         border-radius: 4px;
         width: 100%;
+        height: 70px;
         border: 1px solid #ccc;
         margin-bottom: .9em;
         position: relative;
+        background-size: auto 100%;
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding: .5em .5em .5em 80px;
+        line-height: 1.3;
 
         &:hover {
-            background: #eee;
+            background-color: #f7f7f7;
         }
 
         img {
@@ -226,21 +232,12 @@ a {
         }
     }
 
-    .avatar-wrapper {
-        display: block;
-        height: 124px;
-        background-size: 100%;
-        background-position: center center;
-
-        &.sm {
-            height: 80px;
-        }
+    .solver-name {
+        font-size: 1em;
     }
 
-    .solver-name {
-        border-radius: 0 0 4px 4px;
-        padding: .3em .5em;
-        font-size: .8rem;
+    .profile-photo {
+        width: 100%;
     }
 }
 

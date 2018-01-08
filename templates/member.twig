@@ -1,9 +1,10 @@
 {% extends 'two-col.twig' %}
 
 {% block filters %}
-    {% from 'macros.twig' import avatar %}
     {% if member.avatar %}
-    {{ avatar(member, 'lg', false) }}
+        <div class="nav-section">
+            <img class="profile-photo" src="{{ member.avatar }}" alt="">
+        </div>
     {% endif %}
 {% endblock %}
 

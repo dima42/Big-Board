@@ -399,11 +399,17 @@ a {
     background: #fff;
     border-radius: 4px;
     width: 100%;
+    height: 70px;
     border: 1px solid #ccc;
     margin-bottom: .9em;
-    position: relative; }
+    position: relative;
+    background-size: auto 100%;
+    background-position: center left;
+    background-repeat: no-repeat;
+    padding: .5em .5em .5em 80px;
+    line-height: 1.3; }
     .sidebar .solver:hover {
-      background: #eee; }
+      background-color: #f7f7f7; }
     .sidebar .solver img {
       border-radius: 4px 4px 0 0;
       width: 100%; }
@@ -419,17 +425,10 @@ a {
       .sidebar .solver .location::before {
         display: block;
         margin-top: 3px; }
-  .sidebar .avatar-wrapper {
-    display: block;
-    height: 124px;
-    background-size: 100%;
-    background-position: center center; }
-    .sidebar .avatar-wrapper.sm {
-      height: 80px; }
   .sidebar .solver-name {
-    border-radius: 0 0 4px 4px;
-    padding: .3em .5em;
-    font-size: .8rem; }
+    font-size: 1em; }
+  .sidebar .profile-photo {
+    width: 100%; }
 
 .progress {
   height: 1.2rem;
