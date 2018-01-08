@@ -14,8 +14,10 @@ $('.puzzle-list').on('mouseleave', 'tr', function(e) {
 });
 
 var loadPuzzleData = function(url, callback) {
+    var activeFilter = $('[data-toggle=tab].active').first();
     $.get(url, {}, function(response) {
         loadPuzzleTemplate(response, callback, 'PuzzleParents', 'ParentId');
+        activeFilter.click();
     });
 };
 
@@ -29,6 +31,7 @@ var loadPuzzleTemplate = function(response, callback, parentListName, parentIDNa
     var data = response;
     var now = Date.now();
     var template = $('#puzzle_row').html();
+    $('tbody').empty();
     $.each(data, function(key, puzzleData) {
         var ssID = puzzleData['SpreadsheetId'];
         ssID = ssID.replace(/^.+ccc\?key=/, "");

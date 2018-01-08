@@ -21,8 +21,8 @@ $this->respond('GET', '/bymeta', function () {
 // DATA API
 
 $this->with('/puzzles', function () {
-		$this->respond('GET', '/all', function ($request, $response) {
-				return allPuzzles($response);
+		$this->respond('GET', '/all/[:field]/[:order]', function ($request, $response) {
+				return allPuzzles($request->field, $request->order, $response);
 			});
 		$this->respond('GET', '/bymeta', function ($request, $response) {
 				return allPuzzlesByMeta($response);
@@ -212,9 +212,19 @@ function displayError($error) {
 }
 
 function displayTest($response) {
-	// $stuff = createNewSlackChannel('pizza2');
-	preprint($stuff);
-	return;
+	// $puzzles = PuzzleQuery::create()
+	// 	->find();
+
+	// foreach ($puzzles as $puzzle) {
+	// 	if ($puzzle->getCreatedAt()) {
+	// 		preprint($puzzle->getCreatedAt());
+	// 	} else {
+	// 		$puzzle->setCreatedAt("2017-".rand(01, 12)."-".rand(01, 28)." ".rand(01, 24).":".rand(01, 60).":".rand(01, 60));
+	// 		$puzzle->save();
+	// 		preprint($puzzle->getCreatedAt());
+	// 	}
+	// }
+	// return;
 
 	render('test.twig', '', array(
 			// 'content' => $result,
@@ -223,9 +233,10 @@ function displayTest($response) {
 
 // PUZZLE DATA
 
-function allPuzzles($response) {
+function allPuzzles($orderBy = 'Title', $orderHow = 'asc', $response) {
 	$puzzles = PuzzleQuery::create()
-		->orderByTitle()
+		->orderBy($orderBy, $orderHow)
+		->orderByTitle($orderHow)
 		->find()
 		->toArray();
 
