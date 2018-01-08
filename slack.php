@@ -115,6 +115,7 @@ function scrapeAvatar($member) {
 		$member->setAvatar($avatar);
 		$member->save();
 	}
+	return $response_body;
 }
 
 // SLACK BOT
