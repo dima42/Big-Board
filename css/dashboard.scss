@@ -82,6 +82,11 @@
     color: #666;
 }
 
+.icon-offsite {
+    @include icon('external-link-alt');
+    color: #999;
+}
+
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
