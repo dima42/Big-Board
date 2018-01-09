@@ -104,4 +104,15 @@ $(function() {
             $('[data-filter~=' + filterNot + ']').hide();
         }
     });
+
+    $('.copy-solutions').click(function(e) {
+        e.preventDefault();
+        var solutions = $.makeArray($(this).closest('table').find('tbody tr').map(function() { return $(this).data('solution'); }));
+        var solutionList = solutions.join("\n");
+        $('aside').append('<textarea id="copyBox">'+solutionList+'</textarea>')
+        var val = $('#copyBox').val();
+        $("#copyBox").select();
+        document.execCommand("Copy");
+        $("#copyBox").remove();
+    })
 });
