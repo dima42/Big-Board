@@ -119,4 +119,10 @@
         <behavior name="timestampable" />
         <behavior name="archivable" />
     </table>
+    <table name="link" phpName="Link">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="title" type="varchar" size="24" required="true" />
+        <column name="url" type="varchar" size="255" required="true" />
+        <column name="external" type="boolean" required="true" defaultValue="false" />
+    </table>
 </database>

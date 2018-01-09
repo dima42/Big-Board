@@ -203,6 +203,21 @@ CREATE TABLE `news`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- link
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `link`;
+
+CREATE TABLE `link`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(24) NOT NULL,
+    `url` VARCHAR(255) NOT NULL,
+    `external` TINYINT(1) DEFAULT 0 NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- puzzle_archive
 -- ---------------------------------------------------------------------
 

@@ -30,7 +30,9 @@
         Links
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-        <a class="dropdown-item" href=/about>Documentation</a>
+        {% for link in links %}
+            <a class="dropdown-item" href="{{ link.url }}">{{ link.title }} {% if link.external %} <i class="icon-offsite"></i>{% endif %}</a>
+        {% endfor %}
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="http://{{ slackDomain }}.slack.com/messages/general">Slack <i class="icon-offsite"></i></a>
         <a class="dropdown-item" href="https://drive.google.com/drive/u/0/folders/{{ googleDriveId }}">Google Drive <i class="icon-offsite"></i></a>

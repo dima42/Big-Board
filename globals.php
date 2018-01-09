@@ -84,6 +84,9 @@ function render($template, $context = "", $vars = array()) {
 		->limit(1)
 		->findOne();
 
+	$links = LinkQuery::create()
+		->find();
+
 	Global $twig;
 
 	$member = $_SESSION['user']??null;
@@ -95,6 +98,7 @@ function render($template, $context = "", $vars = array()) {
 	$vars['statuses']      = ['open', 'stuck', 'priority', 'solved'];
 	$vars['now']           = strftime('%c');
 	$vars['latestNews']    = $latestNews;
+	$vars['links']         = $links;
 	$vars['context']       = $context;
 	$vars['slackDomain']   = getenv('SLACK_DOMAIN');
 	$vars['googleDriveId'] = getenv('GOOGLE_DRIVE_ID');
