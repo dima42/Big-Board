@@ -46,6 +46,12 @@ $this->respond('GET', '/scrape_avatars', function ($request, $response) {
 		return scrapeAvatars();
 	});
 
+// POLL GOOGLE DRIVE
+
+$this->respond('GET', '/poll_drive', function ($request, $response) {
+		return pollDrive();
+	});
+
 // PUZZLES
 
 $this->with('/puzzle/[:id]', function () {
@@ -225,6 +231,19 @@ function scrapeAvatars() {
 		preprint($member->getFullName()." ".$s['ok']);
 	}
 
+	return;
+}
+
+function pollDrive() {
+	Global $pal_drive;
+
+	$current_puzzles = array();
+	$all_files       = $pal_drive->files->listFiles();
+	foreach ($all_files["items"] as $k => $v) {
+		preprint($k." <br>".$v);
+		// $current_puzzles[$v["id"]][0] = $v["lastModifyingUserName"];
+		// $current_puzzles[$v["id"]][1] = $v["modifiedDate"];
+	}
 	return;
 }
 
