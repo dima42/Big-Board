@@ -228,7 +228,7 @@ class Bot {
 		return $channel_response;
 	}
 
-	private function join($request, $response) {
+	private function workon($request, $response) {
 		$parameter        = $request->text;
 		$channel_response = ['text' => "Hmm, maybe ask a human for help. This computer is confused."];
 		$channel_id       = $request->channel_id;
