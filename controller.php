@@ -229,16 +229,22 @@ function scrapeAvatars() {
 }
 
 function displayTest($response) {
-	$has_avatars = MemberQuery::create()
-		->filterBySlackId(null, Criteria::NOT_EQUAL)
-		->find();
+	$slugify = new Slugify(['regexp' => '/[^a-z0-9._-]+/']);
 
-	foreach ($has_avatars as $member) {
-		$s = scrapeAvatar($member);
-		preprint($member->getFullName()." ".$s['ok']);
-	}
-
+	echo "slug:";
+	echo substr($slugify->slugify("grrrr"), 0, 19);
 	return;
+
+	// $has_avatars = MemberQuery::create()
+	// 	->filterBySlackId(null, Criteria::NOT_EQUAL)
+	// 	->find();
+
+	// foreach ($has_avatars as $member) {
+	// 	$s = scrapeAvatar($member);
+	// 	preprint($member->getFullName()." ".$s['ok']);
+	// }
+
+	// return;
 
 	// $puzzles = PuzzleQuery::create()
 	//  ->find();
@@ -662,6 +668,10 @@ function addPuzzle($request, $response) {
 	$existingSlacks = array();
 	$newPuzzles     = array();
 
+	# Valid Slack channel name characters, taken from https://gist.github.com/gswalden/27ac96e497c3aa1f3230
+	# Slack now supports some non-Latin characters, but we should be able to do without.
+	$slugify = new Slugify(['regexp' => '/[^a-z0-9._-]+/']);
+
 	foreach ($request->newPuzzles as $puzzleKey => $puzzleContent) {
 		$puzzleId = "puzzleGroup".$puzzleKey;
 
@@ -686,7 +696,8 @@ function addPuzzle($request, $response) {
 		}
 
 		if (!$puzzleURLExists && !$puzzleTitleExists && !$slackNameExists) {
-			$slack_channel_name = "ρ_".$puzzleContent['slack'];
+			$slack_channel_slug = substr($slugify->slugify($puzzleContent['slack']), 0, 19);
+			$slack_channel_name = "ρ_".$slack_channel_slug;
 			$newChannelID       = createNewSlackChannel($slack_channel_name);
 
 			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
