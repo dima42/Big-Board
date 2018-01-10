@@ -1036,7 +1036,7 @@ function archiveNews($update_id) {
 		->filterByID($update_id)
 		->delete();
 
-	$alert = "Update archived.";
+	$alert = "News update has been archived.";
 	redirect('/news/', $alert);
 }
 
