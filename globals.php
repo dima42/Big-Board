@@ -34,12 +34,12 @@ function preprint($arr) {
 
 // ERROR HANDLING
 
-$raven_settings = ['environment' => 'production'];
+$sentry_settings = ['environment' => 'production'];
 if ($DEBUG) {
-	$raven_settings['environment'] = 'development';
+	$sentry_settings['environment'] = 'development';
 }
-$ravenClient   = new Raven_Client(getenv('RAVEN_CONFIG'), $raven_settings);
-$error_handler = new Raven_ErrorHandler($ravenClient);
+$sentryClient  = new Raven_Client(getenv('SENTRY_CONFIG'), $sentry_settings);
+$error_handler = new Raven_ErrorHandler($sentryClient);
 $error_handler->registerExceptionHandler();
 $error_handler->registerErrorHandler();
 $error_handler->registerShutdownFunction();
