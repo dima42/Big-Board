@@ -497,18 +497,20 @@ function editPuzzle($puzzle_id, $request) {
 	$puzzle->setWranglerId($wrangler_id);
 	$puzzle->save();
 
-	// Remove all parents, even myself if I'm a meta
+	// Remove all parents, even myself, if I'm a meta
 	$oldParents = PuzzlePuzzleQuery::create()
 		->filterByPuzzleId($puzzle_id)
 		->find();
 	$oldParents->delete();
 
 	// Assign parents
-	foreach ($request->metas as $meta_id) {
-		$meta = PuzzleQuery::create()
-			->filterById($meta_id)
-			->findOne();
-		$puzzle->addParent($meta);
+	if ($request->metas) {
+		foreach ($request->metas as $meta_id) {
+			$meta = PuzzleQuery::create()
+				->filterById($meta_id)
+				->findOne();
+			$puzzle->addParent($meta);
+		}
 	}
 
 	// Add self as parent if it's a meta
