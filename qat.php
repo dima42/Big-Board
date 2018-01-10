@@ -42,4 +42,4 @@ if (count($regex_results) > 0) {
 	];
 }
 
-$r = postToChannel($pretext, $attachments, ":cat:", "Qat bot", "sandbox");
+$r = postToChannel($pretext, $attachments, ":cat:", "Qat bot", $channel);
