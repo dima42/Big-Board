@@ -804,6 +804,25 @@ body.add.trippy {
   background: transparent url("https://media.giphy.com/media/l378z9JqBTfYDrXUI/source.gif") no-repeat;
   background-size: cover; }
 
+.created {
+  font-size: .8rem;
+  color: #444;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: .5em;
+  display: block; }
+
+.puzzleLink {
+  display: block;
+  padding: .6em 1em;
+  border: 1px solid #aaa;
+  border-bottom-width: 4px;
+  border-radius: 4px;
+  font-size: 1.2em;
+  font-weight: bold; }
+  .puzzleLink:hover {
+    background: #f7f7f7; }
+
 .member-table td {
   padding: .5rem; }
 

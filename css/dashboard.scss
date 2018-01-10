@@ -816,6 +816,29 @@ body.add {
     }
 }
 
+.created {
+    font-size: .8rem;
+    color: #444;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: .5em;
+    display: block;
+}
+
+.puzzleLink {
+    display: block;
+    padding: .6em 1em;
+    border: 1px solid #aaa;
+    border-bottom-width: 4px;
+    border-radius: 4px;
+    font-size: 1.2em;
+    font-weight: bold;
+
+    &:hover {
+        background:#f7f7f7;
+    }
+}
+
 // ROSTER
 
 .member-table {

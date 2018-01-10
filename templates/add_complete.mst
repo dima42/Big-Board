@@ -1,7 +1,2 @@
-<div class="card">
-    <div class="card-body">
-        Created<br>
-        <strong class="puzzleTitle">{{ title }}</strong><br>
-        <a class="puzzleLink" href="/puzzle/{{ pkID }}">Visit it now &rarr;</a>
-    </div>
-</div>
+<h4 class="created">Puzzle created!</h4>
+<a class="puzzleLink" href="/puzzle/{{ pkID }}">{{ title }} &rarr;</a>
