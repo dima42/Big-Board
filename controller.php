@@ -488,11 +488,13 @@ function editPuzzle($puzzle_id, $request) {
 		->filterByID($puzzle_id)
 		->findOne();
 
+	$wrangler_id = ($request->wrangler != "")?$request->wrangler:null;
+
 	$puzzle->setTitle($request->title);
 	$puzzle->setStatus($request->status);
 	$puzzle->setSpreadsheetId($request->spreadsheet_id);
 	$puzzle->setSlackChannel($request->slack_channel);
-	$puzzle->setWranglerId($request->wrangler);
+	$puzzle->setWranglerId($wrangler_id);
 	$puzzle->save();
 
 	// Remove all parents, even myself if I'm a meta
