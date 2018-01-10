@@ -183,7 +183,7 @@ class NewsTableMap extends TableMap
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), 'SET NULL', null, null, false);
+), 'CASCADE', null, null, false);
     } // buildRelations()
 
     /**

@@ -248,7 +248,7 @@ class PuzzleTableMap extends TableMap
     0 => ':puzzle_id',
     1 => ':id',
   ),
-), 'SET NULL', null, 'News', false);
+), 'CASCADE', null, 'News', false);
         $this->addRelation('Tag', '\\Tag', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Tags');
         $this->addRelation('Member', '\\Member', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Members');
         $this->addRelation('Parent', '\\Puzzle', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Parents');

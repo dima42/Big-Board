@@ -1447,10 +1447,9 @@ abstract class Puzzle implements ActiveRecordInterface
 
             if ($this->newsScheduledForDeletion !== null) {
                 if (!$this->newsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->newsScheduledForDeletion as $news) {
-                        // need to save related object because we set the relation to null
-                        $news->save($con);
-                    }
+                    \NewsQuery::create()
+                        ->filterByPrimaryKeys($this->newsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->newsScheduledForDeletion = null;
                 }
             }

@@ -199,7 +199,7 @@ CREATE TABLE `news`
     CONSTRAINT `news_fk_937852`
         FOREIGN KEY (`puzzle_id`)
         REFERENCES `puzzle` (`id`)
-        ON DELETE SET NULL
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
