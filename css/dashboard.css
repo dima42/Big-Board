@@ -506,7 +506,7 @@ aside {
   .puzzle-metadata .add-puzzles-to-meta {
     text-align: right; }
 
-.solution {
+td.solution-cell {
   font-family: Inconsolata, monospace; }
 
 .puzzle-list {
@@ -555,6 +555,9 @@ aside {
 
 [data-filter=priority] {
   background: #FFD1B2; }
+
+body.tags .solution-cell {
+  display: none; }
 
 .anchor-target {
   display: block;

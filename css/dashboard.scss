@@ -331,7 +331,7 @@ aside {
     }
 }
 
-.solution {
+td.solution-cell {
     font-family: $monospace;
 }
 
@@ -415,6 +415,12 @@ aside {
 
 [data-filter=priority] {
     background:$priority;
+}
+
+body.tags {
+    .solution-cell {
+        display: none;
+    }
 }
 
 // DEEP LINKS (/bymeta and /about)
