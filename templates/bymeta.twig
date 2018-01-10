@@ -23,6 +23,7 @@
             {{ meta.Title }}
         {% endif %}
     </h2>
+    {% if meta.Id != 0 %}
     <div class="puzzle-metadata row">
         <div class="col col-sm-6 wrangler">
             {% if meta.Wrangler %}
@@ -35,6 +36,7 @@
             <a class="add-puzzles-to-meta" href="/add/{{ meta.Id }}">+ Add puzzles</a>
         </div>
     </div>
+    {% endif %}
     {{ puzzle_table(meta.Id) }}
 </section>
 {% endfor %}

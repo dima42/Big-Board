@@ -63,7 +63,7 @@
 <script>
 var newPuzzleTemplate = $('#add_puzzle').html();
 var successTemplate = $('#add_complete').html();
-var selectedMeta = "";
+window.selectedMeta = "";
 
 function addPuzzleForm() {
     var puzzleData = [];
@@ -88,9 +88,8 @@ function slugify(text) {
 
 $(function() {
     addPuzzleForm();
-    $('[data-meta={{meta_id}}]').click();
 
-    $('[data-meta]').click(function(e) {
+    $('a[data-meta]').click(function(e) {
         selectedMeta = $(this).data('meta');
         if (selectedMeta == -1) {
             $('.meta-select').attr('disabled', false);
@@ -98,6 +97,8 @@ $(function() {
             $('.meta-select').val(selectedMeta).prop('disabled', 'disabled');
         }
     });
+
+    $('[data-meta={{meta_id}}]').trigger('click');
 
     $('#add-another-puzzle').click(addPuzzleForm);
 
