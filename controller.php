@@ -893,7 +893,7 @@ function displayRoster() {
 		->joinWith('PuzzleMember')
 		->orderBy('Title')
 		->groupBy('Title', 'Id')
-		->select(['Id', 'Title'])
+		->select(['Id', 'Title', 'Status'])
 		->find();
 
 	render('roster.twig', 'roster', array(

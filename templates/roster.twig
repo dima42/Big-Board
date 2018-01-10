@@ -36,7 +36,7 @@
         <h1 class="mb-3">Who’s working on what</h1>
 
         {% for puzzle in puzzles %}
-        {{ member_table(puzzle.Id, puzzle.Title) }}
+        {{ member_table(puzzle.Id, puzzle.Title, puzzle.Status) }}
         {% endfor %}
 
         {{ member_table(0) }}
