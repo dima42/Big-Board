@@ -565,6 +565,8 @@ function changePuzzleStatus($puzzle_id, $request) {
 			":bell:",
 			"StatusBot"
 		);
+	} elseif ($newStatus == 'solved') {
+		$puzzle->removeMembers();
 	}
 
 	$alert = "Changed status.";
