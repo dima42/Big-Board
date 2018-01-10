@@ -1,6 +1,6 @@
 <tr id="puzzle{{ Id }}" data-solution="{{ Solution }}" data-filter="{{ Status }}" class="puzzle {{ #meta }}meta{{ /meta }}">
     <td class="status"><i class="icon-{{ Status }}"></i></td>
-    <td class="member-count">{{ SolverCount }}</td>
+    <td class="member-count">{{ #SolverCount }}{{ SolverCount }}{{ /SolverCount }}</td>
     <td class="title"><a href="/puzzle/{{ Id }}">{{ Title }}</a></td>
     <td class="solution">{{ Solution }}</td>
     <td class="icon-link work-on"><form action="/puzzle/{{ Id }}/join" method="post"><button type="submit" title="Work on this puzzle" data-tooltip><i class="icon-join"></i></button></form></td>
