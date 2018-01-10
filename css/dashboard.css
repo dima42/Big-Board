@@ -527,6 +527,8 @@ aside {
     border-bottom: 1px solid #888 !important; }
   .puzzle-list label {
     margin: 0; }
+  .puzzle-list .icon-th {
+    text-align: center; }
   .puzzle-list tbody a {
     display: block; }
     .puzzle-list tbody a:hover {
