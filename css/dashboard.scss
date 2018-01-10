@@ -87,6 +87,11 @@
     color: #999;
 }
 
+.icon-solvers {
+    @include icon('users');
+    color: #666;
+}
+
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
@@ -384,6 +389,13 @@ aside {
         border: 0;
         vertical-align: middle;
         background: none;
+    }
+
+    .member-count {
+        font-weight: bold;
+        font-size: .75rem;
+        text-align: center;
+        line-height: 1.7;
     }
 }
 
