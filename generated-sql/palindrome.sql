@@ -120,7 +120,7 @@ CREATE TABLE `member`
     `slack_id` VARCHAR(24),
     `slack_handle` VARCHAR(48),
     `strengths` VARCHAR(128),
-    `avatar` VARCHAR(128),
+    `avatar` VARCHAR(200),
     `phone_number` VARCHAR(24),
     `location` VARCHAR(24),
     PRIMARY KEY (`id`),

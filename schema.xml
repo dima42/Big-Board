@@ -72,7 +72,7 @@
         <column name="slack_id" type="varchar" size="24" required="false" />
         <column name="slack_handle" type="varchar" size="48" required="false" />
         <column name="strengths" type="varchar" size="128" required="false" />
-        <column name="avatar" type="varchar" size="128" required="false" />
+        <column name="avatar" type="varchar" size="200" required="false" />
         <column name="phone_number" type="varchar" size="24" required="false" />
         <column name="location" type="varchar" size="24" required="false" valueSet="campus,offsite" />
         <unique>

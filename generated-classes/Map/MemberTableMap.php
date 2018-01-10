@@ -178,7 +178,7 @@ class MemberTableMap extends TableMap
         $this->addColumn('slack_id', 'SlackId', 'VARCHAR', false, 24, null);
         $this->addColumn('slack_handle', 'SlackHandle', 'VARCHAR', false, 48, null);
         $this->addColumn('strengths', 'Strengths', 'VARCHAR', false, 128, null);
-        $this->addColumn('avatar', 'Avatar', 'VARCHAR', false, 128, null);
+        $this->addColumn('avatar', 'Avatar', 'VARCHAR', false, 200, null);
         $this->addColumn('phone_number', 'PhoneNumber', 'VARCHAR', false, 24, null);
         $this->addColumn('location', 'Location', 'VARCHAR', false, 24, null);
     } // initialize()
