@@ -18,6 +18,11 @@
             <parameter name="foreign_table" value="note" />
             <parameter name="expression" value="COUNT(id)" />
         </behavior>
+        <behavior name="aggregate_column" id="solver_count">
+            <parameter name="name" value="solver_count" />
+            <parameter name="foreign_table" value="solver" />
+            <parameter name="expression" value="COUNT(member_id)" />
+        </behavior>
         <unique>
             <unique-column name="title" />
         </unique>

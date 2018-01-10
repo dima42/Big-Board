@@ -31,6 +31,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery orderBySlackChannelId($order = Criteria::ASC) Order by the slack_channel_id column
  * @method     ChildPuzzleQuery orderByWranglerId($order = Criteria::ASC) Order by the wrangler_id column
  * @method     ChildPuzzleQuery orderByPostCount($order = Criteria::ASC) Order by the post_count column
+ * @method     ChildPuzzleQuery orderBySolverCount($order = Criteria::ASC) Order by the solver_count column
  * @method     ChildPuzzleQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildPuzzleQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -44,6 +45,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzleQuery groupBySlackChannelId() Group by the slack_channel_id column
  * @method     ChildPuzzleQuery groupByWranglerId() Group by the wrangler_id column
  * @method     ChildPuzzleQuery groupByPostCount() Group by the post_count column
+ * @method     ChildPuzzleQuery groupBySolverCount() Group by the solver_count column
  * @method     ChildPuzzleQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildPuzzleQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -140,6 +142,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzle findOneBySlackChannelId(string $slack_channel_id) Return the first ChildPuzzle filtered by the slack_channel_id column
  * @method     ChildPuzzle findOneByWranglerId(int $wrangler_id) Return the first ChildPuzzle filtered by the wrangler_id column
  * @method     ChildPuzzle findOneByPostCount(int $post_count) Return the first ChildPuzzle filtered by the post_count column
+ * @method     ChildPuzzle findOneBySolverCount(int $solver_count) Return the first ChildPuzzle filtered by the solver_count column
  * @method     ChildPuzzle findOneByCreatedAt(string $created_at) Return the first ChildPuzzle filtered by the created_at column
  * @method     ChildPuzzle findOneByUpdatedAt(string $updated_at) Return the first ChildPuzzle filtered by the updated_at column *
 
@@ -156,6 +159,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzle requireOneBySlackChannelId(string $slack_channel_id) Return the first ChildPuzzle filtered by the slack_channel_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzle requireOneByWranglerId(int $wrangler_id) Return the first ChildPuzzle filtered by the wrangler_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzle requireOneByPostCount(int $post_count) Return the first ChildPuzzle filtered by the post_count column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPuzzle requireOneBySolverCount(int $solver_count) Return the first ChildPuzzle filtered by the solver_count column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzle requireOneByCreatedAt(string $created_at) Return the first ChildPuzzle filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPuzzle requireOneByUpdatedAt(string $updated_at) Return the first ChildPuzzle filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -170,6 +174,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPuzzle[]|ObjectCollection findBySlackChannelId(string $slack_channel_id) Return ChildPuzzle objects filtered by the slack_channel_id column
  * @method     ChildPuzzle[]|ObjectCollection findByWranglerId(int $wrangler_id) Return ChildPuzzle objects filtered by the wrangler_id column
  * @method     ChildPuzzle[]|ObjectCollection findByPostCount(int $post_count) Return ChildPuzzle objects filtered by the post_count column
+ * @method     ChildPuzzle[]|ObjectCollection findBySolverCount(int $solver_count) Return ChildPuzzle objects filtered by the solver_count column
  * @method     ChildPuzzle[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildPuzzle objects filtered by the created_at column
  * @method     ChildPuzzle[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildPuzzle objects filtered by the updated_at column
  * @method     ChildPuzzle[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -273,7 +278,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, title, url, spreadsheet_id, solution, status, slack_channel, slack_channel_id, wrangler_id, post_count, created_at, updated_at FROM puzzle WHERE id = :p0';
+        $sql = 'SELECT id, title, url, spreadsheet_id, solution, status, slack_channel, slack_channel_id, wrangler_id, post_count, solver_count, created_at, updated_at FROM puzzle WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -661,6 +666,47 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         }
 
         return $this->addUsingAlias(PuzzleTableMap::COL_POST_COUNT, $postCount, $comparison);
+    }
+
+    /**
+     * Filter the query on the solver_count column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySolverCount(1234); // WHERE solver_count = 1234
+     * $query->filterBySolverCount(array(12, 34)); // WHERE solver_count IN (12, 34)
+     * $query->filterBySolverCount(array('min' => 12)); // WHERE solver_count > 12
+     * </code>
+     *
+     * @param     mixed $solverCount The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildPuzzleQuery The current query, for fluid interface
+     */
+    public function filterBySolverCount($solverCount = null, $comparison = null)
+    {
+        if (is_array($solverCount)) {
+            $useMinMax = false;
+            if (isset($solverCount['min'])) {
+                $this->addUsingAlias(PuzzleTableMap::COL_SOLVER_COUNT, $solverCount['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($solverCount['max'])) {
+                $this->addUsingAlias(PuzzleTableMap::COL_SOLVER_COUNT, $solverCount['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(PuzzleTableMap::COL_SOLVER_COUNT, $solverCount, $comparison);
     }
 
     /**

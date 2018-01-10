@@ -179,6 +179,7 @@ class PuzzleMemberTableMap extends TableMap
     {
         return array(
             'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'aggregate_column_relation_solver_count' => array('foreign_table' => 'puzzle', 'update_method' => 'updateSolverCount', 'aggregate_name' => 'SolverCount', ),
         );
     } // getBehaviors()
 
