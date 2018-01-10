@@ -137,6 +137,7 @@
 {% endblock %}
 
 {% block aside %}
+    <section class="tag-lists {% if not tag_alerts|length %}show-all{% endif %}">
     {% for scope_name, scope_tags in scopes %}
     <h5 class="scope-header"><i class="icon-tags"></i> {{ scope_name }}</h5>
     <div class="tag-list mb-3">
@@ -145,9 +146,15 @@
         {% endfor %}
     </div>
     {% endfor %}
+    {% if tag_alerts|length %}
+    <div class="buttons">
+        <a class="btn btn-light show-all-tags" href="/puzzle/{{ puzzle.id }}/edit">Show all <i class="icon-tags"></i> tags</a>
+    </div>
+    {% endif %}
+    </section>
 
     {% block edit_button %}
-    <div class="mb-3">
+    <div class="buttons">
         <a class="btn btn-light border border-dark" href="/puzzle/{{ puzzle.id }}/edit"><i class="icon-edit"></i> Edit this puzzle</a>
     </div>
     {% endblock %}
@@ -174,6 +181,11 @@ $(function() {
                 link.toggleClass('alerted');
             }
         });
+    });
+
+    $('.show-all-tags').click(function(e) {
+        e.preventDefault();
+        $('.tag-lists').toggleClass('show-all');
     });
 
     {% if is_meta %}

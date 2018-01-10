@@ -712,6 +712,27 @@ body.tags .solution-cell {
   .tag-list .level2 {
     margin-left: 1em; }
 
+.puzzles .tag-list .tag {
+  display: none; }
+
+.puzzles .tag-list .alerted {
+  display: block; }
+
+.puzzles .tag-lists.show-all .tag {
+  display: block; }
+
+.show-all-tags {
+  border: 1px solid #ccc;
+  color: #555;
+  text-transform: uppercase;
+  font-size: .8rem; }
+
+aside .buttons .btn, aside .buttons button {
+  display: block;
+  margin-bottom: 1em;
+  text-align: left;
+  width: 100%; }
+
 .scope-header {
   font-size: 1rem;
   margin-bottom: .5em;

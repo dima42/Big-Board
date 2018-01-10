@@ -95,7 +95,7 @@
 {% block edit_button %}{% endblock %}
 
 {% block aside_bottom %}
-<div class="mb-3">
+<div class="buttons">
     <form action="/puzzle/{{ puzzle.id }}/delete" data-behavior="confirm-delete" method="post">
         <button type="submit" class="btn border border-danger text-danger" href=""><i class="icon-archive"></i> Archive puzzle</button>
     </form>
