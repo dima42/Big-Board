@@ -341,57 +341,19 @@ class Bot {
 	}
 
 	private function nutrimatic($request, $response) {
-		$query = $request->text;
-
-		// Slack uses smart quotes, and that breaks Nutrimatic.  Replace them...
-		// ...and encode the query for use in the request URL.
-		$encoded_query = rawurlencode(str_replace(["“", "”"], ["\"", "\""], $query));
-
-		// Build the request URL and get the response from Nutrimatic.
-		$request_url     = "https://nutrimatic.org/?q={$encoded_query}";
-		$nmatic_response = file_get_contents($request_url);
-
-		// The response from Nutrimatic holds the results in span tags.
-		$regex_query = "/<span style='font-size: .*em'>(.*)<\/span>/";
-		preg_match_all($regex_query, $nmatic_response, $regex_results, PREG_SET_ORDER);
-
-		// Handle the case where the query yields no results.
-		if (count($regex_results) == 0) {
-			return [
-				"text"          => "<{$request_url}|No results> for `{$query}`.",
-				"response_type" => "in_channel",
-			];
-		}
-
-		$pretext = "<{$request_url}|Nutrimatic results> for `{$query}`:\n";
-
-		// Compile the results and add them to the string in a code block.
-		$response_text = "```\n";
-		foreach ($regex_results as $regex_result) {
-			$response_text .= "{$regex_result[1]}\n";
-		}
-		$response_text = substr($response_text, 0, -1);
-		$response_text .= "```";
-
-		// Send the response back to the channel!
-		$channel_response = [
-			"text"        => $pretext,
-			"attachments" => [
-				[
-					"text"      => $response_text,
-					"mrkdwn_in" => ['text'],
-				]
-			],
+		$query   = $request->text;
+		$channel = $request->channel_name;
+		exec("php nutrimatic.php '".$query."' ".$channel." > /dev/null &");
+		return [
+			"text"          => "Nutrimatic request received. :thinking_face: Working on it…",
 			"response_type" => "in_channel",
 		];
-
-		return $channel_response;
 	}
 
 	private function qat($request, $response) {
 		$query   = $request->text;
-		$channel = $request->channel_id;
-		exec("php qat.php \"".$query."\" ".$channel." > /dev/null &");
+		$channel = $request->channel_name;
+		exec("php qat.php '".$query."' ".$channel." > /dev/null &");
 		return [
 			"text"          => "Qat request received. :thinking_face: Working on it…",
 			"response_type" => "in_channel",
