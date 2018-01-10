@@ -12,17 +12,6 @@ use DebugBar\StandardDebugBar;
 
 session_start();
 
-// ERROR HANDLING
-
-$ravenClient   = new Raven_Client(getenv('RAVEN_CONFIG'));
-$error_handler = new Raven_ErrorHandler($ravenClient);
-$error_handler->registerExceptionHandler();
-$error_handler->registerErrorHandler();
-$error_handler->registerShutdownFunction();
-
-// ALERT
-$_SESSION['alert'] = "";
-
 // DEBUG
 Global $DEBUG;
 $DEBUG = false;
@@ -42,6 +31,21 @@ function preprint($arr) {
 	print_r($arr);
 	echo "</pre>";
 }
+
+// ERROR HANDLING
+
+$raven_settings = ['environment' => 'production'];
+if ($DEBUG) {
+	$raven_settings['environment'] = 'development';
+}
+$ravenClient   = new Raven_Client(getenv('RAVEN_CONFIG'), $raven_settings);
+$error_handler = new Raven_ErrorHandler($ravenClient);
+$error_handler->registerExceptionHandler();
+$error_handler->registerErrorHandler();
+$error_handler->registerShutdownFunction();
+
+// ALERT
+$_SESSION['alert'] = "";
 
 // STATUSES
 
