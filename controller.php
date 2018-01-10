@@ -670,10 +670,14 @@ function addPuzzle($request, $response) {
 	$slugify = new Slugify(['regexp' => '/[^a-z0-9._-]+/']);
 
 	foreach ($request->newPuzzles as $puzzleKey => $puzzleContent) {
-		$puzzleId = "puzzleGroup".$puzzleKey;
+		$puzzleId   = "puzzleGroup".$puzzleKey;
+		$puzzle_url = $puzzleContent['url'];
+		if (!preg_match("/\:\/\//", $puzzle_url)) {
+			$puzzle_url = "http://".$puzzle_url;
+		}
 
 		$puzzleURLExists = PuzzleQuery::create()
-			->filterByURL($puzzleContent['url'])
+			->filterByURL($puzzle_url)
 			->findOne();
 		$puzzleTitleExists = PuzzleQuery::create()
 			->filterByTitle($puzzleContent['title'])
@@ -701,7 +705,7 @@ function addPuzzle($request, $response) {
 
 			$newPuzzle = new Puzzle();
 			$newPuzzle->setTitle($puzzleContent['title']);
-			$newPuzzle->setUrl($puzzleContent['url']);
+			$newPuzzle->setUrl($puzzle_url);
 			$newPuzzle->setSpreadsheetId($spreadsheet_id);
 			$newPuzzle->setSlackChannel($slack_channel_name);
 			$newPuzzle->setSlackChannelId($newChannelID);
