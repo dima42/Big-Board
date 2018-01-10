@@ -14,8 +14,8 @@ session_start();
 
 // ERROR HANDLING
 
-$client        = new Raven_Client(getenv('RAVEN_CONFIG'));
-$error_handler = new Raven_ErrorHandler($client);
+$ravenClient   = new Raven_Client(getenv('RAVEN_CONFIG'));
+$error_handler = new Raven_ErrorHandler($ravenClient);
 $error_handler->registerExceptionHandler();
 $error_handler->registerErrorHandler();
 $error_handler->registerShutdownFunction();
