@@ -112,6 +112,12 @@ abstract class PuzzleMember implements ActiveRecordInterface
      */
     protected $alreadyInSave = false;
 
+    // aggregate_column_relation_solver_count behavior
+    /**
+     * @var ChildPuzzle
+     */
+    protected $oldPuzzleSolverCount;
+
     /**
      * Initializes internal state of Base\PuzzleMember object.
      */
@@ -704,6 +710,8 @@ abstract class PuzzleMember implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
+                // aggregate_column_relation_solver_count behavior
+                $this->updateRelatedPuzzleSolverCount($con);
                 PuzzleMemberTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
@@ -1248,6 +1256,10 @@ abstract class PuzzleMember implements ActiveRecordInterface
      */
     public function setPuzzle(ChildPuzzle $v = null)
     {
+        // aggregate_column_relation behavior
+        if (null !== $this->aPuzzle && $v !== $this->aPuzzle) {
+            $this->oldPuzzleSolverCount = $this->aPuzzle;
+        }
         if ($v === null) {
             $this->setPuzzleId(NULL);
         } else {
@@ -1404,6 +1416,24 @@ abstract class PuzzleMember implements ActiveRecordInterface
         $this->modifiedColumns[PuzzleMemberTableMap::COL_UPDATED_AT] = true;
 
         return $this;
+    }
+
+    // aggregate_column_relation_solver_count behavior
+
+    /**
+     * Update the aggregate column in the related Puzzle object
+     *
+     * @param ConnectionInterface $con A connection object
+     */
+    protected function updateRelatedPuzzleSolverCount(ConnectionInterface $con)
+    {
+        if ($puzzle = $this->getPuzzle()) {
+            $puzzle->updateSolverCount($con);
+        }
+        if ($this->oldPuzzleSolverCount) {
+            $this->oldPuzzleSolverCount->updateSolverCount($con);
+            $this->oldPuzzleSolverCount = null;
+        }
     }
 
     /**
