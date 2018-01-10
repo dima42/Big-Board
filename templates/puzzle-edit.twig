@@ -92,6 +92,8 @@
 </form>
 {% endblock %}
 
+{% block edit_button %}{% endblock %}
+
 {% block aside_bottom %}
 <div class="mb-3">
     <form action="/puzzle/{{ puzzle.id }}/delete" data-behavior="confirm-delete" method="post">
