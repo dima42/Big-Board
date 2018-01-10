@@ -92,6 +92,11 @@
     color: #666;
 }
 
+.icon-important {
+    @include icon('bullhorn');
+    color: #333;
+}
+
 $monospace: Inconsolata, monospace;
 
 $open: #dadada;
@@ -824,6 +829,10 @@ body.member {
     &[data-filter=important] {
         background:lighten(yellow, 30%);
     }
+}
+
+.news {
+
 }
 
 // ABOUT

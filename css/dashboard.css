@@ -15,6 +15,7 @@
 .icon-copy,
 .icon-offsite,
 .icon-solvers,
+.icon-important,
 .far,
 .fal,
 .fab {
@@ -67,7 +68,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags, .icon-campus, .icon-remote, .icon-join, .icon-copy, .icon-offsite, .icon-solvers {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags, .icon-campus, .icon-remote, .icon-join, .icon-copy, .icon-offsite, .icon-solvers, .icon-important {
   text-align: center;
   width: 1.25em; }
 
@@ -113,6 +114,7 @@
 .fa-pull-left.icon-copy,
 .fa-pull-left.icon-offsite,
 .fa-pull-left.icon-solvers,
+.fa-pull-left.icon-important,
 .far.fa-pull-left,
 .fal.fa-pull-left,
 .fab.fa-pull-left {
@@ -135,6 +137,7 @@
 .fa-pull-right.icon-copy,
 .fa-pull-right.icon-offsite,
 .fa-pull-right.icon-solvers,
+.fa-pull-right.icon-important,
 .far.fa-pull-right,
 .fal.fa-pull-right,
 .fab.fa-pull-right {
@@ -211,6 +214,9 @@
 readers do not read off random characters that represent icons */
 .icon-archive:before {
   content: "\f187"; }
+
+.icon-important:before {
+  content: "\f0a1"; }
 
 .icon-open:before {
   content: "\f1ce"; }
@@ -358,6 +364,12 @@ readers do not read off random characters that represent icons */
   font-weight: 900;
   color: #FF6600;
   color: #666; }
+
+.icon-important {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #333; }
 
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {

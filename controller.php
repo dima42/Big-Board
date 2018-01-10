@@ -174,10 +174,7 @@ $this->respond('GET', '/puzzle_scrape', function ($request, $response) {
 
 $this->with('/news', function () {
 		$this->respond('GET', '/?', function ($request) {
-				return displayNews("all");
-			});
-		$this->respond('GET', '/[:filter]/?', function ($request) {
-				return displayNews($request->filter);
+				return displayNews();
 			});
 		$this->respond('POST', '/add/?', function ($request) {
 				return postNews($request->body);
@@ -999,25 +996,24 @@ function assignSlackId($slack_id) {
 	redirect('/member/'.$member->getId(), $message);
 }
 
-function displayNews($filter = "all") {
-	$news = NewsQuery::create()
+function displayNews() {
+	$important = NewsQuery::create()
 		->leftJoinWith('News.Member')
 		->leftJoinWith('News.Puzzle')
-		->orderByCreatedAt('desc');
+		->orderByCreatedAt('desc')
+		->filterByNewsType('important')
+		->find();
 
-	if ($filter == "important") {
-		$news->filterByNewsType('important')
-		     ->find();
-	} elseif ($filter == "puzzles") {
-		$news->where('puzzle_id is not null')
-		     ->find();
-	} else {
-		$news->find();
-	}
+	$updates = NewsQuery::create()
+		->leftJoinWith('News.Member')
+		->leftJoinWith('News.Puzzle')
+		->orderByCreatedAt('desc')
+		->filterByNewsType('important', Criteria::NOT_EQUAL)
+		->find();
 
 	render('news.twig', 'news', array(
-			'filter'  => $filter,
-			'updates' => $news,
+			'important' => $important,
+			'updates'   => $updates,
 		));
 }
 
