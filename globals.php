@@ -12,6 +12,14 @@ use DebugBar\StandardDebugBar;
 
 session_start();
 
+// ERROR HANDLING
+
+$client        = new Raven_Client(getenv('RAVEN_CONFIG'));
+$error_handler = new Raven_ErrorHandler($client);
+$error_handler->registerExceptionHandler();
+$error_handler->registerErrorHandler();
+$error_handler->registerShutdownFunction();
+
 // ALERT
 $_SESSION['alert'] = "";
 

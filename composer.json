@@ -20,7 +20,8 @@
     "aptoma/twig-markdown": "^3.0",
     "michelf/php-markdown": "^1.7",
     "guzzlehttp/guzzle": "~6.0",
-    "frlnc/php-slack": "dev-no-format-support"
+    "frlnc/php-slack": "dev-no-format-support",
+    "sentry/sentry": "^1.8"
   },
   "require-dev": {
     "deployer/deployer": "^6.0",
