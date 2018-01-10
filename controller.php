@@ -881,7 +881,9 @@ function alertTag($request, $response, $puzzle_id) {
 		$ta->setTag($tag);
 		$ta->save();
 
-		postToSlack("*".$puzzle->getTitle()."* has been tagged `".strtoupper($tag->getTitle())."`", $puzzle->getSlackAttachmentMedium(), ":label:", "TagBot", $tag->getSlackChannelId());
+		error_log("tagging ".$tag->getTitle());
+
+		postToSlack("*".$puzzle->getTitle()."* is tagged `".strtoupper($tag->getTitle())."`.", $puzzle->getSlackAttachmentMedium(), ":label:", ucfirst($tag->getTitle())." Bot", $tag->getSlackChannelId());
 
 		$json = [
 			'ok' => 1
