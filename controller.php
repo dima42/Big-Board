@@ -235,12 +235,22 @@ function pollDrive() {
 	Global $pal_drive;
 
 	$current_puzzles = array();
-	$all_files       = $pal_drive->files->listFiles();
+	$all_files       = $pal_drive->files->listFiles([
+			"maxResults" => 200,
+			"q"          => "'".getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID')."' in parents and trashed != true and modifiedDate > '2018-01-10T02:14:51.708Z'"
+		]);
+	echo "<pre>";
 	foreach ($all_files["items"] as $k => $v) {
-		preprint($k." <br>".$v);
+		echo $v['title'];
+		echo " - ";
+		echo $v['createdDate'];
+		echo " - ";
+		echo $v['id'];
+		echo "\n";
 		// $current_puzzles[$v["id"]][0] = $v["lastModifyingUserName"];
 		// $current_puzzles[$v["id"]][1] = $v["modifiedDate"];
 	}
+	echo "</pre>";
 	return;
 }
 
