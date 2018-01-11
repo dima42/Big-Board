@@ -44,6 +44,10 @@ $error_handler->registerExceptionHandler();
 $error_handler->registerErrorHandler();
 $error_handler->registerShutdownFunction();
 
+// TIMEZONES
+
+date_default_timezone_set("UTC");
+
 // ALERT
 $_SESSION['alert'] = "";
 
