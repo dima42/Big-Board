@@ -668,6 +668,12 @@ body.tags .solution-cell {
 
 .puzzle-header {
   margin-bottom: 1em; }
+  .puzzle-header h1 {
+    margin-bottom: .5rem; }
+  .puzzle-header .last-update {
+    font-size: .75em;
+    color: #666;
+    margin-bottom: 6px; }
 
 .puzzleEdit .input-group-addon {
   width: 80px; }

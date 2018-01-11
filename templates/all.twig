@@ -85,11 +85,11 @@ $(function() {
     });
 
     $('[data-sort-by=stalest]').click(function() {
-        loadPuzzleData('/puzzles/all/UpdatedAt/desc');
+        loadPuzzleData('/puzzles/all/SheetModDate/asc');
     });
 
     $('[data-sort-by=freshest]').click(function() {
-        loadPuzzleData('/puzzles/all/UpdatedAt/asc');
+        loadPuzzleData('/puzzles/all/SheetModDate/desc');
     });
 
     $('[data-sort-by=oldest]').click(function() {

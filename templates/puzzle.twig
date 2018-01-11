@@ -1,5 +1,7 @@
 {% extends 'two-col.twig' %}
 
+{% block title %}{{ puzzle.title }}{% endblock %}
+
 {% block filters %}
     {% from 'macros.twig' import solver %}
     <div class="nav-section">
@@ -39,10 +41,18 @@
 
 {% block content %}
     <div class="puzzle-header">
-        <h1 class="mb-3">
+        <h1>
             <a href="/puzzle/{{ puzzle.id }}">{{ puzzle.title }}</a>
             <i class="icon-{{ puzzle.status }}"></i>
         </h1>
+
+        {% if puzzle.sheetModDate %}
+        <div class="last-update">
+            {% set difference = date(now).diff(date(puzzle.sheetModDate)) %}
+            Last edited
+            <b>{{ puzzle.sheetModDate|time_diff }}</b>
+        </div>
+        {% endif %}
 
         <div class="puzzle-metas small">
             {% if is_meta %}

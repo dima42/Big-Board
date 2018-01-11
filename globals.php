@@ -44,7 +44,12 @@ $error_handler->registerExceptionHandler();
 $error_handler->registerErrorHandler();
 $error_handler->registerShutdownFunction();
 
+// TIMEZONES
+
+date_default_timezone_set("UTC");
+
 // ALERT
+
 $_SESSION['alert'] = "";
 
 // STATUSES
@@ -68,6 +73,7 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig   = new Twig_Environment($loader, array(
 	));
 $twig->addExtension(new MarkdownExtension($engine));
+$twig->addExtension(new Twig_Extensions_Extension_Date());
 
 // TWIG FILTERS
 $default = new Twig_Filter('default',

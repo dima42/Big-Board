@@ -484,6 +484,16 @@ body.tags {
 
 .puzzle-header {
     margin-bottom: 1em;
+
+    h1 {
+        margin-bottom: .5rem;
+    }
+
+    .last-update {
+        font-size: .75em;
+        color: #666;
+        margin-bottom: 6px;
+    }
 }
 
 .puzzleEdit {
