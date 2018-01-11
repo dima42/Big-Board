@@ -46,11 +46,13 @@
             <i class="icon-{{ puzzle.status }}"></i>
         </h1>
 
+        {% if puzzle.sheetModDate %}
         <div class="last-update">
             {% set difference = date(now).diff(date(puzzle.sheetModDate)) %}
             Last edited
             <b>{{ puzzle.sheetModDate|time_diff }}</b>
         </div>
+        {% endif %}
 
         <div class="puzzle-metas small">
             {% if is_meta %}
