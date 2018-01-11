@@ -342,7 +342,8 @@ class Bot {
 
 			if ($note_count == 0) {
 				$channel_response = [
-					"text" => "There are no notes attached to *".$puzzle->getTitle()."*.",
+					"text"          => "There are no notes attached to *".$puzzle->getTitle()."*.",
+					"response_type" => "in_channel",
 				];
 			} else {
 
@@ -367,7 +368,8 @@ class Bot {
 		} else {
 			$puzzle->note($body, $member);
 			$channel_response = [
-				"text" => "Got it. I posted your note to *".$puzzle->getTitle()."*.",
+				"text"          => "Got it. I posted your note to *".$puzzle->getTitle()."*.",
+				"response_type" => "in_channel",
 			];
 		}
 
