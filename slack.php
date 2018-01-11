@@ -126,7 +126,7 @@ function getTobyBotInstructions() {
 		"`/note` returns all of this puzzle's notes.",
 		"`/note [text]` adds [text] as a note on this puzzle.",
 		"`/solve [text]` sets [text] as the solution to the puzzle.",
-		"`/workon` automatically attaches you to this puzzle. (If you are working on a different puzzle, this will forcefully detach you from it.)",
+		"`/workon` attaches you to this puzzle. (If you are working on a different puzzle, this will forcefully detach you from it.)",
 		"`!help` gets you a random puzzle-solving tip.",
 		"`/tobybot` returns this list (in a private message to you).",
 	];
@@ -344,20 +344,22 @@ class Bot {
 				$channel_response = [
 					"text" => "There are no notes attached to *".$puzzle->getTitle()."*.",
 				];
+			} else {
+
+				$all_notes = array_map(function ($note) {
+						return [
+							"pretext" => $note->getAuthor()->getNameForSlack()." wrote:",
+							"text"    => $note->getBody(),
+						];
+					}, iterator_to_array($puzzle->getNotes()));
+
+				$channel_response = [
+					'link_names'    => true,
+					"response_type" => "in_channel",
+					"attachments"   => $all_notes,
+				];
 			}
 
-			$all_notes = array_map(function ($note) {
-					return [
-						"pretext" => $note->getAuthor()->getNameForSlack()." wrote:",
-						"text"    => $note->getBody(),
-					];
-				}, iterator_to_array($puzzle->getNotes()));
-
-			$channel_response = [
-				'link_names'    => true,
-				"response_type" => "in_channel",
-				"attachments"   => $all_notes,
-			];
 		} elseif (!$puzzle) {
 			$channel_response = [
 				"text" => "`".$request->command."` can only be used inside a puzzle channel.",
