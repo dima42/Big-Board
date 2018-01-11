@@ -99,7 +99,7 @@ function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = 
 }
 
 function postToChannel($message, $attachments, $icon, $bot_name, $channel = "big-board") {
-	postToSlack($message, $attachments, $icon, $bot_name, '#'.$channel);
+	return postToSlack($message, $attachments, $icon, $bot_name, '#'.$channel);
 }
 
 function scrapeAvatar($member) {
@@ -119,6 +119,26 @@ function scrapeAvatar($member) {
 }
 
 // SLACK BOT
+
+function getTobyBotInstructions() {
+	$instructions = [
+		"`/info` returns all links and solvers on this puzzle.",
+		"`/note` returns all of this puzzle's notes.",
+		"`/note [text]` adds [text] as a note on this puzzle.",
+		"`/solve [text]` sets [text] as the solution to the puzzle.",
+		"`/workon` attaches you to this puzzle. (If you are working on a different puzzle, this will forcefully detach you from it.)",
+		"`!help` gets you a random puzzle-solving tip.",
+		"`/tobybot` returns this list (in a private message to you).",
+	];
+
+	return array_map(function ($note) {
+			return [
+				"text"      => $note,
+				"mrkdwn_in" => ['text'],
+				"color"     => "#225DAA",
+			];
+		}, $instructions);
+}
 
 class Bot {
 	public function __call($name, $args) {
@@ -148,6 +168,18 @@ class Bot {
 		}
 
 		return $response->json($payload);
+	}
+
+	private function tobybot($request, $response) {
+		$attachments = getTobyBotInstructions();
+
+		$channel_response = [
+			'link_names'  => true,
+			'text'        => "*Tobybot commands that work within a puzzle channel:*",
+			"attachments" => $attachments,
+		];
+
+		return $channel_response;
 	}
 
 	private function avatar($request, $response) {
@@ -213,7 +245,7 @@ class Bot {
 			];
 		} else {
 			$status = $puzzle->getStatus();
-			$text   = "*".$puzzle->getTitle()."* is :".$puzzle->getStatus().": ".strtoupper($status);
+			$text   = "*".$puzzle->getTitle()."* is :".$puzzle->getStatus().": `".strtoupper($status)."`";
 			if ($status == "solved") {
 				$text .= ": `".$puzzle->getSolution()."`";
 			}
@@ -228,7 +260,7 @@ class Bot {
 		return $channel_response;
 	}
 
-	private function join($request, $response) {
+	private function workon($request, $response) {
 		$parameter        = $request->text;
 		$channel_response = ['text' => "Hmm, maybe ask a human for help. This computer is confused."];
 		$channel_id       = $request->channel_id;
@@ -294,8 +326,6 @@ class Bot {
 		$body             = trim($request->text);
 		$slack_user_id    = $request->user_id;
 
-		debug("Body: ".$body);
-
 		$puzzle = PuzzleQuery::create()
 			->filterBySlackChannelId($channel_id)
 			->findOne();
@@ -310,22 +340,24 @@ class Bot {
 
 			if ($note_count == 0) {
 				$channel_response = [
-					"text" => "There are no notes attached to *".$puzzle->getTitle()."*.",
+					"text"          => "There are no notes attached to *".$puzzle->getTitle()."*.",
+					"response_type" => "in_channel",
+				];
+			} else {
+				$all_notes = array_map(function ($note) {
+						return [
+							"pretext" => $note->getAuthor()->getNameForSlack()." wrote:",
+							"text"    => $note->getBody(),
+						];
+					}, iterator_to_array($puzzle->getNotes()));
+
+				$channel_response = [
+					'link_names'    => true,
+					"response_type" => "in_channel",
+					"attachments"   => $all_notes,
 				];
 			}
 
-			$all_notes = array_map(function ($note) {
-					return [
-						"pretext" => $note->getAuthor()->getNameForSlack()." wrote:",
-						"text"    => $note->getBody(),
-					];
-				}, iterator_to_array($puzzle->getNotes()));
-
-			$channel_response = [
-				'link_names'    => true,
-				"response_type" => "in_channel",
-				"attachments"   => $all_notes,
-			];
 		} elseif (!$puzzle) {
 			$channel_response = [
 				"text" => "`".$request->command."` can only be used inside a puzzle channel.",
@@ -333,57 +365,53 @@ class Bot {
 		} else {
 			$puzzle->note($body, $member);
 			$channel_response = [
-				"text" => "Got it. I posted your note to *".$puzzle->getTitle()."*.",
+				"text"          => "Got it. I posted your note to *".$puzzle->getTitle()."*.",
+				"response_type" => "in_channel",
 			];
 		}
 
 		return $channel_response;
 	}
 
-	private function nutrimatic($request, $response) {
-		$query = $request->text;
+	private function tagged($request, $response) {
+		$channel_response = ['text' => 'Sorry, there is a problem.'];
+		$channel_id       = $request->channel_id;
 
-		// Slack uses smart quotes, and that breaks Nutrimatic.  Replace them...
-		// ...and encode the query for use in the request URL.
-		$encoded_query = rawurlencode(str_replace(["“", "”"], ["\"", "\""], $query));
+		$tag = TagQuery::create()
+			->filterBySlackChannelId($channel_id)
+			->findOne();
 
-		// Build the request URL and get the response from Nutrimatic.
-		$request_url = "https://nutrimatic.org/?q={$encoded_query}";
-		$response    = file_get_contents($request_url);
+		// If there's no body, send back all puzzles with this tag.
+		if ($tag) {
+			$puzzleQuery = PuzzleQuery::create()
+				->filterByStatus('solved', Criteria::NOT_EQUAL)
+				->joinWithTagAlert()
+				->where('TagAlert.tag_id = '.$tag->getId());
 
-		// The response from Nutrimatic holds the results in span tags.
-		$regex_query = "/<span style='font-size: .*em'>(.*)<\/span>/";
-		preg_match_all($regex_query, $response, $regex_results, PREG_SET_ORDER);
+			$puzzleCount = $puzzleQuery->count();
 
-		// Handle the case where the query yields no results.
-		if (count($regex_results) == 0) {
-			return [
-				"text"          => "<{$request_url}|No results> for `{$query}`.",
-				"response_type" => "in_channel",
+			if ($puzzleCount == 0) {
+				$channel_response = [
+					"text"          => "There are no unsolved puzzles tagged with *".$tag->getTitle()."*.",
+					"response_type" => "in_channel",
+				];
+			} else {
+				$all_puzzles = array_map(function ($puzzle) {
+						return $puzzle->getSlackAttachmentSmall();
+					}, iterator_to_array($puzzleQuery->find()));
+
+				$channel_response = [
+					'link_names'    => true,
+					'text'          => $puzzleCount." puzzles tagged `".strtoupper($tag->getTitle())."`",
+					"response_type" => "in_channel",
+					"attachments"   => $all_puzzles,
+				];
+			}
+		} else {
+			$channel_response = [
+				"text" => "`".$request->command."` can only be used inside a tag channel.",
 			];
 		}
-
-		$pretext = "<{$request_url}|Nutrimatic results> for `{$query}`:\n";
-
-		// Compile the results and add them to the string in a code block.
-		$response_text = "```\n";
-		foreach ($regex_results as $regex_result) {
-			$response_text .= "{$regex_result[1]}\n";
-		}
-		$response_text = substr($response_text, 0, -1);
-		$response_text .= "```";
-
-		// Send the response back to the channel!
-		$channel_response = [
-			"text"        => $pretext,
-			"attachments" => [
-				[
-					"text"      => $response_text,
-					"mrkdwn_in" => ['text'],
-				]
-			],
-			"response_type" => "in_channel",
-		];
 
 		return $channel_response;
 	}

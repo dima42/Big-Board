@@ -14,6 +14,8 @@
 .icon-join,
 .icon-copy,
 .icon-offsite,
+.icon-solvers,
+.icon-important,
 .far,
 .fal,
 .fab {
@@ -66,7 +68,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags, .icon-campus, .icon-remote, .icon-join, .icon-copy, .icon-offsite {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags, .icon-campus, .icon-remote, .icon-join, .icon-copy, .icon-offsite, .icon-solvers, .icon-important {
   text-align: center;
   width: 1.25em; }
 
@@ -111,6 +113,8 @@
 .fa-pull-left.icon-join,
 .fa-pull-left.icon-copy,
 .fa-pull-left.icon-offsite,
+.fa-pull-left.icon-solvers,
+.fa-pull-left.icon-important,
 .far.fa-pull-left,
 .fal.fa-pull-left,
 .fab.fa-pull-left {
@@ -132,6 +136,8 @@
 .fa-pull-right.icon-join,
 .fa-pull-right.icon-copy,
 .fa-pull-right.icon-offsite,
+.fa-pull-right.icon-solvers,
+.fa-pull-right.icon-important,
 .far.fa-pull-right,
 .fal.fa-pull-right,
 .fab.fa-pull-right {
@@ -209,6 +215,9 @@ readers do not read off random characters that represent icons */
 .icon-archive:before {
   content: "\f187"; }
 
+.icon-important:before {
+  content: "\f0a1"; }
+
 .icon-open:before {
   content: "\f1ce"; }
 
@@ -244,6 +253,9 @@ readers do not read off random characters that represent icons */
 
 .icon-join:before {
   content: "\f234"; }
+
+.icon-solvers:before {
+  content: "\f0c0"; }
 
 .icon-x:before {
   content: "\f410"; }
@@ -321,7 +333,7 @@ readers do not read off random characters that represent icons */
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
   color: #FF6600;
-  color: #666; }
+  color: #993333; }
 
 .icon-remote {
   font-family: 'Font Awesome 5 Free';
@@ -346,6 +358,18 @@ readers do not read off random characters that represent icons */
   font-weight: 900;
   color: #FF6600;
   color: #999; }
+
+.icon-solvers {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #666; }
+
+.icon-important {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600;
+  color: #333; }
 
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
@@ -418,41 +442,54 @@ a {
   .sidebar .nav-section {
     padding: 0 1rem .5rem;
     margin-bottom: .5rem; }
-  .sidebar .solver {
-    display: block;
-    background: #fff;
-    border-radius: 4px;
-    width: 100%;
-    height: 70px;
-    border: 1px solid #ccc;
-    margin-bottom: .9em;
-    position: relative;
-    background-size: auto 100%;
-    background-position: center left;
-    background-repeat: no-repeat;
-    padding: .5em .5em .5em 80px;
-    line-height: 1.3; }
-    .sidebar .solver:hover {
-      background-color: #f7f7f7; }
-    .sidebar .solver img {
-      border-radius: 4px 4px 0 0;
-      width: 100%; }
-    .sidebar .solver .location {
-      position: absolute;
-      left: -9px;
-      top: -9px;
-      background: black;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      color: white; }
-      .sidebar .solver .location::before {
-        display: block;
-        margin-top: 3px; }
-  .sidebar .solver-name {
-    font-size: 1em; }
-  .sidebar .profile-photo {
+
+.solver {
+  display: block;
+  background: #fff;
+  border-radius: 4px;
+  width: 100%;
+  border: 1px solid #ccc;
+  margin-bottom: .9em;
+  position: relative;
+  background-size: 30px 30px;
+  background-position: center left;
+  background-repeat: no-repeat;
+  font-size: .8em;
+  padding: .5em;
+  padding-left: 40px;
+  line-height: 1.3;
+  border-right: 5px solid #993333; }
+  .solver.remote {
+    border-right-color: #666; }
+  .solver:hover {
+    background-color: #f7f7f7; }
+  .solver img {
+    border-radius: 4px 4px 0 0;
     width: 100%; }
+
+@media (min-width: 860px) {
+  .solver {
+    background-size: 40px 40px;
+    padding-left: 50px;
+    font-size: .9em; } }
+
+@media (min-width: 1000px) {
+  .solver {
+    background-size: auto 100%;
+    padding-left: 60px;
+    height: 50px; } }
+
+@media (min-width: 1140px) {
+  .solver {
+    font-size: 1em;
+    height: 70px;
+    padding-left: 80px; } }
+
+.solver-name {
+  font-size: 1em; }
+
+.profile-photo {
+  width: 100%; }
 
 .progress {
   height: 1.2rem;
@@ -471,10 +508,16 @@ a {
 .progress-priority {
   background-color: #FFD1B2; }
 
-aside {
-  /*border-left: 1px solid #eee;*/ }
-  aside small {
-    display: block; }
+aside small {
+  display: block; }
+
+aside .important-info {
+  font-family: Inconsolata, monospace;
+  font-size: .8em; }
+
+aside .now {
+  color: #888;
+  font-size: 10px; }
 
 .latest-news, .subhead {
   font-weight: bold;
@@ -494,7 +537,7 @@ aside {
   .puzzle-metadata .add-puzzles-to-meta {
     text-align: right; }
 
-.solution {
+td.solution-cell {
   font-family: Inconsolata, monospace; }
 
 .puzzle-list {
@@ -515,6 +558,8 @@ aside {
     border-bottom: 1px solid #888 !important; }
   .puzzle-list label {
     margin: 0; }
+  .puzzle-list .icon-th {
+    text-align: center; }
   .puzzle-list tbody a {
     display: block; }
     .puzzle-list tbody a:hover {
@@ -526,6 +571,11 @@ aside {
     border: 0;
     vertical-align: middle;
     background: none; }
+  .puzzle-list .member-count {
+    font-weight: bold;
+    font-size: .75rem;
+    text-align: center;
+    line-height: 1.7; }
 
 [data-filter=solved] {
   background: #f7f7f7;
@@ -536,6 +586,9 @@ aside {
 
 [data-filter=priority] {
   background: #FFD1B2; }
+
+body.tags .solution-cell {
+  display: none; }
 
 .anchor-target {
   display: block;
@@ -605,6 +658,10 @@ aside {
       color: black;
       text-decoration: none;
       border-bottom-style: solid; }
+  .puzzle-metas .meta-wrapper:after {
+    content: " / "; }
+  .puzzle-metas .meta-wrapper:last-child:after {
+    content: ""; }
 
 .solution-field {
   font-family: Inconsolata, monospace; }
@@ -678,6 +735,27 @@ aside {
   .tag-list .level2 {
     margin-left: 1em; }
 
+.puzzles .tag-list .tag {
+  display: none; }
+
+.puzzles .tag-list .alerted {
+  display: block; }
+
+.puzzles .tag-lists.show-all .tag {
+  display: block; }
+
+.show-all-tags {
+  border: 1px solid #ccc;
+  color: #555;
+  text-transform: uppercase;
+  font-size: .8rem; }
+
+aside .buttons .btn, aside .buttons button {
+  display: block;
+  margin-bottom: 1em;
+  text-align: left;
+  width: 100%; }
+
 .scope-header {
   font-size: 1rem;
   margin-bottom: .5em;
@@ -748,6 +826,25 @@ body.add[data-step='scraping'] .working {
 body.add.trippy {
   background: transparent url("https://media.giphy.com/media/l378z9JqBTfYDrXUI/source.gif") no-repeat;
   background-size: cover; }
+
+.created {
+  font-size: .8rem;
+  color: #444;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: .5em;
+  display: block; }
+
+.puzzleLink {
+  display: block;
+  padding: .6em 1em;
+  border: 1px solid #aaa;
+  border-bottom-width: 4px;
+  border-radius: 4px;
+  font-size: 1.2em;
+  font-weight: bold; }
+  .puzzleLink:hover {
+    background: #f7f7f7; }
 
 .member-table td {
   padding: .5rem; }

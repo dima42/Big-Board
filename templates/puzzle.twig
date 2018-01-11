@@ -1,12 +1,12 @@
 {% extends 'two-col.twig' %}
 
 {% block filters %}
-    {% from 'macros.twig' import avatar %}
+    {% from 'macros.twig' import solver %}
     <div class="nav-section">
         <h4>Wrangler</h4>
         {% for meta in puzzles_metas %}
             {% if meta.Wrangler %}
-            {{ avatar(meta.Wrangler) }}
+            {{ solver(meta.Wrangler) }}
             {% endif %}
         {% else %}
         {% endfor %}
@@ -17,7 +17,7 @@
         <h4>Solvers</h4>
 
         {% for member in members %}
-            {{ avatar(member) }}
+            {{ solver(member) }}
         {% else %}
             No one :(
         {% endfor %}
@@ -52,14 +52,16 @@
                 {% if loop.first %}
                 Part of
                 {% endif %}
+                <span class="meta-wrapper">
                 <a class="" href='/puzzle/{{ meta.Id }}'>{{ meta.Title }}</a>
+                </span>
             {% endfor %}
         </div>
 
         <ul class="nav nav-fill puzzle-links mb-3">
-            <li class="nav-item"><a class="nav-link link-puzzle" href='{{ puzzle.url }}'>Puzzle</a></li>
-            <li class="nav-item"><a class="nav-link link-drive" href='{{ puzzle.getSpreadsheetURL() }}'>Sheet</a></li>
-            <li class="nav-item"><a class="nav-link link-slack" href='{{ puzzle.getSlackURL() }}'>Slack</a></li>
+            <li class="nav-item"><a class="nav-link link-puzzle" target="_blank" href='{{ puzzle.url }}'>Puzzle</a></li>
+            <li class="nav-item"><a class="nav-link link-drive" target="_blank" href='{{ puzzle.getSpreadsheetURL() }}'>Sheet</a></li>
+            <li class="nav-item"><a class="nav-link link-slack" target="_blank" href='{{ puzzle.getSlackURL() }}'>Slack</a></li>
         </ul>
     </div>
 
@@ -77,7 +79,7 @@
         <div class="input-group">
             <span class="input-group-addon">Status</span>
             <select id="statusSelect" class="form-control" name="status">
-                {% for status in statuses %}
+                {% for status in statuses if (status != "solved" or puzzle.solution != "") %}
                     <option {% if status == puzzle.status %}selected{% endif %} value="{{ status }}">{{ status|capitalize }}</option>
                 {% endfor %}
             </select>
@@ -101,7 +103,7 @@
                 <textarea type="text" class="form-control" name="body" rows="2"></textarea>
             </div>
             <div class="col-sm-3">
-                <button class="btn btn-dark" type="submit">Post this note</button>
+                <button class="btn btn-dark" type="submit">Post note</button>
             </div>
         </div>
     </form>
@@ -137,6 +139,7 @@
 {% endblock %}
 
 {% block aside %}
+    <section class="tag-lists {% if not tag_alerts|length %}show-all{% endif %}">
     {% for scope_name, scope_tags in scopes %}
     <h5 class="scope-header"><i class="icon-tags"></i> {{ scope_name }}</h5>
     <div class="tag-list mb-3">
@@ -145,10 +148,18 @@
         {% endfor %}
     </div>
     {% endfor %}
+    {% if tag_alerts|length %}
+    <div class="buttons">
+        <a class="btn btn-light show-all-tags" href="/puzzle/{{ puzzle.id }}/edit">Show all <i class="icon-tags"></i> tags</a>
+    </div>
+    {% endif %}
+    </section>
 
-    <div class="mb-3">
+    {% block edit_button %}
+    <div class="buttons">
         <a class="btn btn-light border border-dark" href="/puzzle/{{ puzzle.id }}/edit"><i class="icon-edit"></i> Edit this puzzle</a>
     </div>
+    {% endblock %}
 {% endblock %}
 
 {% block latest_news %}{% endblock %}
@@ -172,6 +183,11 @@ $(function() {
                 link.toggleClass('alerted');
             }
         });
+    });
+
+    $('.show-all-tags').click(function(e) {
+        e.preventDefault();
+        $('.tag-lists').toggleClass('show-all');
     });
 
     {% if is_meta %}

@@ -180,10 +180,7 @@ $this->respond('GET', '/puzzle_scrape', function ($request, $response) {
 
 $this->with('/news', function () {
 		$this->respond('GET', '/?', function ($request) {
-				return displayNews("all");
-			});
-		$this->respond('GET', '/[:filter]/?', function ($request) {
-				return displayNews($request->filter);
+				return displayNews();
 			});
 		$this->respond('POST', '/add/?', function ($request) {
 				return postNews($request->body);
@@ -248,16 +245,54 @@ function pollDrive() {
 }
 
 function displayTest($response) {
-	$has_avatars = MemberQuery::create()
-		->filterBySlackId(null, Criteria::NOT_EQUAL)
-		->find();
+	$channel_response = ['text' => 'Sorry, there is a problem.'];
+	$channel_id       = "C8MAX1F6J";
 
-	foreach ($has_avatars as $member) {
-		$s = scrapeAvatar($member);
-		preprint($member->getFullName()." ".$s['ok']);
+	$tag = TagQuery::create()
+		->filterBySlackChannelId($channel_id)
+		->findOne();
+
+	$puzzleQuery = PuzzleQuery::create()
+		->filterByStatus('solved', Criteria::NOT_EQUAL)
+		->joinWithTagAlert()
+		->where('TagAlert.tag_id = '.$tag->getId());
+
+	if ($puzzleQuery->count() == 0) {
+		$channel_response = [
+			"text"          => "There are no unsolved puzzles tagged with *".$tag->getTitle()."*.",
+			"response_type" => "in_channel",
+		];
+	} else {
+		$all_puzzles = array_map(function ($puzzle) {
+				return $puzzle->getSlackAttachmentSmall();
+			}, iterator_to_array($puzzleQuery->find()));
+
+		$channel_response = [
+			'link_names'    => true,
+			"response_type" => "in_channel",
+			"attachments"   => $all_puzzles,
+		];
 	}
 
+	preprint($channel_response);
 	return;
+
+	// $slugify = new Slugify(['regexp' => '/[^a-z0-9._-]+/']);
+
+	// echo "slug:";
+	// echo substr($slugify->slugify("grrrr"), 0, 19);
+	// return;
+
+	// $has_avatars = MemberQuery::create()
+	// 	->filterBySlackId(null, Criteria::NOT_EQUAL)
+	// 	->find();
+
+	// foreach ($has_avatars as $member) {
+	// 	$s = scrapeAvatar($member);
+	// 	preprint($member->getFullName()." ".$s['ok']);
+	// }
+
+	// return;
 
 	// $puzzles = PuzzleQuery::create()
 	//  ->find();
@@ -284,7 +319,7 @@ function allPuzzles($orderBy = 'Title', $orderHow = 'asc', $response) {
 	$puzzles = PuzzleQuery::create()
 		->orderBy($orderBy, $orderHow)
 		->orderByTitle($orderHow)
-		->select(['Id', 'Title', 'Url', 'SpreadsheetId', 'Solution', 'Status', 'SlackChannelId'])
+		->select(['Id', 'Title', 'Url', 'SpreadsheetId', 'Solution', 'Status', 'SlackChannelId', 'SolverCount'])
 		->find()
 		->toArray();
 
@@ -507,25 +542,29 @@ function editPuzzle($puzzle_id, $request) {
 		->filterByID($puzzle_id)
 		->findOne();
 
+	$wrangler_id = ($request->wrangler != "")?$request->wrangler:null;
+
 	$puzzle->setTitle($request->title);
 	$puzzle->setStatus($request->status);
 	$puzzle->setSpreadsheetId($request->spreadsheet_id);
 	$puzzle->setSlackChannel($request->slack_channel);
-	$puzzle->setWranglerId($request->wrangler);
+	$puzzle->setWranglerId($wrangler_id);
 	$puzzle->save();
 
-	// Remove all parents, even myself if I'm a meta
+	// Remove all parents, even myself, if I'm a meta
 	$oldParents = PuzzlePuzzleQuery::create()
 		->filterByPuzzleId($puzzle_id)
 		->find();
 	$oldParents->delete();
 
 	// Assign parents
-	foreach ($request->metas as $meta_id) {
-		$meta = PuzzleQuery::create()
-			->filterById($meta_id)
-			->findOne();
-		$puzzle->addParent($meta);
+	if ($request->metas) {
+		foreach ($request->metas as $meta_id) {
+			$meta = PuzzleQuery::create()
+				->filterById($meta_id)
+				->findOne();
+			$puzzle->addParent($meta);
+		}
 	}
 
 	// Add self as parent if it's a meta
@@ -582,6 +621,8 @@ function changePuzzleStatus($puzzle_id, $request) {
 			":bell:",
 			"StatusBot"
 		);
+	} elseif ($newStatus == 'solved') {
+		$puzzle->removeMembers();
 	}
 
 	$alert = "Changed status.";
@@ -675,11 +716,19 @@ function addPuzzle($request, $response) {
 	$existingSlacks = array();
 	$newPuzzles     = array();
 
+	# Valid Slack channel name characters, taken from https://gist.github.com/gswalden/27ac96e497c3aa1f3230
+	# Slack now supports some non-Latin characters, but we should be able to do without.
+	$slugify = new Slugify(['regexp' => '/[^a-z0-9._-]+/']);
+
 	foreach ($request->newPuzzles as $puzzleKey => $puzzleContent) {
-		$puzzleId = "puzzleGroup".$puzzleKey;
+		$puzzleId   = "puzzleGroup".$puzzleKey;
+		$puzzle_url = $puzzleContent['url'];
+		if (!preg_match("/\:\/\//", $puzzle_url)) {
+			$puzzle_url = "http://".$puzzle_url;
+		}
 
 		$puzzleURLExists = PuzzleQuery::create()
-			->filterByURL($puzzleContent['url'])
+			->filterByURL($puzzle_url)
 			->findOne();
 		$puzzleTitleExists = PuzzleQuery::create()
 			->filterByTitle($puzzleContent['title'])
@@ -699,14 +748,15 @@ function addPuzzle($request, $response) {
 		}
 
 		if (!$puzzleURLExists && !$puzzleTitleExists && !$slackNameExists) {
-			$slack_channel_name = "ρ_".$puzzleContent['slack'];
+			$slack_channel_slug = substr($slugify->slugify($puzzleContent['slack']), 0, 19);
+			$slack_channel_name = "ρ_".$slack_channel_slug;
 			$newChannelID       = createNewSlackChannel($slack_channel_name);
 
 			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
 
 			$newPuzzle = new Puzzle();
 			$newPuzzle->setTitle($puzzleContent['title']);
-			$newPuzzle->setUrl($puzzleContent['url']);
+			$newPuzzle->setUrl($puzzle_url);
 			$newPuzzle->setSpreadsheetId($spreadsheet_id);
 			$newPuzzle->setSlackChannel($slack_channel_name);
 			$newPuzzle->setSlackChannelId($newChannelID);
@@ -714,6 +764,7 @@ function addPuzzle($request, $response) {
 			$newPuzzle->save();
 
 			$meta_id = $puzzleContent['meta'];
+			$meta    = null;
 
 			if ($meta_id == 0) {
 				// it's a meta, so set Parent to itself
@@ -738,8 +789,14 @@ function addPuzzle($request, $response) {
 			$news_text = "was added.";
 			addNews($news_text, 'open', $newPuzzle);
 
+			$tobybot      = new Bot();
+			$instructions = getTobyBotInstructions();
+
 			// POST TO SLACK CHANNEL
 			postToChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), ":hatching_chick:", "NewPuzzleBot", $newPuzzle->getSlackChannel());
+			postToChannel('*Puzzle channel commands that I answer to:*', $instructions, ":robot_face:", "HelperBot", $newPuzzle->getSlackChannel());
+
+			// POST TO #general
 			postToGeneral('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentMedium(), ":hatching_chick:", "NewPuzzleBot");
 		}
 	}
@@ -883,7 +940,9 @@ function alertTag($request, $response, $puzzle_id) {
 		$ta->setTag($tag);
 		$ta->save();
 
-		postToSlack("*".$puzzle->getTitle()."* has been tagged `".strtoupper($tag->getTitle())."`", $puzzle->getSlackAttachmentMedium(), ":label:", "TagBot", $tag->getSlackChannelId());
+		error_log("tagging ".$tag->getTitle());
+
+		postToSlack("*".$puzzle->getTitle()."* is tagged `".strtoupper($tag->getTitle())."`.", $puzzle->getSlackAttachmentMedium(), ":label:", ucfirst($tag->getTitle())." Bot", $tag->getSlackChannelId());
 
 		$json = [
 			'ok' => 1
@@ -908,7 +967,7 @@ function displayRoster() {
 		->joinWith('PuzzleMember')
 		->orderBy('Title')
 		->groupBy('Title', 'Id')
-		->select(['Id', 'Title'])
+		->select(['Id', 'Title', 'Status'])
 		->find();
 
 	render('roster.twig', 'roster', array(
@@ -999,25 +1058,24 @@ function assignSlackId($slack_id) {
 	redirect('/member/'.$member->getId(), $message);
 }
 
-function displayNews($filter = "all") {
-	$news = NewsQuery::create()
+function displayNews() {
+	$important = NewsQuery::create()
 		->leftJoinWith('News.Member')
 		->leftJoinWith('News.Puzzle')
-		->orderByCreatedAt('desc');
+		->orderByCreatedAt('desc')
+		->filterByNewsType('important')
+		->find();
 
-	if ($filter == "important") {
-		$news->filterByNewsType('important')
-		     ->find();
-	} elseif ($filter == "puzzles") {
-		$news->where('puzzle_id is not null')
-		     ->find();
-	} else {
-		$news->find();
-	}
+	$updates = NewsQuery::create()
+		->leftJoinWith('News.Member')
+		->leftJoinWith('News.Puzzle')
+		->orderByCreatedAt('desc')
+		->filterByNewsType('important', Criteria::NOT_EQUAL)
+		->find();
 
 	render('news.twig', 'news', array(
-			'filter'  => $filter,
-			'updates' => $news,
+			'important' => $important,
+			'updates'   => $updates,
 		));
 }
 
@@ -1055,7 +1113,7 @@ function archiveNews($update_id) {
 		->filterByID($update_id)
 		->delete();
 
-	$alert = "Update archived.";
+	$alert = "News update has been archived.";
 	redirect('/news/', $alert);
 }
 

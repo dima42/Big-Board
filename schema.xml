@@ -18,6 +18,11 @@
             <parameter name="foreign_table" value="note" />
             <parameter name="expression" value="COUNT(id)" />
         </behavior>
+        <behavior name="aggregate_column" id="solver_count">
+            <parameter name="name" value="solver_count" />
+            <parameter name="foreign_table" value="solver" />
+            <parameter name="expression" value="COUNT(member_id)" />
+        </behavior>
         <unique>
             <unique-column name="title" />
         </unique>
@@ -72,7 +77,7 @@
         <column name="slack_id" type="varchar" size="24" required="false" />
         <column name="slack_handle" type="varchar" size="48" required="false" />
         <column name="strengths" type="varchar" size="128" required="false" />
-        <column name="avatar" type="varchar" size="128" required="false" />
+        <column name="avatar" type="varchar" size="200" required="false" />
         <column name="phone_number" type="varchar" size="24" required="false" />
         <column name="location" type="varchar" size="24" required="false" valueSet="campus,offsite" />
         <unique>
@@ -113,7 +118,7 @@
         <foreign-key foreignTable="member" phpName="Member" refPhpName="News" onDelete="SETNULL">
             <reference local="member_id" foreign="id"/>
         </foreign-key>
-        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="News" onDelete="SETNULL">
+        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="News" onDelete="CASCADE">
             <reference local="puzzle_id" foreign="id"/>
         </foreign-key>
         <behavior name="timestampable" />

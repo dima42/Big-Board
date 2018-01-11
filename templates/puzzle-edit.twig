@@ -19,7 +19,7 @@
         <div class="row">
             <legend class="col-form-legend col-sm-3">Status</legend>
             <div class="col-sm-9">
-                {% for status in statuses %}
+                {% for status in statuses if (status != "solved" or puzzle.solution != "") %}
                 <div class="form-check">
                   <label class="form-check-label">
                     <input class="form-check-input" type="radio" name="status" id="status-{{ status }}" {% if status == puzzle.status %}checked{% endif %} value="{{ status }}">
@@ -92,8 +92,10 @@
 </form>
 {% endblock %}
 
+{% block edit_button %}{% endblock %}
+
 {% block aside_bottom %}
-<div class="mb-3">
+<div class="buttons">
     <form action="/puzzle/{{ puzzle.id }}/delete" data-behavior="confirm-delete" method="post">
         <button type="submit" class="btn border border-danger text-danger" href=""><i class="icon-archive"></i> Archive puzzle</button>
     </form>

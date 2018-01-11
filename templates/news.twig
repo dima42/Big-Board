@@ -1,61 +1,42 @@
 {% extends 'two-col.twig' %}
 
 {% block filters %}
-<h4 class="nav-header">Filter by</h4>
+<h4 class="nav-header">Jump to</h4>
 <ul class="nav nav-pills flex-column" data-filter-list>
     <li class="nav-item">
-        <a data-toggle="tab" class="nav-link" id="all-tab" href="/news">All</a>
+        <a data-toggle="tab" class="nav-link" href="#news">News</a>
     </li>
     <li class="nav-item">
-        <a data-toggle="tab" data-filter-by="important" class="nav-link" id="important-tab" href="/news/important">Important</a>
-    </li>
-    <li class="nav-item">
-        <a data-toggle="tab" data-filter-by="puzzle" class="nav-link" id="puzzles-tab" href="/news/puzzles">Puzzles</a>
+        <a data-toggle="tab" class="nav-link" href="#status-updates">Puzzles</a>
     </li>
 </ul>
 {% endblock %}
 
 {% block content %}
-<h1>Latest news</h1>
+{% from 'macros.twig' import news_entry %}
 
-<div class="news-list">
-{% for update in updates %}
-<div class="row news-row" data-filter="{{ update.getNewsFilter() }}">
-    <div class="col-sm-3">
-        <small class="entry-by">{{ update.member.fullName|default("TobyBot") }}</small>
-        <small class="entry-when">
-            {% set difference = date(now).diff(date(update.createdAt)) %}
-            {% if difference.days >= 2 %}
-                {{ difference.days }} days ago
-            {% else %}
-                {{ difference.format('%H:%I') }} ago
-            {% endif %}
-        </small>
-    </div>
-    <div class="col-sm-1">
-        <i class="icon-{{ update.newsType }}"></i>
-    </div>
-    <div class="col-sm-8 entry-body">
-        {% if update.puzzle %}
-            <a href="/puzzle/{{ update.puzzle.id }}">{{ update.puzzle.title }}</a><br>
-        {% endif %}
-        {{ update.content|markdown }}
-        <form action="/news/{{ update.id }}/delete" class="delete-entry" method="post">
-            <button type="submit" class="close">
-                <span>&times;</span>
-            </button>
-        </form>
-    </div>
-</div>
-{% endfor %}
-</div>
+<section class="news mb-5">
+<h2>News</h2>
+    <span class="anchor-target" id="news"></span>
+    {% for news in important %}
+    {{ news_entry(news) }}
+    {% endfor %}
+</section>
+
+<section class="news mb-3">
+    <h2>Status updates</h2>
+    <span class="anchor-target" id="status-updates"></span>
+    {% for update in updates %}
+    {{ news_entry(update) }}
+    {% endfor %}
+</section>
 {% endblock %}
 
 {% block aside %}
-<h4>Add an update</h4>
+<h4>Post news</h4>
 <form class="new-update-form mb-4" action="/news/add" method="post">
     <textarea type="text" class="form-control mb-2" name="body" rows="4"></textarea>
-    <button class="btn btn-primary" type="submit">Post important update</button>
+    <button class="btn btn-dark" type="submit">Submit this news</button>
 </form>
 {% endblock %}
 

@@ -21,6 +21,7 @@ CREATE TABLE `puzzle`
     `slack_channel_id` VARCHAR(24),
     `wrangler_id` INTEGER,
     `post_count` INTEGER,
+    `solver_count` INTEGER,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`id`),
@@ -120,7 +121,7 @@ CREATE TABLE `member`
     `slack_id` VARCHAR(24),
     `slack_handle` VARCHAR(48),
     `strengths` VARCHAR(128),
-    `avatar` VARCHAR(128),
+    `avatar` VARCHAR(200),
     `phone_number` VARCHAR(24),
     `location` VARCHAR(24),
     PRIMARY KEY (`id`),
@@ -199,7 +200,7 @@ CREATE TABLE `news`
     CONSTRAINT `news_fk_937852`
         FOREIGN KEY (`puzzle_id`)
         REFERENCES `puzzle` (`id`)
-        ON DELETE SET NULL
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -235,6 +236,7 @@ CREATE TABLE `puzzle_archive`
     `slack_channel_id` VARCHAR(24),
     `wrangler_id` INTEGER,
     `post_count` INTEGER,
+    `solver_count` INTEGER,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     `archived_at` DATETIME,

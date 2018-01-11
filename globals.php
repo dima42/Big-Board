@@ -12,9 +12,6 @@ use DebugBar\StandardDebugBar;
 
 session_start();
 
-// ALERT
-$_SESSION['alert'] = "";
-
 // DEBUG
 Global $DEBUG;
 $DEBUG = false;
@@ -34,6 +31,21 @@ function preprint($arr) {
 	print_r($arr);
 	echo "</pre>";
 }
+
+// ERROR HANDLING
+
+$sentry_settings = ['environment' => 'production'];
+if ($DEBUG) {
+	$sentry_settings['environment'] = 'development';
+}
+$sentryClient  = new Raven_Client(getenv('SENTRY_CONFIG'), $sentry_settings);
+$error_handler = new Raven_ErrorHandler($sentryClient);
+$error_handler->registerExceptionHandler();
+$error_handler->registerErrorHandler();
+$error_handler->registerShutdownFunction();
+
+// ALERT
+$_SESSION['alert'] = "";
 
 // STATUSES
 

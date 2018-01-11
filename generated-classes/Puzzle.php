@@ -80,11 +80,9 @@ class Puzzle extends BasePuzzle {
 			$alert = $this->getTitle()." is solved! Great work, team! 🎓";
 
 			// REMOVE MEMBERS
-			PuzzleMemberQuery::create()
-				->filterByPuzzle($this)
-				->delete();
+			$this->removeMembers();
 
-			// POST UPDATE
+			// POST NEWS UPDATE
 			$news_text = "`".$this->getSolution()."`";
 			addNews($news_text, $newStatus, $this);
 
@@ -99,6 +97,12 @@ class Puzzle extends BasePuzzle {
 		$this->save();
 
 		return $alert;
+	}
+
+	public function removeMembers() {
+		PuzzleMemberQuery::create()
+			->filterByPuzzle($this)
+			->delete();
 	}
 
 	// LAST MOD

@@ -3,8 +3,9 @@
     <thead>
         <tr>
             <th></th>
+            <th class="icon-th"><i class="icon-solvers"></i></th>
             <th>Puzzle</th>
-            <th>Solution <a href="#" class="copy-solutions" title="Copy solutions" data-tooltip><i class="icon-copy"></i></a></th>
+            <th class="solution-cell">Solution <a href="#" class="copy-solutions" title="Copy solutions" data-tooltip><i class="icon-copy"></i></a></th>
             <th></th>
             <th></th>
             <th></th>
@@ -16,7 +17,7 @@
 </table>
 {% endmacro puzzle_table %}
 
-{% macro member_table(id = 0, title = "Not active") %}
+{% macro member_table(id = 0, title = "Not active", status) %}
 <section class="pt-2">
     <span class="anchor-target" id="puzzle-{{ id }}"></span>
     <h2>
@@ -25,6 +26,7 @@
         {% else %}
             {{ title }}
         {% endif %}
+        <i class="icon-{{ status }}"></i>
     </h2>
     <table id="table-{{ id }}" class="table member-table" data-title="{{ title }}">
         <tbody>
@@ -33,9 +35,39 @@
 </section>
 {% endmacro member_table %}
 
-{% macro avatar(member) %}
-<a href="/member/{{ member.id }}" class="solver" style="background-image:url({{ member.avatar }});">
+{% macro solver(member) %}
+<a href="/member/{{ member.id }}" class="solver member.location" style="background-image:url({{ member.avatar }});">
     <span class="solver-name">{{ member.fullName }}</span>
-    <i class="location icon-{{ member.location }}"></i>
 </a>
+{% endmacro %}
+
+{% macro news_entry(update) %}
+<div class="row news-row" data-filter="{{ update.getNewsFilter() }}">
+    <div class="col-sm-3">
+        <small class="entry-by">{{ update.member.fullName|default("TobyBot") }}</small>
+        <small class="entry-when">
+            {% set difference = date(now).diff(date(update.createdAt)) %}
+            {% if difference.days >= 2 %}
+                {{ difference.days }} days ago
+            {% else %}
+                {{ difference.format('%H:%I') }} ago
+            {% endif %}
+        </small>
+    </div>
+    <div class="col-sm-1">
+        <i class="icon-{{ update.newsType }}"></i>
+    </div>
+    <div class="col-sm-8 entry-body">
+        {% if update.puzzle %}
+            <a href="/puzzle/{{ update.puzzle.id }}">{{ update.puzzle.title }}</a><br>
+        {% endif %}
+        {{ update.content|markdown }}
+        <form action="/news/{{ update.id }}/delete" class="delete-entry" method="post">
+            <button type="submit" class="close">
+                <span>&times;</span>
+            </button>
+        </form>
+    </div>
+</div>
+
 {% endmacro %}

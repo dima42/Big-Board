@@ -54,7 +54,8 @@
 
     <ul>
         <li>List the <a href="/bymeta">puzzles by meta</a></li>
-        <li>See the <a href="/roster">roster of our team</a></li>
+        <li><a href="/tags">Show all tags</a> and the unsovled puzzles attached to each.</li>
+        <li>See the <a href="/roster">roster of our team</a> and what puzzles they're working on</li>
         <li>Read all the <a href="/news">latest news</a></li>
         <li><a href="/add">Add puzzles</a></li>
     </ul>
@@ -72,13 +73,14 @@
         <li>Add a note</li>
         <li>Change status</li>
         <li>Add a solution</li>
+        <li>Tag it</li>
         <li>Edit any of the puzzle's metadata</li>
         <li>Join the puzzle's roster</li>
         <li>(If it's a meta) See list of associated puzzles</li>
     </ul>
 
     <p>
-        On the right rail of of each puzzle page you'll find the 3 external links that come with each puzzle:
+        Undeneath the puzzle title, you'll find the 3 external links that come with each puzzle:
     </p>
 
     <ul>
@@ -91,6 +93,7 @@
         You'll also see a list of solvers working on that puzzle. Here you can join the roster, or leave if you're already a member.
     </p>
 </section>
+{#
 <section class="mb-5">
     <span id="adding" class="anchor-target"></span>
 
@@ -117,7 +120,7 @@
         <li>Create the Slack channel.</li>
     </ul>
 
-    <p><b>Using Link Grabber</b></p>
+     <p><b>Using Link Grabber</b></p>
 
     <p>If you find yourself on the puzzle site where there are a lot of new puzzles to copy over, you can use the <a href="https://chrome.google.com/webstore/detail/link-grabber/caodelkhipncidmoebgbbeemedohcdma/related?hl=en-US">Link Grabber</a> tool to scrape the page more efficiently. Steps:</p>
 
@@ -128,6 +131,7 @@
         <li>Paste the list in the box on <a href="/add">/add</a>.</li>
     </ol>
 </section>
+#}
 
 <section class="mb-5">
     <span id="slack" class="anchor-target"></span>
@@ -143,19 +147,24 @@
         <li>When someone joins a puzzle, an alert is posted in that puzzle's channel, and that person is invited to that channel.</li>
         <li>When a news update is posted, that news is posted in <code>#general</code></li>
     </ul>
-    <p>And here are the things you can do in Slack. In any channel, you can:</p>
+    <p><b>In any channel, you can:</b></p>
     <ul>
         <li>Type <code>/board</code> to see a list of unsolved puzzles.</li>
         <li>Type <code>/board [open | stuck | priority]</code> to see a list of puzzles with that status.</li>
         <li>Type <code>/board [text]</code> to search for puzzle titles with that text.</li>
     </ul>
-    <p>And in any puzzle channel, you can:</p>
+    <p><b>In any <i>puzzle</i> channel, you can:</b></p>
     <ul>
         <li>Type <code>/info</code> to get all the meta-links and list of members for a puzzle.</li>
         <li>Type <code>/note</code> to see the list of notes.</li>
         <li>Type <code>/note [text]</code> to add a note with that text.</li>
         <li>Type <code>/solve [solution]</code> to enter a puzzle's solution.</li>
         <li>Type <code>/workon</code> to join a puzzle. If you are already a member of a puzzle, this will forcefully un-join you from it.</li>
+        <li>Type <code>/tobybot</code> to get this list of commands.</li>
+    </ul>
+    <p><b>In any <i>tag</i> channel, you can:</b></p>
+    <ul>
+        <li>Type <code>/tagged</code> to get all the puzzles tagged with that tag.</li>
     </ul>
 </section>
 

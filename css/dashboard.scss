@@ -11,81 +11,7 @@
 @import 'scss/icons';
 @import 'scss/screen-reader';
 
-@mixin icon($name) {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: #FF6600;
-    @extend .fas;
-    @extend .fa-fw;
-    @extend %fa-#{$name};
-}
-
-.icon-open {
-    @include icon('circle-notch');
-}
-
-.icon-stuck {
-    @include icon('question');
-}
-
-.icon-priority {
-    @include icon('exclamation');
-}
-
-.icon-solved {
-    @include icon('flag-checkered');
-    color: #444;
-}
-
-.icon-edit {
-    @include icon('pencil-alt');
-    color: #111111;
-}
-
-.icon-archive {
-    @include icon('archive');
-    color: #DC3545;
-}
-
-.icon-x {
-    @include icon('window-close');
-    color: #444;
-}
-
-.icon-tag {
-    @include icon('tag');
-    color: #444;
-}
-
-.icon-tags {
-    @include icon('tags');
-    color: #444;
-}
-
-.icon-campus {
-    @include icon('university');
-    color: #666;
-}
-
-.icon-remote {
-    @include icon('home');
-    color: #666;
-}
-
-.icon-join {
-    @include icon('user-plus');
-    color: #666;
-}
-
-.icon-copy {
-    @include icon('clipboard');
-    color: #666;
-}
-
-.icon-offsite {
-    @include icon('external-link-alt');
-    color: #999;
-}
+@import 'icons';
 
 $monospace: Inconsolata, monospace;
 
@@ -200,56 +126,72 @@ a {
         padding: 0 1rem .5rem;
         margin-bottom: .5rem;
     }
+}
 
-    .solver {
-        display: block;
-        background:#fff;
-        border-radius: 4px;
-        width: 100%;
-        height: 70px;
-        border: 1px solid #ccc;
-        margin-bottom: .9em;
-        position: relative;
-        background-size: auto 100%;
-        background-position: center left;
-        background-repeat: no-repeat;
-        padding: .5em .5em .5em 80px;
-        line-height: 1.3;
+.solver {
+    display: block;
+    background:#fff;
+    border-radius: 4px;
+    width: 100%;
+    border: 1px solid #ccc;
+    margin-bottom: .9em;
+    position: relative;
+    background-size: 30px 30px;
+    background-position: center left;
+    background-repeat: no-repeat;
+    font-size: .8em;
+    padding: .5em;
+    padding-left: 40px;
+    line-height: 1.3;
+    border-right: 5px solid #993333;
 
-        &:hover {
-            background-color: #f7f7f7;
-        }
-
-        img {
-            border-radius: 4px 4px 0 0;
-            width: 100%;
-        }
-
-        .location {
-            position: absolute;
-            left: -9px;
-            top: -9px;
-            background:black;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            color: white;
-
-            &::before {
-                display: block;
-                margin-top: 3px;
-            }
-        }
+    &.remote {
+        border-right-color: #666;
     }
 
-    .solver-name {
-        font-size: 1em;
+    &:hover {
+        background-color: #f7f7f7;
     }
 
-    .profile-photo {
+    img {
+        border-radius: 4px 4px 0 0;
         width: 100%;
     }
 }
+
+@media (min-width: 860px) {
+    .solver {
+        background-size: 40px 40px;
+        padding-left: 50px;
+        font-size: .9em;
+    }
+}
+
+
+@media (min-width: 1000px) {
+    .solver {
+        background-size: auto 100%;
+        padding-left: 60px;
+        height: 50px;
+    }
+}
+
+@media (min-width: 1140px) {
+    .solver {
+        font-size: 1em;
+        height: 70px;
+        padding-left: 80px;
+    }
+ }
+
+.solver-name {
+    font-size: 1em;
+}
+
+.profile-photo {
+    width: 100%;
+}
+
 
 // PROGRESS
 
@@ -283,10 +225,18 @@ a {
 // ASIDE
 
 aside {
-    /*border-left: 1px solid #eee;*/
-
     small {
         display: block;
+    }
+
+    .important-info {
+        font-family: $monospace;
+        font-size: .8em;
+    }
+
+    .now {
+        color: #888;
+        font-size: 10px;
     }
 }
 
@@ -326,7 +276,7 @@ aside {
     }
 }
 
-.solution {
+td.solution-cell {
     font-family: $monospace;
 }
 
@@ -367,6 +317,10 @@ aside {
         margin: 0;
     }
 
+    .icon-th {
+        text-align: center;
+    }
+
     tbody a {
         display: block;
 
@@ -385,6 +339,13 @@ aside {
         vertical-align: middle;
         background: none;
     }
+
+    .member-count {
+        font-weight: bold;
+        font-size: .75rem;
+        text-align: center;
+        line-height: 1.7;
+    }
 }
 
 
@@ -399,6 +360,12 @@ aside {
 
 [data-filter=priority] {
     background:$priority;
+}
+
+body.tags {
+    .solution-cell {
+        display: none;
+    }
 }
 
 // DEEP LINKS (/bymeta and /about)
@@ -495,6 +462,18 @@ aside {
             color: black;
             text-decoration: none;
             border-bottom-style: solid;
+        }
+    }
+
+    .meta-wrapper {
+        &:after {
+            content: " / ";
+        }
+
+        &:last-child {
+            &:after {
+                content: "";
+            }
         }
     }
 }
@@ -626,6 +605,43 @@ aside {
     }
 }
 
+.puzzles {
+    .tag-list {
+        .tag {
+            display: none;
+        }
+
+        .alerted {
+            display: block;
+        }
+    }
+
+    .tag-lists.show-all {
+        .tag {
+            display: block;
+        }
+    }
+}
+
+.show-all-tags {
+    // background:#eee;
+    border: 1px solid #ccc;
+    color: #555;
+    text-transform: uppercase;
+    font-size: .8rem;
+}
+
+aside {
+    .buttons {
+        .btn, button {
+            display: block;
+            margin-bottom: 1em;
+            text-align: left;
+            width: 100%;
+        }
+    }
+}
+
 .scope-header {
     font-size: 1rem;
     margin-bottom: .5em;
@@ -752,6 +768,29 @@ body.add {
     }
 }
 
+.created {
+    font-size: .8rem;
+    color: #444;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: .5em;
+    display: block;
+}
+
+.puzzleLink {
+    display: block;
+    padding: .6em 1em;
+    border: 1px solid #aaa;
+    border-bottom-width: 4px;
+    border-radius: 4px;
+    font-size: 1.2em;
+    font-weight: bold;
+
+    &:hover {
+        background:#f7f7f7;
+    }
+}
+
 // ROSTER
 
 .member-table {
@@ -802,6 +841,10 @@ body.member {
     &[data-filter=important] {
         background:lighten(yellow, 30%);
     }
+}
+
+.news {
+
 }
 
 // ABOUT
