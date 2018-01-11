@@ -213,7 +213,7 @@ class Bot {
 			];
 		} else {
 			$status = $puzzle->getStatus();
-			$text   = "*".$puzzle->getTitle()."* is :".$puzzle->getStatus().": ".strtoupper($status);
+			$text   = "*".$puzzle->getTitle()."* is :".$puzzle->getStatus().": `".strtoupper($status)."`";
 			if ($status == "solved") {
 				$text .= ": `".$puzzle->getSolution()."`";
 			}
@@ -338,25 +338,5 @@ class Bot {
 		}
 
 		return $channel_response;
-	}
-
-	private function nutrimatic($request, $response) {
-		$query   = $request->text;
-		$channel = $request->channel_name;
-		exec("php nutrimatic.php '".$query."' ".$channel." > /dev/null &");
-		return [
-			"text"          => "Nutrimatic request received. :thinking_face: Working on it…",
-			"response_type" => "in_channel",
-		];
-	}
-
-	private function qat($request, $response) {
-		$query   = $request->text;
-		$channel = $request->channel_name;
-		exec("php qat.php '".$query."' ".$channel." > /dev/null &");
-		return [
-			"text"          => "Qat request received. :thinking_face: Working on it…",
-			"response_type" => "in_channel",
-		];
 	}
 }
