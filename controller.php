@@ -234,89 +234,41 @@ function scrapeAvatars() {
 function pollDrive() {
 	Global $pal_drive;
 
-	$current_puzzles = array();
-	$all_files       = $pal_drive->files->listFiles([
+	$mostRecentUpdate = PuzzleQuery::create()
+		->orderByUpdatedAt('desc')
+		->select('sheet_mod_date')
+		->findOne();
+
+	$mruDateTime = date("c", strtotime($mostRecentUpdate));
+
+	$all_files = $pal_drive->files->listFiles([
 			"maxResults" => 200,
-			"q"          => "'".getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID')."' in parents and trashed != true and modifiedDate > '2018-01-10T02:14:51.708Z'"
+			"q"          => "'".getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID')."' in parents and trashed != true and modifiedDate > '".$mruDateTime."'",
 		]);
-	echo "<pre>";
-	foreach ($all_files["items"] as $k => $v) {
-		echo $v['title'];
-		echo " - ";
-		echo $v['createdDate'];
-		echo " - ";
-		echo $v['id'];
-		echo "\n";
-		// $current_puzzles[$v["id"]][0] = $v["lastModifyingUserName"];
-		// $current_puzzles[$v["id"]][1] = $v["modifiedDate"];
+
+	foreach ($all_files["items"] as $k => $sheetData) {
+		$sheetData['modifiedDate'];
+
+		$p = PuzzleQuery::create()
+			->findOneBySpreadsheetId($sheetData['id']);
+
+		if ($p) {
+			$p->setSheetModDate($sheetData['modifiedDate']);
+			$p->save();
+		}
 	}
-	echo "</pre>";
+
 	return;
 }
 
 function displayTest($response) {
-	$channel_response = ['text' => 'Sorry, there is a problem.'];
-	$channel_id       = "C8MAX1F6J";
+	$newPuzzle = new Puzzle();
+	$newPuzzle->setTitle("test".rand(100, 999));
+	$newPuzzle->setUrl("y");
+	$newPuzzle->setStatus('open');
+	$newPuzzle->save();
 
-	$tag = TagQuery::create()
-		->filterBySlackChannelId($channel_id)
-		->findOne();
-
-	$puzzleQuery = PuzzleQuery::create()
-		->filterByStatus('solved', Criteria::NOT_EQUAL)
-		->joinWithTagAlert()
-		->where('TagAlert.tag_id = '.$tag->getId());
-
-	if ($puzzleQuery->count() == 0) {
-		$channel_response = [
-			"text"          => "There are no unsolved puzzles tagged with *".$tag->getTitle()."*.",
-			"response_type" => "in_channel",
-		];
-	} else {
-		$all_puzzles = array_map(function ($puzzle) {
-				return $puzzle->getSlackAttachmentSmall();
-			}, iterator_to_array($puzzleQuery->find()));
-
-		$channel_response = [
-			'link_names'    => true,
-			"response_type" => "in_channel",
-			"attachments"   => $all_puzzles,
-		];
-	}
-
-	preprint($channel_response);
 	return;
-
-	// $slugify = new Slugify(['regexp' => '/[^a-z0-9._-]+/']);
-
-	// echo "slug:";
-	// echo substr($slugify->slugify("grrrr"), 0, 19);
-	// return;
-
-	// $has_avatars = MemberQuery::create()
-	// 	->filterBySlackId(null, Criteria::NOT_EQUAL)
-	// 	->find();
-
-	// foreach ($has_avatars as $member) {
-	// 	$s = scrapeAvatar($member);
-	// 	preprint($member->getFullName()." ".$s['ok']);
-	// }
-
-	// return;
-
-	// $puzzles = PuzzleQuery::create()
-	//  ->find();
-
-	// foreach ($puzzles as $puzzle) {
-	// 	if ($puzzle->getCreatedAt()) {
-	// 		preprint($puzzle->getCreatedAt());
-	// 	} else {
-	// 		$puzzle->setCreatedAt("2017-".rand(01, 12)."-".rand(01, 28)." ".rand(01, 24).":".rand(01, 60).":".rand(01, 60));
-	// 		$puzzle->save();
-	// 		preprint($puzzle->getCreatedAt());
-	// 	}
-	// }
-	// return;
 
 	render('test.twig', '', array(
 			// 'content' => $result,
