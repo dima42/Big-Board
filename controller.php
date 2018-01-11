@@ -226,11 +226,43 @@ function scrapeAvatars() {
 }
 
 function displayTest($response) {
-	$slugify = new Slugify(['regexp' => '/[^a-z0-9._-]+/']);
+	$channel_response = ['text' => 'Sorry, there is a problem.'];
+	$channel_id       = "C8MAX1F6J";
 
-	echo "slug:";
-	echo substr($slugify->slugify("grrrr"), 0, 19);
+	$tag = TagQuery::create()
+		->filterBySlackChannelId($channel_id)
+		->findOne();
+
+	$puzzleQuery = PuzzleQuery::create()
+		->filterByStatus('solved', Criteria::NOT_EQUAL)
+		->joinWithTagAlert()
+		->where('TagAlert.tag_id = '.$tag->getId());
+
+	if ($puzzleQuery->count() == 0) {
+		$channel_response = [
+			"text"          => "There are no unsolved puzzles tagged with *".$tag->getTitle()."*.",
+			"response_type" => "in_channel",
+		];
+	} else {
+		$all_puzzles = array_map(function ($puzzle) {
+				return $puzzle->getSlackAttachmentSmall();
+			}, iterator_to_array($puzzleQuery->find()));
+
+		$channel_response = [
+			'link_names'    => true,
+			"response_type" => "in_channel",
+			"attachments"   => $all_puzzles,
+		];
+	}
+
+	preprint($channel_response);
 	return;
+
+	// $slugify = new Slugify(['regexp' => '/[^a-z0-9._-]+/']);
+
+	// echo "slug:";
+	// echo substr($slugify->slugify("grrrr"), 0, 19);
+	// return;
 
 	// $has_avatars = MemberQuery::create()
 	// 	->filterBySlackId(null, Criteria::NOT_EQUAL)

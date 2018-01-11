@@ -326,8 +326,6 @@ class Bot {
 		$body             = trim($request->text);
 		$slack_user_id    = $request->user_id;
 
-		debug("Body: ".$body);
-
 		$puzzle = PuzzleQuery::create()
 			->filterBySlackChannelId($channel_id)
 			->findOne();
@@ -346,7 +344,6 @@ class Bot {
 					"response_type" => "in_channel",
 				];
 			} else {
-
 				$all_notes = array_map(function ($note) {
 						return [
 							"pretext" => $note->getAuthor()->getNameForSlack()." wrote:",
@@ -370,6 +367,49 @@ class Bot {
 			$channel_response = [
 				"text"          => "Got it. I posted your note to *".$puzzle->getTitle()."*.",
 				"response_type" => "in_channel",
+			];
+		}
+
+		return $channel_response;
+	}
+
+	private function tagged($request, $response) {
+		$channel_response = ['text' => 'Sorry, there is a problem.'];
+		$channel_id       = $request->channel_id;
+
+		$tag = TagQuery::create()
+			->filterBySlackChannelId($channel_id)
+			->findOne();
+
+		// If there's no body, send back all puzzles with this tag.
+		if ($tag) {
+			$puzzleQuery = PuzzleQuery::create()
+				->filterByStatus('solved', Criteria::NOT_EQUAL)
+				->joinWithTagAlert()
+				->where('TagAlert.tag_id = '.$tag->getId());
+
+			$puzzleCount = $puzzleQuery->count();
+
+			if ($puzzleCount == 0) {
+				$channel_response = [
+					"text"          => "There are no unsolved puzzles tagged with *".$tag->getTitle()."*.",
+					"response_type" => "in_channel",
+				];
+			} else {
+				$all_puzzles = array_map(function ($puzzle) {
+						return $puzzle->getSlackAttachmentSmall();
+					}, iterator_to_array($puzzleQuery->find()));
+
+				$channel_response = [
+					'link_names'    => true,
+					'text'          => $puzzleCount." puzzles tagged `".strtoupper($tag->getTitle())."`",
+					"response_type" => "in_channel",
+					"attachments"   => $all_puzzles,
+				];
+			}
+		} else {
+			$channel_response = [
+				"text" => "`".$request->command."` can only be used inside a tag channel.",
 			];
 		}
 
