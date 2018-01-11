@@ -225,10 +225,18 @@ a {
 // ASIDE
 
 aside {
-    /*border-left: 1px solid #eee;*/
-
     small {
         display: block;
+    }
+
+    .important-info {
+        font-family: $monospace;
+        font-size: .8em;
+    }
+
+    .now {
+        color: #888;
+        font-size: 10px;
     }
 }
 

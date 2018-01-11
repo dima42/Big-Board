@@ -20,14 +20,12 @@
 
     {% block aside_bottom %}{% endblock %}
 
-    <p>
-    <small>
+    <div class="important-info">
     {% for line in sidebarInfo %}
         {{ line }}<br>
     {% endfor %}
-    {{ now }}
-    </small>
-    </p>
+    <span class="now">{{ now }}</span>
+    </div>
 
     {% block aside_footer %}{% endblock %}
 </aside>
