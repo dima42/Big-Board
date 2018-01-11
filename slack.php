@@ -175,6 +175,7 @@ class Bot {
 
 		$channel_response = [
 			'link_names'  => true,
+			'text'        => "*Tobybot commands that work within a puzzle channel:*",
 			"attachments" => $attachments,
 		];
 
