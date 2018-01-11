@@ -239,6 +239,8 @@ function pollDrive() {
 		->select('sheet_mod_date')
 		->findOne();
 
+	preprint("Most recent update: ".$mostRecentUpdate);
+
 	$mruDateTime = date("c", strtotime($mostRecentUpdate));
 
 	$all_files = $pal_drive->files->listFiles([
@@ -253,6 +255,7 @@ function pollDrive() {
 			->findOneBySpreadsheetId($sheetData['id']);
 
 		if ($p) {
+			preprint("-> ".$p->getTitle());
 			$p->setSheetModDate($sheetData['modifiedDate']);
 			$p->save();
 		}
