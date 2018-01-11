@@ -456,6 +456,18 @@ body.tags {
             border-bottom-style: solid;
         }
     }
+
+    .meta-wrapper {
+        &:after {
+            content: " / ";
+        }
+
+        &:last-child {
+            &:after {
+                content: "";
+            }
+        }
+    }
 }
 
 .solution-field {

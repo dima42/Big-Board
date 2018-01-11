@@ -52,7 +52,9 @@
                 {% if loop.first %}
                 Part of
                 {% endif %}
+                <span class="meta-wrapper">
                 <a class="" href='/puzzle/{{ meta.Id }}'>{{ meta.Title }}</a>
+                </span>
             {% endfor %}
         </div>
 

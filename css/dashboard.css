@@ -652,6 +652,10 @@ body.tags .solution-cell {
       color: black;
       text-decoration: none;
       border-bottom-style: solid; }
+  .puzzle-metas .meta-wrapper:after {
+    content: " / "; }
+  .puzzle-metas .meta-wrapper:last-child:after {
+    content: ""; }
 
 .solution-field {
   font-family: Inconsolata, monospace; }
