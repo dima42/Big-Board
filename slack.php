@@ -150,6 +150,33 @@ class Bot {
 		return $response->json($payload);
 	}
 
+	private function tobybot($request, $response) {
+		$toby_notes = [
+			"`/info` gets all links and solvers on the puzzle.",
+			"`/note` gets all of the puzzle's notes.",
+			"`/note [text]` adds a note with that text.",
+			"`/solve [text]` sets that text as the solution to the puzzle.",
+			"`/workon` automatically attaches you to a puzzle. If you are working on a different puzzle, this will forcefully detach you from it.",
+		];
+
+		$attachments = array_map(function ($note) {
+				return [
+					"text"      => $note,
+					"mrkdwn_in" => ['text'],
+					"color"     => "good",
+				];
+			}, $toby_notes);
+
+		$channel_response = [
+			'link_names'    => true,
+			"response_type" => "in_channel",
+			"text"          => "Tobybot commands that work within a puzzle channel:",
+			"attachments"   => $attachments,
+		];
+
+		return $channel_response;
+	}
+
 	private function avatar($request, $response) {
 		scrapeAvatar($this->member);
 		$channel_response = [
