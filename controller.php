@@ -713,6 +713,7 @@ function addPuzzle($request, $response) {
 			$newPuzzle->save();
 
 			$meta_id = $puzzleContent['meta'];
+			$meta    = null;
 
 			if ($meta_id == 0) {
 				// it's a meta, so set Parent to itself
