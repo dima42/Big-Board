@@ -2,6 +2,6 @@ Options +FollowSymLinks
 RewriteEngine On
 
 # The request isn't for a file ending with one of these extensions
-RewriteCond %{REQUEST_URI} !\.(css|js|jpe?g|gid|html|png|mst|woff|woff2|ttf)$ [NC]
+RewriteCond %{REQUEST_URI} !\.(css|js|jpe?g|gid|html|png|ico|mst|woff|woff2|ttf)$ [NC]
 
 RewriteRule ^(.*)$ index.php [NC,L]
