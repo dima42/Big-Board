@@ -10,6 +10,7 @@
         <column name="slack_channel" type="varchar" size="48" required="false" />
         <column name="slack_channel_id" type="varchar" size="24" required="false" />
         <column name="wrangler_id" type="integer" required="false" />
+        <column name="sheet_mod_date" type="timestamp" required="false" />
         <foreign-key foreignTable="member" phpName="Wrangler" refPhpName="WrangledPuzzle" onDelete="SETNULL">
             <reference local="wrangler_id" foreign="id"/>
         </foreign-key>

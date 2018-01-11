@@ -148,6 +148,13 @@ abstract class Puzzle implements ActiveRecordInterface
     protected $wrangler_id;
 
     /**
+     * The value for the sheet_mod_date field.
+     *
+     * @var        DateTime
+     */
+    protected $sheet_mod_date;
+
+    /**
      * The value for the post_count field.
      *
      * @var        int
@@ -643,6 +650,26 @@ abstract class Puzzle implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [sheet_mod_date] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getSheetModDate($format = NULL)
+    {
+        if ($format === null) {
+            return $this->sheet_mod_date;
+        } else {
+            return $this->sheet_mod_date instanceof \DateTimeInterface ? $this->sheet_mod_date->format($format) : null;
+        }
+    }
+
+    /**
      * Get the [post_count] column value.
      *
      * @return int
@@ -887,6 +914,26 @@ abstract class Puzzle implements ActiveRecordInterface
     } // setWranglerId()
 
     /**
+     * Sets the value of [sheet_mod_date] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Puzzle The current object (for fluent API support)
+     */
+    public function setSheetModDate($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->sheet_mod_date !== null || $dt !== null) {
+            if ($this->sheet_mod_date === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->sheet_mod_date->format("Y-m-d H:i:s.u")) {
+                $this->sheet_mod_date = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[PuzzleTableMap::COL_SHEET_MOD_DATE] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setSheetModDate()
+
+    /**
      * Set the value of [post_count] column.
      *
      * @param int $v new value
@@ -1029,19 +1076,25 @@ abstract class Puzzle implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : PuzzleTableMap::translateFieldName('WranglerId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->wrangler_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : PuzzleTableMap::translateFieldName('PostCount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : PuzzleTableMap::translateFieldName('SheetModDate', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->sheet_mod_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : PuzzleTableMap::translateFieldName('PostCount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_count = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : PuzzleTableMap::translateFieldName('SolverCount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : PuzzleTableMap::translateFieldName('SolverCount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->solver_count = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : PuzzleTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : PuzzleTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : PuzzleTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : PuzzleTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1054,7 +1107,7 @@ abstract class Puzzle implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 13; // 13 = PuzzleTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = PuzzleTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Puzzle'), 0, $e);
@@ -1555,6 +1608,9 @@ abstract class Puzzle implements ActiveRecordInterface
         if ($this->isColumnModified(PuzzleTableMap::COL_WRANGLER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'wrangler_id';
         }
+        if ($this->isColumnModified(PuzzleTableMap::COL_SHEET_MOD_DATE)) {
+            $modifiedColumns[':p' . $index++]  = 'sheet_mod_date';
+        }
         if ($this->isColumnModified(PuzzleTableMap::COL_POST_COUNT)) {
             $modifiedColumns[':p' . $index++]  = 'post_count';
         }
@@ -1604,6 +1660,9 @@ abstract class Puzzle implements ActiveRecordInterface
                         break;
                     case 'wrangler_id':
                         $stmt->bindValue($identifier, $this->wrangler_id, PDO::PARAM_INT);
+                        break;
+                    case 'sheet_mod_date':
+                        $stmt->bindValue($identifier, $this->sheet_mod_date ? $this->sheet_mod_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'post_count':
                         $stmt->bindValue($identifier, $this->post_count, PDO::PARAM_INT);
@@ -1707,15 +1766,18 @@ abstract class Puzzle implements ActiveRecordInterface
                 return $this->getWranglerId();
                 break;
             case 9:
-                return $this->getPostCount();
+                return $this->getSheetModDate();
                 break;
             case 10:
-                return $this->getSolverCount();
+                return $this->getPostCount();
                 break;
             case 11:
-                return $this->getCreatedAt();
+                return $this->getSolverCount();
                 break;
             case 12:
+                return $this->getCreatedAt();
+                break;
+            case 13:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1757,17 +1819,22 @@ abstract class Puzzle implements ActiveRecordInterface
             $keys[6] => $this->getSlackChannel(),
             $keys[7] => $this->getSlackChannelId(),
             $keys[8] => $this->getWranglerId(),
-            $keys[9] => $this->getPostCount(),
-            $keys[10] => $this->getSolverCount(),
-            $keys[11] => $this->getCreatedAt(),
-            $keys[12] => $this->getUpdatedAt(),
+            $keys[9] => $this->getSheetModDate(),
+            $keys[10] => $this->getPostCount(),
+            $keys[11] => $this->getSolverCount(),
+            $keys[12] => $this->getCreatedAt(),
+            $keys[13] => $this->getUpdatedAt(),
         );
-        if ($result[$keys[11]] instanceof \DateTimeInterface) {
-            $result[$keys[11]] = $result[$keys[11]]->format('c');
+        if ($result[$keys[9]] instanceof \DateTimeInterface) {
+            $result[$keys[9]] = $result[$keys[9]]->format('c');
         }
 
         if ($result[$keys[12]] instanceof \DateTimeInterface) {
             $result[$keys[12]] = $result[$keys[12]]->format('c');
+        }
+
+        if ($result[$keys[13]] instanceof \DateTimeInterface) {
+            $result[$keys[13]] = $result[$keys[13]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1943,15 +2010,18 @@ abstract class Puzzle implements ActiveRecordInterface
                 $this->setWranglerId($value);
                 break;
             case 9:
-                $this->setPostCount($value);
+                $this->setSheetModDate($value);
                 break;
             case 10:
-                $this->setSolverCount($value);
+                $this->setPostCount($value);
                 break;
             case 11:
-                $this->setCreatedAt($value);
+                $this->setSolverCount($value);
                 break;
             case 12:
+                $this->setCreatedAt($value);
+                break;
+            case 13:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -2008,16 +2078,19 @@ abstract class Puzzle implements ActiveRecordInterface
             $this->setWranglerId($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setPostCount($arr[$keys[9]]);
+            $this->setSheetModDate($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setSolverCount($arr[$keys[10]]);
+            $this->setPostCount($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setCreatedAt($arr[$keys[11]]);
+            $this->setSolverCount($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setUpdatedAt($arr[$keys[12]]);
+            $this->setCreatedAt($arr[$keys[12]]);
+        }
+        if (array_key_exists($keys[13], $arr)) {
+            $this->setUpdatedAt($arr[$keys[13]]);
         }
     }
 
@@ -2086,6 +2159,9 @@ abstract class Puzzle implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PuzzleTableMap::COL_WRANGLER_ID)) {
             $criteria->add(PuzzleTableMap::COL_WRANGLER_ID, $this->wrangler_id);
+        }
+        if ($this->isColumnModified(PuzzleTableMap::COL_SHEET_MOD_DATE)) {
+            $criteria->add(PuzzleTableMap::COL_SHEET_MOD_DATE, $this->sheet_mod_date);
         }
         if ($this->isColumnModified(PuzzleTableMap::COL_POST_COUNT)) {
             $criteria->add(PuzzleTableMap::COL_POST_COUNT, $this->post_count);
@@ -2193,6 +2269,7 @@ abstract class Puzzle implements ActiveRecordInterface
         $copyObj->setSlackChannel($this->getSlackChannel());
         $copyObj->setSlackChannelId($this->getSlackChannelId());
         $copyObj->setWranglerId($this->getWranglerId());
+        $copyObj->setSheetModDate($this->getSheetModDate());
         $copyObj->setPostCount($this->getPostCount());
         $copyObj->setSolverCount($this->getSolverCount());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -4810,6 +4887,7 @@ abstract class Puzzle implements ActiveRecordInterface
         $this->slack_channel = null;
         $this->slack_channel_id = null;
         $this->wrangler_id = null;
+        $this->sheet_mod_date = null;
         $this->post_count = null;
         $this->solver_count = null;
         $this->created_at = null;
@@ -5067,6 +5145,7 @@ abstract class Puzzle implements ActiveRecordInterface
         $this->setSlackChannel($archive->getSlackChannel());
         $this->setSlackChannelId($archive->getSlackChannelId());
         $this->setWranglerId($archive->getWranglerId());
+        $this->setSheetModDate($archive->getSheetModDate());
         $this->setPostCount($archive->getPostCount());
         $this->setSolverCount($archive->getSolverCount());
         $this->setCreatedAt($archive->getCreatedAt());
