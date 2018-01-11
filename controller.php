@@ -528,7 +528,7 @@ function editPuzzle($puzzle_id, $request) {
 	$puzzle->setTitle($request->title);
 	$puzzle->setStatus($request->status);
 	$puzzle->setSpreadsheetId($request->spreadsheet_id);
-	$puzzle->setSlackChannel($request->slack_channel);
+	$puzzle->setSlackChannelID($request->slack_channel_id);
 	$puzzle->setWranglerId($wrangler_id);
 	$puzzle->save();
 

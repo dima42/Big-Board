@@ -30,7 +30,7 @@ class Puzzle extends BasePuzzle {
 	}
 
 	public function getSlackURL() {
-		return "http://".getenv('SLACK_DOMAIN').".slack.com/messages/".$this->getSlackChannel();
+		return "http://".getenv('SLACK_DOMAIN').".slack.com/messages/".$this->getSlackChannelID();
 	}
 
 	public function getSpreadsheetURL() {
