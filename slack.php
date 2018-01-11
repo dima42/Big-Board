@@ -150,22 +150,27 @@ class Bot {
 		return $response->json($payload);
 	}
 
-	private function tobybot($request, $response) {
-		$toby_notes = [
+	private function getInstructions() {
+		$instructions = [
 			"`/info` gets all links and solvers on the puzzle.",
 			"`/note` gets all of the puzzle's notes.",
 			"`/note [text]` adds a note with that text.",
 			"`/solve [text]` sets that text as the solution to the puzzle.",
 			"`/workon` automatically attaches you to a puzzle. If you are working on a different puzzle, this will forcefully detach you from it.",
+			"`!help` gets you a random puzzle-solving tip.",
 		];
 
-		$attachments = array_map(function ($note) {
+		return array_map(function ($note) {
 				return [
 					"text"      => $note,
 					"mrkdwn_in" => ['text'],
 					"color"     => "good",
 				];
-			}, $toby_notes);
+			}, $instructions);
+	}
+
+	private function tobybot($request, $response) {
+		$attachments = $this->getInstructions();
 
 		$channel_response = [
 			'link_names'    => true,
