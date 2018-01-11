@@ -120,6 +120,26 @@ function scrapeAvatar($member) {
 
 // SLACK BOT
 
+function getTobyBotInstructions() {
+	$instructions = [
+		"`/info` returns all links and solvers on this puzzle.",
+		"`/note` returns all of this puzzle's notes.",
+		"`/note [text]` adds [text] as a note on this puzzle.",
+		"`/solve [text]` sets [text] as the solution to the puzzle.",
+		"`/workon` automatically attaches you to this puzzle. (If you are working on a different puzzle, this will forcefully detach you from it.)",
+		"`!help` gets you a random puzzle-solving tip.",
+		"`/tobybot` returns this list (in a private message to you).",
+	];
+
+	return array_map(function ($note) {
+			return [
+				"text"      => $note,
+				"mrkdwn_in" => ['text'],
+				"color"     => "#225DAA",
+			];
+		}, $instructions);
+}
+
 class Bot {
 	public function __call($name, $args) {
 		$request  = $args[0];
@@ -150,33 +170,12 @@ class Bot {
 		return $response->json($payload);
 	}
 
-	private function getInstructions() {
-		$instructions = [
-			"`/info` gets all links and solvers on the puzzle.",
-			"`/note` gets all of the puzzle's notes.",
-			"`/note [text]` adds a note with that text.",
-			"`/solve [text]` sets that text as the solution to the puzzle.",
-			"`/workon` automatically attaches you to a puzzle. If you are working on a different puzzle, this will forcefully detach you from it.",
-			"`!help` gets you a random puzzle-solving tip.",
-		];
-
-		return array_map(function ($note) {
-				return [
-					"text"      => $note,
-					"mrkdwn_in" => ['text'],
-					"color"     => "good",
-				];
-			}, $instructions);
-	}
-
 	private function tobybot($request, $response) {
-		$attachments = $this->getInstructions();
+		$attachments = getTobyBotInstructions();
 
 		$channel_response = [
-			'link_names'    => true,
-			"response_type" => "in_channel",
-			"text"          => "Tobybot commands that work within a puzzle channel:",
-			"attachments"   => $attachments,
+			'link_names'  => true,
+			"attachments" => $attachments,
 		];
 
 		return $channel_response;

@@ -737,8 +737,14 @@ function addPuzzle($request, $response) {
 			$news_text = "was added.";
 			addNews($news_text, 'open', $newPuzzle);
 
+			$tobybot      = new Bot();
+			$instructions = getTobyBotInstructions();
+
 			// POST TO SLACK CHANNEL
 			postToChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), ":hatching_chick:", "NewPuzzleBot", $newPuzzle->getSlackChannel());
+			postToChannel('*Puzzle channel commands that I answer to:*', $instructions, ":robot_face:", "TobyBot", $newPuzzle->getSlackChannel());
+
+			// POST TO #general
 			postToGeneral('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentMedium(), ":hatching_chick:", "NewPuzzleBot");
 		}
 	}
