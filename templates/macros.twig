@@ -35,10 +35,9 @@
 </section>
 {% endmacro member_table %}
 
-{% macro avatar(member) %}
-<a href="/member/{{ member.id }}" class="solver" style="background-image:url({{ member.avatar }});">
+{% macro solver(member) %}
+<a href="/member/{{ member.id }}" class="solver member.location" style="background-image:url({{ member.avatar }});">
     <span class="solver-name">{{ member.fullName }}</span>
-    <i class="location icon-{{ member.location }}"></i>
 </a>
 {% endmacro %}
 

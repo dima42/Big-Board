@@ -1,12 +1,12 @@
 {% extends 'two-col.twig' %}
 
 {% block filters %}
-    {% from 'macros.twig' import avatar %}
+    {% from 'macros.twig' import solver %}
     <div class="nav-section">
         <h4>Wrangler</h4>
         {% for meta in puzzles_metas %}
             {% if meta.Wrangler %}
-            {{ avatar(meta.Wrangler) }}
+            {{ solver(meta.Wrangler) }}
             {% endif %}
         {% else %}
         {% endfor %}
@@ -17,7 +17,7 @@
         <h4>Solvers</h4>
 
         {% for member in members %}
-            {{ avatar(member) }}
+            {{ solver(member) }}
         {% else %}
             No one :(
         {% endfor %}

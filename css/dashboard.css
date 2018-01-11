@@ -333,7 +333,7 @@ readers do not read off random characters that represent icons */
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
   color: #FF6600;
-  color: #666; }
+  color: #993333; }
 
 .icon-remote {
   font-family: 'Font Awesome 5 Free';
@@ -442,41 +442,54 @@ a {
   .sidebar .nav-section {
     padding: 0 1rem .5rem;
     margin-bottom: .5rem; }
-  .sidebar .solver {
-    display: block;
-    background: #fff;
-    border-radius: 4px;
-    width: 100%;
-    height: 70px;
-    border: 1px solid #ccc;
-    margin-bottom: .9em;
-    position: relative;
-    background-size: auto 100%;
-    background-position: center left;
-    background-repeat: no-repeat;
-    padding: .5em .5em .5em 80px;
-    line-height: 1.3; }
-    .sidebar .solver:hover {
-      background-color: #f7f7f7; }
-    .sidebar .solver img {
-      border-radius: 4px 4px 0 0;
-      width: 100%; }
-    .sidebar .solver .location {
-      position: absolute;
-      left: -9px;
-      top: -9px;
-      background: black;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      color: white; }
-      .sidebar .solver .location::before {
-        display: block;
-        margin-top: 3px; }
-  .sidebar .solver-name {
-    font-size: 1em; }
-  .sidebar .profile-photo {
+
+.solver {
+  display: block;
+  background: #fff;
+  border-radius: 4px;
+  width: 100%;
+  border: 1px solid #ccc;
+  margin-bottom: .9em;
+  position: relative;
+  background-size: 30px 30px;
+  background-position: center left;
+  background-repeat: no-repeat;
+  font-size: .8em;
+  padding: .5em;
+  padding-left: 40px;
+  line-height: 1.3;
+  border-right: 5px solid #993333; }
+  .solver.remote {
+    border-right-color: #666; }
+  .solver:hover {
+    background-color: #f7f7f7; }
+  .solver img {
+    border-radius: 4px 4px 0 0;
     width: 100%; }
+
+@media (min-width: 860px) {
+  .solver {
+    background-size: 40px 40px;
+    padding-left: 50px;
+    font-size: .9em; } }
+
+@media (min-width: 1000px) {
+  .solver {
+    background-size: auto 100%;
+    padding-left: 60px;
+    height: 50px; } }
+
+@media (min-width: 1140px) {
+  .solver {
+    font-size: 1em;
+    height: 70px;
+    padding-left: 80px; } }
+
+.solver-name {
+  font-size: 1em; }
+
+.profile-photo {
+  width: 100%; }
 
 .progress {
   height: 1.2rem;

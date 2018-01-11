@@ -1,0 +1,85 @@
+@mixin icon($name) {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: #FF6600;
+    @extend .fas;
+    @extend .fa-fw;
+    @extend %fa-#{$name};
+}
+
+.icon-open {
+    @include icon('circle-notch');
+}
+
+.icon-stuck {
+    @include icon('question');
+}
+
+.icon-priority {
+    @include icon('exclamation');
+}
+
+.icon-solved {
+    @include icon('flag-checkered');
+    color: #444;
+}
+
+.icon-edit {
+    @include icon('pencil-alt');
+    color: #111111;
+}
+
+.icon-archive {
+    @include icon('archive');
+    color: #DC3545;
+}
+
+.icon-x {
+    @include icon('window-close');
+    color: #444;
+}
+
+.icon-tag {
+    @include icon('tag');
+    color: #444;
+}
+
+.icon-tags {
+    @include icon('tags');
+    color: #444;
+}
+
+.icon-campus {
+    @include icon('university');
+    color: #993333;
+}
+
+.icon-remote {
+    @include icon('home');
+    color: #666;
+}
+
+.icon-join {
+    @include icon('user-plus');
+    color: #666;
+}
+
+.icon-copy {
+    @include icon('clipboard');
+    color: #666;
+}
+
+.icon-offsite {
+    @include icon('external-link-alt');
+    color: #999;
+}
+
+.icon-solvers {
+    @include icon('users');
+    color: #666;
+}
+
+.icon-important {
+    @include icon('bullhorn');
+    color: #333;
+}
