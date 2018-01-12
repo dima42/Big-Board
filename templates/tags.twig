@@ -1,5 +1,7 @@
 {% extends 'two-col.twig' %}
 
+{% block title %}Tags{% endblock %}
+
 {% block filters %}
 {% for scope_title, scope_tags in scopes %}
     <h4 class="nav-header">{{ scope_title }}</h4>

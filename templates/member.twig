@@ -1,5 +1,7 @@
 {% extends 'two-col.twig' %}
 
+{% block title %}{{ member.fullName }}{% endblock %}
+
 {% block filters %}
     {% if member.avatar %}
         <div class="nav-section">
