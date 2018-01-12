@@ -47,7 +47,7 @@ class Member extends BaseMember {
 			return "You already joined this puzzle.";
 		}
 
-		$puzzle->postJoin($this);
+		// $puzzle->postJoin($this);
 		return "You joined ".$puzzle->getTitle().".";
 	}
 
@@ -56,7 +56,7 @@ class Member extends BaseMember {
 			->filterByMember($this)
 			->filterByPuzzle($puzzle)
 			->delete();
-		$puzzle->postLeave($this);
+		// $puzzle->postLeave($this);
 		return "You left ".$puzzle->getTitle().".";
 	}
 
