@@ -3,9 +3,18 @@
 {% block title %}By Meta{% endblock %}
 
 {% block filters %}
-<h4 class="nav-header">Jump to</h4>
+<h4 class="nav-header">Unsolved</h4>
 <ul class="nav nav-pills flex-column">
-    {% for meta in metas %}
+    {% for meta in metas if meta.Status != "solved" %}
+    <li class="nav-item">
+        <a class="nav-link" href="#meta-{{ meta.Id }}">{{ meta.Title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<h4 class="nav-header">Solved</h4>
+<ul class="nav nav-pills flex-column">
+    {% for meta in metas if meta.Status == "solved" %}
     <li class="nav-item">
         <a class="nav-link" href="#meta-{{ meta.Id }}">{{ meta.Title }}</a>
     </li>
@@ -14,33 +23,14 @@
 {% endblock %}
 
 {% block content %}
-{% from 'macros.twig' import puzzle_table %}
-{% for meta in metas %}
-<section class="puzzle-section">
-    <span class="anchor-target" id="meta-{{ meta.Id }}"></span>
-    <h2>
-        {% if meta.Id %}
-            <a href="/puzzle/{{ meta.Id }}">{{ meta.Title }}</a>
-        {% else %}
-            {{ meta.Title }}
-        {% endif %}
-    </h2>
-    {% if meta.Id != 0 %}
-    <div class="puzzle-metadata row">
-        <div class="col col-sm-6 wrangler">
-            {% if meta.Wrangler %}
-            Wrangler: <a href="/member/{{ meta.WranglerId }}">{{ meta.Wrangler }}</a>
-            {% else %}
-            <i>No assigned wrangler</i>
-            {% endif %}
-        </div>
-        <div class="col col-sm-6 add-puzzles-to-meta">
-            <a class="add-puzzles-to-meta" href="/add/{{ meta.Id }}">+ Add puzzles</a>
-        </div>
-    </div>
-    {% endif %}
-    {{ puzzle_table(meta.Id) }}
-</section>
+<h1>Unsolved metas</h1>
+{% for meta in metas if meta.Status != "solved" %}
+    {% include 'meta_section.twig' %}
+{% endfor %}
+
+<h1>Solved metas</h1>
+{% for meta in metas if meta.Status == "solved" %}
+    {% include 'meta_section.twig' %}
 {% endfor %}
 {% endblock %}
 

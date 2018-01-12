@@ -393,7 +393,7 @@ function displayAllByMeta() {
 		->where('Puzzle.id = PuzzleChild.parent_id')
 		->where('Puzzle.id = PuzzleChild.puzzle_id')
 		->orderBy('title')
-		->select(['Id', 'Title'])
+		->select(['Id', 'Title', 'Status'])
 		->withColumn('Wrangler.Id', 'WranglerId')
 		->withColumn('Wrangler.FullName', 'Wrangler')
 		->find()

@@ -1,0 +1,27 @@
+{% from 'macros.twig' import puzzle_table %}
+<section class="puzzle-section">
+    <span class="anchor-target" id="meta-{{ meta.Id }}"></span>
+    <h2>
+        {% if meta.Id %}
+            <a href="/puzzle/{{ meta.Id }}">{{ meta.Title }}</a>
+        {% else %}
+            {{ meta.Title }}
+            {{ meta.Status }}
+        {% endif %}
+    </h2>
+    {% if meta.Id != 0 %}
+    <div class="puzzle-metadata row">
+        <div class="col col-sm-6 wrangler">
+            {% if meta.Wrangler %}
+            Wrangler: <a href="/member/{{ meta.WranglerId }}">{{ meta.Wrangler }}</a>
+            {% else %}
+            <i>No assigned wrangler</i>
+            {% endif %}
+        </div>
+        <div class="col col-sm-6 add-puzzles-to-meta">
+            <a class="add-puzzles-to-meta" href="/add/{{ meta.Id }}">+ Add puzzles</a>
+        </div>
+    </div>
+    {% endif %}
+    {{ puzzle_table(meta.Id) }}
+</section>
