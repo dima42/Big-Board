@@ -48,7 +48,6 @@
 
         {% if puzzle.sheetModDate %}
         <div class="last-update">
-            {% set difference = date(now).diff(date(puzzle.sheetModDate)) %}
             Last edited
             <b>{{ puzzle.sheetModDate|time_diff }}</b>
         </div>
