@@ -46,6 +46,18 @@ $klein->respond(function () use ($klein, $pal_client, $pal_drive) {
 			$klein->skipRemaining();
 		}
 
+		// POLL GOOGLE DRIVE
+
+		$poll_time = file_get_contents('next_poll_time.txt');
+		debug("Next poll time: ".date("c", $poll_time));
+
+		if ($poll_time <= time()) {
+			debug("Polling Google Drive.");
+			pollDrive();
+			$next_poll_time = strtotime("+2 minutes", $poll_time);
+			file_put_contents('next_poll_time.txt', $next_poll_time);
+		}
+
 	});
 
 $klein->with('', 'controller.php');

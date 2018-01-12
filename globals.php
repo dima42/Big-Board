@@ -13,6 +13,7 @@ use DebugBar\StandardDebugBar;
 session_start();
 
 // DEBUG
+
 Global $DEBUG;
 $DEBUG = false;
 if ($_SERVER['HTTP_HOST'] == "localhost:8888") {

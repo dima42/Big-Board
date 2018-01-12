@@ -239,8 +239,6 @@ function pollDrive() {
 		->select('sheet_mod_date')
 		->findOne();
 
-	preprint("Most recent update: ".$mostRecentUpdate);
-
 	$mruDateTime = date("c", strtotime($mostRecentUpdate));
 
 	$all_files = $pal_drive->files->listFiles([
@@ -255,7 +253,7 @@ function pollDrive() {
 			->findOneBySpreadsheetId($sheetData['id']);
 
 		if ($p) {
-			preprint("-> ".$p->getTitle());
+			debug("UPDATED: ".$p->getTitle());
 			$p->setSheetModDate($sheetData['modifiedDate']);
 			$p->save();
 		}
@@ -265,11 +263,16 @@ function pollDrive() {
 }
 
 function displayTest($response) {
-	$newPuzzle = new Puzzle();
-	$newPuzzle->setTitle("test".rand(100, 999));
-	$newPuzzle->setUrl("y");
-	$newPuzzle->setStatus('open');
-	$newPuzzle->save();
+	$poll_time = file_get_contents('next_poll_time.txt');
+
+	preprint("Next poll time: ".date("c", $poll_time));
+	preprint("Current time: ".date("c", time()));
+
+	if ($poll_time <= time()) {
+		pollDrive();
+		$next_poll_time = strtotime("+2 minutes", $poll_time);
+		file_put_contents('next_poll_time.txt', $next_poll_time);
+	}
 
 	return;
 
