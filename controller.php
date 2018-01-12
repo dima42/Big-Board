@@ -235,7 +235,7 @@ function pollDrive() {
 	Global $pal_drive;
 
 	$mostRecentUpdate = PuzzleQuery::create()
-		->orderByUpdatedAt('desc')
+		->orderBySheetModDate('desc')
 		->select('sheet_mod_date')
 		->findOne();
 
