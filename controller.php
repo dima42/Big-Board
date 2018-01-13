@@ -27,6 +27,9 @@ $this->with('/puzzles', function () {
 		$this->respond('GET', '/bymeta', function ($request, $response) {
 				return allPuzzlesByMeta($response);
 			});
+		$this->respond('GET', '/metas', function ($request, $response) {
+				return allMetas($request, $response);
+			});
 		$this->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
 				return metaPuzzles($request->meta_id, $response);
 			});
@@ -302,6 +305,18 @@ function allPuzzlesByMeta($response) {
 		->toArray();
 
 	return $response->json($puzzles);
+}
+
+function allMetas($request, $response) {
+	$metas = PuzzleQuery::create()
+		->joinWith('PuzzleChild')
+		->where('Puzzle.id = PuzzleChild.parent_id')
+		->where('Puzzle.id = PuzzleChild.puzzle_id')
+		->select(['Id'])
+		->find()
+		->toArray();
+
+	return $response->json($metas);
 }
 
 function metaPuzzles($meta_id, $response) {

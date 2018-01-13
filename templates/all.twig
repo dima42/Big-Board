@@ -80,6 +80,12 @@
 $(function() {
     loadPuzzleData('/puzzles/all/title/asc', function() {
         $('.nav li:first-child a').click();
+
+        $.get('/puzzles/metas', {}, function(response) {
+            $.each(response, function(key, meta) {
+                $('#puzzle'+meta).addClass('meta');
+            });
+        });
     });
 
     $('[data-sort-by=title]').click(function() {

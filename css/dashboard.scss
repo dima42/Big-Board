@@ -313,6 +313,18 @@ td.solution-cell {
         }
     }
 
+    tr.meta {
+        background:#f8f8f8;
+
+        td:first-child {
+            border-left: 3px solid #444;
+        }
+
+        .title {
+            font-weight: bold;
+        }
+    }
+
     label {
         margin: 0;
     }
