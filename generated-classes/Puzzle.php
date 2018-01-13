@@ -133,7 +133,7 @@ class Puzzle extends BasePuzzle {
 		$content = [
 			":".$this ->getStatus().":",
 			'<'.$this ->getBigBoardURL().'|:boar:> ',
-			'<'.$this ->getUrl().'|:mit:>',
+			'<'.$this ->getUrl().'|:hh:>',
 			'<'.$this ->getSpreadsheetURL().'|:drive:> ',
 			'*'.$this ->getTitle().'*',
 			'<#'.$this->getSlackChannelId().'>',
@@ -149,7 +149,7 @@ class Puzzle extends BasePuzzle {
 	public function getSlackAttachmentMedium() {
 		$content = [
 			':boar: <'.$this  ->getBigBoardURL().'|Big Board> ',
-			':mit: <'.$this   ->getUrl().'|Puzzle>',
+			':hh: <'.$this    ->getUrl().'|Puzzle>',
 			':drive: <'.$this ->getSpreadsheetURL().'|Sheet> ',
 			':slack: <#'.$this->getSlackChannelId().'|'.$this->getSlackChannel().'>'
 		];
@@ -164,7 +164,7 @@ class Puzzle extends BasePuzzle {
 		// No need to include Slack channel in attachment list b/c this info can only be returned to the puzzle's Slack channel.
 		$puzzle_info = [
 			':boar: <'.$this ->getBigBoardURL().'|Big Board>',
-			':mit: <'.$this  ->getUrl().'|Puzzle page>',
+			':hh: <'.$this   ->getUrl().'|Puzzle page>',
 			':drive: <'.$this->getSpreadsheetURL().'|Google Spreadsheet>',
 		];
 
