@@ -77,35 +77,43 @@
 
 {% block scripts %}
 <script>
+function markMetas () {
+    $.get('/puzzles/metas', {}, function(response) {
+        $.each(response, function(key, meta) {
+            $('#puzzle'+meta).addClass('meta');
+        });
+    });
+}
+
 $(function() {
     loadPuzzleData('/puzzles/all/title/asc', function() {
         $('.nav li:first-child a').click();
-
-        $.get('/puzzles/metas', {}, function(response) {
-            $.each(response, function(key, meta) {
-                $('#puzzle'+meta).addClass('meta');
-            });
-        });
+        markMetas();
     });
 
     $('[data-sort-by=title]').click(function() {
         loadPuzzleData('/puzzles/all/Title/asc');
+        markMetas();
     });
 
     $('[data-sort-by=stalest]').click(function() {
         loadPuzzleData('/puzzles/all/SheetModDate/asc');
+        markMetas();
     });
 
     $('[data-sort-by=freshest]').click(function() {
         loadPuzzleData('/puzzles/all/SheetModDate/desc');
+        markMetas();
     });
 
     $('[data-sort-by=oldest]').click(function() {
         loadPuzzleData('/puzzles/all/CreatedAt/asc');
+        markMetas();
     });
 
     $('[data-sort-by=newest]').click(function() {
         loadPuzzleData('/puzzles/all/CreatedAt/desc');
+        markMetas();
     });
 
 });

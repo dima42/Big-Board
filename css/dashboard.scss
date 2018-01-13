@@ -358,20 +358,19 @@ td.solution-cell {
         text-align: center;
         line-height: 1.7;
     }
-}
 
+    tr[data-filter=solved] {
+        background:$solved;
+        opacity: .65;
+    }
 
-[data-filter=solved] {
-    background:$solved;
-    opacity: .65;
-}
+    tr[data-filter=stuck] {
+        background:$stuck;
+    }
 
-[data-filter=stuck] {
-    background:$stuck;
-}
-
-[data-filter=priority] {
-    background:$priority;
+    tr[data-filter=priority] {
+        background:$priority;
+    }
 }
 
 body.tags {
