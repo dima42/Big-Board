@@ -556,10 +556,12 @@ td.solution-cell {
   .puzzle-list tr.hover td {
     border-top: 1px solid #888 !important;
     border-bottom: 1px solid #888 !important; }
-  .puzzle-list tr.meta td:first-child {
-    border-left: 5px solid #444; }
-  .puzzle-list tr.meta .title {
-    font-weight: bold; }
+  .puzzle-list tr.meta {
+    background: #f8f8f8; }
+    .puzzle-list tr.meta td:first-child {
+      border-left: 3px solid #444; }
+    .puzzle-list tr.meta .title {
+      font-weight: bold; }
   .puzzle-list label {
     margin: 0; }
   .puzzle-list .icon-th {
