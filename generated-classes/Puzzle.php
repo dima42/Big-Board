@@ -194,20 +194,20 @@ class Puzzle extends BasePuzzle {
 
 		inviteToSlackChannel($this->getSlackChannelId(), $member->getSlackID());
 
-		if ($memberCount > 0) {
-			$this->postMembers($member->getNameForSlack()." joined *".$this->getTitle()."*. Current roster:", $channel);
-		} else {
-			postToChannel(
-				'First member of *'.$this->getTitle().'*!',
-				[[
-						'text'  => $member->getNameForSlack(),
-						'color' => 'good',
-					]],
-				":wave:",
-				"JoinBot",
-				$channel
-			);
-		}
+		// if ($memberCount > 0) {
+		// 	$this->postMembers($member->getNameForSlack()." joined *".$this->getTitle()."*. Current roster:", $channel);
+		// } else {
+		// 	postToChannel(
+		// 		'First member of *'.$this->getTitle().'*!',
+		// 		[[
+		// 				'text'  => $member->getNameForSlack(),
+		// 				'color' => 'good',
+		// 			]],
+		// 		":wave:",
+		// 		"JoinBot",
+		// 		$channel
+		// 	);
+		// }
 	}
 
 	public function postLeave($member) {

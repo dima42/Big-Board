@@ -47,7 +47,7 @@ class Member extends BaseMember {
 			return "You already joined this puzzle.";
 		}
 
-		// $puzzle->postJoin($this);
+		$puzzle->postJoin($this);
 		return "You joined ".$puzzle->getTitle().".";
 	}
 
