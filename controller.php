@@ -353,7 +353,7 @@ function allMembers($response) {
 
 function unsolvedWithTags($response) {
 	$puzzles = PuzzleQuery::create()
-		->filterByStatus('solved', Criteria::NOT_EQUAL)
+	// ->filterByStatus('solved', Criteria::NOT_EQUAL)
 		->joinWithTagAlert()
 		->find()
 		->toArray();
