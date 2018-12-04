@@ -300,6 +300,7 @@ function allPuzzles($orderBy = 'Title', $orderHow = 'asc', $response) {
 function allPuzzlesByMeta($response) {
 	$puzzles = PuzzleQuery::create()
 		->leftJoinWithPuzzleParent()
+		->orderByStatus('desc')
 		->orderByTitle()
 		->find()
 		->toArray();
@@ -376,7 +377,7 @@ function displayAll() {
 	$total_puzzle_count = PuzzleQuery::create()
 		->count();
 
-	$statusCounts   = [[], [], []];
+	$statusCounts   = [[], [], [], []];
 	$unsolved_count = 0;
 	foreach ($statusGroups as $status) {
 		$unsolved_count          = $unsolved_count+$status['StatusCount'];
@@ -407,7 +408,8 @@ function displayAllByMeta() {
 		->leftJoinWith('Wrangler')
 		->where('Puzzle.id = PuzzleChild.parent_id')
 		->where('Puzzle.id = PuzzleChild.puzzle_id')
-		->orderBy('title')
+		->orderByStatus('desc')
+		->orderByTitle()
 		->select(['Id', 'Title', 'Status'])
 		->withColumn('Wrangler.Id', 'WranglerId')
 		->withColumn('Wrangler.FullName', 'Wrangler')
@@ -454,6 +456,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	$puzzles_metas = PuzzleQuery::create()
 		->joinPuzzleChild()
 		->leftJoinWithWrangler()
+		->orderByStatus('desc')
 		->orderByTitle()
 		->withColumn('PuzzleChild.PuzzleId', 'PuzzleId')
 		->where('PuzzleChild.PuzzleId = '.$puzzle->getId())

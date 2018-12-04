@@ -21,6 +21,7 @@ class Puzzle extends BasePuzzle {
 			'stuck'    => "#FFEFE5",
 			'priority' => "#FFD1B2",
 			'solved'   => "#000000",
+            'lowpriority' => "ADD8E6"
 		];
 		return $colors[$this->getStatus()]??'green';
 	}

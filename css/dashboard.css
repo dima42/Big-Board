@@ -3,6 +3,7 @@
 .icon-open,
 .icon-stuck,
 .icon-priority,
+.icon-lowpriority,
 .icon-solved,
 .icon-edit,
 .icon-archive,
@@ -68,7 +69,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags, .icon-campus, .icon-remote, .icon-join, .icon-copy, .icon-offsite, .icon-solvers, .icon-important {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-lowpriority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags, .icon-campus, .icon-remote, .icon-join, .icon-copy, .icon-offsite, .icon-solvers, .icon-important {
   text-align: center;
   width: 1.25em; }
 
@@ -102,6 +103,7 @@
 .fa-pull-left.icon-open,
 .fa-pull-left.icon-stuck,
 .fa-pull-left.icon-priority,
+.fa-pull-left.icon-lowpriority,
 .fa-pull-left.icon-solved,
 .fa-pull-left.icon-edit,
 .fa-pull-left.icon-archive,
@@ -125,6 +127,7 @@
 .fa-pull-right.icon-open,
 .fa-pull-right.icon-stuck,
 .fa-pull-right.icon-priority,
+.fa-pull-right.icon-lowpriority,
 .fa-pull-right.icon-solved,
 .fa-pull-right.icon-edit,
 .fa-pull-right.icon-archive,
@@ -227,6 +230,9 @@ readers do not read off random characters that represent icons */
 .icon-priority:before {
   content: "\f12a"; }
 
+.icon-lowpriority:before {
+  content: "\f11a"; }
+
 .icon-offsite:before {
   content: "\f35d"; }
 
@@ -289,6 +295,11 @@ readers do not read off random characters that represent icons */
   color: #FF6600; }
 
 .icon-priority {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #FF6600; }
+
+.icon-lowpriority {
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
   color: #FF6600; }
@@ -508,6 +519,9 @@ a {
 .progress-priority {
   background-color: #FFD1B2; }
 
+.progress-lowpriority {
+  background-color: #ADD8E6; }
+
 aside small {
   display: block; }
 
@@ -589,6 +603,9 @@ td.solution-cell {
     background: #FFEFE5; }
   .puzzle-list tr[data-filter=priority] {
     background: #FFD1B2; }
+
+[data-filter=lowpriority] {
+  background: #ADD8E6; }
 
 body.tags .solution-cell {
   display: none; }
