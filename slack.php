@@ -264,10 +264,12 @@ class Bot {
 		$parameter        = $request->text;
 		$channel_response = ['text' => "Hmm, maybe ask a human for help. This computer is confused."];
 		$channel_id       = $request->channel_id;
-		$slack_user_handle    = $request->user_name;
+		$slack_user_id    = $request->user_id;
 
 		if ($parameter) {
-			$slack_user_handle = $parameter;
+            $out = "";
+			preg_match("/@\w+/mi", $parameter, $out);
+            $slack_user_id = ltrim($out[0], "@");
 		}
 
 		if (!$channel_id) {
@@ -279,7 +281,7 @@ class Bot {
 			->findOne();
 
 		$member = MemberQuery::create()
-			->filterBySlackHandle($slack_user_handle)
+			->filterBySlackId($slack_user_id)
 			->findOne();
 
 		if (!$puzzle) {

@@ -48,7 +48,7 @@ class Member extends BaseMember {
 		}
 
 		$puzzle->postJoin($this);
-		return "You joined ".$puzzle->getTitle().".";
+		return $this->getFullName()." joined ".$puzzle->getTitle().".";
 	}
 
 	public function leavePuzzle($puzzle) {
@@ -57,7 +57,7 @@ class Member extends BaseMember {
 			->filterByPuzzle($puzzle)
 			->delete();
 		// $puzzle->postLeave($this);
-		return "You left ".$puzzle->getTitle().".";
+		return $this->getFullName()." left ".$puzzle->getTitle().".";
 	}
 
 }
