@@ -264,7 +264,11 @@ class Bot {
 		$parameter        = $request->text;
 		$channel_response = ['text' => "Hmm, maybe ask a human for help. This computer is confused."];
 		$channel_id       = $request->channel_id;
-		$slack_user_id    = $request->user_id;
+		$slack_user_handle    = $request->user_name;
+
+		if ($parameter) {
+			$slack_user_handle = $parameter;
+		}
 
 		if (!$channel_id) {
 			return ['text' => "No channel specified."];
@@ -275,7 +279,7 @@ class Bot {
 			->findOne();
 
 		$member = MemberQuery::create()
-			->filterBySlackId($slack_user_id)
+			->filterBySlackHandle($slack_user_handle)
 			->findOne();
 
 		if (!$puzzle) {
@@ -283,7 +287,12 @@ class Bot {
 				"text" => "`".$request->command."` can only be used inside a puzzle channel.",
 			];
 		} else {
-			$response         = $member->joinPuzzle($puzzle);
+			$isMember = $puzzle->getMembers()->contains($member);
+			if (!$isMember) {
+				$response = $member->joinPuzzle($puzzle);
+			} else {
+				$response = $member->leavePuzzle($puzzle);
+			}
 			$channel_response = [
 				"text" => $response
 			];
