@@ -19,6 +19,7 @@ $open: #dadada;
 $stuck: #FFEFE5;
 $priority: #FFD1B2;
 $solved: #f7f7f7;
+$lowpriority: #ADD8E6;
 
 /* Move down content because we have a fixed navbar that is 3.5rem tall */
 
@@ -215,6 +216,10 @@ a {
 
 .progress-priority {
     background-color: $priority;
+}
+
+.progress-lowpriority {
+    background-color: $lowpriority;
 }
 
 // BANNER

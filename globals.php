@@ -57,10 +57,11 @@ $_SESSION['alert'] = "";
 
 Global $STATUSES;
 $STATUSES = [
-	'open'     => 'circle',
-	'stuck'    => 'question',
-	'priority' => 'exclamation',
-	'solved'   => 'flag-checkered',
+	'open'          => 'circle',
+	'stuck'         => 'question',
+	'priority'      => 'exclamation',
+	'lowpriority'   => 'circle',
+	'solved'        => 'flag-checkered',
 ];
 
 function getFAicon($status) {
@@ -114,7 +115,7 @@ function render($template, $context = "", $vars = array()) {
 		$vars['user_id'] = $_SESSION['user_id'];
 	}
 	$vars['alert']         = $_SESSION['alert_message']??null;
-	$vars['statuses']      = ['open', 'stuck', 'priority', 'solved'];
+	$vars['statuses']      = ['open', 'stuck', 'priority', 'solved', 'lowpriority'];
 	$vars['now']           = strftime('%c');
 	$vars['latestNews']    = $latestNews;
 	$vars['links']         = $links;

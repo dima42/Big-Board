@@ -207,7 +207,7 @@ class Bot {
 			$puzzleQuery->filterByStatus('solved', Criteria::NOT_EQUAL);
 			$count   = $puzzleQuery->count();
 			$pretext = $count." puzzles are unsolved:";
-		} elseif (in_array($parameter, ['open', 'stuck', 'priority', 'solved'])) {
+		} elseif (in_array($parameter, ['open', 'stuck', 'priority', 'solved', 'lowpriority'])) {
 			$puzzleQuery->filterByStatus($parameter);
 			$count   = $puzzleQuery->count();
 			$pretext = $count." puzzles marked `".strtoupper($parameter)."`:";

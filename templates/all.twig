@@ -18,6 +18,10 @@
         <a data-toggle="tab" data-filter-by="priority" class="nav-link" id="priority-tab" href="#"><i class="icon-priority"></i> Priority ({{ statusCounts.2.count|default(0) }})</a>
     </li>
     <li class="nav-item">
+        <a data-toggle="tab" data-filter-by="lowpriority" class="nav-link" id="lowpriority-tab" href="#"><i class="icon-lowpriority"></i> Low Priority ({{ statusCounts.3.count|default(0) }})</a>
+    </li>
+
+    <li class="nav-item">
         <a data-toggle="tab" class="nav-link" id="all-tab" href="#">All</a>
     </li>
 </ul>
