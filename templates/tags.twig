@@ -17,7 +17,7 @@
 
 {% block content %}
 {% from 'macros.twig' import puzzle_table %}
-<h1>All 2018 puzzles, by tag</h1>
+<h1>All puzzles, by tag</h1>
 {% for scope_title, scope_tags in scopes %}
 {% for tag in scope_tags if tag.level > 0 %}
 <section class="tag-section">
