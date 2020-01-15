@@ -122,11 +122,8 @@ function scrapeAvatar($member) {
 
 function getTobyBotInstructions() {
 	$instructions = [
-		"`/info` returns all links and solvers on this puzzle.",
-		"`/note` returns all of this puzzle's notes.",
-		"`/note [text]` adds [text] as a note on this puzzle.",
+		"`/info` returns all links on this puzzle.",
 		"`/solve [text]` sets [text] as the solution to the puzzle.",
-		"`/workon` attaches you to this puzzle. (If you are working on a different puzzle, this will forcefully detach you from it.)",
 		"`!help` gets you a random puzzle-solving tip.",
 		"`/tobybot` returns this list (in a private message to you).",
 	];
