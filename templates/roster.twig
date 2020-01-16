@@ -6,43 +6,15 @@
 <h4 class="nav-header">Order by</h4>
 <ul class="nav nav-pills flex-column" data-filter-list>
     <li class="nav-item">
-        <a data-toggle="tab" class="nav-link" id="by-puzzle-tab" href="#by-puzzle">Puzzle</a>
-    </li>
-    <li class="nav-item">
         <a data-toggle="tab" class="nav-link" id="by-alpha-tab" href="#by-alpha">Alpha</a>
     </li>
 </ul>
-
-<div class="jump-to-tabs">
-    <h4 class="nav-header">Jump to</h4>
-    <ul class="nav nav-pills flex-column">
-        {% for puzzle in puzzles %}
-        <li class="nav-item">
-            <a class="nav-link" href="#puzzle-{{ puzzle.Id }}">{{ puzzle.Title }}</a>
-        </li>
-        {% endfor %}
-        <li class="nav-item">
-            <a class="nav-link" href="#puzzle-0">Not active</a>
-        </li>
-    </ul>
-</div>
 
 {% endblock %}
 
 {% block content %}
 
 <div class="tab-content">
-    <div class="tab-pane by-puzzle" id="by-puzzle">
-
-        {% from 'macros.twig' import member_table %}
-        <h1 class="mb-3">Who’s working on what</h1>
-
-        {% for puzzle in puzzles %}
-        {{ member_table(puzzle.Id, puzzle.Title, puzzle.Status) }}
-        {% endfor %}
-
-        {{ member_table(0) }}
-    </div>
     <div class="tab-pane by-alpha" id="by-alpha">
 
         <h1 class="mb-3">Team Palindrome</h1>
@@ -61,11 +33,11 @@
 $(function() {
     $('.nav a').first().click();
 
-    $('#by-puzzle-tab').on('show.bs.tab', function(e) {
+    $('#by-alpha-tab').on('show.bs.tab', function(e) {
         $('.jump-to-tabs').show();
     });
 
-    $('#by-puzzle-tab').on('hide.bs.tab', function(e) {
+    $('#by-alpha-tab').on('hide.bs.tab', function(e) {
         $('.jump-to-tabs').hide();
     });
 
