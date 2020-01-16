@@ -257,6 +257,7 @@ class Bot {
 		return $channel_response;
 	}
 
+        // unused by ange management in 2020
 	private function workon($request, $response) {
 		$parameter        = $request->text;
 		$channel_response = ['text' => "Hmm, maybe ask a human for help. This computer is confused."];
@@ -328,6 +329,7 @@ class Bot {
 		return $channel_response;
 	}
 
+        // unused by ange management in 2020
 	private function note($request, $response) {
 		$channel_response = ['text' => 'System Error.'];
 		$channel_id       = $request->channel_id;

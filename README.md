@@ -48,8 +48,6 @@ Create two bots:
     - `/board`
     - `/solve`
     - `/info`
-    - `/workon`
-    - `/note`
     - `/connect`
 
 ## Set up Google API project
