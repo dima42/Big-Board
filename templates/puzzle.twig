@@ -25,17 +25,6 @@
         {% endfor %}
     </div>
 
-    <div class="nav-section">
-        {% if not is_member %}
-        <form class="join-leave" action="/puzzle/{{ puzzle.id }}/join" method="post">
-            <button type="submit" class="btn btn-dark">Help solve this</button>
-        </form>
-        {% else %}
-        <form class="join-leave" action="/puzzle/{{ puzzle.id }}/leave" method="post">
-            <button type="submit" class="btn btn-dark">Leave this</button>
-        </form>
-        {% endif %}
-    </div>
     {% endif %}
 {% endblock %}
 
