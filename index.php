@@ -107,7 +107,7 @@ function is_in_palindrome($pal_drive) {
 	}
 
 	// If there's a member whose googleID matches the current user's rootFolderId, then we're good.
-	$drive_user     = $pal_drive->about->get();
+	$drive_user     = $pal_drive->about->get(array('fields' => '*'));
 	$user_google_id = $drive_user["rootFolderId"];
 	$user_full_name = $drive_user["user"]["displayName"];
 
@@ -123,7 +123,7 @@ function is_in_palindrome($pal_drive) {
 	}
 
 	// If it's a new user, make sure they have access to our drive
-	$hunt_folder = new Google_DriveFile();
+	$hunt_folder = new Google_Service_Drive_DriveFile();
 	try {
 		$hunt_folder = $pal_drive->files->get(getenv('GOOGLE_DRIVE_ID'));
 		debug("userPermission.id: ".$hunt_folder["userPermission"]["id"]);
