@@ -161,10 +161,13 @@ if (!$pal_client) {
 }
 
 $shared_client = new Google_Client();
+error_log($shared_client);
 $shared_client->setAuthConfig(__DIR__ . '/' . getenv('GOOGLE_APPLICATION_CREDENTIALS'));
 $shared_client->setScopes(array("https://www.googleapis.com/auth/drive"));
 Global $shared_drive;
+error_log($shared_client);
 $shared_drive = new Google_Service_Drive($shared_client);
+error_log($shared_drive);
 
 function create_file_from_template($title) {
         Global $shared_drive;
