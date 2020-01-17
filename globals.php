@@ -161,7 +161,7 @@ if (!$pal_client) {
 }
 
 $shared_client = new Google_Client();
-$shared_client->setAuthConfig(__DIR__ . '/' . getenv(GOOGLE_APPLICATION_CREDENTIALS));
+$shared_client->setAuthConfig(__DIR__ . '/' . getenv('GOOGLE_APPLICATION_CREDENTIALS'));
 $shared_client->setScopes(array("https://www.googleapis.com/auth/drive"));
 Global $shared_drive;
 $shared_drive = new Google_Service_Drive($shared_client);
@@ -170,11 +170,11 @@ function create_file_from_template($title) {
         Global $shared_drive;
 	$file = new Google_Service_Drive_DriveFile();
         $file->setName($title);
-        $copy = $shared_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file);
+        $copy = $shared_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file, array('fields' => '*'));
         $ownerPermission = new Google_Service_Drive_Permission();
         $ownerPermission->setEmailAddress(getenv('GOOGLE_GROUP_EMAIL'));
         $ownerPermission->setType('group');
         $ownerPermission->setRole('writer');
-        $shared_drive->permissions->create($copy['id'], $ownerPermission);
+        $shared_drive->permissions->create($copy['id'], $ownerPermission, array('fields' => '*'));
         return $copy['id'];
 }
