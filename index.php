@@ -31,7 +31,7 @@ $klein->respond('GET', '/privacy', function ($request, $response) {
 	});
 
 // If user not authorized or not in palindrome do not allow them to get matched to any remaining routes
-$klein->respond(function () use ($klein, $pal_client, $pal_drive) {
+$klein->respond(function () use ($klein, $pal_client, $pal_drive, $pal_oauth) {
 		debug('');// Add a break to the output to help with debugging
 		if (!is_authorized($pal_client)) {
 			$authUrl = $pal_client->createAuthUrl();
@@ -40,8 +40,8 @@ $klein->respond(function () use ($klein, $pal_client, $pal_drive) {
 				));
 			$klein->skipRemaining();
 		}
-
-		if (!is_in_palindrome($pal_drive)) {
+		
+                if (!is_in_palindrome($pal_drive, $pal_oauth)) {
 			render('buggeroff.twig', 'buggeroff');
 			$klein->skipRemaining();
 		}
@@ -99,7 +99,7 @@ function is_authorized($pal_client) {
 	return false;
 }
 
-function is_in_palindrome($pal_drive) {
+function is_in_palindrome($pal_drive, $pal_oauth) {
 	// If 'user' is set in SESSION and 'user' is a Member, then we're good.
 	if (isset($_SESSION['user']) && is_a($_SESSION['user'], 'Member') > 0) {
 		debug('Found member in SESSION: '.$_SESSION['user']->getFullName());
@@ -107,9 +107,9 @@ function is_in_palindrome($pal_drive) {
 	}
 
 	// If there's a member whose googleID matches the current user's rootFolderId, then we're good.
-	$drive_user     = $pal_drive->about->get(array('fields' => '*'));
-	$user_google_id = $drive_user["rootFolderId"];
-	$user_full_name = $drive_user["user"]["displayName"];
+	$google_user    = $pal_oauth->userinfo->get();
+	$user_google_id = $google_user["id"];
+	$user_full_name = $google_user["name"];
 
 	$member = MemberQuery::create()
 		->filterByGoogleID($user_google_id)
@@ -126,8 +126,8 @@ function is_in_palindrome($pal_drive) {
 	$hunt_folder = new Google_Service_Drive_DriveFile();
 	try {
 		$hunt_folder = $pal_drive->files->get(getenv('GOOGLE_DRIVE_ID'));
-		debug("userPermission.id: ".$hunt_folder["userPermission"]["id"]);
-		if ($hunt_folder["userPermission"]["id"] == "me") {
+		debug("hunt_folder.id: ".$hunt_folder["id"]);
+		if (isset($hunt_folder["id"])) {
 			$member = new Member();
 			$member->setFullName($user_full_name);
 			$member->setGoogleId($user_google_id);

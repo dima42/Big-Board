@@ -146,6 +146,7 @@ function render($template, $context = "", $vars = array()) {
 
 Global $pal_client;
 Global $pal_drive;
+Global $pal_oauth;
 
 if (!$pal_client) {
 	// SET UP GOOGLE_CLIENT OBJECT
@@ -158,6 +159,7 @@ if (!$pal_client) {
 	$pal_client->setRedirectUri('http'.($DEBUG?'':'s').'://'.$_SERVER['HTTP_HOST']."/oauth");
 
 	$pal_drive = new Google_Service_Drive($pal_client);
+        $pal_oauth = new Google_Service_Oauth2($pal_client);
 }
 
 $shared_client = new Google_Client();
