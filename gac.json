@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "ange-management-beta",
+  "private_key_id": "9c2f609c098e0e5e68ce8f2c79be9624b2210578",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDRROAvFv91/Lwk\nrh5vPk7/phlv4QU2LG94mU2JWaB9qS8TwUA+domRHJDO9dJh2FeA+1+MqtOiRVmU\nHE92Gtz/PHy/3lRJglmjfMQWAWYw8+A4HAyWMEe08Q29BZtNRB3LIZtcxtbTV7KL\nSfDz1H5Bv9wdnvOptAEJAgfYXVUx+EvCej5XccOLzxwHkaK0qy7qcBGuQynutrmu\nckBeiJZ8UkHjQ3QflmcAc103kgUlP0IuTmZSA7s3Sx7e6RVap3OMJlQ0KcRhg6Hb\nBrzQmq1QPd39E8SPYeIUuMeUDfhdy1TkV91ipo5bJsQb3jepnWOQbHINsgQiaRJs\nDHsRdP/lAgMBAAECggEAB23m5rmkyj4H8MG1/+RQ5YQgSKDhPkV3uH0fFRC3k2VY\nAkzjsaG2Z0VdRm8Z2QSysW7o37OAkBBxOAuE94SjV3QTEWtKR7/N3ChX/FhLqD/1\n6upRJqXUknHVyasOgHen0bFB9NErLfoGagVcxpfVI+6QIilcP98pA601/jt/KSb+\n0LopLuI4rXH2JQIUZ1Zw4FIUN/XAGjJM2ZessBAEakRI+incykKbXjmZC96F8YxQ\n+E1q54uNlAPTTQPk8iOqGhPiULVakdHCIEJXPB+amf4+//rKsIhjXjq3jCVAcoTz\ntvQcPYvoKnx8Lz6l46E/wUmQQq2NCbhbscRnowscMQKBgQDvDtJpKrSZdoPjQ89b\nGXe9My5vn+ISHJXSe+NPVbp8sn6dZYWbdiM32b6GR88PPUjil8jdh5zPxCuW1NH5\nfNwptEr6Gr8KhWh/Uxr4tOm1ouJognX9bG9dajR3e/nsRqbs8xQwjoT2Fd9+tY/4\nRxzzViAdjCQksoDsECge/B8s2QKBgQDgGZnOUQslKySdb/pdhOXRd845I3QQ+zIy\nPeOECBtMBGVDgW30QAt9lui6YzDck2A8W4bO8E/c3wKXG4IuEpag3aaSsQr8OFp8\nkpr5MZDOYbqCehjR2Cxtqi9tBgAhJaFLps8l4CXGsP0hq3BBcdv24muItFB73qG9\nfJ1utytz7QKBgQDcVof/YNpG3GKhdR3I9MdVfrgdMHtZgDljYMbZl8WkK4ziG/Gy\noYfCcZLXB5bEkBL+rzH3ZYhWQ5R9mDjUwI3YbpHwxfgxhVcUjA+/DlifDrup4h1I\ncMqQilRDkOSBL3mpyj5gpuvMOcreahCBoWIAsvA067dgj5qeeiHQtUcyuQKBgAVz\nWfRUsEq1I+zYXmSL6PMRUOi+3gHTukLSkogRkmhk6vmbWktIi38AfqSZ6QRUaVDO\ngRbjbW3X1r5KIv5v4U4EVhrXR4ce78R75F0PQZBjfB/UTGo+McZxDzo9nR8xRR0L\n75niO8j7YQzCmLZeyJTWqProN9Trc0+iikm5Fst5AoGAcsrCnBOMJSt7wPs+eHgR\nh71KSoSZIv/W3bmum9c8dYeMgQhyM3VyfgVTmg8XZuQAAtaiA8l49XVg6J0CBiyB\nMhAtkZBqnLjd3M2rr/btCrRwW1b9n8BqJTxir8gwTb0l/iB16zahoyiAuO7R0gU0\nZ7mIPErb91nVbDrO9yiPA/Y=\n-----END PRIVATE KEY-----\n",
+  "client_email": "angemanagementbeta@ange-management-beta.iam.gserviceaccount.com",
+  "client_id": "103677160478873800164",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/angemanagementbeta%40ange-management-beta.iam.gserviceaccount.com"
+}
