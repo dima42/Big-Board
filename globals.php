@@ -151,7 +151,7 @@ if (!$pal_client) {
 	// SET UP GOOGLE_CLIENT OBJECT
 	$pal_client = new Google_Client();
 	$pal_client->setAccessType("offline");
-        $pal_client->setScopes(array("https://www.googleapis.com/auth/drive.metadata.readonly"));
+  $pal_client->setScopes(array("https://www.googleapis.com/auth/drive.metadata.readonly"));
 	$pal_client->setApplicationName(getenv('GOOGLE_APPLICATION_NAME'));
 	$pal_client->setClientId(getenv('GOOGLE_CLIENT_ID').".apps.googleusercontent.com");
 	$pal_client->setClientSecret(getenv('GOOGLE_CLIENT_SECRET'));
@@ -161,14 +161,17 @@ if (!$pal_client) {
 }
 
 $shared_client = new Google_Client();
-$shared_client->setAuthConfig(__DIR__ . '/' . getenv('GOOGLE_APPLICATION_CREDENTIALS'));
+$shared_client->useApplicationDefaultCredentials();
+$shared_client->setClientId(getenv('GOOGLE_SERVICE_ACCOUNT_CLIENT_ID');
+$shared_client->config['signing_key'] = getenv('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY');
+$shared_client->config['signing_algorithm'] = 'HS256';
 $shared_client->setScopes(array("https://www.googleapis.com/auth/drive"));
 Global $shared_drive;
 $shared_drive = new Google_Service_Drive($shared_client);
 
 function create_file_from_template($title) {
         Global $shared_drive;
-	$file = new Google_Service_Drive_DriveFile();
+				$file = new Google_Service_Drive_DriveFile();
         $file->setName($title);
         $copy = $shared_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file, array('fields' => '*'));
         $ownerPermission = new Google_Service_Drive_Permission();
