@@ -390,7 +390,6 @@ function displayAll() {
 	}
 
 	$member         = $_SESSION['user'];
-	$member_puzzles = $member->getPuzzles();
 
 	$solved_percentage = ($total_puzzle_count == 0)?0:($total_puzzle_count-$unsolved_count)/$total_puzzle_count;
 	render('all.twig', 'puzzles', array(
