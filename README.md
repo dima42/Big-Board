@@ -62,6 +62,7 @@ Create two bots:
 5. Note your Client ID and Client secret.
 6. Add the privacy policy URL (`http://your-domain/privacy`) to your [OAuth consent screen](https://console.cloud.google.com/apis/credentials).  Once your app is live, you'll need to go through the verification process [here](https://support.google.com/cloud/answer/7454865)) to get rid of the "unverified app" screen.
 7. Create a separate credential for testing.  Add `http://localhost:8888` to Authorized JavaScript origins and `http://localhost:8888` and `http://localhost:8888/oauth` to Authorized Redirect URI's for that one
+8. Also create and note an API key.
 
 ## Set up Heroku instance
 
@@ -91,8 +92,10 @@ Locally - Run mysql and create a database and a user.  host is localhost, the re
 
 **Google Drive configuration**
 
-- `GOOGLE_CLIENT_ID` - you got this while setting up gooogle credentials earlier
+- `GOOGLE_APP_ID` - the project number in the google cloud console
+- `GOOGLE_CLIENT_ID` - you got this while setting up google credentials earlier
 - `GOOGLE_CLIENT_SECRET` - same
+- `GOOGLE_DEVELOPER_KEY` - the API key you got while setting up google credentials
 - `GOOGLE_DRIVE_ID` - go to google drive for your team folder, look at the url - it's the long id string there.  Similarly for `GOOGLE_DOCS_TEMPLATE_ID`
 
 **Slack configuration**
@@ -123,7 +126,7 @@ propel sql:insert
 propel migrate --fake
 ```
 
-You can run the app locally with e.g. 
+You can run the app locally with e.g.
 
 ```
 php -S localhost:8888

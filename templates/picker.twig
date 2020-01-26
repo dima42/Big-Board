@@ -1,0 +1,47 @@
+{% extends 'base.twig' %}
+
+{% block body %}
+<script type="text/javascript">
+  var oauthToken = {{ access_token|raw }};
+
+  function onApiLoad() {
+    gapi.load('picker', onPickerApiLoad);
+  }
+
+  function onPickerApiLoad() {
+    var view = new google.picker.DocsView(google.picker.ViewId.FOLDERS);
+    view.setSelectFolderEnabled(true);
+    view.setParent('{{ googleDriveId }}')
+    var picker = new google.picker.PickerBuilder()
+        .setAppId('{{ app_id }}')
+        .setDeveloperKey('{{ developer_key }}')
+        .enableFeature(google.picker.Feature.NAV_HIDDEN)
+        .setTitle('Please select this year\'s puzzle folder to verify your membership')
+        .setOAuthToken(oauthToken.access_token)
+        .addView(view)
+        .setCallback(pickerCallback)
+        .build();
+     picker.setVisible(true);
+  }
+
+  function pickerCallback(data) {
+    if (data.action == google.picker.Action.PICKED) {
+      if (data.docs[0].id == '{{ puzzles_folder_id }}') {
+        window.location.replace("/oauth?picked=true");
+      } else {
+        alert('Incorrect folder. Please select this year\'s puzzle folder.');
+        onPickerApiLoad();
+      }
+    } else if (data.action == google.picker.Action.CANCEL) {
+      window.location.replace("/");
+    }
+  }
+</script>
+
+<nav class="col-12">
+    <div id="result"></div>
+</nav>
+
+<script type="text/javascript" src="https://apis.google.com/js/api.js?onload=onApiLoad"></script>
+
+{% endblock %}
