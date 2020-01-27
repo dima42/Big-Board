@@ -2,9 +2,6 @@
 require_once 'vendor/autoload.php';
 require_once 'generated-conf/config.php';
 require_once "slack.php";
-require_once 'google-api-php-client/src/Google_Client.php';
-require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
-require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
 
 use Aptoma\Twig\Extension\MarkdownEngine;
 use Aptoma\Twig\Extension\MarkdownExtension;
@@ -154,19 +151,44 @@ if (!$pal_client) {
 	// SET UP GOOGLE_CLIENT OBJECT
 	$pal_client = new Google_Client();
 	$pal_client->setAccessType("offline");
+  $pal_client->setScopes(array("https://www.googleapis.com/auth/drive.metadata.readonly"));
 	$pal_client->setApplicationName(getenv('GOOGLE_APPLICATION_NAME'));
 	$pal_client->setClientId(getenv('GOOGLE_CLIENT_ID').".apps.googleusercontent.com");
 	$pal_client->setClientSecret(getenv('GOOGLE_CLIENT_SECRET'));
 	$pal_client->setRedirectUri('http'.($DEBUG?'':'s').'://'.$_SERVER['HTTP_HOST']."/oauth");
 
-	$pal_drive = new Google_DriveService($pal_client);
+	$pal_drive = new Google_Service_Drive($pal_client);
 }
 
-function create_file_from_template($title) {
-	Global $pal_drive;
-	$file = new Google_DriveFile();
-	$file->setTitle($title);
-	$copy = $pal_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file);
+$shared_client = new Google_Client();
+$login_data = json_decode(getenv('GOOGLE_SERVICE_ACCOUNT_APPLICATION_CREDENTIALS'), true);
+$shared_client->setAuthConfig($login_data);
+$shared_client->setScopes(array("https://www.googleapis.com/auth/drive"));
+Global $shared_drive;
+$shared_drive = new Google_Service_Drive($shared_client);
 
-	return $copy['id'];
+function create_file_from_template($title) {
+        Global $shared_drive;
+				$file = new Google_Service_Drive_DriveFile();
+        $file->setName($title);
+				debug("Starting to copy file");
+        $copy = $shared_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file, array('fields' => '*'));
+        $ownerPermission = new Google_Service_Drive_Permission();
+        $ownerPermission->setEmailAddress(getenv('GOOGLE_GROUP_EMAIL'));
+        $ownerPermission->setType('group');
+        $ownerPermission->setRole('writer');
+				$attempts = 0;
+				do {
+					try {
+						debug("Sharing atttempt " . $attempts);
+						$shared_drive->permissions->create($copy['id'], $ownerPermission, array('fields' => '*'));
+					} catch (Exception $e) {
+						debug($e->getMessage());
+						$attempts++;
+						sleep(1);
+						continue;
+					}
+					break;
+				}	while ($attempts < 10);
+        return $copy['id'];
 }

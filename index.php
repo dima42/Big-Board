@@ -106,10 +106,17 @@ function is_in_palindrome($pal_drive) {
 		return true;
 	}
 
+	debug("Member not found in SESSION");
 	// If there's a member whose googleID matches the current user's rootFolderId, then we're good.
-	$drive_user     = $pal_drive->about->get();
+	$drive_user     = $pal_drive->about->get(array('fields' => '*'));
 	$user_google_id = $drive_user["rootFolderId"];
 	$user_full_name = $drive_user["user"]["displayName"];
+	debug("user name: ". $user_full_name);
+
+	$root_req = $pal_drive->files->get('root', array('fields' => 'id'));
+	$user_google_id = $root_req['id'];
+
+	debug("user id: ". $user_google_id);
 
 	$member = MemberQuery::create()
 		->filterByGoogleID($user_google_id)
@@ -123,11 +130,11 @@ function is_in_palindrome($pal_drive) {
 	}
 
 	// If it's a new user, make sure they have access to our drive
-	$hunt_folder = new Google_DriveFile();
+	$hunt_folder = new Google_Service_Drive_DriveFile();
 	try {
-		$hunt_folder = $pal_drive->files->get(getenv('GOOGLE_DRIVE_ID'));
-		debug("userPermission.id: ".$hunt_folder["userPermission"]["id"]);
-		if ($hunt_folder["userPermission"]["id"] == "me") {
+		$hunt_folder = $pal_drive->files->get(getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID'), array('fields' => 'capabilities'));
+		debug("canAddChildren permissions: ".$hunt_folder['capabilities']->canAddChildren);
+		if ($hunt_folder['capabilities']->canAddChildren) {
 			$member = new Member();
 			$member->setFullName($user_full_name);
 			$member->setGoogleId($user_google_id);
