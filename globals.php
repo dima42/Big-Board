@@ -171,11 +171,23 @@ function create_file_from_template($title) {
         Global $shared_drive;
 				$file = new Google_Service_Drive_DriveFile();
         $file->setName($title);
+				debug("Starting to copy file");
         $copy = $shared_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file, array('fields' => '*'));
         $ownerPermission = new Google_Service_Drive_Permission();
         $ownerPermission->setEmailAddress(getenv('GOOGLE_GROUP_EMAIL'));
         $ownerPermission->setType('group');
         $ownerPermission->setRole('writer');
-        $shared_drive->permissions->create($copy['id'], $ownerPermission, array('fields' => '*'));
+				$attempt = 0;
+				do {
+					try {
+						debug("Sharing atttempt " . $attempt);
+						$shared_drive->permissions->create($copy['id'], $ownerPermission, array('fields' => '*'));
+					} catch (Exception $e) {
+						$attempts++;
+						sleep(1);
+						continue;
+					}
+					break;
+				}	while ($attempts < 10);
         return $copy['id'];
 }
