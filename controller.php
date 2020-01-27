@@ -733,11 +733,11 @@ function addPuzzle($request, $response) {
 		}
 
 		if (!$puzzleURLExists && !$puzzleTitleExists && !$slackNameExists) {
+			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
+
 			$slack_channel_slug = substr($slugify->slugify($puzzleContent['slack']), 0, 19);
 			$slack_channel_name = "ρ_".$slack_channel_slug;
 			$newChannelID       = createNewSlackChannel($slack_channel_name);
-
-			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
 
 			$newPuzzle = new Puzzle();
 			$newPuzzle->setTitle($puzzleContent['title']);

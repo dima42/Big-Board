@@ -161,7 +161,7 @@ if (!$pal_client) {
 }
 
 $shared_client = new Google_Client();
-$login_data = json_decode(getenv('GOOGLE_APPLICATION_CREDENTIALS'), true);
+$login_data = json_decode(getenv('GOOGLE_SERVICE_ACCOUNT_APPLICATION_CREDENTIALS'), true);
 $shared_client->setAuthConfig($login_data);
 $shared_client->setScopes(array("https://www.googleapis.com/auth/drive"));
 Global $shared_drive;
