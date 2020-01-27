@@ -151,7 +151,6 @@ if (!$pal_client) {
 	// SET UP GOOGLE_CLIENT OBJECT
 	$pal_client = new Google_Client();
 	$pal_client->setAccessType("offline");
-  $pal_client->setScopes(array("https://www.googleapis.com/auth/drive.metadata.readonly"));
 	$pal_client->setApplicationName(getenv('GOOGLE_APPLICATION_NAME'));
 	$pal_client->setDeveloperKey(getenv('GOOGLE_DEVELOPER_KEY'));
 	$pal_client->setClientId(getenv('GOOGLE_CLIENT_ID').".apps.googleusercontent.com");

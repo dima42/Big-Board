@@ -2,8 +2,6 @@
 
 {% block body %}
 <script type="text/javascript">
-  var oauthToken = {{ access_token|raw }};
-
   function onApiLoad() {
     gapi.load('picker', onPickerApiLoad);
   }
@@ -17,7 +15,7 @@
         .setDeveloperKey('{{ developer_key }}')
         .enableFeature(google.picker.Feature.NAV_HIDDEN)
         .setTitle('Please select this year\'s puzzle folder to verify your membership')
-        .setOAuthToken(oauthToken.access_token)
+        .setOAuthToken('{{ access_token }}')
         .addView(view)
         .setCallback(pickerCallback)
         .build();

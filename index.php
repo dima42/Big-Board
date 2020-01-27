@@ -35,7 +35,7 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($klein, $pa
 		// puzzle folder.
 		if (isset($_SESSION['temporary_access_token'])) {
 			render('picker.twig', 'picker', array(
-				'access_token' => $_SESSION['temporary_access_token'],
+				'access_token' => $_SESSION['temporary_access_token']['access_token'],
 				'app_id' => getenv('GOOGLE_APP_ID'),
 				'developer_key' => getenv('GOOGLE_DEVELOPER_KEY'),
 				'puzzles_folder_id' => getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID'),
@@ -128,19 +128,17 @@ function is_in_palindrome($pal_drive) {
 	}
 
 	debug("Member not found in SESSION");
-	// If there's a member whose googleID matches the current user's rootFolderId, then we're good.
 	$drive_user     = $pal_drive->about->get(array('fields' => '*'));
-	$user_google_id = $drive_user["rootFolderId"];
 	$user_full_name = $drive_user["user"]["displayName"];
 	debug("user name: ". $user_full_name);
 
-	$root_req = $pal_drive->files->get('root', array('fields' => 'id'));
-	$user_google_id = $root_req['id'];
+	// If there's a member whose googleID matches the current user's permissionId, then we're good.
+	$user_google_id = $drive_user["user"]["permissionId"];
 
 	debug("user id: ". $user_google_id);
 
 	$member = MemberQuery::create()
-		->filterByGoogleID($user_google_id)
+		->filterByFullName($user_full_name)
 		->findOne();
 
 	if ($member) {
