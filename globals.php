@@ -161,10 +161,8 @@ if (!$pal_client) {
 }
 
 $shared_client = new Google_Client();
-$shared_client->useApplicationDefaultCredentials();
-$shared_client->setClientId(getenv('GOOGLE_SERVICE_ACCOUNT_CLIENT_ID');
-$shared_client->config['signing_key'] = getenv('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY');
-$shared_client->config['signing_algorithm'] = 'HS256';
+$login_data = json_decode(getenv('GOOGLE_APPLICATION_CREDENTIALS'), true);
+$shared_client->setAuthConfig($login_data);
 $shared_client->setScopes(array("https://www.googleapis.com/auth/drive"));
 Global $shared_drive;
 $shared_drive = new Google_Service_Drive($shared_client);
