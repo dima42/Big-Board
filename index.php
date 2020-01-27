@@ -11,18 +11,39 @@ $klein->with('/tobybot', function () use ($klein) {
 			});
 	});
 
-$klein->respond('GET', '/oauth', function ($request, $response) use ($pal_client) {
-		// If 'code' is set in the request, that's Google trying to authenticate
-		debug("OAUTH. Code: ".$_GET['code']);
-		if (isset($_GET['code'])) {
-			$pal_client->authenticate($_GET['code']);
-			$_SESSION['access_token'] = $pal_client->getAccessToken();
+$klein->respond('GET', '/oauth', function ($request, $response) use ($klein, $pal_client) {
+		// If 'picked' is set in the request, the user has granted access to the
+		// puzzle folder, so finalize the credentials and continue.
+		if (isset($_GET['picked'])) {
+			$_SESSION['access_token'] = $_SESSION['temporary_access_token'];
+			unset($_SESSION['temporary_access_token']);
 			$token_dump = json_decode($_SESSION['access_token']);
 			$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
-
 			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
 			setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
+			return redirect("/");
 		}
+
+		// If 'code' is set in the request, that's Google trying to authenticate.
+		// Extract the access token and continue to the file picker.
+		if (isset($_GET['code'])) {
+			debug("OAUTH. Code: ".$_GET['code']);
+			$pal_client->authenticate($_GET['code']);
+			$_SESSION['temporary_access_token'] = $pal_client->getAccessToken();
+		}
+		// Once we have an access token, show the file picker to get access to the
+		// puzzle folder.
+		if (isset($_SESSION['temporary_access_token'])) {
+			render('picker.twig', 'picker', array(
+				'access_token' => $_SESSION['temporary_access_token']['access_token'],
+				'app_id' => getenv('GOOGLE_APP_ID'),
+				'developer_key' => getenv('GOOGLE_DEVELOPER_KEY'),
+				'puzzles_folder_id' => getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID'),
+			));
+			$klein->skipRemaining();
+			return;
+		}
+
 		return redirect("/");
 	});
 
@@ -107,19 +128,17 @@ function is_in_palindrome($pal_drive) {
 	}
 
 	debug("Member not found in SESSION");
-	// If there's a member whose googleID matches the current user's rootFolderId, then we're good.
 	$drive_user     = $pal_drive->about->get(array('fields' => '*'));
-	$user_google_id = $drive_user["rootFolderId"];
 	$user_full_name = $drive_user["user"]["displayName"];
 	debug("user name: ". $user_full_name);
 
-	$root_req = $pal_drive->files->get('root', array('fields' => 'id'));
-	$user_google_id = $root_req['id'];
+	// If there's a member whose googleID matches the current user's permissionId, then we're good.
+	$user_google_id = $drive_user["user"]["permissionId"];
 
 	debug("user id: ". $user_google_id);
 
 	$member = MemberQuery::create()
-		->filterByGoogleID($user_google_id)
+		->filterByFullName($user_full_name)
 		->findOne();
 
 	if ($member) {
