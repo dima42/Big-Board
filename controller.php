@@ -947,16 +947,7 @@ function inviteToTag($request, $response) {
 // MEMBERS
 
 function displayRoster() {
-	$puzzles_with_members = PuzzleQuery::create()
-		->joinWith('PuzzleMember')
-		->orderBy('Title')
-		->groupBy('Title', 'Id')
-		->select(['Id', 'Title', 'Status'])
-		->find();
-
-	render('roster.twig', 'roster', array(
-			'puzzles' => $puzzles_with_members,
-		));
+	render('roster.twig', 'roster');
 }
 
 function displayMember($member_id) {
