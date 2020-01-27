@@ -397,7 +397,6 @@ function displayAll() {
 			'unsolved_count'     => $unsolved_count,
 			'solved_percentage'  => $solved_percentage,
 			'total_puzzle_count' => $total_puzzle_count,
-			'member_puzzles'     => $member_puzzles,
 		));
 }
 

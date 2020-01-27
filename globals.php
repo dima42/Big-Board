@@ -177,12 +177,13 @@ function create_file_from_template($title) {
         $ownerPermission->setEmailAddress(getenv('GOOGLE_GROUP_EMAIL'));
         $ownerPermission->setType('group');
         $ownerPermission->setRole('writer');
-				$attempt = 0;
+				$attempts = 0;
 				do {
 					try {
-						debug("Sharing atttempt " . $attempt);
+						debug("Sharing atttempt " . $attempts);
 						$shared_drive->permissions->create($copy['id'], $ownerPermission, array('fields' => '*'));
 					} catch (Exception $e) {
+						debug($e->getMessage());
 						$attempts++;
 						sleep(1);
 						continue;
