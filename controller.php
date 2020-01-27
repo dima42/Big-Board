@@ -390,7 +390,6 @@ function displayAll() {
 	}
 
 	$member         = $_SESSION['user'];
-	$member_puzzles = $member->getPuzzles();
 
 	$solved_percentage = ($total_puzzle_count == 0)?0:($total_puzzle_count-$unsolved_count)/$total_puzzle_count;
 	render('all.twig', 'puzzles', array(
@@ -398,7 +397,6 @@ function displayAll() {
 			'unsolved_count'     => $unsolved_count,
 			'solved_percentage'  => $solved_percentage,
 			'total_puzzle_count' => $total_puzzle_count,
-			'member_puzzles'     => $member_puzzles,
 		));
 }
 
@@ -734,11 +732,11 @@ function addPuzzle($request, $response) {
 		}
 
 		if (!$puzzleURLExists && !$puzzleTitleExists && !$slackNameExists) {
+			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
+
 			$slack_channel_slug = substr($slugify->slugify($puzzleContent['slack']), 0, 19);
 			$slack_channel_name = "ρ_".$slack_channel_slug;
 			$newChannelID       = createNewSlackChannel($slack_channel_name);
-
-			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
 
 			$newPuzzle = new Puzzle();
 			$newPuzzle->setTitle($puzzleContent['title']);
