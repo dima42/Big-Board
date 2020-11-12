@@ -90,7 +90,7 @@ class Puzzle extends BasePuzzle {
 			// POST TO SLACK
 			$channel = $this->getSlackChannel();
 			postToChannel('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
-			postToGeneral('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot");
+			postToHuntChannel('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot");
 		} else {
 			$this->setStatus('open');
 			$alert = $this->getTitle()." is open again.";

@@ -72,8 +72,8 @@ function inviteToSlackChannel($channel_id, $member_id) {
 	return $response->getBody();
 }
 
-function postToGeneral($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {
-	$channel = "general";
+function postToHuntChannel($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot") {
+	$channel = getenv('SLACK_HUNT_CHANNEL');
 	return postToChannel($message, $attachments, $icon, $bot_name, $channel);
 }
 

@@ -599,7 +599,7 @@ function changePuzzleStatus($puzzle_id, $request) {
 		$news_text = "status set to `".$newStatus."`.";
 		addNews($news_text, $newStatus, $puzzle);
 
-		postToGeneral(
+		postToHuntChannel(
 			':priority: *'.$puzzle->getTitle().'* was set to `PRIORITY`.',
 			$puzzle->getSlackAttachmentMedium(),
 			":bell:",
@@ -781,7 +781,7 @@ function addPuzzle($request, $response) {
 			postToChannel('*Puzzle channel commands that I answer to:*', $instructions, ":robot_face:", "HelperBot", $newPuzzle->getSlackChannel());
 
 			// POST TO #general
-			postToGeneral('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentMedium(), ":hatching_chick:", "NewPuzzleBot");
+			postToHuntChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentMedium(), ":hatching_chick:", "NewPuzzleBot");
 		}
 	}
 
@@ -1070,7 +1070,7 @@ function postNews($text) {
 
 	$member = $_SESSION['user'];
 	addNews($text, "important", null, $member);
-	postToGeneral(
+	postToHuntChannel(
 		'*IMPORTANT NEWS* from '.$member->getFullName(), [[
 				"text"  => $text,
 				"color" => "#ff0000",
