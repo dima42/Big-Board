@@ -63,8 +63,9 @@ Create two bots:
 6. Add the privacy policy URL (`http://your-domain/privacy`) to your [OAuth consent screen](https://console.cloud.google.com/apis/credentials).  Once your app is live, you'll need to go through the verification process [here](https://support.google.com/cloud/answer/7454865)) to get rid of the "unverified app" screen.
 7. Create a separate credential for testing.  Add `http://localhost:8888` to Authorized JavaScript origins and `http://localhost:8888` and `http://localhost:8888/oauth` to Authorized Redirect URI's for that one
 8. Click "Create credentials" again and choose "Service Account".  Download the JSON for login info here for later.
-9. At https://console.developers.google.com/apis/dashboard?project=[your-project-name], enable the google drive api
-10. Enable auth/drive.metadata.readonly scope at https://console.developers.google.com/apis/credentials/consent/edit?project=[your-project-id]
+9. At https://console.developers.google.com/apis/dashboard?project=[your-project-name], enable the google drive api and the picker api
+10. Enable auth/drive.file scope at https://console.developers.google.com/apis/credentials/consent/edit?project=[your-project-id]
+11. Click "Create credentials" again and choose "API Key"
 
 ## Set up Heroku instance
 
@@ -94,8 +95,10 @@ Locally - Run mysql and create a database and a user.  host is localhost, the re
 
 **Google Drive configuration**
 
-- `GOOGLE_CLIENT_ID` - you got this while setting up gooogle credentials earlier
+- `GOOGLE_APP_ID` - the project number in the google cloud console
+- `GOOGLE_CLIENT_ID` - you got this while setting up google credentials earlier
 - `GOOGLE_CLIENT_SECRET` - same
+- `GOOGLE_DEVELOPER_KEY` - the API key you got while setting up google credentials
 - `GOOGLE_DRIVE_ID` - go to google drive for your team folder, look at the url - it's the long id string there.  Similarly for `GOOGLE_DOCS_TEMPLATE_ID`
 - `GOOGLE_SERVICE_ACCOUNT_APPLICATION_CREDENTIALS` - this is the json for when you made the service account credential
 
