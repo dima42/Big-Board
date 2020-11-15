@@ -36,6 +36,7 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($klein, $pa
 				'app_id' => getenv('GOOGLE_APP_ID'),
 				'developer_key' => getenv('GOOGLE_DEVELOPER_KEY'),
 				'puzzles_folder_id' => getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID'),
+                                'google_drive_id' => getenv('GOOGLE_DRIVE_ID')
 			));
 			$klein->skipRemaining();
 			return;

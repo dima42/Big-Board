@@ -9,7 +9,7 @@
   function onPickerApiLoad() {
     var view = new google.picker.DocsView(google.picker.ViewId.FOLDERS);
     view.setSelectFolderEnabled(true);
-    view.setParent('{{ googleDriveId }}')
+    view.setParent('{{ google_drive_id }}')
     var picker = new google.picker.PickerBuilder()
         .setAppId('{{ app_id }}')
         .setDeveloperKey('{{ developer_key }}')
