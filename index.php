@@ -16,10 +16,7 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($klein, $pa
 		// puzzle folder, so finalize the credentials and continue.
 		if (isset($_GET['picked'])) {
                         $_SESSION['access_token'] = $_SESSION['temporary_access_token'];
-                        $token_dump = json_decode($_SESSION['access_token']);
-			$_SESSION['refresh_token'] = $token_dump->{'access_token'};
 			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
-			setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
 			return redirect("/");
 		}
 
@@ -27,8 +24,8 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($klein, $pa
 		// Extract the access token and continue to the file picker.
 		if (isset($_GET['code'])) {
 			debug("OAUTH. Code: ".$_GET['code']);
-			$pal_client->authenticate($_GET['code']);
-			$_SESSION['temporary_access_token'] = json_encode($pal_client->getAccessToken());
+			$token = $pal_client->authenticate($_GET['code']);
+			$_SESSION['temporary_access_token'] = json_encode($token);
 		}
 		// Once we have an access token, show the file picker to get access to the
 		// puzzle folder.
@@ -54,7 +51,7 @@ $klein->respond('GET', '/privacy', function ($request, $response) {
 // If user not authorized or not in palindrome do not allow them to get matched to any remaining routes
 $klein->respond(function () use ($klein, $pal_client, $pal_drive) {
 		debug('');// Add a break to the output to help with debugging
-		if (!is_authorized($pal_client)) {
+		if (!is_authorized($pal_client, $pal_drive)) {
 			$authUrl = $pal_client->createAuthUrl();
 			render('loggedout.twig', 'loggedout', array(
 					'auth_url' => $authUrl,
@@ -85,8 +82,8 @@ $klein->with('', 'controller.php');
 
 $klein->dispatch();
 
-function is_authorized($pal_client) {
-	// If no access_token in session, check the cookies
+function is_authorized($pal_client, $pal_drive) {
+	// If no access_token in session, check the cookies and fill it
 	if (!isset($_SESSION['access_token']) && isset($_COOKIE['PAL_ACCESS_TOKEN'])) {
 		debug("No access_token IN SESSION, checking cookies");
 		$_SESSION['access_token'] = stripslashes($_COOKIE['PAL_ACCESS_TOKEN']);
@@ -94,27 +91,23 @@ function is_authorized($pal_client) {
 
 	// Now check for access_token in the SESSION
 	if (isset($_SESSION['access_token'])) {
-		debug("Found access_token in SESSION: ".$_SESSION['access_token']);
+                $token_dump = json_decode($_SESSION['access_token']);
+                debug("Found access_token in SESSION: ".$_SESSION['access_token']);
 		$pal_client->setAccessToken($_SESSION['access_token']);
 		if (!$pal_client->isAccessTokenExpired()) {
 			return true;
 		} else {
-			debug("This token is no good");
-		}
-	}
+		    debug("This token is no good");
 
-	// If no access_token in SESSION, check cookies for refresh_token, and refresh
-	if (isset($_COOKIE['refresh_token'])) {
-		debug("refresh token in SESSION: ".$_COOKIE['refresh_token']);
-		$pal_client->refreshToken($_COOKIE['refresh_token']);
-		$_SESSION['access_token']  = json_encode($pal_client->getAccessToken());
-		$token_dump                = json_decode($_SESSION['access_token']);
-		$_SESSION['refresh_token'] = $token_dump->{'access_token'};
-
-		setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
-		setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
-
-		return true;
+		    $pal_client->refreshToken($token_dump->{'refresh_token'});
+		    
+                    $_SESSION['access_token']  = json_encode($pal_client->getAccessToken());
+		    $token_dump                = json_decode($_SESSION['access_token']);
+		    $_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
+                    
+		    setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
+		    return !$pal_client->isAccessTokenExpired();
+                }
 	}
 
 	return false;
