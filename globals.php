@@ -171,10 +171,12 @@ $shared_drive = new Google_Service_Drive($shared_client);
 
 function create_file_from_template($title) {
         Global $shared_drive;
-				$file = new Google_Service_Drive_DriveFile();
+	$file = new Google_Service_Drive_DriveFile();
         $file->setName($title);
-				debug("Starting to copy file");
+	$file->setParents(array(getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID')));
+        debug("Starting to copy file");
         $copy = $shared_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file, array('fields' => '*'));
+
         $ownerPermission = new Google_Service_Drive_Permission();
         $ownerPermission->setEmailAddress(getenv('GOOGLE_GROUP_EMAIL'));
         $ownerPermission->setType('group');
