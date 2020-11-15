@@ -15,8 +15,7 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($klein, $pa
 		// If 'picked' is set in the request, the user has granted access to the
 		// puzzle folder, so finalize the credentials and continue.
 		if (isset($_GET['picked'])) {
-			$_SESSION['access_token'] = $_SESSION['temporary_access_token'];
-			unset($_SESSION['temporary_access_token']);
+			$_SESSION['access_token'] = $pal_client->getAccessToken();
 			$token_dump = json_decode($_SESSION['access_token']);
 			$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
 			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
