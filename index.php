@@ -15,9 +15,12 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($klein, $pa
 		// If 'picked' is set in the request, the user has granted access to the
 		// puzzle folder, so finalize the credentials and continue.
 		if (isset($_GET['picked'])) {
-			$_SESSION['access_token'] = $pal_client->getAccessToken();
-			$token_dump = json_decode($_SESSION['access_token']);
-			$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
+                        error_log('picked');
+			error_log($pal_client->getAccessToken());
+                        error_log($_SESSION['temporary_access_token']);
+                        $_SESSION['access_token'] = $_SESSION['temporary_access_token'];
+                        $token_dump = json_decode($_SESSION['access_token']);
+			$_SESSION['refresh_token'] = $token_dump->{'access_token'};
 			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
 			setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
 			return redirect("/");
@@ -28,13 +31,18 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($klein, $pa
 		if (isset($_GET['code'])) {
 			debug("OAUTH. Code: ".$_GET['code']);
 			$pal_client->authenticate($_GET['code']);
-			$_SESSION['temporary_access_token'] = $pal_client->getAccessToken();
+                        error_log('code');
+                        error_log($pal_client->getAccessToken());
+                        error_log(implode("|", $pal_client->getAccessToken()));
+                        error_log(implode("|", array_keys($pal_client->getAccessToken())));
+			$_SESSION['temporary_access_token'] = json_encode($pal_client->getAccessToken());
 		}
 		// Once we have an access token, show the file picker to get access to the
 		// puzzle folder.
 		if (isset($_SESSION['temporary_access_token'])) {
+                        $token_dump = json_decode($_SESSION['temporary_access_token']);
 			render('picker.twig', 'picker', array(
-				'access_token' => $_SESSION['temporary_access_token']['access_token'],
+				'access_token' => $token_dump->{'access_token'},
 				'app_id' => getenv('GOOGLE_APP_ID'),
 				'developer_key' => getenv('GOOGLE_DEVELOPER_KEY'),
 				'puzzles_folder_id' => getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID'),
@@ -106,9 +114,9 @@ function is_authorized($pal_client) {
 	if (isset($_COOKIE['refresh_token'])) {
 		debug("refresh token in SESSION: ".$_COOKIE['refresh_token']);
 		$pal_client->refreshToken($_COOKIE['refresh_token']);
-		$_SESSION['access_token']  = $pal_client->getAccessToken();
+		$_SESSION['access_token']  = json_encode($pal_client->getAccessToken());
 		$token_dump                = json_decode($_SESSION['access_token']);
-		$_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
+		$_SESSION['refresh_token'] = $token_dump->{'access_token'};
 
 		setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
 		setcookie("refresh_token", $_SESSION['refresh_token'], 5184000+time());
