@@ -180,7 +180,7 @@ function create_file_from_template($title) {
         $ownerPermission = new Google_Service_Drive_Permission();
         $ownerPermission->setEmailAddress(getenv('GOOGLE_GROUP_EMAIL'));
         $ownerPermission->setType('group');
-        $ownerPermission->setRole('writer');
+        $ownerPermission->setRole('owner');
 				$attempts = 0;
 				do {
 					try {
