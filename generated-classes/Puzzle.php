@@ -61,7 +61,7 @@ class Puzzle extends BasePuzzle {
 
 	// SOLVE
 
-	public function solve($solution) {
+	public function solve($solution, $shared_drive) {
 		$oldSolution = $this->getSolution();
 		$newSolution = strtoupper(trim($solution));
 
@@ -75,6 +75,11 @@ class Puzzle extends BasePuzzle {
 
 		if ($newSolution != '') {
 			$newStatus = 'solved';
+
+                        $fileID = $this->parseSpreadsheetID();
+                        $emptyFile = new Google_Service_Drive_DriveFile();
+                        $emptyFile->setName($this->getTitle()." SOLVED: ".$newSolution);
+                        $updatedFile = $shared_drive->files->update($fileID, $emptyFile);
 
 			// SET STATUS
 			$this->setStatus($newStatus);

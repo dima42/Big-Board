@@ -1,6 +1,7 @@
 <?php
 use Cocur\Slugify\Slugify;
 use Propel\Runtime\ActiveQuery\Criteria;
+require_once("globals.php");
 
 $this->respond('GET', '/test',
 
@@ -565,11 +566,12 @@ function editPuzzle($puzzle_id, $request) {
 }
 
 function solvePuzzle($puzzle_id, $request) {
+        global $shared_drive;
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
 		->findOne();
 
-	$alert = $puzzle->solve($request->solution);
+	$alert = $puzzle->solve($request->solution, $shared_drive);
 
 	redirect('/puzzle/'.$puzzle_id, $alert);
 }

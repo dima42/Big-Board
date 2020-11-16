@@ -3,6 +3,7 @@ use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
 use Frlnc\Slack\Http\SlackResponseFactory;
 use Propel\Runtime\ActiveQuery\Criteria;
+require_once("globals.php");
 
 function getSlackCommander($slack_key_env_var) {
 	$slack_key = getenv($slack_key_env_var);
@@ -302,6 +303,7 @@ class Bot {
 	}
 
 	private function solve($request, $response) {
+                global $shared_drive;
 		$channel_response = ['text' => 'Not sure what you mean. Seek help.'];
 		$channel_id       = $request->channel_id;
 		$solution         = strtoupper($request->text);
@@ -319,7 +321,7 @@ class Bot {
 				"text" => "Please include a solution, like so: `/solve LOVE`.",
 			];
 		} else {
-			$puzzle->solve($solution);
+			$puzzle->solve($solution, $shared_drive);
 			$channel_response = [
 				'link_names' => true,
 				"text"       => "Got it. I posted `".$solution."` as a solution to *".$puzzle->getTitle()."*.",
