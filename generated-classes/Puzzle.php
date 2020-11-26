@@ -26,6 +26,10 @@ class Puzzle extends BasePuzzle {
 		return $colors[$this->getStatus()]??'green';
 	}
 
+        public function getJitsiURL() {
+                return "https://meet.jit.si/".str_replace(' ', '', getenv('TEAM_NAME'))."/".str_replace(' ', '', $this->getTitle());
+        }
+
 	public function getBigBoardURL() {
 		return "http://".getenv("APP_DOMAIN")."/puzzle/".$this->getId();
 	}
@@ -45,6 +49,19 @@ class Puzzle extends BasePuzzle {
 		}
 		return $sid;
 	}
+
+        public function postMetadataToSheet($shared_sheets) {
+                $values = [[
+                    'HYPERLINK($this->getSlackURL(), "Slack")',
+                    'HYPERLINK($this->getJitsURL(), "Video"),
+                    'HYPERLINK($this->getBigBoardURL(), "Big Board")
+                ]];
+                $range = "A1:C1";
+                $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'COLUMNS', 'values' => $values]);
+                $spreadsheetID = $this->parseSpreadsheetID();
+                $result = $shared_sheets->spreadsheets_values->update($spreadsheetId, $range,
+        $body);
+        }
 
 	// ADD NOTE
 	public function note($noteText, $author) {
@@ -141,6 +158,7 @@ class Puzzle extends BasePuzzle {
 			'<'.$this ->getBigBoardURL().'|:boar:> ',
 			'<'.$this ->getUrl().'|:hh:>',
 			'<'.$this ->getSpreadsheetURL().'|:drive:> ',
+                        '<'.$this ->getJitsiURL().'|:camera:> ',
 			'*'.$this ->getTitle().'*',
 			'<#'.$this->getSlackChannelId().'>',
 		];
@@ -157,6 +175,7 @@ class Puzzle extends BasePuzzle {
 			':boar: <'.$this  ->getBigBoardURL().'|Big Board> ',
 			':hh: <'.$this    ->getUrl().'|Puzzle>',
 			':drive: <'.$this ->getSpreadsheetURL().'|Sheet> ',
+                        ':camera: <'.$this ->getJitsiURL().'| Video> ',
 			':slack: <#'.$this->getSlackChannelId().'|'.$this->getSlackChannel().'>'
 		];
 
@@ -172,6 +191,7 @@ class Puzzle extends BasePuzzle {
 			':boar: <'.$this ->getBigBoardURL().'|Big Board>',
 			':hh: <'.$this   ->getUrl().'|Puzzle page>',
 			':drive: <'.$this->getSpreadsheetURL().'|Google Spreadsheet>',
+                        ':camera: <'.$this ->getJitsURL().'| Video Meeting>',
 		];
 
 		$response = array_map(function ($info) {
