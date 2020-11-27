@@ -495,6 +495,7 @@ function deletePuzzle($puzzle_id, $request) {
 		->filterByID($puzzle_id)
 		->findOne();
 
+        archiveSlackChannel($puzzle->getSlackChannelID());
 	$puzzle_title = $puzzle->getTitle();
 	$puzzle->delete();
 
