@@ -214,7 +214,7 @@ class Bot {
 			$count   = $puzzleQuery->count();
 			$pretext = $count." puzzles marked `".strtoupper($parameter)."`:";
 		} elseif ($parameter == "ange") {
-                        $puzzleQuery->filterByStatus(['open|stuck|priority', Criteria::LIKE);
+                        $puzzleQuery->filterByStatus(['open', 'stuck', 'priority'], Criteria::IN);
                         $count   = $puzzleQuery->count();
                         $pretext = $count." puzzles marked open/stuck/priority: ";
                 } else {

@@ -37,7 +37,7 @@ var loadPuzzleTemplate = function(response, callback, parentListName, parentIDNa
         ssID = ssID.replace(/^.+ccc\?key=/, "");
         puzzleData['SpreadsheetURL'] = "https://docs.google.com/spreadsheets/d/" + ssID;
         puzzleData['SlackURL'] = "http://" + slackDomain + ".slack.com/messages/"+puzzleData['SlackChannelId'];
-        puzzleData['JitsiURL] = "http://meet.jit.si/" + teamNameNoSpaces + "/"+puzzleData['Title'];
+        puzzleData['JitsiURL'] = "http://meet.jit.si/" + teamNameNoSpaces + "/"+puzzleData['Title'];
         puzzleData['SinceCreated'] = now - new Date(puzzleData['CreatedAt']);
         puzzleData['SinceUpdated'] = now - new Date(puzzleData['UpdatedAt']);
 
