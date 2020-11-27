@@ -26,6 +26,10 @@ class Puzzle extends BasePuzzle {
 		return $colors[$this->getStatus()]??'green';
 	}
 
+        public function getJitsiURL() {
+                return "https://meet.jit.si/".str_replace(' ', '', getenv('TEAM_NAME'))."/".str_replace(' ', '', $this->getTitle());
+        }
+
 	public function getBigBoardURL() {
 		return "http://".getenv("APP_DOMAIN")."/puzzle/".$this->getId();
 	}
@@ -45,6 +49,23 @@ class Puzzle extends BasePuzzle {
 		}
 		return $sid;
 	}
+
+        public function postMetadataToSheet($shared_sheets) {
+                $values = [[
+                    '=HYPERLINK("'.$this->getSlackURL().'", "Slack")',
+                    '=HYPERLINK("'.$this->getJitsiURL().'", "Video")',
+                    '=HYPERLINK("'.$this->getBigBoardURL().'", "Big Board")',
+                ]];
+                $range = "A1:C1";
+                $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'ROWS', 'values' => $values]);
+                $spreadsheetID = $this->parseSpreadsheetID();
+                $valueInputOption = 'USER_ENTERED';
+		$params = [
+  		  'valueInputOption' => $valueInputOption
+		];
+                $result = $shared_sheets->spreadsheets_values->update($spreadsheetID, $range,
+        $body, $params);
+        }
 
 	// ADD NOTE
 	public function note($noteText, $author) {
@@ -141,6 +162,7 @@ class Puzzle extends BasePuzzle {
 			'<'.$this ->getBigBoardURL().'|:boar:> ',
 			'<'.$this ->getUrl().'|:hh:>',
 			'<'.$this ->getSpreadsheetURL().'|:drive:> ',
+                        '<'.$this ->getJitsiURL().'|:camera:> ',
 			'*'.$this ->getTitle().'*',
 			'<#'.$this->getSlackChannelId().'>',
 		];
@@ -157,6 +179,7 @@ class Puzzle extends BasePuzzle {
 			':boar: <'.$this  ->getBigBoardURL().'|Big Board> ',
 			':hh: <'.$this    ->getUrl().'|Puzzle>',
 			':drive: <'.$this ->getSpreadsheetURL().'|Sheet> ',
+                        ':camera: <'.$this ->getJitsiURL().'| Video> ',
 			':slack: <#'.$this->getSlackChannelId().'|'.$this->getSlackChannel().'>'
 		];
 
@@ -172,6 +195,7 @@ class Puzzle extends BasePuzzle {
 			':boar: <'.$this ->getBigBoardURL().'|Big Board>',
 			':hh: <'.$this   ->getUrl().'|Puzzle page>',
 			':drive: <'.$this->getSpreadsheetURL().'|Google Spreadsheet>',
+                        ':camera: <'.$this ->getJitsiURL().'| Video Meeting>',
 		];
 
 		$response = array_map(function ($info) {

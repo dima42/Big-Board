@@ -697,6 +697,7 @@ function puzzleScrape($request, $response) {
 }
 
 function addPuzzle($request, $response) {
+        global $shared_sheets;
 	$existingURLs   = array();
 	$existingTitles = array();
 	$existingSlacks = array();
@@ -784,6 +785,9 @@ function addPuzzle($request, $response) {
 
 			// POST TO #general
 			postToHuntChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentMedium(), ":hatching_chick:", "NewPuzzleBot");
+
+                        // put metadata in sheet
+                        $newPuzzle->postMetadataToSheet($shared_sheets);
 		}
 	}
 
