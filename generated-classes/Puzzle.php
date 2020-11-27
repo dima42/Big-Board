@@ -52,6 +52,7 @@ class Puzzle extends BasePuzzle {
 
         public function postMetadataToSheet($shared_sheets) {
                 $values = [[
+                    '=HYPERLINK("'.$this->getUrl().'", "Puzzle")',
                     '=HYPERLINK("'.$this->getSlackURL().'", "Slack")',
                     '=HYPERLINK("'.$this->getJitsiURL().'", "Video")',
                     '=HYPERLINK("'.$this->getBigBoardURL().'", "Big Board")',

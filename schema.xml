@@ -16,7 +16,6 @@
         </foreign-key>
         <behavior name="aggregate_column">
             <parameter name="name" value="post_count" />
-            <parameter name="foreign_table" value="note" />
             <parameter name="expression" value="COUNT(id)" />
         </behavior>
         <behavior name="aggregate_column" id="solver_count">
@@ -27,46 +26,6 @@
         <unique>
             <unique-column name="title" />
         </unique>
-        <behavior name="timestampable" />
-        <behavior name="archivable" />
-    </table>
-    <table name="tag" phpName="Tag">
-        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="integer" />
-        <column name="title" type="varchar" required="true" primaryString="true" />
-        <column name="alerted" type="boolean" required="true" defaultValue="true" />
-        <column name="slack_channel" type="varchar" size="48" required="false" />
-        <column name="slack_channel_id" type="varchar" size="24" required="false" />
-        <column name="description" type="varchar" size="128" required="false" />
-        <behavior name="nested_set">
-            <parameter name="use_scope" value="true" />
-        </behavior>
-    </table>
-    <table name="tag_alert" phpName="TagAlert" isCrossRef="true">
-        <column name="puzzle_id" type="integer" primaryKey="true" />
-        <column name="tag_id" type="integer" primaryKey="true" />
-        <foreign-key foreignTable="puzzle" phpName="Puzzle" onDelete="CASCADE">
-            <reference local="puzzle_id" foreign="id"/>
-        </foreign-key>
-        <foreign-key foreignTable="tag" phpName="Tag" onDelete="CASCADE">
-            <reference local="tag_id" foreign="id"/>
-        </foreign-key>
-        <unique>
-            <unique-column name="puzzle_id" />
-            <unique-column name="tag_id" />
-        </unique>
-        <behavior name="timestampable" />
-    </table>
-    <table name="note" phpName="Note">
-        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="body" type="varchar" size="255" required="true" />
-        <column name="puzzle_id" type="integer" />
-        <column name="member_id" type="integer" />
-        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="Note" onDelete="SETNULL">
-            <reference local="puzzle_id" foreign="id"/>
-        </foreign-key>
-        <foreign-key foreignTable="member" phpName="Author" refPhpName="Note" onDelete="SETNULL">
-            <reference local="member_id" foreign="id"/>
-        </foreign-key>
         <behavior name="timestampable" />
         <behavior name="archivable" />
     </table>
@@ -109,21 +68,6 @@
         <foreign-key foreignTable="puzzle" phpName="Parent" refPhpName="PuzzleChild" onDelete="CASCADE">
             <reference local="parent_id" foreign="id"/>
         </foreign-key>
-    </table>
-    <table name="news" phpName="News">
-        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="news_type" type="varchar" size="16" required="false" />
-        <column name="content" type="varchar" size="255" required="true" />
-        <column name="member_id" type="integer" required="false" />
-        <column name="puzzle_id" type="integer" required="false" />
-        <foreign-key foreignTable="member" phpName="Member" refPhpName="News" onDelete="SETNULL">
-            <reference local="member_id" foreign="id"/>
-        </foreign-key>
-        <foreign-key foreignTable="puzzle" phpName="Puzzle" refPhpName="News" onDelete="CASCADE">
-            <reference local="puzzle_id" foreign="id"/>
-        </foreign-key>
-        <behavior name="timestampable" />
-        <behavior name="archivable" />
     </table>
     <table name="link" phpName="Link">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>

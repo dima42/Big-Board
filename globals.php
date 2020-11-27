@@ -95,12 +95,6 @@ $twig->addFilter($yesno);
 
 // RENDER
 function render($template, $context = "", $vars = array()) {
-	$latestNews = NewsQuery::create()
-		->orderByCreatedAt('desc')
-		->filterByNewsType('important')
-		->limit(1)
-		->findOne();
-
 	$links = LinkQuery::create()
 		->find();
 
