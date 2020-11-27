@@ -8,7 +8,6 @@
     <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
     <li class="nav-item"><a class="nav-link" href="#organization">Organization</a></li>
     <li class="nav-item"><a class="nav-link" href="#puzzles">Puzzles</a></li>
-    <li class="nav-item"><a class="nav-link" href="#adding">Adding</a></li>
     <li class="nav-item"><a class="nav-link" href="#slack">Slack</a></li>
     <li class="nav-item"><a class="nav-link" href="#spreadsheets">Spreadsheets</a></li>
     <li class="nav-item"><a class="nav-link" href="#feedback">Feedback</a></li>
@@ -18,7 +17,6 @@
 {% block content %}
 <h1>🐗 Big Board documentation</h1>
 
-<p class="mb-5">Add <a href="https://docs.google.com/spreadsheets/d/1n0txhgUBqX1rRPbKRHRfvKnqBdSgmKAVrdhVFm5VuP4/edit">feature requests and bug reports here</a>.</p>
 
 <section class="mb-5">
     <span id="overview" class="anchor-target"></span>
@@ -28,9 +26,6 @@
 
     <ul>
         <li>Organize the puzzles</li>
-        <li>Communicate with other solvers</li>
-        <li>Indicate which puzzles we're working on</li>
-        <li>Find teammates to help when help is needed</li>
     </ul>
 
 </section>
@@ -90,49 +85,7 @@
         <li>The puzzle's Slack channel.</li>
     </ul>
 
-    <p>
-        You'll also see a list of solvers working on that puzzle. Here you can join the roster, or leave if you're already a member.
-    </p>
 </section>
-{#
-<section class="mb-5">
-    <span id="adding" class="anchor-target"></span>
-
-    <h2>Adding puzzles</h2>
-
-    <p>
-        <a href="/add">Adding puzzles</a> is slightly automated, and it assumes that the Mystery Hunt puzzle URLs are not password-protected. If this ends up not being the case, we'll tweak this page to be entirely manual. As it is now, this is how it works:
-    </p>
-
-    <ol>
-        <li>Paste any number of links in the box, one per line.</li>
-        <li>Select a meta if they're all part of the same one. Or select "This is a new meta" if you're adding a new one.</li>
-        <li>Click "Submit URLs".</li>
-        <li>The app will ping the URLs and grab the puzzles' title(s).</li>
-        <li>You'll get a new form for each puzzle, where you can edit data or leave them as is.</li>
-        <li>Hit "Submit puzzles".</li>
-    </ol>
-
-    <p>At this point, the app will make sure that the title, URL and Slack channels are unique. If not, it'll tell you to change. If you're good, it'll do the following:</p>
-
-    <ul>
-        <li>Set up a separate page for the puzzle.</li>
-        <li>Create the spreadsheet in the Drive.</li>
-        <li>Create the Slack channel.</li>
-    </ul>
-
-     <p><b>Using Link Grabber</b></p>
-
-    <p>If you find yourself on the puzzle site where there are a lot of new puzzles to copy over, you can use the <a href="https://chrome.google.com/webstore/detail/link-grabber/caodelkhipncidmoebgbbeemedohcdma/related?hl=en-US">Link Grabber</a> tool to scrape the page more efficiently. Steps:</p>
-
-    <ol>
-        <li>Use Link Grabber to scrape all the links on a given page. </li>
-        <li>Filter as needes so you're only grabbing the URLs you wnat.</li>
-        <li>Press the copy button.</li>
-        <li>Paste the list in the box on <a href="/add">/add</a>.</li>
-    </ol>
-</section>
-#}
 
 <section class="mb-5">
     <span id="slack" class="anchor-target"></span>
@@ -154,7 +107,7 @@
     </ul>
     <p><b>In any <i>puzzle</i> channel, you can:</b></p>
     <ul>
-        <li>Type <code>/info</code> to get all the meta-links and list of members for a puzzle.</li>
+        <li>Type <code>/info</code> to get all the meta-links for a puzzle.</li>
         <li>Type <code>/solve [solution]</code> to enter a puzzle's solution.</li>
         <li>Type <code>/tobybot</code> to get this list of commands.</li>
     </ul>
@@ -169,25 +122,9 @@
 
     <h2>Spreadsheets</h2>
 
-    <p>New spreadsheets are made by duplicating a "Template" file that lives in our Drive. The template has some simple formatting applied to it, and it has a bunch of custom formula attached to it that will be helpful for puzzle solving. All the available formulas are listed in the Examples tab. They are:</p>
-    <ul>
-        <li><code><b>pattern(str)</b></code> — capitalizes and removes any punctuation</li>
-        <li><code><b>strip(str)</b></code> — capitalizes and removes all non-alpha-numeric, including spaces</li>
-        <li><code><b>nth(n, str)</b></code> — returns the nth letter of strip(str)</li>
-        <li><code><b>columnify(str)</b></code> — splits the letters of a string into a bunch of cells, horizontally</li>
-        <li><code><b>position_of(char)</b></code> — returns the alpha position of a character</li>
-        <li><code><b>letter_at(n)</b></code> — return sthe nth letter of the alphabet</li>
-        <li><code><b>shift_string(str, n)</b></code> — shifts an entire string n letters down the alphabet</li>
-        <li><code><b>sum_letters(str)</b></code> — return the sum of the alpha position of every letter in the string.</li>
-        <li><code><b>alphabetize(str)</b></code> — sort the letters of a string, alphabetically</li>
-        <li><code><b>difference(str1, str2)</b></code> — return the letters that are in str1, but not str2.</li>
-    </ul>
+    <p>New spreadsheets are made by duplicating a "Template" file that lives in our Drive. The template has some simple formatting applied to it, and it has a bunch of custom formula attached to it that will be helpful for puzzle solving. All the available formulas are listed in the Examples tab. </p>
 </section>
 
-<section class="mb-5">
-    <span id="feedback" class="anchor-target"></span>
-    <h2>Feedback</h2>
-    <p>Got ideas for improvements? Ping <a href="https://palindrome2018.slack.com/team/U87J885FZ">@santheo</a> on Slack, or email Sandy at <a href="mailto:santheo@gmail.com">santheo@gmail.com</a>.</p>
-</section>
+Credits for most original big board development go to Sandor Weisz and Foggy Brume.  Ange Management maintenance mostly by Dima.
 
 {% endblock %}

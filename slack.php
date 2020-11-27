@@ -213,7 +213,11 @@ class Bot {
 			$puzzleQuery->filterByStatus($parameter);
 			$count   = $puzzleQuery->count();
 			$pretext = $count." puzzles marked `".strtoupper($parameter)."`:";
-		} else {
+		} elseif ($parameter == "ange") {
+                        $puzzleQuery->filterByStatus(['open|stuck|priority', Criteria::LIKE);
+                        $count   = $puzzleQuery->count();
+                        $pretext = $count." puzzles marked open/stuck/priority: ";
+                } else {
 			$puzzleQuery->filterByTitle('%'.$parameter.'%', Criteria::LIKE);
 			$count   = $puzzleQuery->count();
 			$pretext = $count." puzzle titles match a search for `".strtoupper($parameter)."`:";
@@ -262,7 +266,7 @@ class Bot {
 		return $channel_response;
 	}
 
-        // unused by ange management in 2020
+        // unused by ange management in 2020/2021
 	private function workon($request, $response) {
 		$parameter        = $request->text;
 		$channel_response = ['text' => "Hmm, maybe ask a human for help. This computer is confused."];
@@ -335,59 +339,6 @@ class Bot {
 		return $channel_response;
 	}
 
-        // unused by ange management in 2020
-	private function note($request, $response) {
-		$channel_response = ['text' => 'System Error.'];
-		$channel_id       = $request->channel_id;
-		$body             = trim($request->text);
-		$slack_user_id    = $request->user_id;
-
-		$puzzle = PuzzleQuery::create()
-			->filterBySlackChannelId($channel_id)
-			->findOne();
-
-		$member = MemberQuery::create()
-			->filterBySlackId($slack_user_id)
-			->findOne();
-
-		// If there's no body, send back all notes.
-		if (!$body) {
-			$note_count = $puzzle->countNotes();
-
-			if ($note_count == 0) {
-				$channel_response = [
-					"text"          => "There are no notes attached to *".$puzzle->getTitle()."*.",
-					"response_type" => "in_channel",
-				];
-			} else {
-				$all_notes = array_map(function ($note) {
-						return [
-							"pretext" => $note->getAuthor()->getNameForSlack()." wrote:",
-							"text"    => $note->getBody(),
-						];
-					}, iterator_to_array($puzzle->getNotes()));
-
-				$channel_response = [
-					'link_names'    => true,
-					"response_type" => "in_channel",
-					"attachments"   => $all_notes,
-				];
-			}
-
-		} elseif (!$puzzle) {
-			$channel_response = [
-				"text" => "`".$request->command."` can only be used inside a puzzle channel.",
-			];
-		} else {
-			$puzzle->note($body, $member);
-			$channel_response = [
-				"text"          => "Got it. I posted your note to *".$puzzle->getTitle()."*.",
-				"response_type" => "in_channel",
-			];
-		}
-
-		return $channel_response;
-	}
 
 	private function tagged($request, $response) {
 		$channel_response = ['text' => 'Sorry, there is a problem.'];
