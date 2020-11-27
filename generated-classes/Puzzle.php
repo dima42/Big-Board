@@ -57,7 +57,7 @@ class Puzzle extends BasePuzzle {
                     '=HYPERLINK("'.$this->getJitsiURL().'", "Video")',
                     '=HYPERLINK("'.$this->getBigBoardURL().'", "Big Board")',
                 ]];
-                $range = "A1:C1";
+                $range = "A1:D1";
                 $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'ROWS', 'values' => $values]);
                 $spreadsheetID = $this->parseSpreadsheetID();
                 $valueInputOption = 'USER_ENTERED';
