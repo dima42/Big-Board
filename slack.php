@@ -66,6 +66,13 @@ function createNewSlackChannel($slug) {
 	return getSlackChannelID($slug);
 }
 
+function archiveSlackChannel($channel_id) {
+	$commander = getTobyBotCommander();
+        $commander->execute('channels.archive', [
+                   'channel' => $channel_id
+        ]);
+}
+
 function inviteToSlackChannel($channel_id, $member_id) {
 	$commander = getTobyBotCommander();
 
