@@ -108,7 +108,6 @@ function render($template, $context = "", $vars = array()) {
 	$vars['alert']         = $_SESSION['alert_message']??null;
 	$vars['statuses']      = ['open', 'stuck', 'priority', 'solved', 'lowpriority'];
 	$vars['now']           = strftime('%c');
-	$vars['latestNews']    = $latestNews;
 	$vars['links']         = $links;
 	$vars['context']       = $context;
 	$vars['slackDomain']   = getenv('SLACK_DOMAIN');
