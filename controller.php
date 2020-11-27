@@ -37,9 +37,6 @@ $this->with('/puzzles', function () {
 		$this->respond('GET', '/member/[:member_id]', function ($request, $response) {
 				return memberPuzzles($request->member_id, $response);
 			});
-		$this->respond('GET', '/withtags', function ($request, $response) {
-				return unsolvedWithTags($response);
-			});
 	});
 
 $this->respond('GET', '/members', function ($request, $response) {
@@ -75,56 +72,11 @@ $this->with('/puzzle/[:id]', function () {
 		$this->respond('POST', '/change-status/?', function ($request) {
 				return changePuzzleStatus($request->id, $request);
 			});
-                /* unused by ange management 2020-2021
-		$this->respond('POST', '/add-note/?', function ($request) {
-				return addNote($request->id, $request);
-			});
-		$this->respond('POST', '/join/?', function ($request) {
-				return joinPuzzle($request->id);
-			});
-		$this->respond('POST', '/leave/?', function ($request) {
-				return leavePuzzle($request->id);
-			});
-                */
 		$this->respond('POST', '/delete/?', function ($request) {
 				return deletePuzzle($request->id, $request);
 			});
-		$this->respond('POST', '/delete-note/[:note_id]/?', function ($request) {
-				return archivePuzzleNote($request->note_id, $request->id);
-			});
 	});
 
-// TAGS
-
-$this->with('/tags', function () {
-		$this->respond('GET', '/?', function ($request, $response) {
-				return displayTags();
-			});
-		$this->respond('GET', '/admin/?', function ($request, $response) {
-				return displayTagAdmin();
-			});
-		$this->respond('GET', '/edit/?', function ($request, $response) {
-				return displayTagAdmin('edit');
-			});
-		$this->respond('POST', '/add/?', function ($request, $response) {
-				return addTag($request);
-			});
-		$this->respond('POST', '/[:id]/edit/?', function ($request, $response) {
-				return editTag($request);
-			});
-		$this->respond('POST', '/[:id]/move_up/?', function ($request, $response) {
-				return moveTag($request, $request->id, 'up');
-			});
-		$this->respond('POST', '/[:id]/move_dn/?', function ($request, $response) {
-				return moveTag($request, $request->id, 'down');
-			});
-		$this->respond('POST', '/alert/[:id]/?', function ($request, $response) {
-				return alertTag($request, $response, $request->id);
-			});
-		$this->respond('POST', '/invite/?', function ($request, $response) {
-				return inviteToTag($request, $response);
-			});
-	});
 
 // MEMBER
 
@@ -180,20 +132,6 @@ $this->with('/add', function () {
 
 $this->respond('GET', '/puzzle_scrape', function ($request, $response) {
 		return puzzleScrape($request, $response);
-	});
-
-// NEWS
-
-$this->with('/news', function () {
-		$this->respond('GET', '/?', function ($request) {
-				return displayNews();
-			});
-		$this->respond('POST', '/add/?', function ($request) {
-				return postNews($request->body);
-			});
-		$this->respond('POST', '/[:update_id]/delete/?', function ($request) {
-				return archiveNews($request->update_id);
-			});
 	});
 
 // ABOUT
@@ -439,11 +377,6 @@ function displayPuzzle($puzzle_id, $method = "get") {
 		redirect('/', "Puzzle $puzzle_id does not exist.");
 	}
 
-	$notes = NoteQuery::create()
-		->filterByPuzzle($puzzle)
-		->orderByCreatedAt('desc')
-		->find();
-
 	$members = $puzzle->getMembers();
 
 	$is_member      = false;
@@ -490,41 +423,20 @@ function displayPuzzle($puzzle_id, $method = "get") {
 			->find();
 	}
 
-	$puzzles = TagQuery::create()
-		->findTree(1);
-
-	$topics = TagQuery::create()
-		->findTree(2);
-
-	$skills = TagQuery::create()
-		->findTree(3);
-
-	$tag_alerts = TagAlertQuery::create()
-		->filterByPuzzle($puzzle)
-		->select('TagId')
-		->find()
-		->toArray();
-
 	render($template, 'puzzles', array(
 			'puzzle_id'     => $puzzle_id,
 			'puzzle'        => $puzzle,
-			'notes'         => $notes,
 			'members'       => $members,
 			'is_member'     => $is_member,
 			'metas_to_show' => $metas_to_show,
 			'puzzles_metas' => $puzzles_metas,
 			'is_meta'       => $is_meta,
 			'all_members'   => $full_roster,
-			'scopes'        => [
-				'Puzzle Types' => $puzzles,
-				'Topics'       => $topics,
-				'Skills'       => $skills,
-			],
-			'tag_alerts' => $tag_alerts,
 		));
 }
 
 function editPuzzle($puzzle_id, $request) {
+        Global $shared_drive;
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
 		->findOne();
@@ -561,7 +473,7 @@ function editPuzzle($puzzle_id, $request) {
 
 	$puzzle->save();
 
-	$puzzle->solve($request->solution);
+	$puzzle->solve($request->solution, $shared_drive);
 
 	$alert = "Saved ".$puzzle->getTitle();
 	redirect('/puzzle/'.$puzzle_id.'/edit', $alert);
@@ -617,50 +529,6 @@ function changePuzzleStatus($puzzle_id, $request) {
 	redirect('/puzzle/'.$puzzle_id, $alert);
 }
 
-function addNote($puzzle_id, $request) {
-	$puzzle = PuzzleQuery::create()
-		->filterByID($puzzle_id)
-		->findOne();
-
-	$noteText = $request->body;
-
-	if (trim($noteText) != "") {
-		$alert = $puzzle->note($noteText, $_SESSION['user']);
-	}
-
-	redirect('/puzzle/'.$puzzle_id, $alert);
-}
-
-function joinPuzzle($puzzle_id) {
-	$puzzle = PuzzleQuery::create()
-		->filterByID($puzzle_id)
-		->findOne();
-
-	$member = $_SESSION['user'];
-
-	$alert = $member->joinPuzzle($puzzle);
-	redirect('/puzzle/'.$puzzle_id, $alert);
-}
-
-function leavePuzzle($puzzle_id) {
-	$puzzle = PuzzleQuery::create()
-		->filterByID($puzzle_id)
-		->findOne();
-
-	$member = $_SESSION['user'];
-
-	$alert = $member->leavePuzzle($puzzle);
-	redirect('/puzzle/'.$puzzle_id, $alert);
-}
-
-function archivePuzzleNote($note_id, $puzzle_id) {
-	$note = NoteQuery::create()
-		->filterByID($note_id)
-		->delete();
-
-	$alert = "Note archived.";
-	redirect('/puzzle/'.$puzzle_id, $alert);
-}
 
 // ADDING PUZZLES
 
@@ -775,9 +643,6 @@ function addPuzzle($request, $response) {
 				'pkID'     => $newPuzzle->getID(),
 			);
 
-			$news_text = "was added.";
-			addNews($news_text, 'open', $newPuzzle);
-
 			$tobybot      = new Bot();
 			$instructions = getTobyBotInstructions();
 
@@ -785,7 +650,7 @@ function addPuzzle($request, $response) {
 			postToChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentLarge(), ":hatching_chick:", "NewPuzzleBot", $newPuzzle->getSlackChannel());
 			postToChannel('*Puzzle channel commands that I answer to:*', $instructions, ":robot_face:", "HelperBot", $newPuzzle->getSlackChannel());
 
-			// POST TO #general
+			// POST TO main big board slack channel
 			postToHuntChannel('*'.$newPuzzle->getTitle().'*', $newPuzzle->getSlackAttachmentMedium(), ":hatching_chick:", "NewPuzzleBot");
 
                         // put metadata in sheet
@@ -801,157 +666,6 @@ function addPuzzle($request, $response) {
 		));
 }
 
-// TAGS
-
-function displayTags() {
-	$puzzles = TagQuery::create()
-		->findTree(1);
-
-	$topics = TagQuery::create()
-		->findTree(2);
-
-	$skills = TagQuery::create()
-		->findTree(3);
-
-	render('tags.twig', 'tags', array(
-			'scopes'        => [
-				'Puzzle Types' => $puzzles,
-				'Topics'       => $topics,
-				'Skills'       => $skills,
-			],
-		));
-}
-
-function displayTagAdmin($view = 'view') {
-	$puzzles = TagQuery::create()
-		->findTree(1);
-
-	$topics = TagQuery::create()
-		->findTree(2);
-
-	$skills = TagQuery::create()
-		->findTree(3);
-
-	$template = 'tags-admin.twig';
-	if ($view == 'edit') {
-		$template = 'tags-edit.twig';
-	}
-
-	render($template, 'tags', array(
-			'scopes'        => [
-				'Puzzle Types' => $puzzles,
-				'Topics'       => $topics,
-				'Skills'       => $skills,
-			],
-		));
-}
-
-function addTag($request) {
-	Global $DEBUG;
-
-	$parent = TagQuery::create()
-		->findPk($request->parent);
-
-	$slugify = new Slugify();
-	$slug    = substr($slugify->slugify($request->title), 0, 21);
-
-	if (!$DEBUG) {
-		$newChannelID = createNewSlackChannel($slug);
-	} else {
-		$newChannelID = "fake123";
-	}
-
-	if (!$newChannelID) {
-		$alert = "Sorry, something went wrong.";
-	} else {
-		$tag = new Tag();
-		$tag->setTitle($request->title);
-		$tag->setDescription($request->description);
-		$tag->insertAsLastChildOf($parent);
-		$tag->setSlackChannel($slug);
-		$tag->setSlackChannelId($newChannelID);
-		$tag->save();
-
-		$alert = $request->title.' added.';
-	}
-
-	redirect('/tags/admin', $alert);
-}
-
-function editTag($request) {
-	$tag = TagQuery::create()
-		->findPk($request->id);
-
-	$tag->setTitle($request->title);
-	$tag->setDescription($request->description);
-	$tag->save();
-
-	$alert = $request->title.' edited.';
-	redirect('/tags/edit', $alert);
-}
-
-function moveTag($request, $id, $dir) {
-	$tag = TagQuery::create()
-		->findPk($id);
-
-	if ($dir == "down") {
-		$nextSib = $tag->getNextSibling();
-		$tag->moveToNextSiblingOf($nextSib);
-	} elseif ($dir == "up") {
-		$prevSib = $tag->getPrevSibling();
-		$tag->moveToPrevSiblingOf($prevSib);
-	}
-
-	redirect('/tags/edit', $tag->getTitle().' moved '.$dir.'.');
-}
-
-function alertTag($request, $response, $puzzle_id) {
-	$tag_id = $request->tag_id;
-
-	$tag = TagQuery::create()
-		->findPk($tag_id);
-
-	$puzzle = PuzzleQuery::create()
-		->findPk($puzzle_id);
-
-	// TODO: Don't allow if link has .alerted class
-
-	if ($request->alerted == "true") {
-		$ta = TagAlertQuery::create()
-			->filterByPuzzleId($puzzle_id)
-			->filterByTagId($tag_id)
-			->findOne()
-			->delete();
-
-		$json = [
-			'ok' => 1
-		];
-	} else {
-		$ta = new TagAlert();
-		$ta->setPuzzle($puzzle);
-		$ta->setTag($tag);
-		$ta->save();
-
-		error_log("tagging ".$tag->getTitle());
-
-		postToSlack("*".$puzzle->getTitle()."* is tagged `".strtoupper($tag->getTitle())."`.", $puzzle->getSlackAttachmentMedium(), ":label:", ucfirst($tag->getTitle())." Bot", $tag->getSlackChannelId());
-
-		$json = [
-			'ok' => 1
-		];
-	}
-
-	return $response->json($json);
-}
-
-function inviteToTag($request, $response) {
-	$channel = $request->channel;
-	$member  = $_SESSION['user'];
-
-	$slack_response = inviteToSlackChannel($channel, $member->getSlackId());
-	return $response->json($slack_response);
-}
-
 // MEMBERS
 
 function displayRoster() {
@@ -964,44 +678,15 @@ function displayMember($member_id) {
 		->filterById($member_id)
 		->findOne();
 
-	$member_channels = [];
-	$scopes          = [];
-
 	// If it's the logged-in user, take this chance to refresh the session object in case member data has changed
 	if ($member_id == $_SESSION['user']->getId()) {
 		$is_user          = true;
 		$_SESSION['user'] = $member;
-
-		$slack_id     = $member->getSlackId();
-		$all_channels = getAllSlackChannels()['channels'];
-		$member_of    = array_filter($all_channels, function ($channel) use ($slack_id) {
-				return in_array($slack_id, $channel['members']);
-			});
-		$member_channels = array_map(function ($channel) {
-				return $channel['id'];
-			}, $member_of);
-
-		$puzzles = TagQuery::create()
-			->findTree(1);
-
-		$topics = TagQuery::create()
-			->findTree(2);
-
-		$skills = TagQuery::create()
-			->findTree(3);
-
-		$scopes = [
-			'Puzzle Types' => $puzzles,
-			'Topics'       => $topics,
-			'Skills'       => $skills,
-		];
 	}
 
 	render('member.twig', 'member', array(
 			'member'          => $member,
 			'is_user'         => $is_user,
-			'member_channels' => $member_channels,
-			'scopes'          => $scopes,
 		));
 }
 
@@ -1041,64 +726,6 @@ function assignSlackId($slack_id) {
 	redirect('/member/'.$member->getId(), $message);
 }
 
-function displayNews() {
-	$important = NewsQuery::create()
-		->leftJoinWith('News.Member')
-		->leftJoinWith('News.Puzzle')
-		->orderByCreatedAt('desc')
-		->filterByNewsType('important')
-		->find();
-
-	$updates = NewsQuery::create()
-		->leftJoinWith('News.Member')
-		->leftJoinWith('News.Puzzle')
-		->orderByCreatedAt('desc')
-		->filterByNewsType('important', Criteria::NOT_EQUAL)
-		->find();
-
-	render('news.twig', 'news', array(
-			'important' => $important,
-			'updates'   => $updates,
-		));
-}
-
-function addNews($text, $type = "important", $puzzle = null, $member = null) {
-	$update = new News();
-	$update->setContent($text);
-	$update->setNewsType($type);
-	$update->setMember($member);
-	$update->setPuzzle($puzzle);
-	$update->save();
-}
-
-function postNews($text) {
-	if (trim($text) == "") {
-		redirect('/news/');
-	}
-
-	$member = $_SESSION['user'];
-	addNews($text, "important", null, $member);
-	postToHuntChannel(
-		'*IMPORTANT NEWS* from '.$member->getFullName(), [[
-				"text"  => $text,
-				"color" => "#ff0000",
-			]],
-		":mega:",
-		"NewsBot"
-	);
-
-	$alert = "Update posted.";
-	redirect('/news', $alert);
-}
-
-function archiveNews($update_id) {
-	$note = NewsQuery::create()
-		->filterByID($update_id)
-		->delete();
-
-	$alert = "News update has been archived.";
-	redirect('/news/', $alert);
-}
 
 // ABOUT
 

@@ -6,18 +6,6 @@
 <aside class="col-12 col-md-3 col-sm-3 mt-3">
     {% block aside %}{% endblock %}
 
-    {% block latest_news %}
-    <div class="card bg-light mb-3">
-        <div class="card-body">
-            <small class="latest-news">LATEST NEWS</small>
-        {{ latestNews.content }}
-        </div>
-        <div class="card-footer">
-          <small class="text-muted">{{ latestNews.member.fullName }} • {{ latestNews.createdAt | date("D g:i A") }}</small>
-        </div>
-    </div>
-    {% endblock %}
-
     {% block aside_bottom %}{% endblock %}
 
     <div class="important-info">

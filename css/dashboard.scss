@@ -251,10 +251,6 @@ aside {
     color: #aaa;
 }
 
-.latest-news {
-    @extend %card-subhead;
-}
-
 // PUZZLE LISTS
 
 #open-tab, #stuck-tab, #priority-tab {
@@ -608,7 +604,7 @@ body.tags {
         font-weight: bold;
     }
 
-    .join-link, .member-link {
+    .member-link {
         float: right;
     }
 
@@ -617,10 +613,6 @@ body.tags {
     }
 
     .member {
-        .join-link {
-            display: none;
-        }
-
         .member-link {
             display: inline-block;
         }
@@ -856,20 +848,6 @@ body.member {
     .puzzle-list {
         margin-bottom: 1em;
     }
-
-}
-
-// NEWS
-
-.news-row {
-    @extend %entry-row;
-
-    &[data-filter=important] {
-        background:lighten(yellow, 30%);
-    }
-}
-
-.news {
 
 }
 

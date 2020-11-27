@@ -8,11 +8,8 @@
 .icon-edit,
 .icon-archive,
 .icon-x,
-.icon-tag,
-.icon-tags,
 .icon-campus,
 .icon-remote,
-.icon-join,
 .icon-copy,
 .icon-offsite,
 .icon-solvers,
@@ -69,7 +66,7 @@
 .fa-10x {
   font-size: 10em; }
 
-.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-lowpriority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-tag, .icon-tags, .icon-campus, .icon-remote, .icon-join, .icon-copy, .icon-offsite, .icon-solvers, .icon-important {
+.fa-fw, .icon-open, .icon-stuck, .icon-priority, .icon-lowpriority, .icon-solved, .icon-edit, .icon-archive, .icon-x, .icon-campus, .icon-remote, .icon-copy, .icon-offsite, .icon-solvers, .icon-important {
   text-align: center;
   width: 1.25em; }
 
@@ -108,11 +105,8 @@
 .fa-pull-left.icon-edit,
 .fa-pull-left.icon-archive,
 .fa-pull-left.icon-x,
-.fa-pull-left.icon-tag,
-.fa-pull-left.icon-tags,
 .fa-pull-left.icon-campus,
 .fa-pull-left.icon-remote,
-.fa-pull-left.icon-join,
 .fa-pull-left.icon-copy,
 .fa-pull-left.icon-offsite,
 .fa-pull-left.icon-solvers,
@@ -132,11 +126,8 @@
 .fa-pull-right.icon-edit,
 .fa-pull-right.icon-archive,
 .fa-pull-right.icon-x,
-.fa-pull-right.icon-tag,
-.fa-pull-right.icon-tags,
 .fa-pull-right.icon-campus,
 .fa-pull-right.icon-remote,
-.fa-pull-right.icon-join,
 .fa-pull-right.icon-copy,
 .fa-pull-right.icon-offsite,
 .fa-pull-right.icon-solvers,
@@ -248,17 +239,8 @@ readers do not read off random characters that represent icons */
 .icon-stuck:before {
   content: "\f128"; }
 
-.icon-tag:before {
-  content: "\f02b"; }
-
-.icon-tags:before {
-  content: "\f02c"; }
-
 .icon-campus:before {
   content: "\f19c"; }
-
-.icon-join:before {
-  content: "\f234"; }
 
 .icon-solvers:before {
   content: "\f0c0"; }
@@ -328,18 +310,6 @@ readers do not read off random characters that represent icons */
   color: #FF6600;
   color: #444; }
 
-.icon-tag {
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
-  color: #FF6600;
-  color: #444; }
-
-.icon-tags {
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
-  color: #FF6600;
-  color: #444; }
-
 .icon-campus {
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
@@ -347,12 +317,6 @@ readers do not read off random characters that represent icons */
   color: #993333; }
 
 .icon-remote {
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
-  color: #FF6600;
-  color: #666; }
-
-.icon-join {
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
   color: #FF6600;
@@ -533,11 +497,6 @@ aside .now {
   color: #888;
   font-size: 10px; }
 
-.latest-news, .subhead {
-  font-weight: bold;
-  text-transform: uppercase;
-  color: #aaa; }
-
 .puzzle-section h2 {
   margin-bottom: 5px;
   font-weight: bold; }
@@ -618,53 +577,6 @@ body.tags .solution-cell {
   visibility: hidden;
   pointer-events: none; }
 
-.tags .tag {
-  padding: .3em 0;
-  padding-left: .6em;
-  position: relative;
-  margin-bottom: .6em;
-  border-left: 5px solid #f3f3f3; }
-  .tags .tag:hover {
-    background: #f7f7f7; }
-  .tags .tag.tag-form {
-    padding-top: 0;
-    padding-bottom: 0; }
-
-.tags .level0 {
-  margin-top: 1em; }
-
-.tags .level1 {
-  border-left-color: #e7e7e7;
-  margin-left: 1em; }
-
-.tags .level2 {
-  border-left-color: #c7c7c7;
-  margin-left: 2em; }
-
-.tags .level3 {
-  border-left-color: #aaa;
-  margin-left: 3em; }
-
-.tags .move-tag {
-  position: absolute;
-  top: 0;
-  right: 0; }
-
-.tags .move-tag-up {
-  right: 25px; }
-
-.tags .edit-tag {
-  margin-right: 65px; }
-
-.tags h2 .slack-link {
-  background: #f7f7f7 url("/img/slack.png") no-repeat 5px 4px;
-  background-size: 15px;
-  padding-left: 25px;
-  float: right;
-  font-weight: normal;
-  font-size: 1rem;
-  margin-top: 2px; }
-
 .puzzle-metas {
   background: #eee;
   margin-bottom: .5rem;
@@ -734,47 +646,6 @@ body.tags .solution-cell {
   .puzzle-links .link-slack::before {
     background-image: url("/img/slack.png"); }
 
-.tag-list {
-  margin-bottom: 1em; }
-  .tag-list .tag {
-    display: block;
-    font-size: .9rem;
-    padding: .3em .5em;
-    margin-bottom: 4px;
-    color: #333;
-    border-left: 4px solid #eee; }
-  .tag-list .tag:hover, .tag-list .alerted, .tag-list .member {
-    background: #e6f2ff;
-    border-left-color: #004a99;
-    color: black;
-    text-decoration: none; }
-  .tag-list .alerted, .tag-list .member {
-    font-weight: bold; }
-  .tag-list .join-link, .tag-list .member-link {
-    float: right; }
-  .tag-list .member-link {
-    display: none; }
-  .tag-list .member .join-link {
-    display: none; }
-  .tag-list .member .member-link {
-    display: inline-block; }
-  .tag-list .level2 {
-    margin-left: 1em; }
-
-.puzzles .tag-list .tag {
-  display: none; }
-
-.puzzles .tag-list .alerted {
-  display: block; }
-
-.puzzles .tag-lists.show-all .tag {
-  display: block; }
-
-.show-all-tags {
-  border: 1px solid #ccc;
-  color: #555;
-  text-transform: uppercase;
-  font-size: .8rem; }
 
 aside .buttons .btn, aside .buttons button {
   display: block;
@@ -789,35 +660,6 @@ aside .buttons .btn, aside .buttons button {
   border-bottom: 1px dashed #ccc; }
   .scope-header:first-child {
     margin-top: 0; }
-
-.note-row, .news-row {
-  padding: .8em 0;
-  border-bottom: 1px solid #eee; }
-  .note-row .entry-by, .news-row .entry-by {
-    color: #666;
-    font-size: .9rem;
-    display: block; }
-  .note-row .entry-when, .news-row .entry-when {
-    color: #888;
-    font-size: .75rem;
-    display: block; }
-  .note-row .entry-body, .news-row .entry-body {
-    position: relative; }
-    .note-row .entry-body p, .news-row .entry-body p {
-      margin: 0; }
-    .note-row .entry-body .close, .news-row .entry-body .close {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 0; }
-    .note-row .entry-body:hover .close, .news-row .entry-body:hover .close {
-      display: block; }
-
-.note-row:first-child {
-  border-top: 1px solid #eee; }
-
-.new-note-form {
-  margin-bottom: 1em; }
 
 .puzzles .level2 {
   margin-left: 1.2em; }
@@ -892,9 +734,6 @@ body.add.trippy {
 
 body.member .puzzle-list {
   margin-bottom: 1em; }
-
-.news-row[data-filter=important] {
-  background: #ffff99; }
 
 .about h2 {
   padding-bottom: .3em;
