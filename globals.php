@@ -168,7 +168,8 @@ $shared_client->setAuthConfig($login_data);
 $shared_client->setScopes(array("https://www.googleapis.com/auth/drive"));
 Global $shared_drive;
 $shared_drive = new Google_Service_Drive($shared_client);
-$shared_sheets = new Google_Service_Sheets($client);
+Global $shared_sheets;
+$shared_sheets = new Google_Service_Sheets($shared_client);
 
 function create_file_from_template($title) {
         Global $shared_drive;

@@ -15,7 +15,7 @@
     "propel/propel": "~2.0@dev",
     "klein/klein": "^2.1",
     "duzun/hquery": "^1.7",
-    "maknz/slack": "^1.7",
+    "nexylan/slack": "^3.1",
     "maximebf/debugbar": "^1.14",
     "aptoma/twig-markdown": "^3.0",
     "michelf/php-markdown": "^1.7",

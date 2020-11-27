@@ -59,6 +59,10 @@ function createNewSlackChannel($slug) {
 			'name' => $slug
 		]);
 
+        $commander->execute('channels.leave', [
+                        'channel' => getSlackChannelID($slug)
+                ]);
+
 	return getSlackChannelID($slug);
 }
 

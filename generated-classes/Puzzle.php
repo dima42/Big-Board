@@ -52,15 +52,19 @@ class Puzzle extends BasePuzzle {
 
         public function postMetadataToSheet($shared_sheets) {
                 $values = [[
-                    'HYPERLINK($this->getSlackURL(), "Slack")',
-                    'HYPERLINK($this->getJitsURL(), "Video"),
-                    'HYPERLINK($this->getBigBoardURL(), "Big Board")
+                    '=HYPERLINK("'.$this->getSlackURL().'", "Slack")',
+                    '=HYPERLINK("'.$this->getJitsiURL().'", "Video")',
+                    '=HYPERLINK("'.$this->getBigBoardURL().'", "Big Board")',
                 ]];
                 $range = "A1:C1";
-                $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'COLUMNS', 'values' => $values]);
+                $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'ROWS', 'values' => $values]);
                 $spreadsheetID = $this->parseSpreadsheetID();
-                $result = $shared_sheets->spreadsheets_values->update($spreadsheetId, $range,
-        $body);
+                $valueInputOption = 'USER_ENTERED';
+		$params = [
+  		  'valueInputOption' => $valueInputOption
+		];
+                $result = $shared_sheets->spreadsheets_values->update($spreadsheetID, $range,
+        $body, $params);
         }
 
 	// ADD NOTE
@@ -191,7 +195,7 @@ class Puzzle extends BasePuzzle {
 			':boar: <'.$this ->getBigBoardURL().'|Big Board>',
 			':hh: <'.$this   ->getUrl().'|Puzzle page>',
 			':drive: <'.$this->getSpreadsheetURL().'|Google Spreadsheet>',
-                        ':camera: <'.$this ->getJitsURL().'| Video Meeting>',
+                        ':camera: <'.$this ->getJitsiURL().'| Video Meeting>',
 		];
 
 		$response = array_map(function ($info) {
