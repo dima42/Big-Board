@@ -436,6 +436,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 }
 
 function editPuzzle($puzzle_id, $request) {
+        Global $shared_drive;
 	$puzzle = PuzzleQuery::create()
 		->filterByID($puzzle_id)
 		->findOne();
@@ -472,7 +473,7 @@ function editPuzzle($puzzle_id, $request) {
 
 	$puzzle->save();
 
-	$puzzle->solve($request->solution);
+	$puzzle->solve($request->solution, $shared_drive);
 
 	$alert = "Saved ".$puzzle->getTitle();
 	redirect('/puzzle/'.$puzzle_id.'/edit', $alert);

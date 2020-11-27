@@ -13,19 +13,6 @@
         {% else %}
         {% endfor %}
     </div>
-
-    {% if puzzle.status != "solved" %}
-    <div class="nav-section">
-        <h4>Solvers</h4>
-
-        {% for member in members %}
-            {{ solver(member) }}
-        {% else %}
-            No one :(
-        {% endfor %}
-    </div>
-
-    {% endif %}
 {% endblock %}
 
 {% block content %}
