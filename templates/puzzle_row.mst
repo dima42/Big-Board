@@ -1,10 +1,9 @@
 <tr id="puzzle{{ Id }}" data-solution="{{ Solution }}" data-filter="{{ Status }}" class="puzzle {{ #meta }}meta{{ /meta }}">
     <td class="status"><i class="icon-{{ Status }}"></i></td>
-    <td class="member-count">{{ #SolverCount }}{{ SolverCount }}{{ /SolverCount }}</td>
     <td class="title"><a href="/puzzle/{{ Id }}">{{ Title }}</a></td>
     <td class="solution-cell">{{ Solution }}</td>
-    <td class="icon-link work-on"><form action="/puzzle/{{ Id }}/join" method="post"><button type="submit" title="Work on this puzzle" data-tooltip><i class="icon-join"></i></button></form></td>
     <td class="icon-link">{{ #Url }}<a href="{{ Url }}" target="_blank"><img src="/img/hh.png" width="20" alt="" title="Puzzle page"></a>{{ /Url }}</td>
     <td class="icon-link"><a href="{{ SpreadsheetURL }}" target="_blank"><img src="/img/drive.png" width="20" alt="" title="Google Spreadsheet"></a></td>
     <td class="icon-link"><a href="{{ SlackURL }}" target="_blank"><img src="/img/slack.png" width="20" alt=""  title="Slack channel"></a></td>
+    <td class="icon-link"><a href="{{ JitsiURL }}" target="_blank"><img src="/img/camera.png" width="20" alt=""  title="Video channel"></a></td>
 </tr>

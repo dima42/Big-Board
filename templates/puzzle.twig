@@ -60,6 +60,7 @@
             <li class="nav-item"><a class="nav-link link-puzzle" target="_blank" href='{{ puzzle.url }}'>Puzzle</a></li>
             <li class="nav-item"><a class="nav-link link-drive" target="_blank" href='{{ puzzle.getSpreadsheetURL() }}'>Sheet</a></li>
             <li class="nav-item"><a class="nav-link link-slack" target="_blank" href='{{ puzzle.getSlackURL() }}'>Slack</a></li>
+            <li class="nav-item"><a class="nav-link link-jitsi" target="_blank" href='{{ puzzle.getJitsiURL() }}'>Video</a></li>
         </ul>
     </div>
 
@@ -91,49 +92,8 @@
         {% from 'macros.twig' import puzzle_table %}
         {{ puzzle_table( puzzle.id ) }}
     {% endif %}
-
-    <form class="new-note-form" action="/puzzle/{{ puzzle.id }}/add-note" method="post">
-        <div class="row">
-            <div class="col-sm-3">
-                <small>Add a note:</small>
-            </div>
-            <div class="col-sm-6">
-                <textarea type="text" class="form-control" name="body" rows="2"></textarea>
-            </div>
-            <div class="col-sm-3">
-                <button class="btn btn-dark" type="submit">Post note</button>
-            </div>
-        </div>
-    </form>
-
-    {% if notes|length %}
-        <div class="notes">
-        {% for note in notes %}
-            <div class="row note-row">
-                <div class="col-sm-3">
-                    <small class="entry-by">{{ note.author.fullName }}</small>
-                    <small class="entry-when">
-                        {% set difference = date(now).diff(date(note.createdAt)) %}
-                        {% if difference.days >= 2 %}
-                            {{ difference.days }} days
-                        {% else %}
-                            {{ difference.format('%H:%I') }} ago
-                        {% endif %}
-                    </small>
-                </div>
-                <div class="col-sm-9 entry-body">
-                    {{ note.body }}
-                    <form action="/puzzle/{{ puzzle.id }}/delete-note/{{ note.id }}" class="delete-note" method="post">
-                        <button type="submit" class="close">
-                            <span>&times;</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        {% endfor %}
-        </div>
-    {% endif %}
     {% endblock %}
+
 {% endblock %}
 
 {% block aside %}

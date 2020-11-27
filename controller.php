@@ -75,6 +75,7 @@ $this->with('/puzzle/[:id]', function () {
 		$this->respond('POST', '/change-status/?', function ($request) {
 				return changePuzzleStatus($request->id, $request);
 			});
+                /* unused by ange management 2020-2021
 		$this->respond('POST', '/add-note/?', function ($request) {
 				return addNote($request->id, $request);
 			});
@@ -84,6 +85,7 @@ $this->with('/puzzle/[:id]', function () {
 		$this->respond('POST', '/leave/?', function ($request) {
 				return leavePuzzle($request->id);
 			});
+                */
 		$this->respond('POST', '/delete/?', function ($request) {
 				return deletePuzzle($request->id, $request);
 			});
