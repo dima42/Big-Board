@@ -110,10 +110,6 @@ class Puzzle extends BasePuzzle {
 			// REMOVE MEMBERS
 			$this->removeMembers();
 
-			// POST NEWS UPDATE
-			$news_text = "`".$this->getSolution()."`";
-			addNews($news_text, $newStatus, $this);
-
 			// POST TO SLACK
 			$channel = $this->getSlackChannel();
 			postToChannel('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
