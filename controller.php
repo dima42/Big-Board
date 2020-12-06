@@ -231,11 +231,14 @@ function allPuzzles($orderBy = 'Title', $orderHow = 'asc', $response) {
 	$puzzles = PuzzleQuery::create()
 		->orderBy($orderBy, $orderHow)
 		->orderByTitle($orderHow)
-		->select(['Id', 'Title', 'Url', 'SpreadsheetId', 'Solution', 'Status', 'SlackChannelId', 'SolverCount'])
-		->find()
-		->toArray();
+		->find();
 
-	return $response->json($puzzles);
+        $properties = [];
+        foreach ($puzzles as $puzzle){
+            array_push($properties, $puzzle->getProperties());
+        }
+
+	return $response->json($properties);
 }
 
 function allPuzzlesByMeta($response) {
@@ -243,22 +246,29 @@ function allPuzzlesByMeta($response) {
 		->leftJoinWithPuzzleParent()
 		->orderByStatus('desc')
 		->orderByTitle()
-		->find()
-		->toArray();
+		->find();
 
-	return $response->json($puzzles);
+        $properties = [];
+        foreach ($puzzles as $puzzle){
+            array_push($properties, $puzzle->getProperties());
+        }
+
+	return $response->json($properties);
 }
 
 function allMetas($request, $response) {
-	$metas = PuzzleQuery::create()
+	$puzzles = PuzzleQuery::create()
 		->joinWith('PuzzleChild')
 		->where('Puzzle.id = PuzzleChild.parent_id')
 		->where('Puzzle.id = PuzzleChild.puzzle_id')
-		->select(['Id'])
-		->find()
-		->toArray();
+		->find();
 
-	return $response->json($metas);
+        $properties = [];
+        foreach ($puzzles as $puzzle){
+            array_push($properties, $puzzle->getProperties());
+        }
+
+	return $response->json($properties);
 }
 
 function metaPuzzles($meta_id, $response) {
@@ -266,19 +276,14 @@ function metaPuzzles($meta_id, $response) {
 		->joinWithPuzzleParent()
 		->where('PuzzleParent.ParentId = '.$meta_id)
 		->orderByTitle()
-		->find()
-		->toArray();
+		->find();
 
-	return $response->json($puzzles);
-}
+        $properties = [];
+        foreach ($puzzles as $puzzle){
+            array_push($properties, $puzzle->getProperties());
+        }
 
-function memberPuzzles($member_id, $response) {
-	$member = MemberQuery::create()
-		->filterById($member_id)
-		->findOne();
-
-	$puzzles = $member->getPuzzles()->toArray();
-	return $response->json($puzzles);
+	return $response->json($properties);
 }
 
 function allMembers($response) {
@@ -291,16 +296,6 @@ function allMembers($response) {
 		->toArray();
 
 	return $response->json($members);
-}
-
-function unsolvedWithTags($response) {
-	$puzzles = PuzzleQuery::create()
-	// ->filterByStatus('solved', Criteria::NOT_EQUAL)
-		->joinWithTagAlert()
-		->find()
-		->toArray();
-
-	return $response->json($puzzles);
 }
 
 // PUZZLE LISTS

@@ -27,7 +27,7 @@ class Puzzle extends BasePuzzle {
 	}
 
         public function getJitsiURL() {
-                return preg_replace("/[^a-zA-Z0-9]+/", "", "https://meet.jit.si/".getenv('TEAM_NAME')."/".$this->getTitle());
+                return preg_replace("/[^a-zA-Z0-9:.\/]+/", "", "https://meet.jit.si/".getenv('TEAM_NAME')."/".$this->getTitle());
         }
 
 	public function getBigBoardURL() {
@@ -41,6 +41,17 @@ class Puzzle extends BasePuzzle {
 	public function getSpreadsheetURL() {
 		return "https://docs.google.com/spreadsheets/d/".$this->parseSpreadsheetID();
 	}
+
+        public function getProperties() {
+           return array_merge(
+                $this->toArray(),
+            [
+                'SpreadsheetId' => $this->parseSpreadsheetID(),
+                'SlackChannelURL' => $this->getSlackURL(),
+                'JitsiURL' => $this->getJitsiURL(),
+            ]
+            );
+        }
 
 	public function parseSpreadsheetID() {
 		$sid = $this->getSpreadsheetID();
@@ -67,19 +78,6 @@ class Puzzle extends BasePuzzle {
                 $result = $shared_sheets->spreadsheets_values->update($spreadsheetID, $range,
         $body, $params);
         }
-
-	// ADD NOTE
-	public function note($noteText, $author) {
-		$note = new Note();
-		$note->setPuzzle($this);
-		$note->setBody($noteText);
-		$note->setAuthor($author);
-		$note->save();
-
-		$this->postNoteToSlack($note);
-
-		return "Saved a note to ".$this->getTitle();
-	}
 
 	// SOLVE
 
@@ -121,12 +119,6 @@ class Puzzle extends BasePuzzle {
 		$this->save();
 
 		return $alert;
-	}
-
-	public function removeMembers() {
-		PuzzleMemberQuery::create()
-			->filterByPuzzle($this)
-			->delete();
 	}
 
 	// LAST MOD
@@ -214,81 +206,4 @@ class Puzzle extends BasePuzzle {
 		return $response;
 	}
 
-	public function postJoin($member) {
-		$memberCount = $this->countMembers();
-
-		$channel = $this->getSlackChannel();
-
-		inviteToSlackChannel($this->getSlackChannelId(), $member->getSlackID());
-
-		// if ($memberCount > 0) {
-		// 	$this->postMembers($member->getNameForSlack()." joined *".$this->getTitle()."*. Current roster:", $channel);
-		// } else {
-		// 	postToChannel(
-		// 		'First member of *'.$this->getTitle().'*!',
-		// 		[[
-		// 				'text'  => $member->getNameForSlack(),
-		// 				'color' => 'good',
-		// 			]],
-		// 		":wave:",
-		// 		"JoinBot",
-		// 		$channel
-		// 	);
-		// }
-	}
-
-	public function postLeave($member) {
-		$memberCount = $this->countMembers();
-
-		$channel = $this->getSlackChannel();
-
-		if ($memberCount > 0) {
-			$this->postMembers($member->getFullName().' left *'.$this->getTitle().'*. Current roster:', $channel);
-		} else {
-			postToChannel(
-				$member->getFullName().' left *'.$this->getTitle().'*. No members remain.',
-				[],
-				":wave:",
-				"JoinBot",
-				$channel
-			);
-		}
-	}
-
-	public function getMembersForSlack() {
-		$members = $this->getMembers();
-		$text    = [];
-		foreach ($members as $key => $member) {
-			$text[] = $member->getFullName();
-		}
-		return join("\n", $text);
-	}
-
-	public function postMembers($header_msg = "Current roster:", $channel) {
-		postToChannel(
-			$header_msg,
-			[[
-					'text'  => $this->getMembersForSlack(),
-					'color' => 'good',
-				]],
-			":wave:",
-			"JoinBot",
-			$channel
-		);
-	}
-
-	public function postNoteToSlack($note) {
-		$channel = $this->getSlackChannel();
-
-		postToChannel(
-			'*'.$note->getAuthor()->getFullName().'* posted a note:',
-			[[
-					'text'  => $note->getBody(),
-					'color' => 'good',
-				]],
-			":scroll:",
-			"NoteBot",
-			$channel
-		);
-	}
 }
