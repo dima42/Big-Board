@@ -21,12 +21,6 @@ var loadPuzzleData = function(url, callback) {
     });
 };
 
-var loadPuzzleTagData = function(url, callback) {
-    $.get(url, {}, function(response) {
-        loadPuzzleTemplate(response, callback, 'TagAlerts', 'TagId');
-    });
-};
-
 var loadPuzzleTemplate = function(response, callback, parentListName, parentIDName) {
     var data = response;
     var now = Date.now();
@@ -35,9 +29,6 @@ var loadPuzzleTemplate = function(response, callback, parentListName, parentIDNa
     $.each(data, function(key, puzzleData) {
         var ssID = puzzleData['SpreadsheetId'];
         ssID = ssID.replace(/^.+ccc\?key=/, "");
-        puzzleData['SpreadsheetURL'] = "https://docs.google.com/spreadsheets/d/" + ssID;
-        puzzleData['SlackURL'] = "http://" + slackDomain + ".slack.com/messages/"+puzzleData['SlackChannelId'];
-        puzzleData['JitsiURL'] = "http://meet.jit.si/" + teamNameNoSpaces + "/"+puzzleData['Title'];
         puzzleData['SinceCreated'] = now - new Date(puzzleData['CreatedAt']);
         puzzleData['SinceUpdated'] = now - new Date(puzzleData['UpdatedAt']);
 

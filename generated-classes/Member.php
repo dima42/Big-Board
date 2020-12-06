@@ -28,36 +28,4 @@ class Member extends BaseMember {
 		return "http://".getenv('SLACK_DOMAIN').".slack.com/team/".$this->getSlackID();
 	}
 
-	// JOINING & LEAVING
-
-	public function joinPuzzle($puzzle) {
-		// Go thorugh all the puzzles I'm a member of, and leave them all (except don't leave this puzzle, if I'm already a member)
-		$memberPuzzles = $this->getPuzzles();
-		foreach ($memberPuzzles as $key => $memberPuzzle) {
-			if ($puzzle->getId() != $memberPuzzle->getId()) {
-				$this->leavePuzzle($memberPuzzle);
-			}
-		}
-
-		try {
-			$this->addPuzzle($puzzle);
-			$this->save();
-		} catch (Exception $e) {
-			debug("Exception: .".$e->getMessage());
-			return "You already joined this puzzle.";
-		}
-
-		$puzzle->postJoin($this);
-		return $this->getFullName()." joined ".$puzzle->getTitle().".";
-	}
-
-	public function leavePuzzle($puzzle) {
-		PuzzleMemberQuery::create()
-			->filterByMember($this)
-			->filterByPuzzle($puzzle)
-			->delete();
-		// $puzzle->postLeave($this);
-		return $this->getFullName()." left ".$puzzle->getTitle().".";
-	}
-
 }
