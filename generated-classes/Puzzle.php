@@ -27,7 +27,7 @@ class Puzzle extends BasePuzzle {
 	}
 
         public function getJitsiURL() {
-                return "https://meet.jit.si/".str_replace(' ', '', getenv('TEAM_NAME'))."/".str_replace(' ', '', $this->getTitle());
+                return preg_replace("/[^a-zA-Z0-9]+/", "", "https://meet.jit.si/".getenv('TEAM_NAME')."/".$this->getTitle());
         }
 
 	public function getBigBoardURL() {
