@@ -47,8 +47,11 @@ class Puzzle extends BasePuzzle {
                 $this->toArray(),
             [
                 'SpreadsheetId' => $this->parseSpreadsheetID(),
+                'SpreadsheetURL' => $this->getSpreadsheetURL(),
                 'SlackChannelURL' => $this->getSlackURL(),
                 'JitsiURL' => $this->getJitsiURL(),
+                'SheetData' => $this->getMaybeCachedSheetData(),
+                'LastModified' => $this->getMaybeCachedLastMod()['when'],
             ]
             );
         }
@@ -79,6 +82,24 @@ class Puzzle extends BasePuzzle {
         $body, $params);
         }
 
+        public function getMaybeCachedSheetData() {
+            Global $cache;
+            $callable = function () { return $this->getSheetData(); };
+            return $cache->get($this->parseSpreadsheetID(), $callable);
+        }
+
+        public function getSheetData() {
+            if ($this->getStatus() == 'solved') {
+                return '';
+            } else {
+                Global $shared_sheets;
+                $range = "A4:B8";
+                $response = $shared_sheets->spreadsheets_values->get($this->parseSpreadsheetID(), $range);
+                $values = $response->getValues();
+                return $values;
+            }
+        }
+
 	// SOLVE
 
 	public function solve($solution, $shared_drive) {
@@ -101,12 +122,20 @@ class Puzzle extends BasePuzzle {
                         $emptyFile->setName($this->getTitle()." SOLVED: ".$newSolution);
                         $updatedFile = $shared_drive->files->update($fileID, $emptyFile);
 
+                        Global $shared_sheets;
+                        $values = [['No', 'No', 'No', 'No', 'No']];
+                        $range = "B4:B8";
+                        $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'ROWS', 'values' => $values]);
+                        $spreadsheetID = $this->parseSpreadsheetID();
+                        $valueInputOption = 'USER_ENTERED';
+                        $params = [
+                            'valueInputOption' => $valueInputOption
+                        ];
+                        $result = $shared_sheets->spreadsheets_values->update($spreadsheetID, $range, $body, $params);
+
 			// SET STATUS
 			$this->setStatus($newStatus);
-			$alert = $this->getTitle()." is solved! Great work, team! 🎓";
-
-			// REMOVE MEMBERS
-			$this->removeMembers();
+                        $alert = $this->getTitle()." is solved! Great work, team! 🎓";
 
 			// POST TO SLACK
 			$channel = $this->getSlackChannel();
@@ -114,7 +143,7 @@ class Puzzle extends BasePuzzle {
 			postToHuntChannel('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot");
 		} else {
 			$this->setStatus('open');
-			$alert = $this->getTitle()." is open again.";
+                        $alert = $this->getTitle()." is open again.";
 		}
 		$this->save();
 
@@ -122,20 +151,37 @@ class Puzzle extends BasePuzzle {
 	}
 
 	// LAST MOD
+        public function getMaybeCachedLastMod() {
+
+            $max_age = 180;
+            if ($this->getStatus() == 'solved') {
+                $max_age = 1000*1000*1000*1000;
+            }
+
+            Global $cache;
+            $callable = function () { return $this->getLastMod(); };
+            return $cache->get($this->parseSpreadsheetID()." last mod", $callable, $max_age);
+        }
 
 	public function getLastMod() {
-		Global $pal_drive;
+		Global $shared_drive;
 		$fileID = $this->parseSpreadsheetID();
-		$file   = $pal_drive->files->get($fileID);
+		$file   = $shared_drive->files->get($fileID, array('fields' => 'modifiedTime, createdTime'));
 		debug('Fetching Google file info for '.$this->title);
 
-		$age_in_minutes = (time()-strtotime($file['modifiedDate']??"2017-12-31"))/60;
-		$last_mod       = intval($age_in_minutes)." min";
+		$age_in_minutes = (time()-strtotime($file['modifiedTime']))/60;
+		$last_mod       = intval($age_in_minutes)." min ago";
 		if ($age_in_minutes > 60*24) {
-			$last_mod = intval($age_in_minutes/(24*60))." days";
+			$last_mod = intval($age_in_minutes/(24*60))." days ago";
 		} else if ($age_in_minutes > 60) {
-			$last_mod = intval($age_in_minutes/60)." hrs";
+			$last_mod = intval($age_in_minutes/60)." hrs ago";
 		}
+
+                if (strtotime($file['modifiedTime'])-strtotime($file['createdTime']) < 60) {
+                        $last_mod = "not yet started";
+                }
+
+                $this->setSheetModDate($file['modifiedTime']);
 
 		return [
 			'when' => $last_mod,

@@ -76,6 +76,8 @@ Provision a MySQL add-on. I used ClearDB. Create a DB. Note your:
 - username
 - password
 
+Provision Heroku Redis.  `heroku addons:create heroku-redis:hobby-dev -a your-app-name`
+
 ## Config variables
 
 Define these locally and Heroku.  Locally: copy `envvars_example.config` to `envvars.config`, fill out the fields, and run `source envars.config`.  On Heroku: config variables are in the settings tab.

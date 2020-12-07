@@ -47,12 +47,6 @@ $this->respond('GET', '/scrape_avatars', function ($request, $response) {
 		return scrapeAvatars();
 	});
 
-// POLL GOOGLE DRIVE
-
-$this->respond('GET', '/poll_drive', function ($request, $response) {
-		return pollDrive();
-	});
-
 // PUZZLES
 
 $this->with('/puzzle/[:id]', function () {
@@ -175,37 +169,6 @@ function scrapeAvatars() {
 	return;
 }
 
-function pollDrive() {
-	Global $pal_drive;
-
-	$mostRecentUpdate = PuzzleQuery::create()
-		->orderBySheetModDate('desc')
-		->select('sheet_mod_date')
-		->findOne();
-
-	$mruDateTime = date("c", strtotime($mostRecentUpdate));
-
-	$all_files = $pal_drive->files->listFiles([
-			"maxResults" => 200,
-			"q"          => "'".getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID')."' in parents and trashed != true and modifiedDate > '".$mruDateTime."'",
-		]);
-
-	foreach ($all_files["items"] as $k => $sheetData) {
-		$sheetData['modifiedDate'];
-
-		$p = PuzzleQuery::create()
-			->findOneBySpreadsheetId($sheetData['id']);
-
-		if ($p) {
-			debug("UPDATED: ".$p->getTitle());
-			$p->setSheetModDate($sheetData['modifiedDate']);
-			$p->save();
-		}
-	}
-
-	return;
-}
-
 function displayTest($response) {
 	$poll_time = file_get_contents('next_poll_time.txt');
 
@@ -261,14 +224,11 @@ function allMetas($request, $response) {
 		->joinWith('PuzzleChild')
 		->where('Puzzle.id = PuzzleChild.parent_id')
 		->where('Puzzle.id = PuzzleChild.puzzle_id')
-		->find();
+                ->select(['Id'])
+		->find()
+                ->toArray();
 
-        $properties = [];
-        foreach ($puzzles as $puzzle){
-            array_push($properties, $puzzle->getProperties());
-        }
-
-	return $response->json($properties);
+	return $response->json($puzzles);
 }
 
 function metaPuzzles($meta_id, $response) {
@@ -517,8 +477,6 @@ function changePuzzleStatus($puzzle_id, $request) {
 			":bell:",
 			"StatusBot"
 		);
-	} elseif ($newStatus == 'solved') {
-		$puzzle->removeMembers();
 	}
 
 	$alert = "Changed status.";

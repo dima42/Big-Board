@@ -545,11 +545,10 @@ td.solution-cell {
       text-decoration: none; }
   .puzzle-list .status {
     width: 22px; }
-  .puzzle-list .work-on button {
-    padding: 0;
-    border: 0;
-    vertical-align: middle;
-    background: none; }
+  .puzzle-list .solvers {
+    width: 22px; }
+  .puzzle-list .last-modified {
+    width: 22px; }
   .puzzle-list .member-count {
     font-weight: bold;
     font-size: .75rem;
