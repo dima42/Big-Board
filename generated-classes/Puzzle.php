@@ -42,6 +42,17 @@ class Puzzle extends BasePuzzle {
 		return "https://docs.google.com/spreadsheets/d/".$this->parseSpreadsheetID();
 	}
 
+        public function getDisplayAge($timestr) {
+            $age_in_minutes = (time()-strtotime($timestr))/60;
+            $last_mod       = intval($age_in_minutes)." min ago";
+            if ($age_in_minutes > 60*24) {
+                $last_mod = intval($age_in_minutes/(24*60))." days ago";
+            } else if ($age_in_minutes > 60) {
+                $last_mod = intval($age_in_minutes/60)." hrs ago";
+            }
+            return $last_mod;
+        }
+
         public function getProperties() {
            return array_merge(
                 $this->toArray(),
@@ -51,7 +62,8 @@ class Puzzle extends BasePuzzle {
                 'SlackChannelURL' => $this->getSlackURL(),
                 'JitsiURL' => $this->getJitsiURL(),
                 'SheetData' => $this->getMaybeCachedSheetData(),
-                'LastModified' => $this->getMaybeCachedLastMod()['when'],
+                'LastModifiedAge' => $this->getMaybeCachedLastMod()['when'],
+                'CreatedAge' => $this->getDisplayAge($this->getCreatedAt("Y-m-d H:i:s")),
             ]
             );
         }
@@ -166,22 +178,28 @@ class Puzzle extends BasePuzzle {
 	public function getLastMod() {
 		Global $shared_drive;
 		$fileID = $this->parseSpreadsheetID();
+                
+                
 		$file   = $shared_drive->files->get($fileID, array('fields' => 'modifiedTime, createdTime'));
 		debug('Fetching Google file info for '.$this->title);
+                $revisions = $shared_drive->revisions->listRevisions($fileID);
+                
+                // google drive modifiedAt is affected by some background process
+                $last_modified = $file['createdTime'];
+                foreach($revisions['revisions'] as $revision) {
+                    if ($revision['modifiedTime'] > $last_modified) {
+                        $last_modified = $revision['modifiedTime'];
+                    }
+                }
 
-		$age_in_minutes = (time()-strtotime($file['modifiedTime']))/60;
-		$last_mod       = intval($age_in_minutes)." min ago";
-		if ($age_in_minutes > 60*24) {
-			$last_mod = intval($age_in_minutes/(24*60))." days ago";
-		} else if ($age_in_minutes > 60) {
-			$last_mod = intval($age_in_minutes/60)." hrs ago";
-		}
+                $last_mod = $this->getDisplayAge($last_modified);
 
-                if (strtotime($file['modifiedTime'])-strtotime($file['createdTime']) < 60) {
+                if (strtotime($last_modified)-strtotime($file['createdTime']) < 60) {
                         $last_mod = "not yet started";
                 }
 
-                $this->setSheetModDate($file['modifiedTime']);
+                $this->setSheetModDate($last_modified);
+                $this->save();
 
 		return [
 			'when' => $last_mod,

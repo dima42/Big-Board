@@ -7,5 +7,6 @@
     <td class="icon-link"><a href="{{ SpreadsheetURL }}" target="_blank"><img src="/img/drive.png" width="20" alt="" title="Google Spreadsheet"></a></td>
     <td class="icon-link"><a href="{{ SlackChannelURL }}" target="_blank"><img src="/img/slack.png" width="20" alt=""  title="Slack channel"></a></td>
     <td class="icon-link"><a href="{{ JitsiURL }}" target="_blank"><img src="/img/camera.png" width="20" alt=""  title="Video channel"></a></td>
-    <td class="last-modified">{{ LastModified }} </td>
+    <td class="time-age">{{ LastModifiedAge }} </td>
+    <td class="time-age">{{ CreatedAge }} </td>
 </tr>

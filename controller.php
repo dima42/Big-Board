@@ -3,12 +3,6 @@ use Cocur\Slugify\Slugify;
 use Propel\Runtime\ActiveQuery\Criteria;
 require_once("globals.php");
 
-$this->respond('GET', '/test',
-
-function ($request, $response) {
-		return displayTest($response);
-	});
-
 // PUZZLE LISTS
 
 $this->respond('GET', '/', function () {
@@ -169,31 +163,11 @@ function scrapeAvatars() {
 	return;
 }
 
-function displayTest($response) {
-	$poll_time = file_get_contents('next_poll_time.txt');
-
-	preprint("Next poll time: ".date("c", $poll_time));
-	preprint("Current time: ".date("c", time()));
-
-	if ($poll_time <= time()) {
-		pollDrive();
-		$next_poll_time = strtotime("+2 minutes", $poll_time);
-		file_put_contents('next_poll_time.txt', $next_poll_time);
-	}
-
-	return;
-
-	render('test.twig', '', array(
-			// 'content' => $result,
-		));
-}
-
 // PUZZLE DATA
 
 function allPuzzles($orderBy = 'Title', $orderHow = 'asc', $response) {
 	$puzzles = PuzzleQuery::create()
 		->orderBy($orderBy, $orderHow)
-		->orderByTitle($orderHow)
 		->find();
 
         $properties = [];

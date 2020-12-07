@@ -77,6 +77,7 @@ Provision a MySQL add-on. I used ClearDB. Create a DB. Note your:
 - password
 
 Provision Heroku Redis.  `heroku addons:create heroku-redis:hobby-dev -a your-app-name`
+Allow workers on Heroku. `heroku config:add LD_LIBRARY_PATH=/app/php/ext:/app/apache/lib`
 
 ## Config variables
 
