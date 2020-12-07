@@ -15,7 +15,7 @@
     "propel/propel": "~2.0@dev",
     "klein/klein": "^2.1",
     "duzun/hquery": "^1.7",
-    "nexylan/slack": "^3.1",
+    "maknz/slack": "^1.7",
     "maximebf/debugbar": "^1.14",
     "aptoma/twig-markdown": "^3.0",
     "michelf/php-markdown": "^1.7",
@@ -23,7 +23,8 @@
     "frlnc/php-slack": "dev-no-format-support",
     "sentry/sentry": "^1.8",
     "twig/extensions": "^1.5",
-    "google/apiclient": "^2.0"
+    "google/apiclient": "^2.0",
+    "predis/predis": "1.0.3"
   },
   "require-dev": {
     "deployer/deployer": "^6.0",

@@ -2,6 +2,7 @@
 require_once 'vendor/autoload.php';
 require_once 'generated-conf/config.php';
 require_once "slack.php";
+require_once "cache.php";
 
 use Aptoma\Twig\Extension\MarkdownEngine;
 use Aptoma\Twig\Extension\MarkdownExtension;
@@ -192,3 +193,6 @@ function create_file_from_template($title) {
 				}	while ($attempts < 10);
         return $copy['id'];
 }
+
+Global $cache;
+$cache = new Cache();

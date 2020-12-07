@@ -346,6 +346,14 @@ td.solution-cell {
         width: 22px;
     }
 
+    .solvers {
+        width: 22px;
+    }
+
+    .last-modified {
+        width: 22px;
+    }
+
     .work-on button {
         padding: 0;
         border: 0;
@@ -391,71 +399,6 @@ body.tags {
     pointer-events: none;
 }
 
-// TAGS
-
-.tags {
-    .tag {
-        padding: .3em 0;
-        padding-left: .6em;
-        position: relative;
-        margin-bottom: .6em;
-        border-left: 5px solid #f3f3f3;
-
-        &:hover {
-            background:#f7f7f7;
-        }
-
-        &.tag-form {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-    }
-
-    .level0 {
-        margin-top: 1em;
-    }
-
-    .level1 {
-        border-left-color: #e7e7e7;
-        margin-left: 1em;
-    }
-
-    .level2 {
-        border-left-color: #c7c7c7;
-        margin-left: 2em;
-    }
-
-    .level3 {
-        border-left-color: #aaa;
-        margin-left: 3em;
-    }
-
-    .move-tag {
-        position: absolute;
-        top: 0;
-        right: 0;
-    }
-
-    .move-tag-up {
-        right: 25px;
-    }
-
-    .edit-tag {
-        margin-right: 65px;
-    }
-
-    h2 {
-        .slack-link {
-            background: #f7f7f7 url('/img/slack.png') no-repeat 5px 4px;
-            background-size: 15px;
-            padding-left: 25px;
-            float: right;
-            font-weight: normal;
-            font-size: 1rem;
-            margin-top: 2px;
-        }
-    }
-}
 
 // PUZZLE PAGE
 
