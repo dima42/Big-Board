@@ -19,18 +19,22 @@ $klein->respond('GET', '/oauth', function ($request, $response) use ($klein, $pa
 			setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
 			return redirect("/");
 		}
+                error_log("hi");
 
 		// If 'code' is set in the request, that's Google trying to authenticate.
 		// Extract the access token and continue to the file picker.
 		if (isset($_GET['code'])) {
 			debug("OAUTH. Code: ".$_GET['code']);
+                        error_log("OAUTH. Code: ".$_GET['code']);
 			$token = $pal_client->authenticate($_GET['code']);
+                        error_log(json_encode($token));
 			$_SESSION['temporary_access_token'] = json_encode($token);
 		}
 		// Once we have an access token, show the file picker to get access to the
 		// puzzle folder.
 		if (isset($_SESSION['temporary_access_token'])) {
                         $token_dump = json_decode($_SESSION['temporary_access_token']);
+                        var_dump($token_dump);
 			render('picker.twig', 'picker', array(
 				'access_token' => $token_dump->{'access_token'},
 				'app_id' => getenv('GOOGLE_APP_ID'),
