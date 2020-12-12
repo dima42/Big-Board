@@ -137,7 +137,7 @@ class Puzzle extends BasePuzzle {
                         Global $shared_sheets;
                         $values = [['No', 'No', 'No', 'No', 'No']];
                         $range = "B4:B8";
-                        $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'ROWS', 'values' => $values]);
+                        $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'COLUMNS', 'values' => $values]);
                         $spreadsheetID = $this->parseSpreadsheetID();
                         $valueInputOption = 'USER_ENTERED';
                         $params = [
