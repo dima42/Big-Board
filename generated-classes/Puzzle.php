@@ -224,7 +224,7 @@ class Puzzle extends BasePuzzle {
                         '<'.$this ->getJitsiURL().'|:camera:> ',
 			'*'.$this ->getTitle().'*',
 			'<#'.$this->getSlackChannelId().'>',
-                        join(",", array_filter($properties['SheetData'], function ($input) {return $input & 1;})),
+                        join(",", array_map(function ($input) {return $input[0];}, $properties['SheetData'])),
                         $properties['LastModifiedAge'],
 		];
 
