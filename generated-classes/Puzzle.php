@@ -62,7 +62,7 @@ class Puzzle extends BasePuzzle {
                 'SlackChannelURL' => $this->getSlackURL(),
                 'JitsiURL' => $this->getJitsiURL(),
                 'SheetData' => $this->getMaybeCachedSheetData(),
-                'LastModifiedAge' => $this->getMaybeCachedLastMod()['when'],
+                'LastModifiedAge' => $this->getDisplayAge($this->getMaybeCachedLastMod()['when']),
                 'CreatedAge' => $this->getDisplayAge($this->getCreatedAt("Y-m-d H:i:s")),
             ]
             );
@@ -112,54 +112,61 @@ class Puzzle extends BasePuzzle {
             }
         }
 
-	// SOLVE
 
 	public function solve($solution, $shared_drive) {
-		$oldSolution = $this->getSolution();
-		$newSolution = strtoupper(trim($solution));
+            $oldSolution = $this->getSolution();
+            $newSolution = strtoupper(trim($solution));
 
-		if ($newSolution == $oldSolution) {
-			return;
-		}
+            if ($newSolution == $oldSolution) {
+                    return;
+            }
 
-		// SET SOLUTION
-		$this->setSolution($newSolution);
-		$this->save();
+            if ($newSolution != '') {
+                $newStatus = 'solved';
+                $title = $this->getTitle()." SOLVED: ".$newSolution;
+                $alert = $this->getTitle()." is solved! Great work, team! 🎓";
+            } else {
+                $newStatus = 'open';
+                $title = $this->getTitle();
+                $alert = $this->getTitle()." is open again";
+            }
 
-		if ($newSolution != '') {
-			$newStatus = 'solved';
+            // SET SOLUTION
+            $this->setSolution($newSolution);
 
-                        $fileID = $this->parseSpreadsheetID();
-                        $emptyFile = new Google_Service_Drive_DriveFile();
-                        $emptyFile->setName($this->getTitle()." SOLVED: ".$newSolution);
-                        $updatedFile = $shared_drive->files->update($fileID, $emptyFile);
+            $fileID = $this->parseSpreadsheetID();
+            $emptyFile = new Google_Service_Drive_DriveFile();
+            $emptyFile->setName($title);
+            $updatedFile = $shared_drive->files->update($fileID, $emptyFile);
 
-                        Global $shared_sheets;
-                        $values = [['No', 'No', 'No', 'No', 'No']];
-                        $range = "B4:B8";
-                        $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'COLUMNS', 'values' => $values]);
-                        $spreadsheetID = $this->parseSpreadsheetID();
-                        $valueInputOption = 'USER_ENTERED';
-                        $params = [
-                            'valueInputOption' => $valueInputOption
-                        ];
-                        $result = $shared_sheets->spreadsheets_values->update($spreadsheetID, $range, $body, $params);
+            Global $shared_sheets;
+            $values = [[
+                '=if(not(A4=""), "no", "")',
+                '=if(not(A5=""), "no", "")',
+                '=if(not(A6=""), "no", "")',
+                '=if(not(A7=""), "no", "")',
+                '=if(not(A8=""), "no", "")'
+            ]];
+            $range = "B4:B8";
+            $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'COLUMNS', 'values' => $values]);
+            $spreadsheetID = $this->parseSpreadsheetID();
+            $valueInputOption = 'USER_ENTERED';
+            $params = [
+                'valueInputOption' => $valueInputOption
+            ];
+            $result = $shared_sheets->spreadsheets_values->update($spreadsheetID, $range, $body, $params);
 
-			// SET STATUS
-			$this->setStatus($newStatus);
-                        $alert = $this->getTitle()." is solved! Great work, team! 🎓";
+            // SET STATUS
+            $this->setStatus($newStatus);
 
-			// POST TO SLACK
-			$channel = $this->getSlackChannel();
-			postToChannel('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
-			postToHuntChannel('*'.$this->getTitle().'* is solved: `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot");
-		} else {
-			$this->setStatus('open');
-                        $alert = $this->getTitle()." is open again.";
-		}
-		$this->save();
+            // POST TO SLACK
+            $channel = $this->getSlackChannel();
+            postToChannel('*'.$this->getTitle().'* is '.$newStatus.': `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot", $channel);
+            postToHuntChannel('*'.$this->getTitle().'* is '.$newStatus.': `'.$this->getSolution().'`', $this->getSlackAttachmentMedium(), ":checkered_flag:", "SolveBot");
+            
+            $this->save();
 
-		return $alert;
+	    return $alert;
 	}
 
 	// LAST MOD
@@ -192,8 +199,6 @@ class Puzzle extends BasePuzzle {
                     }
                 }
 
-                $last_mod = $this->getDisplayAge($last_modified);
-
                 if (strtotime($last_modified)-strtotime($file['createdTime']) < 60) {
                         $last_mod = "not yet started";
                 }
@@ -202,7 +207,7 @@ class Puzzle extends BasePuzzle {
                 $this->save();
 
 		return [
-			'when' => $last_mod,
+			'when' => $last_modified,
 			'who'  => $file['lastModifyingUserName']??"",
 		];
 	}
