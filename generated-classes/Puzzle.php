@@ -215,6 +215,7 @@ class Puzzle extends BasePuzzle {
 	// SLACK STUFF
 
 	public function getSlackAttachmentSmall() {
+                $properties = $this->getProperties();
 		$content = [
 			":".$this ->getStatus().":",
 			'<'.$this ->getBigBoardURL().'|:boar:> ',
@@ -223,6 +224,8 @@ class Puzzle extends BasePuzzle {
                         '<'.$this ->getJitsiURL().'|:camera:> ',
 			'*'.$this ->getTitle().'*',
 			'<#'.$this->getSlackChannelId().'>',
+                        join(",", array_map(function ($input) {return $input[0];}, $properties['SheetData'])),
+                        $properties['LastModifiedAge'],
 		];
 
 		return [
