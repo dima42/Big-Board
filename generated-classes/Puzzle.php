@@ -27,7 +27,7 @@ class Puzzle extends BasePuzzle {
 	}
 
         public function getJitsiURL() {
-                return preg_replace("/[^a-zA-Z0-9:.\/]+/", "", "https://meet.jit.si/".getenv('TEAM_NAME')."/".$this->getTitle());
+                return preg_replace("/[^a-zA-Z0-9:.\/]+/", "", getenv('VIDEO_DOMAIN').$this->getTitle());
         }
 
 	public function getBigBoardURL() {
@@ -105,10 +105,16 @@ class Puzzle extends BasePuzzle {
                 return '';
             } else {
                 Global $shared_sheets;
-                $range = "A4:B8";
+                $range = "A4:B13";
                 $response = $shared_sheets->spreadsheets_values->get($this->parseSpreadsheetID(), $range);
                 $values = $response->getValues();
-                return $values;
+                $names = [];
+                foreach($values as $row){
+                    if ($row[1]=="yes") {
+                        array_push($names, $row[0]);
+                    }
+                }
+                return $names;
             }
         }
 
@@ -145,9 +151,14 @@ class Puzzle extends BasePuzzle {
                 '=if(not(A5=""), "no", "")',
                 '=if(not(A6=""), "no", "")',
                 '=if(not(A7=""), "no", "")',
-                '=if(not(A8=""), "no", "")'
+                '=if(not(A8=""), "no", "")',
+                '=if(not(A9=""), "no", "")',
+                '=if(not(A10=""), "no", "")',
+                '=if(not(A11=""), "no", "")',
+                '=if(not(A12=""), "no", "")',
+                '=if(not(A13=""), "no", "")',
             ]];
-            $range = "B4:B8";
+            $range = "B4:B13";
             $body = new Google_Service_Sheets_ValueRange(['majorDimension' => 'COLUMNS', 'values' => $values]);
             $spreadsheetID = $this->parseSpreadsheetID();
             $valueInputOption = 'USER_ENTERED';
@@ -224,7 +235,7 @@ class Puzzle extends BasePuzzle {
                         '<'.$this ->getJitsiURL().'|:camera:> ',
 			'*'.$this ->getTitle().'*',
 			'<#'.$this->getSlackChannelId().'>',
-                        join(", ", array_map(function ($input) {return $input[0];}, $properties['SheetData'])),
+                        $properties['SheetData'],
                         $properties['LastModifiedAge'],
 		];
 
