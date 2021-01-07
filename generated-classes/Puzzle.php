@@ -114,7 +114,7 @@ class Puzzle extends BasePuzzle {
                         array_push($names, $row[0]);
                     }
                 }
-                return $values;
+                return $names;
             }
         }
 
