@@ -30,11 +30,11 @@ function refreshPuzzles($orderBy = 'Title', $orderHow = 'asc') {
                     sleep(3);
                 }
                 error_log('worker loop complete');
-                sleep(10);
             }
             catch (Exception $e) {
                 error_log("caught: ".$e->getMessage());
             }
+            sleep(3);
         }
 }
 
