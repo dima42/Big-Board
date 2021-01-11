@@ -27,7 +27,7 @@ function refreshPuzzles($orderBy = 'Title', $orderHow = 'asc') {
 
                     error_log("updating: ".$puzzle->getTitle());
                     $puzzle->getProperties();
-                    sleep(10);
+                    sleep(3);
                 }
                 error_log('worker loop complete');
                 sleep(10);
