@@ -28,9 +28,6 @@ $this->with('/puzzles', function () {
 		$this->respond('GET', '/meta/[:meta_id]', function ($request, $response) {
 				return metaPuzzles($request->meta_id, $response);
 			});
-		$this->respond('GET', '/member/[:member_id]', function ($request, $response) {
-				return memberPuzzles($request->member_id, $response);
-			});
 	});
 
 $this->respond('GET', '/members', function ($request, $response) {
