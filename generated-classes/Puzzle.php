@@ -109,7 +109,7 @@ class Puzzle extends BasePuzzle {
                 $response = $shared_sheets->spreadsheets_values->get($this->parseSpreadsheetID(), $range);
                 $values = $response->getValues();
                 $names = [];
-                foreach($values as $row){
+                foreach((array) $values as $row){
                     if ($row[1]=="yes") {
                         array_push($names, $row[0]);
                     }
