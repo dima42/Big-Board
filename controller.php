@@ -442,8 +442,6 @@ function changePuzzleStatus($puzzle_id, $request) {
 
 	if ($newStatus == 'priority') {
 		$news_text = "status set to `".$newStatus."`.";
-		addNews($news_text, $newStatus, $puzzle);
-
 		postToHuntChannel(
 			':priority: *'.$puzzle->getTitle().'* was set to `PRIORITY`.',
 			$puzzle->getSlackAttachmentMedium(),
