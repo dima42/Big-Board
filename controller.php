@@ -186,7 +186,9 @@ function allPuzzlesByMeta($response) {
 
         $properties = [];
         foreach ($puzzles as $puzzle){
+            error_log("got ".$puzzle->getTitle());
             $props = $puzzle->getProperties();
+            error_log("got properties");
             $props["PuzzleParents"] = $puzzle->getPuzzleParents()->toArray();
             array_push($properties, $props);
         }
