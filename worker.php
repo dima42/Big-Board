@@ -27,14 +27,14 @@ function refreshPuzzles($orderBy = 'Title', $orderHow = 'asc') {
 
                     error_log("updating: ".$puzzle->getTitle());
                     $puzzle->getProperties();
-                    sleep(3);
+                    sleep(1);
                 }
                 error_log('worker loop complete');
             }
             catch (Exception $e) {
                 error_log("caught: ".$e->getMessage());
             }
-            sleep(3);
+            sleep(1);
         }
 }
 
