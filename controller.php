@@ -176,11 +176,13 @@ function allPuzzles($orderBy = 'Title', $orderHow = 'asc', $response) {
 }
 
 function allPuzzlesByMeta($response) {
+        error_log("starting by meta retrieval");
 	$puzzles = PuzzleQuery::create()
 		->leftJoinWithPuzzleParent()
 		->orderByStatus('desc')
 		->orderByTitle()
 		->find();
+        error_log("query done");
 
         $properties = [];
         foreach ($puzzles as $puzzle){
@@ -188,6 +190,7 @@ function allPuzzlesByMeta($response) {
             $props["PuzzleParents"] = $puzzle->getPuzzleParents()->toArray();
             array_push($properties, $props);
         }
+        error_log("response formed");
 
 	return $response->json($properties);
 }

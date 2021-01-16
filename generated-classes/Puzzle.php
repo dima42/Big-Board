@@ -54,7 +54,6 @@ class Puzzle extends BasePuzzle {
         }
 
         public function getProperties() {
-           error_log("retrieving ".$this->getTitle());
            return array_merge(
                 $this->toArray(),
             [
