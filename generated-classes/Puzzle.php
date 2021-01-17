@@ -53,7 +53,7 @@ class Puzzle extends BasePuzzle {
             return $last_mod;
         }
 
-        public function getProperties() {
+        public function getProperties($maxAge=-1) {
            return array_merge(
                 $this->toArray(),
             [
@@ -61,8 +61,8 @@ class Puzzle extends BasePuzzle {
                 'SpreadsheetURL' => $this->getSpreadsheetURL(),
                 'SlackChannelURL' => $this->getSlackURL(),
                 'JitsiURL' => $this->getJitsiURL(),
-                'SheetData' => $this->getMaybeCachedSheetData(),
-                'LastModifiedAge' => $this->getDisplayAge($this->getMaybeCachedLastMod()['when']),
+                'SheetData' => $this->getMaybeCachedSheetData($maxAge),
+                'LastModifiedAge' => $this->getDisplayAge($this->getMaybeCachedLastMod($maxAge)['when']),
                 'CreatedAge' => $this->getDisplayAge($this->getCreatedAt("Y-m-d H:i:s")),
             ]
             );
@@ -94,10 +94,10 @@ class Puzzle extends BasePuzzle {
         $body, $params);
         }
 
-        public function getMaybeCachedSheetData() {
+        public function getMaybeCachedSheetData($max_age=-1) {
             Global $cache;
             $callable = function () { return $this->getSheetData(); };
-            return $cache->get($this->parseSpreadsheetID(), $callable);
+            return $cache->get($this->parseSpreadsheetID(), $callable, $max_age);
         }
 
         public function getSheetData() {
@@ -181,9 +181,8 @@ class Puzzle extends BasePuzzle {
 	}
 
 	// LAST MOD
-        public function getMaybeCachedLastMod() {
+        public function getMaybeCachedLastMod($max_age=-1) {
 
-            $max_age = 180;
             if ($this->getStatus() == 'solved') {
                 $max_age = 1000*1000*1000*1000;
             }
