@@ -14,7 +14,7 @@ function refreshPuzzles($orderBy = 'Title', $orderHow = 'asc') {
                 continue;
             }
 
-            $max_age = getenv("MAX_CACHE_AGE")/5; // more aggressive than for end users
+            $max_age = getenv("MAX_CACHE_AGE")/10; // more aggressive than for end users
             $offset = rand(0, $max_age/2);
             $modified_max_age = $max_age-$offset;
 
