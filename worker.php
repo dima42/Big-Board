@@ -1,7 +1,7 @@
 <?php
 require_once "globals.php";
 
-function refreshPuzzles($orderBy = 'Title', $orderHow = 'asc') {
+function refreshSomePuzzle($orderBy = 'Title', $orderHow = 'asc') {
 
 
         Global $cache;
@@ -24,10 +24,10 @@ function refreshPuzzles($orderBy = 'Title', $orderHow = 'asc') {
 
             error_log("updating: ".$puzzle->getTitle());
             $puzzle->getProperties($modified_max_age);
-            sleep(1);
+            
+            break;
         }
-        error_log('worker loop complete');
 }
 
 
-refreshPuzzles();
+refreshSomePuzzle();
