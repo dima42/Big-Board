@@ -19,6 +19,10 @@
     @include icon('exclamation');
 }
 
+.icon-lowpriority {
+    @include icon ('ban');
+}
+
 .icon-solved {
     @include icon('flag-checkered');
     color: #444;
