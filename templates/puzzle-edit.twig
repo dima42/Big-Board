@@ -58,19 +58,6 @@
             </div>
         </div>
     </fieldset>
-    {% if is_meta %}
-    <div class="form-group row">
-        <label class="col-sm-3 col-form-label" for="solution">Wrangler</label>
-        <div class="col-sm-9">
-            <select class="form-control" name="wrangler">
-                <option value="">- - -</option>
-                {% for member in all_members %}
-                    <option value="{{ member.id }}" {% if member.id == puzzle.wrangler.id %}selected{% endif %}>{{ member.fullName }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    {% endif %}
 
     <div class="form-group row">
         <label class="col-sm-3 col-form-label" for="">Spreadsheet ID</label>
