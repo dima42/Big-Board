@@ -222,7 +222,7 @@ readers do not read off random characters that represent icons */
   content: "\f12a"; }
 
 .icon-lowpriority:before {
-  content: "\f11a"; }
+  content: "\f05e"; }
 
 .icon-offsite:before {
   content: "\f35d"; }
