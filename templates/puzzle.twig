@@ -5,7 +5,6 @@
 {% block filters %}
     {% from 'macros.twig' import solver %}
     <div class="nav-section">
-        <h4>Wrangler</h4>
         {% for meta in puzzles_metas %}
             {% if meta.Wrangler %}
             {{ solver(meta.Wrangler) }}
