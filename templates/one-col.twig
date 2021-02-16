@@ -19,20 +19,20 @@
     <li class="nav-item">
       <a class="nav-link {{ context == 'roster' ? 'active' }}" href="/roster">Roster</a>
     </li>
-    <li class="nav-item dropdown">
-      <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Links
-      </a>
-      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-        {% for link in links %}
-            <a class="dropdown-item" href="{{ link.url }}" {% if link.external %}target="_blank"{% endif %}>{{ link.title }} {% if link.external %} <i class="icon-offsite"></i>{% endif %}</a>
-        {% endfor %}
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="http://{{ slackDomain }}.slack.com/messages/general">Slack <i class="icon-offsite"></i></a>
-        <a class="dropdown-item" href="https://drive.google.com/drive/u/0/folders/{{ googleDriveId }}" target="_blank">Google Drive <i class="icon-offsite"></i></a>
-        <a class="dropdown-item" href="{{huntUrl}}" target="_blank">The Hunt <i class="icon-offsite"></i></a>
-      </div>
-    </li>
+#    <li class="nav-item dropdown">
+#      <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+#        Links
+#      </a>
+#      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
+#        {% for link in links %}
+#            <a class="dropdown-item" href="{{ link.url }}" {% if link.external %}target="_blank"{% endif %}>{{ link.title }} {% if link.external %} <i class="icon-offsite"></i>{% endif %}</a>
+#        {% endfor %}
+#        <div class="dropdown-divider"></div>
+#        <a class="dropdown-item" href="http://{{ slackDomain }}.slack.com/messages/general">Slack <i class="icon-offsite"></i></a>
+#        <a class="dropdown-item" href="https://drive.google.com/drive/u/0/folders/{{ googleDriveId }}" target="_blank">Google Drive <i class="icon-offsite"></i></a>
+#        <a class="dropdown-item" href="{{huntUrl}}" target="_blank">The Hunt <i class="icon-offsite"></i></a>
+#      </div>
+#    </li>
     <li class="nav-item">
       <a class="nav-link add-link {{ context == 'add' ? 'active' }}" href="/add">+Add</a>
     </li>
@@ -51,9 +51,9 @@
 {% block filters %}{% endblock %}
 </nav>
 
-{% if alert.message %}
-<div class="alert-banner col-12 offset-md-2 col-md-10 banner rounded-0 alert alert-{{ alert.type }}">{{ alert.message }}</div>
-{% endif %}
+#{% if alert.message %}
+#<div class="alert-banner col-12 offset-md-2 col-md-10 banner rounded-0 alert alert-{{ alert.type }}">{{ alert.message }}</div>
+#{% endif %}
 
 {% block main_top %}{% endblock %}
 
