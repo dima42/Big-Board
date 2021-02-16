@@ -56,13 +56,13 @@
 <div class="alert-banner col-12 offset-md-2 col-md-10 banner rounded-0 alert alert-{{ alert.type }}">{{ alert.message }}</div>
 {% endif %}-->
 
-<!--{% block main_top %}{% endblock %}-->
+{% block main_top %}{% endblock %}
 
 <main role="main" class="col-12 {% block main_classes %}col-md-10{% endblock %} pt-3 ml-sm-auto">
 {% block content %}{% endblock %}
 </main>
 
-{% block column_two %}{% endblock %}
+<!--{% block column_two %}{% endblock %}-->
 
 {% endblock %}
 
