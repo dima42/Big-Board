@@ -1,2 +1,3 @@
 Ange = sleepy
-Ange = not_going_to_bed
+Angeface = not_going_to_bed
+Angepants = cold
