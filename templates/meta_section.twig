@@ -11,14 +11,14 @@
     </h2>
     {% if meta.Id != 0 %}
     <div class="puzzle-metadata row">
-        <div class="col col-sm-6 wrangler">
-            {% if meta.Wrangler %}
+<!--        <div class="col col-sm-6 wrangler">
+=           {% if meta.Wrangler %}
             Wrangler: <a href="/member/{{ meta.WranglerId }}">{{ meta.Wrangler }}</a>
             {% else %}
             <i>No assigned wrangler</i>
             {% endif %}
-        </div>
-        <div class="col col-sm-6 add-puzzles-to-meta">
+        </div> -->
+        <div class="col-12 add-puzzles-to-meta">
             <a class="add-puzzles-to-meta" href="/add/{{ meta.Id }}">+ Add puzzles</a>
         </div>
     </div>
