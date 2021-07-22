@@ -1,82 +1,74 @@
 <?php
-use Frlnc\Slack\Core\Commander;
-use Frlnc\Slack\Http\CurlInteractor;
-use Frlnc\Slack\Http\SlackResponseFactory;
 use Propel\Runtime\ActiveQuery\Criteria;
 require_once("globals.php");
 
-function getSlackCommander($slack_key_env_var) {
+function getSlackClient($slack_key_env_var) {
 	$slack_key = getenv($slack_key_env_var);
-
-	$interactor = new CurlInteractor;
-	$interactor->setResponseFactory(new SlackResponseFactory);
-
-	return new Commander($slack_key, $interactor);
+	return new wrapi\slack\slack($slack_key);
 }
 
-function getBigBoardBotCommander() {
-	return getSlackCommander('BIGBOARDBOT_SLACK_KEY');
+function getBigBoardBotClient() {
+	return getSlackClient('BIGBOARDBOT_SLACK_KEY');
 }
 
-function getTobyBotCommander() {
-	return getSlackCommander('TOBYBOT_SLACK_KEY');
-}
-
-function getAllSlackChannels() {
-	$commander = getTobyBotCommander();
-
-	return $commander->execute('channels.list', [
-			'exclude_archived' => true
-		])->getBody();
+function getTobyBotClient() {
+	return getSlackClient('TOBYBOT_SLACK_KEY');
 }
 
 function getSlackChannelID($slug) {
-	$commander = getTobyBotCommander();
+	$client = getTobyBotClient();
 
-	$response = $commander->execute('channels.list', [
-			'channel' => $slug
-		]);
+        $next_cursor = NULL;
 
-	$response_body = $response->getBody();
+        while (true) {
 
-	if ($response_body['ok'] != 1) {
-		return false;
-	}
+    	    $response_body = $client->conversations->list([
+                "cursor" => $next_cursor
+            ]);
 
-	foreach ($response_body['channels'] as $key => $channel) {
+
+            debug(print_r($response_body, true));
+
+	    foreach ($response_body['channels'] as $key => $channel) {
 		if ($channel['name'] == $slug) {
 			return $channel['id'];
 		}
-	}
+	    }
 
-	return 0;
+            $next_cursor = $response_body["response_metadata"]["next_cursor"];
+	    if ($next_cursor == "") {
+                return 0;
+            }
+        }
 }
 
 function createNewSlackChannel($slug) {
-	$commander = getTobyBotCommander();
+	$client = getTobyBotClient();
 
-	$slack_response = $commander->execute('channels.create', [
+	$slack_response = $client->conversations->create([
 			'name' => $slug
 		]);
 
-        $commander->execute('channels.leave', [
-                        'channel' => getSlackChannelID($slug)
+        $id = getSlackChannelID($slug);
+
+        $client->conversations->leave([
+                        'channel' => $id
                 ]);
 
-	return getSlackChannelID($slug);
+	return $id;
 }
 
 function archiveSlackChannel($channel_id) {
-	$commander = getTobyBotCommander();
-        $commander->execute('channels.archive', [
+	$client = getTobyBotClient();
+        $client->conversations->archive([
                    'channel' => $channel_id
         ]);
 }
 
 function inviteToSlackChannel($channel_id, $member_id) {
-	$commander = getTobyBotCommander();
+	$client = getTobyBotClient();
 
-	$response = $commander->execute('channels.invite', [
+	$response = $client->conversations->invite([
 			'channel' => $channel_id,
 			'user'    => $member_id,
 		]);
@@ -95,9 +87,9 @@ function postToBigBoard($message, $attachments = [], $icon = ":boar:", $bot_name
 }
 
 function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot", $channel = "big-board") {
-	$commander = getBigBoardBotCommander();
+	$client = getBigBoardBotClient();
 
-	$response = $commander->execute('chat.postMessage', [
+	$response = $client->chat->postMessage([
 			'no_format'   => true,
 			'channel'     => $channel,
 			'icon_emoji'  => $icon,
@@ -115,12 +107,11 @@ function postToChannel($message, $attachments, $icon, $bot_name, $channel = "big
 }
 
 function scrapeAvatar($member) {
-	$commander      = getTobyBotCommander();
-	$slack_response = $commander->execute('users.info', [
+	$client      = getTobyBotClient();
+	$response_body = $client->execute('users.info', [
 			'user' => $member->getSlackId()
 		]);
 
-	$response_body = $slack_response->getBody();
 	if ($response_body['ok'] == 1) {
 		// Avatar options: image_24, 32, 48, 72, 192, 512, 1024
 		$avatar = $slack_response->getBody()['user']['profile']['image_192'];
