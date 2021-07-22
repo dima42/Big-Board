@@ -27,8 +27,6 @@ function getSlackChannelID($slug) {
             ]);
 
 
-            debug(print_r($response_body, true));
-
 	    foreach ($response_body['channels'] as $key => $channel) {
 		if ($channel['name'] == $slug) {
 			return $channel['id'];
