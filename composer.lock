@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6b27b63c71597183b21168d40439cae",
+    "content-hash": "b5d5960f8208c6d88c01bb6d34005224",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -688,51 +688,6 @@
             "time": "2017-06-27T22:17:23+00:00"
         },
         {
-            "name": "frlnc/php-slack",
-            "version": "dev-no-format-support",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/santheo/php-slack.git",
-                "reference": "058fb06ce5f2d3eb9c778301a3783460b3f132ce"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/santheo/php-slack/zipball/058fb06ce5f2d3eb9c778301a3783460b3f132ce",
-                "reference": "058fb06ce5f2d3eb9c778301a3783460b3f132ce",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Frlnc\\Slack\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Connor Parks",
-                    "email": "connor@connorvg.tv"
-                }
-            ],
-            "description": "A lightweight PHP implementation of Slack's API.",
-            "keywords": [
-                "slack"
-            ],
-            "support": {
-                "source": "https://github.com/santheo/php-slack/tree/no-format-support"
-            },
-            "time": "2017-12-11T02:26:12+00:00"
-        },
-        {
             "name": "google/apiclient",
             "version": "v2.4.0",
             "source": {
@@ -1119,55 +1074,6 @@
             "time": "2017-02-01T23:08:58+00:00"
         },
         {
-            "name": "maknz/slack",
-            "version": "1.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/maknz/slack.git",
-                "reference": "7f21fefc70c76b304adc1b3a780c8740dfcfb595"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/maknz/slack/zipball/7f21fefc70c76b304adc1b3a780c8740dfcfb595",
-                "reference": "7f21fefc70c76b304adc1b3a780c8740dfcfb595",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "guzzlehttp/guzzle": "~6.0|~5.0|~4.0",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "0.9.*",
-                "phpunit/phpunit": "4.2.*"
-            },
-            "suggest": {
-                "illuminate/support": "Required for Laravel support"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Maknz\\Slack\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "maknz",
-                    "email": "github@mak.geek.nz"
-                }
-            ],
-            "description": "A simple PHP package for sending messages to Slack, with a focus on ease of use and elegant syntax. Includes Laravel support out of the box.",
-            "keywords": [
-                "laravel",
-                "slack"
-            ],
-            "time": "2015-06-03T03:35:16+00:00"
-        },
-        {
             "name": "maximebf/debugbar",
             "version": "v1.15.0",
             "source": {
@@ -1356,6 +1262,56 @@
                 "psr-3"
             ],
             "time": "2017-06-19T01:22:40+00:00"
+        },
+        {
+            "name": "palanik/wrapi",
+            "version": "v0.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/palanik/wrapi-php.git",
+                "reference": "20cd27151af36c28cfdb46c53cfb0de015f32fbf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/palanik/wrapi-php/zipball/20cd27151af36c28cfdb46c53cfb0de015f32fbf",
+                "reference": "20cd27151af36c28cfdb46c53cfb0de015f32fbf",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": ">=6.1.0",
+                "php": ">=5.5.0",
+                "sabre/uri": "^1.0"
+            },
+            "require-dev": {
+                "internations/http-mock": "0.7.0",
+                "phpunit/phpunit": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "wrapi\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "palanik"
+                }
+            ],
+            "description": "Wrapper for calling Restful API",
+            "homepage": "https://github.com/palanik/wrapi-php",
+            "keywords": [
+                "Guzzle",
+                "api",
+                "function",
+                "functions",
+                "restful",
+                "wrapper"
+            ],
+            "time": "2018-01-22T02:10:09+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -1950,6 +1906,57 @@
                 "simple-cache"
             ],
             "time": "2017-01-02T13:31:39+00:00"
+        },
+        {
+            "name": "sabre/uri",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sabre-io/uri.git",
+                "reference": "ada354d83579565949d80b2e15593c2371225e61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sabre-io/uri/zipball/ada354d83579565949d80b2e15593c2371225e61",
+                "reference": "ada354d83579565949d80b2e15593c2371225e61",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.0,<6.0",
+                "sabre/cs": "~1.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/functions.php"
+                ],
+                "psr-4": {
+                    "Sabre\\Uri\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Evert Pot",
+                    "email": "me@evertpot.com",
+                    "homepage": "http://evertpot.com/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Functions for making sense out of URIs.",
+            "homepage": "http://sabre.io/uri/",
+            "keywords": [
+                "rfc3986",
+                "uri",
+                "url"
+            ],
+            "time": "2017-02-20T19:59:28+00:00"
         },
         {
             "name": "sentry/sentry",
@@ -2721,6 +2728,59 @@
                 "templating"
             ],
             "time": "2017-09-27T18:10:31+00:00"
+        },
+        {
+            "name": "wrapi/slack",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/palanik/slack-php.git",
+                "reference": "4e15921b2073e38d661fa966375b77619d5afe46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/palanik/slack-php/zipball/4e15921b2073e38d661fa966375b77619d5afe46",
+                "reference": "4e15921b2073e38d661fa966375b77619d5afe46",
+                "shasum": ""
+            },
+            "require": {
+                "palanik/wrapi": "^0.1.7",
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "wrapi\\slack\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "palanik"
+                }
+            ],
+            "description": "Wrapper for Slack Web API",
+            "homepage": "https://github.com/palanik/slack-php",
+            "keywords": [
+                "Api Wrapper",
+                "Guzzle",
+                "api",
+                "api client",
+                "rest",
+                "slack",
+                "slack api client",
+                "slack api wrapper",
+                "slack web api client",
+                "slack web api wrapper",
+                "slack wrapper",
+                "slack-api",
+                "slack-web-api",
+                "wrapi"
+            ],
+            "time": "2021-05-08T03:43:14+00:00"
         }
     ],
     "packages-dev": [
@@ -2831,6 +2891,7 @@
                 "phar",
                 "update"
             ],
+            "abandoned": true,
             "time": "2017-07-03T06:55:29+00:00"
         },
         {
@@ -2876,13 +2937,61 @@
                 "php"
             ],
             "time": "2017-11-30T16:10:52+00:00"
+        },
+        {
+            "name": "maknz/slack",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maknz/slack.git",
+                "reference": "7f21fefc70c76b304adc1b3a780c8740dfcfb595"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maknz/slack/zipball/7f21fefc70c76b304adc1b3a780c8740dfcfb595",
+                "reference": "7f21fefc70c76b304adc1b3a780c8740dfcfb595",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "~6.0|~5.0|~4.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "4.2.*"
+            },
+            "suggest": {
+                "illuminate/support": "Required for Laravel support"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Maknz\\Slack\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "maknz",
+                    "email": "github@mak.geek.nz"
+                }
+            ],
+            "description": "A simple PHP package for sending messages to Slack, with a focus on ease of use and elegant syntax. Includes Laravel support out of the box.",
+            "keywords": [
+                "laravel",
+                "slack"
+            ],
+            "time": "2015-06-03T03:35:16+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "propel/propel": 20,
-        "frlnc/php-slack": 20
+        "propel/propel": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
