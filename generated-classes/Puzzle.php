@@ -97,7 +97,7 @@ class Puzzle extends BasePuzzle {
         public function getMaybeCachedSheetData($max_age=-1) {
             Global $cache;
             $callable = function () { return $this->getSheetData(); };
-            return $cache->get($this->parseSpreadsheetID(), $callable, $max_age);
+            return $cache->get($this->parseSpreadsheetID() . " sheet data", $callable, $max_age);
         }
 
         public function getSheetData() {
