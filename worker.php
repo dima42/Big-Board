@@ -26,6 +26,7 @@ function refreshSomePuzzle($orderBy = 'Title', $orderHow = 'asc') {
             error_log("updating: ".$puzzle->getTitle());
             $puzzle->getProperties($modified_max_age);
         }
+        sleep(1);
 }
 
 
