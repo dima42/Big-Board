@@ -11,6 +11,8 @@ function refreshSomePuzzle($orderBy = 'Title', $orderHow = 'asc') {
 
         $skipped = [];
         $updated = [];
+        // since we have several workers
+        shuffle($puzzles);
         foreach ($puzzles as $puzzle){
             if ($puzzle->getStatus() == 'solved') {
                 continue;
