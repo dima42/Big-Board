@@ -9,6 +9,8 @@ function refreshSomePuzzle($orderBy = 'Title', $orderHow = 'asc') {
                 ->orderBy($orderBy, $orderHow)
                 ->find();
 
+        $skipped = [];
+        $updated = [];
         foreach ($puzzles as $puzzle){
             if ($puzzle->getStatus() == 'solved') {
                 continue;
@@ -19,13 +21,14 @@ function refreshSomePuzzle($orderBy = 'Title', $orderHow = 'asc') {
             $modified_max_age = $max_age-$offset;
 
             if ($cache->existsNoOlderThan($puzzle->getSpreadsheetID() . " sheet data", $modified_max_age)) {
-                error_log("skipping updating: ".$puzzle->getTitle());
+                array_push($skipped, $puzzle->getSpreadsheetID());
                 continue;
             }
 
-            error_log("updating: ".$puzzle->getTitle());
             $puzzle->getProperties($modified_max_age);
+            array_push($updated, $puzzle->getSpreadsheetID());
         }
+        error_log("skipped " . count($skipped) . ", updated " . count($updated) . "puzzles");
         sleep(1);
 }
 
