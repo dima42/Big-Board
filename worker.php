@@ -18,14 +18,12 @@ function refreshSomePuzzle($orderBy = 'Title', $orderHow = 'asc') {
             $offset = rand(0, $max_age/2);
             $modified_max_age = $max_age-$offset;
 
-            if ($cache->existsNoOlderThan($puzzle->getSpreadsheetID(), $modified_max_age)) {
-                continue;
+            if ($cache->existsNoOlderThan($puzzle->getSpreadsheetID() . " sheet data", $modified_max_age)) {
+                break;
             }
 
             error_log("updating: ".$puzzle->getTitle());
             $puzzle->getProperties($modified_max_age);
-            
-            break;
         }
 }
 
