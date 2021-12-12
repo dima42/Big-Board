@@ -19,6 +19,7 @@ function refreshSomePuzzle($orderBy = 'Title', $orderHow = 'asc') {
             $modified_max_age = $max_age-$offset;
 
             if ($cache->existsNoOlderThan($puzzle->getSpreadsheetID() . " sheet data", $modified_max_age)) {
+                error_log("skipping updating: ".$puzzle->getTitle());
                 continue;
             }
 
