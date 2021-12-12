@@ -41,9 +41,11 @@ class Cache {
         if ($this->existsNoOlderThan($key, $modified_max_age)) {
             $json_blob = $this->redis->get($key);
             $val = json_decode($json_blob, true);
+            error_log("cache hit for $key");
             return $val[1];
-        } 
-                
+        }
+
+        error_log("cache missed for $key");
         $new_val = $callable();
         $this->add($key, $new_val);
         return $new_val;
