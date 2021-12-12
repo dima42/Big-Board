@@ -11,8 +11,6 @@ function refreshSomePuzzle($orderBy = 'Title', $orderHow = 'asc') {
 
         $skipped = [];
         $updated = [];
-        // since we have several workers
-        shuffle($puzzles);
         foreach ($puzzles as $puzzle){
             if ($puzzle->getStatus() == 'solved') {
                 continue;
@@ -31,7 +29,7 @@ function refreshSomePuzzle($orderBy = 'Title', $orderHow = 'asc') {
             array_push($updated, $puzzle->getSpreadsheetID());
         }
         error_log("skipped " . count($skipped) . ", updated " . count($updated) . "puzzles");
-        sleep(1);
+        usleep(random_int(1000*1000, 5*1000*1000));
 }
 
 
