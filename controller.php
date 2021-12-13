@@ -169,7 +169,7 @@ function allPuzzles($orderBy = 'Title', $orderHow = 'asc', $response) {
 
         $properties = [];
         foreach ($puzzles as $puzzle){
-            array_push($properties, $puzzle->getProperties());
+            array_push($properties, $puzzle->getProperties(-1, true));
         }
 
 	return $response->json($properties);
@@ -186,7 +186,7 @@ function allPuzzlesByMeta($response) {
 
         $properties = [];
         foreach ($puzzles as $puzzle){
-            $props = $puzzle->getProperties($cached_only=true);
+            $props = $puzzle->getProperties(-1, true);
             $props["PuzzleParents"] = $puzzle->getPuzzleParents()->toArray();
             array_push($properties, $props);
         }

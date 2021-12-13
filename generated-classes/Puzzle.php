@@ -56,11 +56,11 @@ class Puzzle extends BasePuzzle {
         public function getProperties($maxAge=-1, $cached_only=false) {
             Global $cache;
             $sheetData = null;
-            if ($cache->existsNoOlderThan($this->parseSpreadsheetID() . " sheet data", $maxAge) || !$cached_only) {
+            if (!$cached_only || $cache->existsNoOlderThan($this->parseSpreadsheetID() . " sheet data", $maxAge)) {
                 $sheetData = $this->getMaybeCachedSheetData($maxAge);
             }
             $lastModifiedAge = null;
-            if ($cache->existsNoOlderThan($this->parseSpreadsheetID()." last mod", $maxAge) || !$cached_only) {
+            if (!$cached_only || $cache->existsNoOlderThan($this->parseSpreadsheetID()." last mod", $maxAge)) {
                 $lastModifiedAge = $this->getDisplayAge($this->getMaybeCachedLastMod($maxAge)['when']);
             }
 
@@ -236,7 +236,7 @@ class Puzzle extends BasePuzzle {
 	// SLACK STUFF
 
 	public function getSlackAttachmentSmall() {
-	    $properties = $this->getProperties($cached_only=true);
+	    $properties = $this->getProperties(-1, true);
 		$content = [
 			":".$this ->getStatus().":",
 			'<'.$this ->getBigBoardURL().'|:boar:> ',
