@@ -168,9 +168,9 @@ $shared_sheets = new Google_Service_Sheets($shared_client);
 
 function create_file_from_template($title) {
         Global $shared_drive;
-	$file = new Google_Service_Drive_DriveFile();
+	    $file = new Google_Service_Drive_DriveFile();
         $file->setName($title);
-	$file->setParents(array(getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID')));
+	    $file->setParents(array(getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID')));
         error_log("Starting to copy file");
         $copy = $shared_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file, array('fields' => '*'));
         error_log("starting to set permissions");

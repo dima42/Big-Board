@@ -53,16 +53,27 @@ class Puzzle extends BasePuzzle {
             return $last_mod;
         }
 
-        public function getProperties($maxAge=-1) {
-           return array_merge(
+        public function getProperties($maxAge=-1, $cached_only=false) {
+            Global $cache;
+            $sheetData = null;
+            if ($cache->existsNoOlderThan($this->parseSpreadsheetID() . " sheet data", $maxAge) || !$cached_only) {
+                $sheetData = $this->getMaybeCachedSheetData($maxAge);
+            }
+            $lastModifiedAge = null;
+            if ($cache->existsNoOlderThan($this->parseSpreadsheetID()." last mod", $maxAge) || !$cached_only) {
+                $lastModifiedAge = $this->getDisplayAge($this->getMaybeCachedLastMod($maxAge)['when']);
+            }
+
+
+            return array_merge(
                 $this->toArray(),
             [
                 'SpreadsheetId' => $this->parseSpreadsheetID(),
                 'SpreadsheetURL' => $this->getSpreadsheetURL(),
                 'SlackChannelURL' => $this->getSlackURL(),
                 'JitsiURL' => $this->getJitsiURL(),
-                'SheetData' => $this->getMaybeCachedSheetData($maxAge),
-                'LastModifiedAge' => $this->getDisplayAge($this->getMaybeCachedLastMod($maxAge)['when']),
+                'SheetData' => $sheetData,
+                'LastModifiedAge' => $lastModifiedAge,
                 'CreatedAge' => $this->getDisplayAge($this->getCreatedAt("Y-m-d H:i:s")),
             ]
             );
@@ -225,7 +236,7 @@ class Puzzle extends BasePuzzle {
 	// SLACK STUFF
 
 	public function getSlackAttachmentSmall() {
-                $properties = $this->getProperties();
+	    $properties = $this->getProperties($cached_only=true);
 		$content = [
 			":".$this ->getStatus().":",
 			'<'.$this ->getBigBoardURL().'|:boar:> ',
