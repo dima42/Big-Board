@@ -130,6 +130,12 @@
         </div>
     </form>
 
+    <div class="buttons">
+        <form action="/puzzle/{{ puzzle.id }}/delete" data-behavior="confirm-delete" method="post">
+            <button type="submit" class="btn border border-danger text-danger" href=""><i class="icon-archive"></i> Archive puzzle</button>
+        </form>
+    </div>
+
     {% if is_meta %}
         {% from 'macros.twig' import puzzle_table %}
         {{ puzzle_table( puzzle.id ) }}
@@ -138,13 +144,6 @@
 
 {% endblock %}
 
-{% block aside %}
-    {% block edit_button %}
-    <div class="buttons">
-        <a class="btn btn-light border border-dark" href="/puzzle/{{ puzzle.id }}/edit"><i class="icon-edit"></i> Edit this puzzle</a>
-    </div>
-    {% endblock %}
-{% endblock %}
 
 {% block scripts %}
 <script>
@@ -167,15 +166,7 @@ $(function() {
     {% endif %}
 });
 </script>
-{% block aside_bottom %}
-<div class="buttons">
-    <form action="/puzzle/{{ puzzle.id }}/delete" data-behavior="confirm-delete" method="post">
-        <button type="submit" class="btn border border-danger text-danger" href=""><i class="icon-archive"></i> Archive puzzle</button>
-    </form>
-</div>
-{% endblock %}
 
-{% block more_scripts %}
 <script>
 $(function() {
     $('[data-behavior=confirm-delete]').submit(function(e) {
@@ -186,5 +177,4 @@ $(function() {
     });
 });
 </script>
-{% endblock %}
 {% endblock %}
