@@ -28,7 +28,7 @@ function refreshSomePuzzle($orderBy = 'Title', $orderHow = 'asc') {
             $puzzle->getProperties($modified_max_age);
             array_push($updated, $puzzle->getSpreadsheetID());
         }
-        error_log("skipped " . count($skipped) . ", updated " . count($updated) . "puzzles");
+        //error_log("skipped " . count($skipped) . ", updated " . count($updated) . "puzzles");
         usleep(random_int(1000*1000, 5*1000*1000));
 }
 

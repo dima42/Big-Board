@@ -341,7 +341,7 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	$metas_to_show = [];
 	$full_roster   = [];
 	if ($method == "edit") {
-		$template = 'puzzle-edit.twig';
+		$template = 'puzzle.twig';
 
 		$metas_to_show = PuzzlePuzzleQuery::create()
 			->joinWith('PuzzlePuzzle.Parent')
@@ -508,6 +508,7 @@ function addPuzzle($request, $response) {
 	$slugify = new Slugify(['regexp' => '/[^a-z0-9._-]+/']);
 
 	foreach ($request->newPuzzles as $puzzleKey => $puzzleContent) {
+	    error_log("starting to make " . $puzzleKey);
 		$puzzleId   = "puzzleGroup".$puzzleKey;
 		$puzzle_url = $puzzleContent['url'];
 		if (!preg_match("/\:\/\//", $puzzle_url)) {
@@ -520,7 +521,10 @@ function addPuzzle($request, $response) {
 		$puzzleTitleExists = PuzzleQuery::create()
 			->filterByTitle($puzzleContent['title'])
 			->findOne();
+
+		error_log("slack query started");
 		$slackNameExists = (getSlackChannelID($puzzleContent['slack']) != 0);
+		error_log("slack query ended");
 
 		if ($puzzleURLExists) {
 			$existingURLs[] = $puzzleId;
@@ -535,7 +539,9 @@ function addPuzzle($request, $response) {
 		}
 
 		if (!$puzzleURLExists && !$puzzleTitleExists && !$slackNameExists) {
+		    error_log("spreadsheet make started");
 			$spreadsheet_id = create_file_from_template($puzzleContent['title']);
+			error_log("spreadsheet make ended");
 
 			$slack_channel_slug = substr($slugify->slugify($puzzleContent['slack']), 0, 19);
 			$slack_channel_name = "ρ_".$slack_channel_slug;
@@ -549,6 +555,7 @@ function addPuzzle($request, $response) {
 			$newPuzzle->setSlackChannelId($newChannelID);
 			$newPuzzle->setStatus('open');
 			$newPuzzle->save();
+			error_log("puzzle saved");
 
 			$meta_id = $puzzleContent['meta'];
 			$meta    = null;

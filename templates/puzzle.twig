@@ -51,26 +51,82 @@
     </div>
 
     {% block content_main %}
-    <form class="puzzleEdit mb-1" data-behavior="confirm" action="/puzzle/{{ puzzle.id }}/solve" method="post">
-        <div class="input-group mb-2">
-            <span class="input-group-addon">Solution</span>
-            <input type="text" class="solution-field form-control" name="solution" placeholder="Enter solution here" value="{{ puzzle.solution }}">
-            <span class="input-group-btn">
-                <button class="btn btn-dark" type="submit">Go</button>
-            </span>
+
+    <form data-behavior="confirm" action="/puzzle/{{ puzzle.id }}/edit" method="post">
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="title">Title</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" name="title" value="{{ puzzle.title }}">
+            </div>
         </div>
-    </form>
-    <form class="puzzleEdit mb-4" action="/puzzle/{{ puzzle.id }}/change-status" method="post">
-        <div class="input-group">
-            <span class="input-group-addon">Status</span>
-            <select id="statusSelect" class="form-control" name="status">
-                {% for status in statuses if (status != "solved" or puzzle.solution != "") %}
-                    <option {% if status == puzzle.status %}selected{% endif %} value="{{ status }}">{{ status|capitalize }}</option>
-                {% endfor %}
-            </select>
-            <span class="input-group-btn">
-                <button class="btn btn-dark" type="submit">Go</button>
-            </span>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="solution">Solution</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control solution-field" name="solution" value="{{ puzzle.solution }}">
+            </div>
+        </div>
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-legend col-sm-3">Status</legend>
+                <div class="col-sm-9">
+                    {% for status in statuses if (status != "solved" or puzzle.solution != "") %}
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="status" id="status-{{ status }}" {% if status == puzzle.status %}checked{% endif %} value="{{ status }}">
+                        {{ status|capitalize }}
+                        <i class="icon-{{ status }}"></i>
+                      </label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-legend col-sm-3">Parent meta(s)</legend>
+                <div class="col-sm-9">
+                    {% for meta in metas_to_show %}
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type='checkbox' id="meta{{meta.id}}" {% if meta.virtualColumns.IsInMeta %}checked{% endif %} name='metas[]' value="{{ meta.parent.id }}">
+                        {{ meta.parent.title }}
+                      </label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-legend col-sm-3">Meta?</legend>
+                <div class="col-sm-9">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" name="is_meta" {{ is_meta|yesno('checked') }} value="y">
+                    This is a meta!
+                  </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="">Spreadsheet ID</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" name="spreadsheet_id" value="{{ puzzle.spreadsheetId }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="">Slack channel ID</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" name="slack_channel_id" value="{{ puzzle.slackChannelID }}">
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <div class="offset-sm-3 col-sm-9">
+                <button class="btn btn-dark">Submit changes</button>
+            </div>
         </div>
     </form>
 
@@ -111,5 +167,24 @@ $(function() {
     {% endif %}
 });
 </script>
-{% block more_scripts %}{% endblock %}
+{% block aside_bottom %}
+<div class="buttons">
+    <form action="/puzzle/{{ puzzle.id }}/delete" data-behavior="confirm-delete" method="post">
+        <button type="submit" class="btn border border-danger text-danger" href=""><i class="icon-archive"></i> Archive puzzle</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block more_scripts %}
+<script>
+$(function() {
+    $('[data-behavior=confirm-delete]').submit(function(e) {
+        if(!confirm('You sure you want to archive this puzzle and make it disappear from the site?')) {
+            e.preventDefault();
+        }
+        return true;
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}
