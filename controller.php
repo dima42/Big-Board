@@ -312,14 +312,6 @@ function displayPuzzle($puzzle_id, $method = "get") {
 
 	$members = $puzzle->getMembers();
 
-	$is_member      = false;
-	$current_member = $_SESSION['user'];
-	foreach ($members as $member) {
-		if ($member->getId() == $current_member->getId()) {
-			$is_member = true;
-		}
-	}
-
 	$puzzles_metas = PuzzleQuery::create()
 		->joinPuzzleChild()
 		->leftJoinWithWrangler()
@@ -339,32 +331,21 @@ function displayPuzzle($puzzle_id, $method = "get") {
 	$template = 'puzzle.twig';
 
 	$metas_to_show = [];
-	$full_roster   = [];
-	if ($method == "edit") {
-		$template = 'puzzle.twig';
 
-		$metas_to_show = PuzzlePuzzleQuery::create()
-			->joinWith('PuzzlePuzzle.Parent')
-			->orderBy('Parent.Title')
-			->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
-			->filterByParentId($puzzle_id, CRITERIA::NOT_EQUAL)
-			->groupBy('Parent.Id')
-			->find();
-
-		$full_roster = MemberQuery::create()
-			->orderBy('FullName')
-			->find();
-	}
+    $metas_to_show = PuzzlePuzzleQuery::create()
+        ->joinWith('PuzzlePuzzle.Parent')
+        ->orderBy('Parent.Title')
+        ->withColumn('Sum(puzzle_id ='.$puzzle_id.')', 'IsInMeta')
+        ->filterByParentId($puzzle_id, CRITERIA::NOT_EQUAL)
+        ->groupBy('Parent.Id')
+        ->find();
 
 	render($template, 'puzzles', array(
 			'puzzle_id'     => $puzzle_id,
 			'puzzle'        => $puzzle,
-			'members'       => $members,
-			'is_member'     => $is_member,
 			'metas_to_show' => $metas_to_show,
 			'puzzles_metas' => $puzzles_metas,
 			'is_meta'       => $is_meta,
-			'all_members'   => $full_roster,
 		));
 }
 
