@@ -186,9 +186,7 @@ function allPuzzlesByMeta($response) {
 
         $properties = [];
         foreach ($puzzles as $puzzle){
-            error_log("got ".$puzzle->getTitle());
             $props = $puzzle->getProperties();
-            error_log("got properties");
             $props["PuzzleParents"] = $puzzle->getPuzzleParents()->toArray();
             array_push($properties, $props);
         }
@@ -218,7 +216,9 @@ function metaPuzzles($meta_id, $response) {
 
         $properties = [];
         foreach ($puzzles as $puzzle){
-            array_push($properties, $puzzle->getProperties());
+            $props = $puzzle->getProperties();
+            $props["PuzzleParents"] = $puzzle->getPuzzleParents()->toArray();
+            array_push($properties, $props);
         }
 
 	return $response->json($properties);
@@ -489,7 +489,6 @@ function addPuzzle($request, $response) {
 	$slugify = new Slugify(['regexp' => '/[^a-z0-9._-]+/']);
 
 	foreach ($request->newPuzzles as $puzzleKey => $puzzleContent) {
-	    error_log("starting to make " . $puzzleKey);
 		$puzzleId   = "puzzleGroup".$puzzleKey;
 		$puzzle_url = $puzzleContent['url'];
 		if (!preg_match("/\:\/\//", $puzzle_url)) {
@@ -503,9 +502,7 @@ function addPuzzle($request, $response) {
 			->filterByTitle($puzzleContent['title'])
 			->findOne();
 
-		error_log("slack query started");
 		$slackNameExists = (getSlackChannelID($puzzleContent['slack']) != 0);
-		error_log("slack query ended");
 
 		if ($puzzleURLExists) {
 			$existingURLs[] = $puzzleId;

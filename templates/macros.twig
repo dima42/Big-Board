@@ -5,7 +5,6 @@
             <th></th>
             <th class="icon-th"><i class="icon-solvers"></i></th>
             <th>Puzzle</th>
-<!--            <th class="solution-cell">Solution <a href="#" class="copy-solutions" title="Copy solutions" data-tooltip><i class="icon-copy"></i></a></th> -->
             <th>Solution</th>
             <th>Hunt Link</th>
             <th>Sheets</th>
@@ -19,27 +18,3 @@
     </tbody>
 </table>
 {% endmacro puzzle_table %}
-
-{% macro member_table(id = 0, title = "Not active", status) %}
-<section class="pt-2">
-    <span class="anchor-target" id="puzzle-{{ id }}"></span>
-    <h2>
-        {% if id != 0 %}
-            <a href="/puzzle/{{ id }}">{{ title }}</a>
-        {% else %}
-            {{ title }}
-        {% endif %}
-        <i class="icon-{{ status }}"></i>
-    </h2>
-    <table id="table-{{ id }}" class="table member-table" data-title="{{ title }}">
-        <tbody>
-        </tbody>
-    </table>
-</section>
-{% endmacro member_table %}
-
-{% macro solver(member) %}
-<a href="/member/{{ member.id }}" class="solver member.location" style="background-image:url({{ member.avatar }});">
-    <span class="solver-name">{{ member.fullName }}</span>
-</a>
-{% endmacro %}

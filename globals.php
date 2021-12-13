@@ -171,9 +171,9 @@ function create_file_from_template($title) {
 	$file = new Google_Service_Drive_DriveFile();
         $file->setName($title);
 	$file->setParents(array(getenv('GOOGLE_DRIVE_PUZZLES_FOLDER_ID')));
-        debug("Starting to copy file");
+        error_log("Starting to copy file");
         $copy = $shared_drive->files->copy(getenv('GOOGLE_DOCS_TEMPLATE_ID'), $file, array('fields' => '*'));
-
+        error_log("starting to set permissions");
         $ownerPermission = new Google_Service_Drive_Permission();
         $ownerPermission->setEmailAddress(getenv('GOOGLE_GROUP_EMAIL'));
         $ownerPermission->setType('group');
@@ -181,10 +181,10 @@ function create_file_from_template($title) {
 				$attempts = 0;
 				do {
 					try {
-						debug("Sharing atttempt " . $attempts);
+						error_log("Sharing atttempt " . $attempts);
 						$shared_drive->permissions->create($copy['id'], $ownerPermission, array('fields' => '*'));
 					} catch (Exception $e) {
-						debug($e->getMessage());
+						error_log($e->getMessage());
 						$attempts++;
 						sleep(1);
 						continue;
