@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+body {
+ background-color:#f6f6f6;
+}
+#temp_canvas {
+ position: absolute;
+ top: 0;
+ left: 0;
+ cursor: crosshair;
+}
+#container {
+ position: absolute;
+ border-width: 10px;
+ border-style: dashed;
+ left: 375px;
+ top: 50px;
+ right: 50px;
+ bottom: 50px;
+}
+#container.hover {
+ border-color: #000;
+ background-color: #9F9;
+}
+#container.nohover {
+ border-color: #999;
+ background-color: transparent;
+}
+#container.error {
+ background-color: #F99;
+ font-size: 150%;
+ font-weight: bold;
+}
+#error_msg {
+ display: none;
+ margin: 12pt;
+}
+#description {
+ position: absolute;
+ left: 0;
+ top: 0;
+ width: 325px;
+ padding: 12pt;
+}
+button {
+ float: right;
+ position: relative;
+}
+</style>
+</head>
+<body>
+
+<div id="description">
+<h2>Image Search</h2>
+Drag or paste an image from your computer into the box on the right. Then select an area of the image to perform a Google Image Search on it.
+<p>
+Based on the original at <a href="https://tools.qhex.org/imagesearch.html">tools.qhex.org</a>.
+</div>
+
+<div id="container" class="nohover">
+<canvas id="view_canvas" width="0" height="0"></canvas>
+<canvas id="temp_canvas" width="0" height="0"></canvas>
+<span id="error_msg">Error</span>
+</div>
+
+<script type="text/javascript">
+var errorMsg = document.getElementById('error_msg');
+var container = document.getElementById('container');
+var viewCanvas = document.getElementById('view_canvas');
+// temp canvas is for drawing rectangles
+var tempCanvas = document.getElementById('temp_canvas');
+if (!viewCanvas.getContext) {
+  container.className = "error";
+  errorMsg.innerHTML = "Sorry, this tool is not supported by your browser. Please try a recent version of Chrome or Firefox. [canvas error]";
+  errorMsg.style.display = "block";
+} else if (typeof window.FileReader === 'undefined') {
+  errorMsg.innerHTML = "Sorry, your browser does not support reading local files. However, you may still be able to drag images directly from another web page.";
+  errorMsg.style.display = "block";
+}
+// check for drop support
+if (!("ondrop" in container)) {
+  container.setAttribute("ondrop", '');
+  if (typeof container["ondrop"] != 'function') {
+    container.className = "error";
+    errorMsg.innerHTML = "Sorry, this tool is not supported by your browser. Please try a recent version of Chrome or Firefox. [file drop error]";
+    errorMsg.style.display = "block";
+  }
+  if (typeof container["ondrop"] != 'undefined') {
+    container["ondrop"] = undefined;
+  }
+  container.removeAttribute("ondrop");
+}
+var viewContext = viewCanvas.getContext('2d');
+var tempContext = tempCanvas.getContext('2d');
+
+container.ondragover = function(e) {
+  e.preventDefault();
+  container.className = "hover";
+  return false;
+};
+container.onmouseout = function(e) {
+  if (container.className == "hover") {
+    container.className = "nohover";
+  }
+};
+var scale;
+// updates canvas size to match the image and window
+function scaleCanvas() {
+  if (!img) { return; }
+  var cw = container.offsetWidth - 20;
+  var ch = container.offsetHeight - 20;
+  scale = Math.min(cw / img.width, ch / img.height);
+  scale = Math.min(scale, 1);
+  // setting style dimensions scales the image
+  viewCanvas.style.width = img.width * scale + 'px';
+  viewCanvas.style.height = img.height * scale + 'px';
+  // set direct dimensions for temp canvas (not scaled)
+  tempCanvas.width = img.width * scale;
+  tempCanvas.height = img.height * scale;
+}
+window.onresize = scaleCanvas;
+img = new Image();
+img.onload = function() {
+  viewCanvas.width = img.width;
+  viewCanvas.height = img.height;
+  scaleCanvas();
+  viewContext.drawImage(img, 0, 0);
+  container.className = "nohover";
+  errorMsg.style.display = "none";
+};
+function readFile(file) {
+  var reader = new FileReader();
+  reader.onload = function (event) {
+    if (img.src == event.target.result) {
+      container.className = "nohover";
+    } else {
+      img.src = event.target.result;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+container.ondrop = function(e) {
+  e.preventDefault();
+  errorMsg.style.display = "none";
+  container.className = "error";  // will be cleared if image loads successfully
+  //alert(e.dataTransfer.types);
+  if (e.dataTransfer.files && e.dataTransfer.files[0]) {  // local files
+    var file = e.dataTransfer.files[0];
+    readFile(file);
+  } else if (false) {  // web page elements (disabled)
+    var url = e.dataTransfer.getData("text/uri-list");
+    if (url) {
+      if (img.src == url) {
+        container.className = "nohover";
+      } else {
+        img.src = url;
+      }
+    }
+  }
+  return false;
+};
+// Support pasting images from the clipboard
+document.onpaste = function(e) {
+  var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+  if (items[0].kind === 'file') {
+    var file = items[0].getAsFile();
+    readFile(file);
+  }
+};
+var isMouseDown = false;
+var mouseDownX, mouseDownY;
+function mouseEvent(ev) {
+  var x,y;
+  if (ev.offsetX || ev.offsetX == 0) {
+    x = ev.offsetX;
+    y = ev.offsetY;
+  } else if (ev.layerX || ev.layerX == 0) {  // firefox?
+    x = ev.layerX;
+    y = ev.layerY;
+  }
+  if (ev.type == 'mousedown' && !isMouseDown) {
+    mouseDownX = x;
+    mouseDownY = y;
+    isMouseDown = true;
+  }
+  var minX = Math.min(mouseDownX, x);
+  var minY = Math.min(mouseDownY, y);
+  var maxX = Math.max(mouseDownX, x);
+  var maxY = Math.max(mouseDownY, y);
+  if (ev.type == 'mouseup' && isMouseDown) {
+    isMouseDown = false;
+    doSearch(minX, minY, maxX - minX, maxY - minY);
+  }
+  if (isMouseDown) {
+    tempContext.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+    tempContext.fillStyle = "rgba(0, 0, 0, 0.3)";
+    tempContext.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+    tempContext.clearRect(minX, minY, maxX - minX, maxY - minY);
+    tempContext.lineWidth = 1;
+    tempContext.strokeStyle = "black";
+    tempContext.strokeRect(minX-0.5, minY-0.5, maxX-minX+1, maxY-minY+1);
+    tempContext.strokeStyle = "white";
+    tempContext.strokeRect(minX+0.5, minY+0.5, maxX-minX-1, maxY-minY-1);
+  }
+}
+tempCanvas.addEventListener('mousedown', mouseEvent, false);
+tempCanvas.addEventListener('mousemove', mouseEvent, false);
+tempCanvas.addEventListener('mouseup', mouseEvent, false);
+
+// suppress text selection cursor
+tempCanvas.onselectstart = function () { return false; };
+tempCanvas.onmousedown = function () { return false; };
+
+document.onkeydown = function(evt) {
+  if (isMouseDown) {
+    isMouseDown = false;
+    tempContext.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+  }
+};
+
+function doSearch(x, y, w, h) {
+  if (!img) { return; }
+  x /= scale;
+  y /= scale;
+  w /= scale;
+  h /= scale;
+  if (w < 9 || h < 9) {
+    tempContext.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+    return;
+  }
+  var cropCanvas = document.createElement('canvas');
+  cropCanvas.width = w;
+  cropCanvas.height = h;
+  var cropContext = cropCanvas.getContext('2d');
+  cropContext.drawImage(img, x, y, w, h, 0, 0, w, h);
+
+  var imgData = cropCanvas.toDataURL().split(",")[1];
+  imgData = imgData.replace(/\//g,"_").replace(/\+/g,"-");
+
+  var form = document.createElement("form");
+  form.method = "post";
+  form.action = "https://images.google.com/searchbyimage/upload";
+  form.target = "_blank";
+  form.enctype = "multipart/form-data";
+  var field = document.createElement("input");
+  field.type = "hidden";
+  field.name = "image_content";
+  field.value = imgData;
+  form.appendChild(field);
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+};
+</script>
+
+</body>
+</html>
