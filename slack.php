@@ -106,7 +106,7 @@ function postToChannel($message, $attachments, $icon, $bot_name, $channel = "big
 
 function scrapeAvatar($member) {
 	$client      = getTobyBotClient();
-	$response_body = $client->execute('users.info', [
+    $response_body = $client->users->info([
 			'user' => $member->getSlackId()
 		]);
 
