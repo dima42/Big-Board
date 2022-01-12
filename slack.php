@@ -112,7 +112,7 @@ function scrapeAvatar($member) {
 
 	if ($response_body['ok'] == 1) {
 		// Avatar options: image_24, 32, 48, 72, 192, 512, 1024
-		$avatar = $slack_response->getBody()['user']['profile']['image_192'];
+		$avatar = $response_body['user']['profile']['image_192'];
 		$member->setAvatar($avatar);
 		$member->save();
 	}
