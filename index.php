@@ -48,8 +48,9 @@ $klein->respond('GET', '/privacy', function ($request, $response) {
 		return render('privacy.twig', 'privacy');
 	});
 
-$klein->respond('GET', '/image-search', function ($request, $response) {
-		return render('image-search.twig', 'image-search');
+$klein->respond('GET', '/image-search', function ($request, $response) use ($klein) {
+		render('image-search.twig', 'image-search');
+		$klein->skipRemaining();
 	});
 
 // If user not authorized or not in palindrome do not allow them to get matched to any remaining routes
