@@ -48,6 +48,11 @@ $klein->respond('GET', '/privacy', function ($request, $response) {
 		return render('privacy.twig', 'privacy');
 	});
 
+$klein->respond('GET', '/image-search', function ($request, $response) use ($klein) {
+		render('image-search.twig', 'image-search');
+		$klein->skipRemaining();
+	});
+
 // If user not authorized or not in palindrome do not allow them to get matched to any remaining routes
 $klein->respond(function () use ($klein, $pal_client, $pal_drive) {
 		debug('');// Add a break to the output to help with debugging
@@ -88,11 +93,11 @@ function is_authorized($pal_client, $pal_drive) {
 		    debug("This token is no good");
 
 		    $pal_client->refreshToken($token_dump->{'refresh_token'});
-		    
+
                     $_SESSION['access_token']  = json_encode($pal_client->getAccessToken());
 		    $token_dump                = json_decode($_SESSION['access_token']);
 		    $_SESSION['refresh_token'] = $token_dump->{'refresh_token'};
-                    
+
 		    setcookie("PAL_ACCESS_TOKEN", $_SESSION['access_token'], 5184000+time());
 		    return !$pal_client->isAccessTokenExpired();
                 }

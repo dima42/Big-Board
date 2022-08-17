@@ -17,6 +17,10 @@ class Cache {
     }
 
     public function existsNoOlderThan($key, $max_age) {
+        if ($max_age < 0) {
+            $max_age=$this->default_max_age;
+        }
+
         $now = time();
         if ($this->redis->exists($key)) {
             $json_blob = $this->redis->get($key);
@@ -33,17 +37,16 @@ class Cache {
         if ($max_age < 0) {
             $max_age=$this->default_max_age;
         }
-        // have some randomness in expiration so it gets reset incrementally
-        $offset = rand(0, $max_age/2);
-        $modified_max_age = $max_age-$offset;
         
 
-        if ($this->existsNoOlderThan($key, $modified_max_age)) {
+        if ($this->existsNoOlderThan($key, $max_age)) {
             $json_blob = $this->redis->get($key);
             $val = json_decode($json_blob, true);
+            //error_log("cache hit for $key");
             return $val[1];
-        } 
-                
+        }
+
+        //error_log("cache missed for $key");
         $new_val = $callable();
         $this->add($key, $new_val);
         return $new_val;

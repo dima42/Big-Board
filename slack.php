@@ -47,11 +47,11 @@ function createNewSlackChannel($slug) {
 			'name' => $slug
 		]);
 
-        $id = getSlackChannelID($slug);
+    $id = $slack_response["channel"]["id"];
 
-        $client->conversations->leave([
-                        'channel' => $id
-                ]);
+    $client->conversations->leave([
+                    'channel' => $id
+            ]);
 
 	return $id;
 }
@@ -106,13 +106,13 @@ function postToChannel($message, $attachments, $icon, $bot_name, $channel = "big
 
 function scrapeAvatar($member) {
 	$client      = getTobyBotClient();
-	$response_body = $client->execute('users.info', [
+    $response_body = $client->users->info([
 			'user' => $member->getSlackId()
 		]);
 
 	if ($response_body['ok'] == 1) {
 		// Avatar options: image_24, 32, 48, 72, 192, 512, 1024
-		$avatar = $slack_response->getBody()['user']['profile']['image_192'];
+		$avatar = $response_body['user']['profile']['image_192'];
 		$member->setAvatar($avatar);
 		$member->save();
 	}

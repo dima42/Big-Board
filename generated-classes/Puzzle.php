@@ -53,16 +53,27 @@ class Puzzle extends BasePuzzle {
             return $last_mod;
         }
 
-        public function getProperties($maxAge=-1) {
-           return array_merge(
+        public function getProperties($maxAge=-1, $cached_only=false) {
+            Global $cache;
+            $sheetData = null;
+            if (!$cached_only || $cache->existsNoOlderThan($this->parseSpreadsheetID() . " sheet data", $maxAge)) {
+                $sheetData = $this->getMaybeCachedSheetData($maxAge);
+            }
+            $lastModifiedAge = null;
+            if (!$cached_only || $cache->existsNoOlderThan($this->parseSpreadsheetID()." last mod", $maxAge)) {
+                $lastModifiedAge = $this->getDisplayAge($this->getMaybeCachedLastMod($maxAge)['when']);
+            }
+
+
+            return array_merge(
                 $this->toArray(),
             [
                 'SpreadsheetId' => $this->parseSpreadsheetID(),
                 'SpreadsheetURL' => $this->getSpreadsheetURL(),
                 'SlackChannelURL' => $this->getSlackURL(),
                 'JitsiURL' => $this->getJitsiURL(),
-                'SheetData' => $this->getMaybeCachedSheetData($maxAge),
-                'LastModifiedAge' => $this->getDisplayAge($this->getMaybeCachedLastMod($maxAge)['when']),
+                'SheetData' => $sheetData,
+                'LastModifiedAge' => $lastModifiedAge,
                 'CreatedAge' => $this->getDisplayAge($this->getCreatedAt("Y-m-d H:i:s")),
             ]
             );
@@ -97,7 +108,7 @@ class Puzzle extends BasePuzzle {
         public function getMaybeCachedSheetData($max_age=-1) {
             Global $cache;
             $callable = function () { return $this->getSheetData(); };
-            return $cache->get($this->parseSpreadsheetID(), $callable, $max_age);
+            return $cache->get($this->parseSpreadsheetID() . " sheet data", $callable, $max_age);
         }
 
         public function getSheetData() {
@@ -225,7 +236,7 @@ class Puzzle extends BasePuzzle {
 	// SLACK STUFF
 
 	public function getSlackAttachmentSmall() {
-                $properties = $this->getProperties();
+	    $properties = $this->getProperties(-1, true);
 		$content = [
 			":".$this ->getStatus().":",
 			'<'.$this ->getBigBoardURL().'|:boar:> ',
