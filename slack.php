@@ -7,10 +7,6 @@ function getSlackClient($slack_key_env_var) {
 	return new wrapi\slack\slack($slack_key);
 }
 
-function getBigBoardBotClient() {
-	return getSlackClient('BIGBOARDBOT_SLACK_KEY');
-}
-
 function getTobyBotClient() {
 	return getSlackClient('TOBYBOT_SLACK_KEY');
 }
@@ -85,7 +81,7 @@ function postToBigBoard($message, $attachments = [], $icon = ":boar:", $bot_name
 }
 
 function postToSlack($message, $attachments = [], $icon = ":boar:", $bot_name = "Big Board Bot", $channel = "big-board") {
-	$client = getBigBoardBotClient();
+	$client = getTobyBotClient();
 
 	$response = $client->chat->postMessage([
 			'no_format'   => true,

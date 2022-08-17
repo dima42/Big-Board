@@ -12,20 +12,7 @@
 
 Create a `#big-board` channel.
 
-### Bots
-
-Create two bots:
-
-#### Big Board Bot
-
-1. Go to https://api.slack.com/apps
-2. Click **Create New App**.
-3. _Don't_ click the "Interested in the next generation of apps?" link.
-4.  Name it whatever you'd like and choose your team's workspace.
-5.  Under Bot User, name it whatever you'd like.
-6.  Under OAuth & Permissions > Scopes, add `bot` permissions.
-
-#### TobyBot
+### Slack Bot
 
 1. Go to https://api.slack.com/apps
 2. Click **Create New App**.
@@ -44,6 +31,10 @@ Create two bots:
     - `users.profile:write`
     - `users:read`
     - `users:write`
+    - `channels:manage`
+    - `channels:join`
+    - `chat:write.public`
+
 7. Click "Slash Commands". Create these seven commands. For each one, define the Request URL as `http://[YOURAPP].herokuapp.com/tobybot`. Include Descriptions and Usage Hints as desired.
     - `/board`
     - `/solve`
