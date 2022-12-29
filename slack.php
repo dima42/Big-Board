@@ -43,7 +43,11 @@ function createNewSlackChannel($slug) {
 			'name' => $slug
 		]);
 
-    error_log(serialize($slack_response));
+    if (array_key_exists("error", $slack_response)) {
+      error_log(sprintf("Error creating slack channel: %s",
+                        $slack_response["error"]));
+      error_log(serialize($slack_response));
+    }
 
     $id = $slack_response["channel"]["id"];
 
