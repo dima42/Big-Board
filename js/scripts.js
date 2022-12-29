@@ -89,7 +89,6 @@ $(function() {
         var filter = $(this).data('filter-by');
         var filterNot = $(this).data('filter-by-not');
         $('[data-filter]').show();
-        $('.solution-cell').hide();
         if (filter) {
             $('[data-filter]').hide();
             $('[data-filter~=' + filter + ']').show();
