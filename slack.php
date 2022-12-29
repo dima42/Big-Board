@@ -43,6 +43,8 @@ function createNewSlackChannel($slug) {
 			'name' => $slug
 		]);
 
+    error_log($slack_response);
+
     $id = $slack_response["channel"]["id"];
 
     $client->conversations->leave([
