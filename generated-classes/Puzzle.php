@@ -91,7 +91,6 @@ class Puzzle extends BasePuzzle {
                 $values = [[
                     '=HYPERLINK("'.$this->getUrl().'", "Puzzle")',
                     '=HYPERLINK("'.$this->getSlackURL().'", "Slack")',
-                    '=HYPERLINK("'.$this->getJitsiURL().'", "Video")',
                     '=HYPERLINK("'.$this->getBigBoardURL().'", "Big Board")',
                 ]];
                 $range = "A1:D1";
@@ -261,7 +260,6 @@ class Puzzle extends BasePuzzle {
 			':boar: <'.$this  ->getBigBoardURL().'|Big Board> ',
 			':hh: <'.$this    ->getUrl().'|Puzzle>',
 			':drive: <'.$this ->getSpreadsheetURL().'|Sheet> ',
-                        ':camera: <'.$this ->getJitsiURL().'| Video> ',
 			':slack: <#'.$this->getSlackChannelId().'|'.$this->getSlackChannel().'>'
 		];
 
@@ -277,7 +275,6 @@ class Puzzle extends BasePuzzle {
 			':boar: <'.$this ->getBigBoardURL().'|Big Board>',
 			':hh: <'.$this   ->getUrl().'|Puzzle page>',
 			':drive: <'.$this->getSpreadsheetURL().'|Google Spreadsheet>',
-                        ':camera: <'.$this ->getJitsiURL().'| Video Meeting>',
 		];
 
 		$response = array_map(function ($info) {
