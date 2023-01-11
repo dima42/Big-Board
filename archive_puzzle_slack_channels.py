@@ -1,7 +1,7 @@
 from slack_sdk import WebClient
 import time
 
-client = WebClient(token="xoxp-862551652951-849224379555-1497255024083-52a5c1395e300bcefb0e44bfb1fb190b")
+client = WebClient(token="")
 
 cursor = None
 while True:
